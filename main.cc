@@ -10,6 +10,7 @@
 #include "buildgear/dependency.h"
 #include "buildgear/source.h"
 #include "buildgear/download.h"
+#include "buildgear/tools.h"
 
 Debug debug(cout);
 
@@ -22,8 +23,9 @@ int main (int argc, char *argv[])
    CBuildFiles  BuildFiles;
    CDependency  Dependency;
    CSource      Source;
+   CTools       Tools;
    
-   /* Disable cursor (terminfo:civis) */
+   /* Disable cursor */
    cout << TERMINFO_CIVIS;
    
    /* Parse command line options */
@@ -42,27 +44,8 @@ int main (int argc, char *argv[])
    ConfigFile.Parse(GLOBAL_CONFIG_FILE);
    ConfigFile.Parse(LOCAL_CONFIG_FILE);
 
-   /* Verify buildgear required tools */
-// Tools.Verify();
-//   - fakeroot
-//   - sed
-//   - bin/bash (dash becomes a don't care)
-//   - sha256sum
-//   - tar
-//   - gzip
-//   - bzip2
-//   - xz
-//   - lzma
-//   - unzip
-//   - cp
-//   - mv
-//   - cat
-//   - sort
-//   - diff
-//   - find
-//   - grep
-//   - rm
-//   - file
+   /* Check for tools required by buildgear */
+   Tools.Check();
 
    /* Future optimization
     * 
@@ -138,12 +121,12 @@ int main (int argc, char *argv[])
    Source.Download(&Dependency.download_order);
    cout << "Done\n\n";
 
-   goto time;
-
    /* Quit if download command */
    if (Options.download)
       exit(EXIT_SUCCESS);
 
+   goto time;
+   
    /* Start building */
    if (Options.build)
       Source.Build(&Dependency);
@@ -155,6 +138,6 @@ time:
    /* Show elapsed time */
    Time.ShowElapsedTime();
    
-   /* Enable cursor again (terminfo:cnorm) */
+   /* Enable cursor again */
    cout << TERMINFO_CNORM;
 }
