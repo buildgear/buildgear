@@ -24,7 +24,7 @@ int main (int argc, char *argv[])
    CSource      Source;
    
    /* Disable cursor (terminfo:civis) */
-   cout << "\033[?25l" << flush;
+   cout << TERMINFO_CIVIS;
    
    /* Parse command line options */
    Options.Parse(argc, argv);
@@ -156,5 +156,5 @@ time:
    Time.ShowElapsedTime();
    
    /* Enable cursor again (terminfo:cnorm) */
-   cout << "\033[?25h" << flush;
+   cout << TERMINFO_CNORM;
 }

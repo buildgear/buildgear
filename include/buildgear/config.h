@@ -24,4 +24,6 @@
 #define HOST                   0
 #define TARGET                 1
 
+#define TERMINFO_CIVIS         "\033[?25l"
+#define TERMINFO_CNORM         "\033[?25h"
 #define BUILD_SCRIPT           "/home/mgl/projects/buildgear/git/buildgear/buildgear.sh"
