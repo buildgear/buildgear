@@ -97,21 +97,11 @@ void CFileSystem::FindFile(string dirname, string filename, list<CBuildFile*> *b
   closedir(d);
 }
 
-void CFileSystem::FindFiles(string dirname, string filename, CBuildFiles *buildfiles)
+void CFileSystem::FindFiles(string dirname, string filename, list<CBuildFile*> *buildfiles)
 {
-   // Find host buildfiles
-   if (CFileSystem::DirExists(BUILD_FILES_HOST_DIR))
-      CFileSystem::FindFile(BUILD_FILES_HOST_DIR,
-                            filename, &buildfiles->host_buildfiles);
-   
-   /* Return to buildgear root */
-   if (chdir(CFileSystem::root.c_str()) != 0)
-      throw std::runtime_error(strerror(errno));
-   
-   // Find target buildfiles
-   if (CFileSystem::DirExists(BUILD_FILES_TARGET_DIR))
-      CFileSystem::FindFile(BUILD_FILES_TARGET_DIR,
-                            filename, &buildfiles->target_buildfiles);
+   if (CFileSystem::DirExists(dirname))
+      CFileSystem::FindFile(dirname,
+                            filename, buildfiles);
    
    /* Return to buildgear root */
    if (chdir(CFileSystem::root.c_str()) != 0)
@@ -134,6 +124,17 @@ void CFileSystem::CreateDirectory(string dirname)
 {
    int status;
    string command = "mkdir -p " + dirname;
+   
+   status = system(command.c_str());
+   
+   if (status != 0)
+      throw std::runtime_error(strerror(errno));
+}
+
+void CFileSystem::Move(string source, string destination)
+{
+   int status;
+   string command = "mv " + source + " " + destination;
    
    status = system(command.c_str());
    

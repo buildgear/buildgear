@@ -31,16 +31,15 @@ int CSource::remote(string item)
    return false;
 }
 
-void CSource::Download(list<CBuildFile*> *buildfiles, CFileSystem *filesystem, COptions *options)
+void CSource::Download(list<CBuildFile*> *buildfiles)
 {
    CDownload Download;
-   bool first;
    
    list<CBuildFile*>::iterator it;
    string command;
    
    /* Make sure that source temp dir exists */
-   filesystem->CreateDirectory(SOURCE_TEMP_DIR);
+   CreateDirectory(SOURCE_TEMP_DIR);
 
    /* Traverse buildfiles download list */
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
@@ -48,40 +47,17 @@ void CSource::Download(list<CBuildFile*> *buildfiles, CFileSystem *filesystem, C
       istringstream iss((*it)->source);
       string item;
       
-      first = true;
-      
       // For each source item      
       while ( getline(iss, item, ' ') )
       {
          // Download item if it is a remote URL
          if (CSource::remote(item))
-         {
-            if (first)
-            {
-               cout << " " << (*it)->name << ":" << endl;
-               first = false;
-            }
-            cout << "   Downloading '" << item << "'" << endl; 
-            Download.File(item, SOURCE_TEMP_DIR);
-         }
+            Download.URL(item);
       }
-      
-      // TODO: Fix broken progress bar!
-      // TODO: Fix resume (seek to end of partial file before dl)
-      // TODO: Check sha256sum
-      // TODO: If OK move file from SOURCE_TEMP_DIR to SOURCE_DIR
-      
-      
-      // Figure out which source elements are local or remote
-      // Download remote files
-         // Download.File("ftp://ftp.fu-berlin.de/unix/tools/file/file-5.05.tar.gz", "/home/mgl");
-         // Download.URL(source, SOURCE_TEMP_DIR);
-      // Copy local files
-      
    }
 }
 
-void CSource::Build(CDependency *dependency, CFileSystem *filesystem, COptions *options)
+void CSource::Build(CDependency *dependency)
 {
    list<CBuildFile*>::iterator it;
    string command;
@@ -95,7 +71,7 @@ void CSource::Build(CDependency *dependency, CFileSystem *filesystem, COptions *
       command = BUILD_SCRIPT " build " + 
                   (*it)->filename + " --target";
 
-      if (chdir(filesystem->root.c_str()) != 0)
+      if (chdir(root.c_str()) != 0)
          throw std::runtime_error(strerror(errno));
 
       cout << "\nBuilding " << (*it)->name << endl;

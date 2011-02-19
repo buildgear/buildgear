@@ -146,7 +146,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "Build options:\n";
    cout << "  -s, --skip-download     Do not download remote source files\n";
 	cout << "  -c, --ignore-checksum   Do not perform source checksum check\n";
-	cout << "  -C, --update-checksum   Update source checksum\n\n";
+	cout << "  -C, --update-checksum   Update source checksum\n";
    cout << "  -k, --keep-work         Do not delete work files\n";
    cout << "  -e, --enforce-footprint Build and enforce footprint match\n";
    cout << "  -u, --update-footprint  Build and update footprint\n";

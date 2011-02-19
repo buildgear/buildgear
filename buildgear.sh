@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#  buildgear script
+#  buildgear build script
 #
 #  Copyright (c) 2011 Martin Lund
 #  Copyright (c) 2000-2005 Per Liden

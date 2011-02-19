@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
@@ -7,14 +8,15 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <pthread.h>
 #include <curl/curl.h>
 #include <curl/types.h>
 #include <curl/easy.h>
 #include "buildgear/config.h"
+#include "buildgear/filesystem.h"
 #include "buildgear/download.h"
 
 pthread_mutex_t progress_mutex = PTHREAD_MUTEX_INITIALIZER;
+unsigned int filesize;
 
 struct File
 {
@@ -27,10 +29,10 @@ static size_t file_write(void *buffer, size_t size, size_t nmemb, void *stream)
    struct File *out=(struct File *)stream;
    if(out && !out->stream)
    {
-      /* open file for writing */
-      out->stream=fopen(out->filename, "wb");
+      // open file for writing
+      out->stream=fopen(out->filename, "a");
       if(!out->stream)
-         return -1; /* failure, can't open file to write */
+         return -1; // failure, can't open file to write
    }
    
    return fwrite(buffer, size, nmemb, out->stream);
@@ -51,8 +53,7 @@ int file_exist(string filename, unsigned int &filesize )
    return true;
 }
 
-static int old_progress = 0;
-static int space_counter = 19;
+static int old_progress;
 
 int progress(void *v,
              double dltotal,
@@ -60,62 +61,53 @@ int progress(void *v,
              double ultotal,
              double ulnow)
 {
-   pthread_mutex_lock(&progress_mutex);
-   
    double percent;
+   int elements;
+   int spaces;
+   ostringstream total;
    int i;
+   
+   total << (unsigned long) dltotal << " bytes";
    
    if (dltotal != 0)
    {
       percent = dlnow * 100.0 / dltotal;
-      //cout << dlnow << " / " << dltotal << "(" << percent << "%)" << endl;
+      spaces = 20;
       
       // Progress bar:
       // [====================]100%   (= ~ 5%)
       
-      if ( ((((int) percent) % 5) == 0) && ( ((int)percent) != old_progress))
+      // Calculate how many bar elements to draw
+      elements = ((int) percent) / 5;
+      
+      if (((int)percent) != old_progress)
       {
-         cout << "=" << flush;
-         for (i=space_counter; i != 0; i--)
+         for (i=0; i<elements; i++)
+            cout << "=" << flush;
+         for (i=(spaces-elements); i != 0; i--)
             cout << " " << flush;
-            
-         cout << "]"
-              << setw(4) 
-              << (int) percent 
-              << "%" << setw(15) 
-              << (unsigned long) dlnow 
-              << " bytes" 
+         
+         cout << right <<"]"
+              << setw(4) << (int) percent << "%" 
+              << setw(12) << (unsigned long) dlnow
+              << " / " 
+              << setw(16) << left << total.str()
               << flush;
          
-         for (i=(space_counter+1+4+1+15+6); i != 0; i--)
+         for (i=(spaces+1+4+1+12+3+16); i != 0; i--)
             cout << "\b" << flush;
-         space_counter--;
          old_progress = (int) percent;
       }
    }
 
-   pthread_mutex_unlock(&progress_mutex);
    return 0;
 }
 
 void CDownload::URL(string url)
 {
-   // If filename exists in build/source
-      // Do not download
-   // else
-      // Download to build/source/.temp/<type>/<name>/<filename>
-      // Do sha256 checksum check
-}
-void CDownload::File(string url, string directory)
-{
    string filename;
-   unsigned int filesize;
-   
-   // Reset progress bar
-   old_progress = 0;
-   space_counter = 19;
-   
-   // Parse filename from url
+      
+   // Parse filename from URL
    size_t pos = url.find_last_of('/');
 
    if (pos == url.npos )
@@ -133,64 +125,92 @@ void CDownload::File(string url, string directory)
          exit(EXIT_FAILURE);
    }
    
-   filename = directory + "/" + filename;
+   // If file does not exist in source dir
+   if (!file_exist(SOURCE_DIR "/" + filename, filesize))
+   {
+      int result;
       
+      cout << "   Downloading '" << url << "'" << endl;
+      
+      // Download to build/source/.temp   
+      result = CDownload::File(url, SOURCE_TEMP_DIR "/" + filename);
+
+      if (result == CURLE_OK)
+      {
+         // Succesful download
+         
+         // Move to build/source
+         Move(SOURCE_TEMP_DIR "/" + filename,
+              SOURCE_DIR "/" + filename);
+      }
+   }
+   // TODO: Handle timeout, retry, and servers not supporting resume!
+}
+int CDownload::File(string url, string filename)
+{
    CURL *curl;
-   CURLcode res;
+   CURLcode result = CURLE_OK;
    struct File file = 
    {
       filename.c_str(), /* name to store the file as if succesful */
       NULL
    };
 
+   // Reset progress bar
+   old_progress = -1;
+
+   // Initialize Curl
    curl_global_init(CURL_GLOBAL_DEFAULT);
-
    curl = curl_easy_init();
-   if(curl) {
-
+   if (curl) 
+   {
       curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
   
-      /* Define our callback to get called when there's data to be written */
+      // Define file write callback
       curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, file_write);
   
-      /* Set a pointer to our struct to pass to the callback */
+      // Define write data callback
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, &file);
       
-      /* Disable builtin progress display */
+      // Disable curls builtin progress indicator
       curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
 
-      /* Define our callback for progress indication */
+      // Define progress indication callback
       curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progress);
 
-      /* Set resume option if file already found */
+      // Set resume option if file already exists
       if (file_exist(filename, filesize))
       {
          // Resume
-         cout << filename << " exists with size " << filesize << endl;
+         cout << "   Partial download detected - resuming..." << endl;
          curl_easy_setopt(curl, CURLOPT_RESUME_FROM, filesize);
       }
 
-      /* Switch on full protocol/debug output */
+      // Enable full curl rotocol/debug output
       //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
       cout << "   Progress [";
 
-      res = curl_easy_perform(curl);
+      result = curl_easy_perform(curl);
 
       cout << endl;
 
-      /* always cleanup */
+      // Curl cleanup
       curl_easy_cleanup(curl);
 
-      if(CURLE_OK != res)
+      if(result != CURLE_OK)
       {
-         /* we failed */
-         cout << "curl told us " << res << endl;
+         // Download failure
+         cout << "   Warning: libcurl told us " << result << endl;
       }
    }
 
+   // close download file
    if(file.stream)
-      fclose(file.stream); /* close the local file */
+      fclose(file.stream);
 
+   // Curl cleanup
    curl_global_cleanup();
+   
+   return result;
 }

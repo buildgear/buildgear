@@ -13,6 +13,7 @@ all: buildgear
 
 buildgear: main.o filesystem.o buildfiles.o time.o dependency.o source.o options.o download.o
 	$(HOST_CXX) $(HOST_CXXFLAGS) $^ -o $@
+	strip $@
 
 clean:
 	rm -rf buildgear *.o

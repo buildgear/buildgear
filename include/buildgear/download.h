@@ -1,12 +1,14 @@
 #ifndef DOWNLOAD_H
 #define DOWNLOAD_H
 
+#include "buildgear/filesystem.h"
+
 using namespace std;
 
-class CDownload
+class CDownload : public CFileSystem
 {
    public:
-      void File(string, string);
+      int File(string, string);
       void URL(string);
    private:
 };

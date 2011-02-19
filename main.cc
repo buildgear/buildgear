@@ -21,6 +21,9 @@ int main (int argc, char *argv[])
    CDependency Dependency;
    CSource     Source;
    
+   /* Disable cursor (terminfo:civis) */
+   cout << "\033[?25l" << flush;
+   
    /* Parse command line options */
    Options.Parse(argc, argv);
    
@@ -36,6 +39,28 @@ int main (int argc, char *argv[])
    /* Parse configuration file(s) */
 // Config.Parse(GLOBAL_CONFIG_FILE);
 // Config.Parse(LOCAL_CONFIG_FILE);
+
+   /* Verify buildgear required tools */
+// Tools.Verify();
+//   - fakeroot
+//   - sed
+//   - bin/bash (dash becomes a don't care)
+//   - sha256sum
+//   - tar
+//   - gzip
+//   - bzip2
+//   - xz
+//   - lzma
+//   - unzip
+//   - cp
+//   - mv
+//   - cat
+//   - sort
+//   - diff
+//   - find
+//   - grep
+//   - rm
+//   - file
 
    /* Future optimization
     * 
@@ -62,16 +87,19 @@ int main (int argc, char *argv[])
 
    /* Find host and target build files */
    cout << "Searching for build files...\n";
-   FileSystem.FindFiles(BUILD_FILES_DIR,
+   FileSystem.FindFiles(BUILD_FILES_HOST_DIR,
                         BUILD_FILE,
-                        &BuildFiles);
+                        &BuildFiles.host_buildfiles);
+   FileSystem.FindFiles(BUILD_FILES_TARGET_DIR,
+                        BUILD_FILE,
+                        &BuildFiles.target_buildfiles);
 
    /* Print number of buildfiles found */
    cout << BuildFiles.host_buildfiles.size() +
            BuildFiles.target_buildfiles.size() 
         << " files found\n\n";
 
-   /* Parse and verify buildfiles (assign name, eg. "target/compression/zlib") */
+   /* Parse and verify buildfiles */
    cout << "Verifying build files...\n";
    BuildFiles.ParseAndVerify(&BuildFiles.host_buildfiles, HOST);
    BuildFiles.ParseAndVerify(&BuildFiles.target_buildfiles, TARGET);
@@ -87,7 +115,6 @@ int main (int argc, char *argv[])
    BuildFiles.LoadDependency(&BuildFiles.target_buildfiles, HOST);
    BuildFiles.LoadDependency(&BuildFiles.host_buildfiles, HOST);
    cout << "Done\n\n";
-   
 
    /* Note: 
     * Allowed dependency relations: TARGET -> TARGET
@@ -95,20 +122,19 @@ int main (int argc, char *argv[])
     *                                 HOST -> HOST
     */
 
-
-   /* Resolve dependencies (results in resolved/unresolved lists) */
+   /* Resolve dependencies (FIXME: handle also host/..)  */
    Dependency.Resolve(Options.name, &BuildFiles.target_buildfiles);
 
    /* Print resolved */
-   Dependency.ShowResolved();
+//   Dependency.ShowResolved();
 
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
 
    /* Download source files */
-   cout << "Downloading remote sources..." << endl;
-   Source.Download(&Dependency.download_order, &FileSystem, &Options);
-   cout << endl;
+   cout << "Downloading sources..." << endl;
+   Source.Download(&Dependency.download_order);
+   cout << "Done\n\n";
 
    goto time;
 
@@ -118,7 +144,7 @@ int main (int argc, char *argv[])
 
    /* Start building */
    if (Options.build)
-      Source.Build(&Dependency, &FileSystem, &Options);
+      Source.Build(&Dependency);
 
 time:   
    /* Stop counting elapsed time */
@@ -126,4 +152,7 @@ time:
    
    /* Show elapsed time */
    Time.ShowElapsedTime();
+   
+   /* Enable cursor again (terminfo:cnorm) */
+   cout << "\033[?25h" << flush;
 }
