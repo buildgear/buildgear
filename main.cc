@@ -1,6 +1,7 @@
 #include <string>
 #include <cstdlib>
 #include "buildgear/config.h"
+#include "buildgear/configfile.h"
 #include "buildgear/debug.h"
 #include "buildgear/time.h"
 #include "buildgear/options.h"
@@ -14,12 +15,13 @@ Debug debug(cout);
 
 int main (int argc, char *argv[])
 {
-   COptions    Options;
-   CTime       Time;
-   CFileSystem FileSystem;
-   CBuildFiles BuildFiles;
-   CDependency Dependency;
-   CSource     Source;
+   COptions     Options;
+   CConfigFile  ConfigFile;
+   CTime        Time;
+   CFileSystem  FileSystem;
+   CBuildFiles  BuildFiles;
+   CDependency  Dependency;
+   CSource      Source;
    
    /* Disable cursor (terminfo:civis) */
    cout << "\033[?25l" << flush;
@@ -37,8 +39,8 @@ int main (int argc, char *argv[])
    FileSystem.FindRoot(ROOT_DIR);
    
    /* Parse configuration file(s) */
-// Config.Parse(GLOBAL_CONFIG_FILE);
-// Config.Parse(LOCAL_CONFIG_FILE);
+   ConfigFile.Parse(GLOBAL_CONFIG_FILE);
+   ConfigFile.Parse(LOCAL_CONFIG_FILE);
 
    /* Verify buildgear required tools */
 // Tools.Verify();
