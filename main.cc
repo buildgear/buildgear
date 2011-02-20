@@ -24,15 +24,15 @@ int main (int argc, char *argv[])
    CDependency  Dependency;
    CSource      Source;
    CTools       Tools;
+
+   /* Start counting elapsed time */
+   Time.Start();
    
    /* Disable cursor */
-   cout << TERMINFO_CIVIS;
+//   cout << TERMINFO_CIVIS;
    
    /* Parse command line options */
    Options.Parse(argc, argv);
-   
-   /* Start counting elapsed time */
-   Time.Start();
    
    /* Debug stream option */
    debug.On() = false;
@@ -43,27 +43,17 @@ int main (int argc, char *argv[])
    /* Parse configuration file(s) */
    ConfigFile.Parse(GLOBAL_CONFIG_FILE);
    ConfigFile.Parse(LOCAL_CONFIG_FILE);
+   
+   /* Correct source dir */
+   ConfigFile.CorrectSourceDir();
+
+   /* Correct name */
+   Options.CorrectName(ConfigFile.default_name_prefix);
 
    /* Check for tools required by buildgear */
    Tools.Check();
 
    /* Future optimization
-    * 
-    * Parse command to find host/ or target/ type
-    * if either not found assume target
-    * skip to last /name so that it is possible 
-    * do 
-    *    buildgear build target/audio/audacity
-    *    
-    *    equivalent to:
-    * 
-    *    buildgear build target/audacity
-    *    buildgear build audacity
-    * 
-    * flat host and target namespace:
-    * 
-    * Directories are an illusion - have no meaning, 
-    * only 'name' is important!
     * 
     * Track and load dependent buildfiles
     *  -> does not load all files
@@ -111,14 +101,14 @@ int main (int argc, char *argv[])
    Dependency.Resolve(Options.name, &BuildFiles.target_buildfiles);
 
    /* Print resolved */
-//   Dependency.ShowResolved();
+   Dependency.ShowResolved();
 
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
 
    /* Download source files */
    cout << "Downloading sources..." << endl;
-   Source.Download(&Dependency.download_order);
+   Source.Download(&Dependency.download_order, ConfigFile.source_dir);
    cout << "Done\n\n";
 
    /* Quit if download command */

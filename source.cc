@@ -31,15 +31,16 @@ int CSource::remote(string item)
    return false;
 }
 
-void CSource::Download(list<CBuildFile*> *buildfiles)
+void CSource::Download(list<CBuildFile*> *buildfiles, string dirname)
 {
    CDownload Download;
    
    list<CBuildFile*>::iterator it;
    string command;
    
-   /* Make sure that source temp dir exists */
-   CreateDirectory(SOURCE_TEMP_DIR);
+   /* Make sure that source and its temp dir exists */
+   CreateDirectory(dirname);
+   CreateDirectory(dirname + SOURCE_TEMP_DIR);
 
    /* Traverse buildfiles download list */
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
@@ -52,7 +53,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles)
       {
          // Download item if it is a remote URL
          if (CSource::remote(item))
-            Download.URL(item);
+            Download.URL(item, dirname);
       }
    }
 }

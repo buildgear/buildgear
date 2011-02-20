@@ -9,7 +9,7 @@ using namespace std;
 class CSource : public CFileSystem, COptions
 {
    public:
-      void Download(list<CBuildFile*> *);
+      void Download(list<CBuildFile*> *, string);
       void Build(CDependency *);
    private:
       int remote(string item);

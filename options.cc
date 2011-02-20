@@ -116,12 +116,6 @@ void COptions::Parse(int argc, char *argv[])
       // Get NAME of buildfile
       COptions::name = argv[optind++];
       
-      // Add default prefix in NAME
-      if ((COptions::name.find("target/") != 0) &&
-         (COptions::name.find("host/") != 0))
-         COptions::name = "target/" + COptions::name;
-      
-      
       if (optind < argc)
       {
          // Warn if too many arguments
@@ -173,4 +167,12 @@ void COptions::ShowVersion(void)
    cout << "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n";
    cout << "This is free software: you are free to change and redistribute it.\n";
    cout << "There is NO WARRANTY, to the extent permitted by law.\n";
+}
+
+void COptions::CorrectName(string prefix)
+{
+   // Prepend default name prefix if none is provided
+   if ((COptions::name.find("target/") != 0) &&
+      (COptions::name.find("host/") != 0))
+      COptions::name = prefix + COptions::name;
 }

@@ -8,8 +8,9 @@
 void CTools::Check(void)
 {
    int status, i=0;
-   string tool[] = { "sha256sum",
+   string tool[] = {      "bash",
                       "fakeroot",
+                     "sha256sum",
                            "sed",
                            "tar",
                           "gzip",

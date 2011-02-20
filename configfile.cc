@@ -14,6 +14,12 @@
 
 extern void stripChar(string &str, char c);
 
+CConfigFile::CConfigFile()
+{
+   CConfigFile::default_name_prefix = "target/";
+   CConfigFile::source_dir = SOURCE_DIR;
+}
+
 void CConfigFile::Parse(string filename)
 {
       FILE *fp;
@@ -22,7 +28,7 @@ void CConfigFile::Parse(string filename)
                         "; echo source_dir=$source_dir \
                          ; echo source_mirror=$source_mirror \
                          ; echo required_version=$required_version \
-                         ; echo default_build_prefix=$default_build_prefix \
+                         ; echo default_name_prefix=$default_name_prefix \
                          ; echo ignore_footprint=$ignore_footprint \
                          ; echo ignore_checksum=$ignore_checksum \
                          ; echo download_parallel_level=$download_parallel_level \
@@ -47,9 +53,41 @@ void CConfigFile::Parse(string filename)
 
          if (value != "")
          {
-            if (key == CONFIG_KEY_DEFAULT_BUILD_PREFIX)
-               CConfigFile::default_build_prefix = value;
+            if (key == CONFIG_KEY_DEFAULT_NAME_PREFIX)
+               CConfigFile::default_name_prefix = value;
+            if (key == CONFIG_KEY_SOURCE_DIR)
+               CConfigFile::source_dir = value;
          }
       }
       pclose(fp);
+}
+
+void CConfigFile::CorrectSourceDir(void)
+{
+   // Replace "~" with $HOME value
+   if (CConfigFile::source_dir.find("~/") == 0)
+   {
+      FILE *fp;
+      char line_buffer[PATH_MAX];
+      string command = "echo $HOME";
+      string home;
+      
+      fp = popen(command.c_str(), "r");
+      if (fp == NULL)
+         throw std::runtime_error(strerror(errno));
+      
+      while (fgets(line_buffer, PATH_MAX, fp) != NULL)
+      {
+         home = line_buffer;
+         stripChar(home, '\n');
+      }
+      
+      pclose(fp);
+
+      if (home != "")
+      {
+         CConfigFile::source_dir.erase(0,1);
+         CConfigFile::source_dir = home + CConfigFile::source_dir;
+      }
+   }
 }

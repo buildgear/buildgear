@@ -9,7 +9,7 @@ class CDownload : public CFileSystem
 {
    public:
       int File(string, string);
-      void URL(string);
+      void URL(string, string);
    private:
 };
 

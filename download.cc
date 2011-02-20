@@ -103,7 +103,7 @@ int progress(void *v,
    return 0;
 }
 
-void CDownload::URL(string url)
+void CDownload::URL(string url, string source_dir)
 {
    string filename;
       
@@ -126,22 +126,21 @@ void CDownload::URL(string url)
    }
    
    // If file does not exist in source dir
-   if (!file_exist(SOURCE_DIR "/" + filename, filesize))
+   if (!file_exist(source_dir + "/" + filename, filesize))
    {
       int result;
       
       cout << "   Downloading '" << url << "'" << endl;
       
-      // Download to build/source/.temp   
-      result = CDownload::File(url, SOURCE_TEMP_DIR "/" + filename);
+      // Download to <source dir>/.temp   
+      result = CDownload::File(url, source_dir + SOURCE_TEMP_DIR + 
+                                                      "/" + filename);
 
       if (result == CURLE_OK)
       {
-         // Succesful download
-         
-         // Move to build/source
-         Move(SOURCE_TEMP_DIR "/" + filename,
-              SOURCE_DIR "/" + filename);
+         // Succesful download - move file to <source dir>
+         Move(source_dir + SOURCE_TEMP_DIR + "/" + filename,
+              source_dir + "/" + filename);
       }
    }
    // TODO: Handle timeout, retry, and servers not supporting resume!

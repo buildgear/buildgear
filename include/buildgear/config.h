@@ -7,9 +7,10 @@
 #define BUILD_FILES_TARGET_DIR   BUILD_FILES_DIR "/target"
 #define BUILD_DIR                "build"
 #define SOURCE_DIR               BUILD_DIR  "/source"
-#define SOURCE_TEMP_DIR          SOURCE_DIR "/.temp"
+#define SOURCE_TEMP_DIR          "/.temp"
 #define WORK_DIR                 BUILD_DIR  "/work"
 #define PACKAGE_DIR              BUILD_DIR  "/package"
+
 
 #define GLOBAL_CONFIG_FILE       "~/.buildgearconfig"
 #define LOCAL_CONFIG_FILE        ROOT_DIR "/config"
@@ -21,7 +22,7 @@
 #define KEY_SOURCE               "source"
 #define KEY_DEPENDS              "depends"
 
-#define CONFIG_KEY_DEFAULT_BUILD_PREFIX      "default_build_prefix"
+#define CONFIG_KEY_DEFAULT_NAME_PREFIX       "default_name_prefix"
 #define CONFIG_KEY_BUILD_PARALLEL_LEVEL      "build_parallel_level"
 #define CONFIG_KEY_DOWNLOAD_PARALLEL_LEVEL   "download_parallel_level"
 #define CONFIG_KEY_SOURCE_DIR                "source_dir"
@@ -33,6 +34,7 @@
 #define HOST                     0
 #define TARGET                   1
 
-#define TERMINFO_CIVIS         "\033[?25l"
-#define TERMINFO_CNORM         "\033[?25h"
-#define BUILD_SCRIPT           "/home/mgl/projects/buildgear/git/buildgear/buildgear.sh"
+#define TERMINFO_CIVIS           "\033[?25l"
+#define TERMINFO_CNORM           "\033[?25h"
+
+#define BUILD_SCRIPT             "/home/mgl/projects/buildgear/git/buildgear/buildgear.sh"
