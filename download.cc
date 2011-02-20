@@ -132,14 +132,13 @@ void CDownload::URL(string url, string source_dir)
       
       cout << "   Downloading '" << url << "'" << endl;
       
-      // Download to <source dir>/.temp   
-      result = CDownload::File(url, source_dir + SOURCE_TEMP_DIR + 
-                                                      "/" + filename);
+      // Download to partial file in source dir
+      result = CDownload::File(url, source_dir + "/" + filename + ".part");
 
       if (result == CURLE_OK)
       {
-         // Succesful download - move file to <source dir>
-         Move(source_dir + SOURCE_TEMP_DIR + "/" + filename,
+         // Succesful download - remove .part extension
+         Move(source_dir + "/" + filename + ".part",
               source_dir + "/" + filename);
       }
    }

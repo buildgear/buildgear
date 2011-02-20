@@ -7,7 +7,6 @@
 #define BUILD_FILES_TARGET_DIR   BUILD_FILES_DIR "/target"
 #define BUILD_DIR                "build"
 #define SOURCE_DIR               BUILD_DIR  "/source"
-#define SOURCE_TEMP_DIR          "/.temp"
 #define WORK_DIR                 BUILD_DIR  "/work"
 #define PACKAGE_DIR              BUILD_DIR  "/package"
 
