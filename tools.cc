@@ -26,6 +26,8 @@ void CTools::Check(void)
                             "mv",
                             "rm",
                             "cp",
+                       "dirname",
+                      "basename",
                               "" };
 
    while (tool[i] != "")
