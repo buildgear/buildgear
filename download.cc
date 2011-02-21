@@ -92,7 +92,7 @@ int progress(void *v,
               << setw(12) << (unsigned long) dlnow
               << " / " 
               << setw(16) << left << total.str()
-              << flush;
+              << right << flush;
          
          for (i=(spaces+1+4+1+12+3+16); i != 0; i--)
             cout << "\b" << flush;
