@@ -86,9 +86,9 @@ int main (int argc, char *argv[])
    
    /* Load dependencies */
    cout << "Loading dependencies...\n";
-   BuildFiles.LoadDependency(&BuildFiles.target_buildfiles, TARGET);
-   BuildFiles.LoadDependency(&BuildFiles.target_buildfiles, HOST);
-   BuildFiles.LoadDependency(&BuildFiles.host_buildfiles, HOST);
+   BuildFiles.LoadDependency(&BuildFiles.target_buildfiles);
+   BuildFiles.LoadDependency(&BuildFiles.target_buildfiles);
+   BuildFiles.LoadDependency(&BuildFiles.host_buildfiles);
    cout << "Done\n\n";
 
    /* Note: 
@@ -101,7 +101,7 @@ int main (int argc, char *argv[])
    Dependency.Resolve(Options.name, &BuildFiles.target_buildfiles);
 
    /* Print resolved */
-   Dependency.ShowResolved();
+//   Dependency.ShowResolved();
 
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
@@ -114,19 +114,20 @@ int main (int argc, char *argv[])
    /* Quit if download command */
    if (Options.download)
       exit(EXIT_SUCCESS);
-
-   goto time;
    
    /* Start building */
+   cout << "Building '" << Options.name << "'" << endl;
    if (Options.build)
-      Source.Build(&Dependency);
+      Source.Build(&Dependency.build_order, ConfigFile.source_dir);
 
-time:   
    /* Stop counting elapsed time */
    Time.Stop();
    
    /* Show elapsed time */
    Time.ShowElapsedTime();
+   
+   /* Inform about log availability */
+   cout << "See " BUILD_LOG_FILE " for details." << endl << endl;
    
    /* Enable cursor again */
    cout << TERMINFO_CNORM;

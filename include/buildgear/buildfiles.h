@@ -18,6 +18,7 @@ class CBuildFile
       string depends;
       string host_depends;
       string target_depends;
+      string type;
       list<CBuildFile*> host_dependency;
       list<CBuildFile*> target_dependency;
       list<CBuildFile*> host_resolved;
@@ -32,7 +33,7 @@ class CBuildFiles
       list<CBuildFile*> target_buildfiles;
       void ParseAndVerify(list<CBuildFile*> *buildfiles, bool type);
       void ShowMeta(list<CBuildFile*> *buildfiles);
-      void LoadDependency(list<CBuildFile*> *buildfiles, bool dep_type);
+      void LoadDependency(list<CBuildFile*> *buildfiles);
    private:
 };
 

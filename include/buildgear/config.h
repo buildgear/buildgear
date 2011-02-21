@@ -10,10 +10,11 @@
 #define WORK_DIR                 BUILD_DIR  "/work"
 #define PACKAGE_DIR              BUILD_DIR  "/package"
 
-
 #define GLOBAL_CONFIG_FILE       "~/.buildgearconfig"
 #define LOCAL_CONFIG_FILE        ROOT_DIR "/config"
 #define BUILD_FILE               "Buildfile"
+#define BUILD_FILES_CONFIG       BUILD_FILES_DIR "/config"
+#define BUILD_LOG_FILE           BUILD_DIR "/build.log"
 
 #define KEY_NAME                 "name"
 #define KEY_VERSION              "version"
@@ -36,4 +37,4 @@
 #define TERMINFO_CIVIS           "\033[?25l"
 #define TERMINFO_CNORM           "\033[?25h"
 
-#define BUILD_SCRIPT             "/home/mgl/projects/buildgear/git/buildgear/buildgear.sh"
+#define SCRIPT "/home/mgl/projects/buildgear/git/buildgear/buildgear.sh"

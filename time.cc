@@ -32,5 +32,5 @@ void CTime::ShowElapsedTime(void)
    cout << "Elapsed time: " 
         << (CTime::time_stop - CTime::time_start)
         << " seconds"
-        << endl;
+        << endl << endl;
 }

@@ -10,7 +10,7 @@ class CSource : public CFileSystem, COptions
 {
    public:
       void Download(list<CBuildFile*> *, string);
-      void Build(CDependency *);
+      void Build(list<CBuildFile*> *, string);
    private:
       int remote(string item);
 };

@@ -55,11 +55,17 @@ void CBuildFiles::ParseAndVerify(list<CBuildFile*> *buildfiles, bool type)
       if (fp == NULL)
          throw std::runtime_error(strerror(errno));
 
-      // Assign name based on filename
+      // Assign name and type based on filename
       if (type == TARGET)
+      {
          pos = (*it)->filename.rfind("target/");
+         (*it)->type = "target";
+      }
       else
+      {
          pos = (*it)->filename.rfind("host/");
+         (*it)->type = "host";
+      }
 
       if (pos == (*it)->filename.npos)
       {
@@ -124,12 +130,12 @@ void CBuildFiles::ShowMeta(list<CBuildFile*> *buildfiles)
    }
 }
 
-void CBuildFiles::LoadDependency(list<CBuildFile*> *buildfiles, bool dep_type)
+void CBuildFiles::LoadDependency(list<CBuildFile*> *buildfiles)
 {
    list<CBuildFile*>::iterator it, itr;
    
-   /* Traverse through buildfiles */
-   for (it=buildfiles->begin(); 
+   /* Traverse buildfiles */
+   for (it=buildfiles->begin();
         it!=buildfiles->end();
         it++)
    {
@@ -139,7 +145,7 @@ void CBuildFiles::LoadDependency(list<CBuildFile*> *buildfiles, bool dep_type)
       
       // For each dependency element      
       while ( getline(iss, dep, ' ') )
-      {         
+      {
          // Reset match state
          no_match = true;
 

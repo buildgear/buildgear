@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <stdexcept>
 #include <stdio.h>
 #include <stdlib.h>
@@ -57,35 +58,51 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    }
 }
 
-void CSource::Build(CDependency *dependency)
+void CSource::Build(list<CBuildFile*> *buildfiles, string source_dir)
 {
    list<CBuildFile*>::iterator it;
+   string config;
    string command;
+   int i;
+   
+   string action[][3] = { { "do_checksum", " Checksum  ", "[Checksum mismatch]"       },
+                          {  "do_extract", " Extract   ", "[Extracting source failed]"},
+                          {    "do_build", " Build     ", "[Build() failed]"          },
+                          {    "do_strip", " Strip     ", "[Striping failed]"         },
+                          {  "do_package", " Package   ", "[Creating package failed]" },
+                          {"do_footprint", " Footprint ", "[Footprint mismatch]"      },
+                          {  "do_cleanup", " Clean     ", "[Cleanup failed]"          },
+                          {            "",            "", ""                           } };
 
-   cout << endl << "Building..." << endl;
-
-   for (it=dependency->build_order.begin(); it!=dependency->build_order.end(); it++)
+   // Traverse build files (build order)
+   for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
-      FILE *fp;
-      char path[PATH_MAX];
-      command = BUILD_SCRIPT " build " + 
-                  (*it)->filename + " --target";
+      i = 0;
+      cout << "   Building    '" << (*it)->name << "'" << endl;
+      
+      // Set required buildgear script variables
+      config  = " BUILD_FILES_CONFIG=" BUILD_FILES_CONFIG;
+      config += " BUILD_TYPE=" + (*it)->type;
+      config += " WORK_DIR=" WORK_DIR;
+      config += " PACKAGE_DIR=" PACKAGE_DIR;
+      config += " SOURCE_DIR=" + source_dir;
+      config += " BUILD_FILE_DIR=" + string(BUILD_FILES_DIR) + "/" + (*it)->name;
+      config += " BUILD_LOG_FILE=" BUILD_LOG_FILE;
+      
+      while (action[i][0] != "")
+      {
+         command = config + " " SCRIPT " " + action[i][0] + " " + (*it)->filename;
 
-      if (chdir(root.c_str()) != 0)
-         throw std::runtime_error(strerror(errno));
+         cout << setw(15) << action[i][1] << "'" << (*it)->name << "'" << endl;
 
-      cout << "\nBuilding " << (*it)->name << endl;
-      cout << " " << command << endl;
-
-      fp = popen(command.c_str(), "r");
-      if (fp == NULL)
-         throw std::runtime_error(strerror(errno));
-
-      while (fgets(path, PATH_MAX, fp) != NULL)
-         cout << path;
-
-      pclose(fp);
+         if (system(command.c_str()) != 0)
+         {
+            cout << setw(13) <<"Error     '" << (*it)->name << "'" << action[i][2] << endl;
+            cout << "Failed" << endl << endl;
+            return;
+         }
+         i++;
+      }
    }
-
-   cout << endl;
+   cout << "Done" << endl << endl;
 }
