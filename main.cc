@@ -115,6 +115,9 @@ int main (int argc, char *argv[])
    if (Options.download)
       exit(EXIT_SUCCESS);
    
+   /* Guess host and build */
+   
+   
    /* Start building */
    cout << "Building '" << Options.name << "'" << endl;
    if (Options.build)

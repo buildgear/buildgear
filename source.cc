@@ -72,13 +72,13 @@ void CSource::Build(list<CBuildFile*> *buildfiles, string source_dir)
                           {  "do_package", " Package   ", "[Creating package failed]" },
                           {"do_footprint", " Footprint ", "[Footprint mismatch]"      },
                           {  "do_cleanup", " Clean     ", "[Cleanup failed]"          },
-                          {            "",            "", ""                           } };
+                          {            "",            "", ""                          } };
 
    // Traverse build files (build order)
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
       i = 0;
-      cout << "   Building    '" << (*it)->name << "'" << endl;
+      cout << "  Building    '" << (*it)->name << "'" << endl;
       
       // Set required buildgear script variables
       config  = " BUILD_FILES_CONFIG=" BUILD_FILES_CONFIG;
@@ -93,11 +93,11 @@ void CSource::Build(list<CBuildFile*> *buildfiles, string source_dir)
       {
          command = config + " " SCRIPT " " + action[i][0] + " " + (*it)->filename;
 
-         cout << setw(15) << action[i][1] << "'" << (*it)->name << "'" << endl;
+         cout << setw(14) << action[i][1] << "'" << (*it)->name << "'" << endl;
 
          if (system(command.c_str()) != 0)
          {
-            cout << setw(13) <<"Error     '" << (*it)->name << "'" << action[i][2] << endl;
+            cout << "    Error     '" << (*it)->name << "' " << action[i][2] << endl;
             cout << "Failed" << endl << endl;
             return;
          }

@@ -274,8 +274,8 @@ main() {
 
 	TARGET="$BG_ROOT_DIR/$BG_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
 
-	export PKG="$BG_ROOT_DIR/$BG_WORK_DIR/pkg"
-	export SRC="$BG_ROOT_DIR/$BG_WORK_DIR/src"
+	PKG="$BG_ROOT_DIR/$BG_WORK_DIR/pkg"
+	SRC="$BG_ROOT_DIR/$BG_WORK_DIR/src"
 	
    umask 022
 
