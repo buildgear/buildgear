@@ -81,7 +81,7 @@ void CSource::Build(list<CBuildFile*> *buildfiles, string source_dir)
       int i=0;
       
       // Announce build name in progress
-      cout << "  Building    '" << (*it)->name << "'" << endl;
+      cout << "   Building     '" << (*it)->name << "'" << endl;
       
       // Set required buildgear script variables
       config  = " BUILD_FILES_CONFIG=" BUILD_FILES_CONFIG;
@@ -96,7 +96,7 @@ void CSource::Build(list<CBuildFile*> *buildfiles, string source_dir)
       while (action[i][0] != "")
       {
          // Announce build action in progress
-         cout << setw(14) << action[i][1] << "'" << (*it)->name << "'" << endl;
+         cout << setw(16) << action[i][1] << "'" << (*it)->name << "'" << endl;
          
          command = config + " " SCRIPT " " + action[i][0] + " " + (*it)->filename;
 
@@ -104,13 +104,20 @@ void CSource::Build(list<CBuildFile*> *buildfiles, string source_dir)
          if (system(command.c_str()) != 0)
          {
             // Announce action failure message
-            cout << "  Error       '" << (*it)->name << "' " << action[i][2] << endl;
+            cout << "   Error       '" << (*it)->name << "' " << action[i][2] << endl;
             cout << "Failed" << endl << endl;
             return;
          }
          i++;
       }
-   }
    // Announce successful build
+   cout << "   Done         '" << (*it)->name << "'" << endl;
+   
+   // Add contents of package to sysroot
+//   command = config + " " SCRIPT " do_add " + (*it)->filename;
+//   system(command.c_str());
+   
+   }
+   // Announce successful build of all
    cout << "Done" << endl << endl;
 }

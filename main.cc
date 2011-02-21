@@ -117,7 +117,10 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    
    /* Guess host and build */
+   Config.GuessSystem();
    
+   /* Show systen information */
+   Config.ShowSystem();
    
    /* Start building */
    cout << "Building '" << Config.name << "'" << endl;

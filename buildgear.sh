@@ -265,6 +265,10 @@ do_clean() {
    rm -rf $BG_WORK_DIR
 }
 
+do_add() {
+   tar -C $BG_SYSROOT_DIR -xf $TARGET
+}
+
 parse_options() {
    BG_COMMAND=$1
 	BG_BUILDFILE=$2
@@ -291,6 +295,7 @@ main() {
    BG_SYSROOT_DIR="$WORK_DIR/$BUILD_TYPE/sysroot"
    BG_SHA256SUM="$BG_BUILD_FILE_DIR/.sha256sum"
    BG_FOOTPRINT="$BG_BUILD_FILE_DIR/.footprint"
+   BG_NOSTRIP="$BG_BUILD_FILE_DIR/.nostrip"
 
 	TARGET="$BG_ROOT_DIR/$BG_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
 
@@ -312,6 +317,5 @@ main() {
 main "$@"
 
 BG_CHECK_SHA256SUM="yes"
-BG_NOSTRIP=".nostrip"
 
 # End of file

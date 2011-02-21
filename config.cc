@@ -59,3 +59,30 @@ void CConfig::CorrectSourceDir(void)
       }
    }
 }
+
+void CConfig::GuessSystem(void)
+{
+      FILE *fp;
+      char line_buffer[PATH_MAX];
+      
+      fp = popen(CONFIG_GUESS_SCRIPT, "r");
+      if (fp == NULL)
+         throw std::runtime_error(strerror(errno));
+      
+      while (fgets(line_buffer, PATH_MAX, fp) != NULL)
+      {
+         CConfig::host_system = line_buffer;
+         stripChar(host_system, '\n');
+         CConfig::build_system = CConfig::host_system;
+      }
+      
+      pclose(fp);
+}
+
+void CConfig::ShowSystem(void)
+{
+   cout << "Building '" << CConfig::name << "' for:" << endl;
+   cout << "   build  = " << CConfig::build_system << endl;
+   cout << "   host   = " << CConfig::host_system << endl;
+   cout << "   target = " << CConfig::target_system << endl << endl;
+}
