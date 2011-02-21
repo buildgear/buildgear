@@ -16,6 +16,7 @@ Debug debug(cout);
 
 int main (int argc, char *argv[])
 {
+   CConfig      Config;
    COptions     Options;
    CConfigFile  ConfigFile;
    CTime        Time;
@@ -32,7 +33,7 @@ int main (int argc, char *argv[])
 //   cout << TERMINFO_CIVIS;
    
    /* Parse command line options */
-   Options.Parse(argc, argv);
+   Options.Parse(argc, argv, &Config);
    
    /* Debug stream option */
    debug.On() = false;
@@ -41,14 +42,14 @@ int main (int argc, char *argv[])
    FileSystem.FindRoot(ROOT_DIR);
    
    /* Parse configuration file(s) */
-   ConfigFile.Parse(GLOBAL_CONFIG_FILE);
-   ConfigFile.Parse(LOCAL_CONFIG_FILE);
+   ConfigFile.Parse(GLOBAL_CONFIG_FILE, &Config);
+   ConfigFile.Parse(LOCAL_CONFIG_FILE, &Config);
    
    /* Correct source dir */
-   ConfigFile.CorrectSourceDir();
+   Config.CorrectSourceDir();
 
    /* Correct name */
-   Options.CorrectName(ConfigFile.default_name_prefix);
+   Config.CorrectName();
 
    /* Check for tools required by buildgear */
    Tools.Check();
@@ -98,7 +99,7 @@ int main (int argc, char *argv[])
     */
 
    /* Resolve dependencies (FIXME: handle also host/..)  */
-   Dependency.Resolve(Options.name, &BuildFiles.target_buildfiles);
+   Dependency.Resolve(Config.name, &BuildFiles.target_buildfiles);
 
    /* Print resolved */
 //   Dependency.ShowResolved();
@@ -108,20 +109,20 @@ int main (int argc, char *argv[])
 
    /* Download source files */
    cout << "Downloading sources..." << endl;
-   Source.Download(&Dependency.download_order, ConfigFile.source_dir);
+   Source.Download(&Dependency.download_order, Config.source_dir);
    cout << "Done\n\n";
 
    /* Quit if download command */
-   if (Options.download)
+   if (Config.download)
       exit(EXIT_SUCCESS);
    
    /* Guess host and build */
    
    
    /* Start building */
-   cout << "Building '" << Options.name << "'" << endl;
-   if (Options.build)
-      Source.Build(&Dependency.build_order, ConfigFile.source_dir);
+   cout << "Building '" << Config.name << "'" << endl;
+   if (Config.build)
+      Source.Build(&Dependency.build_order, Config.source_dir);
 
    /* Stop counting elapsed time */
    Time.Stop();

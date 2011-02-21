@@ -5,14 +5,7 @@
 #include "buildgear/config.h"
 #include "buildgear/options.h"
 
-COptions::COptions()
-{
-   COptions::download = false;
-   COptions::build = false;
-   COptions::info = false;
-}
-
-void COptions::Parse(int argc, char *argv[])
+void COptions::Parse(int argc, char *argv[], CConfig *config)
 {
 	int c;
    string command;
@@ -64,11 +57,11 @@ void COptions::Parse(int argc, char *argv[])
 
 			case 'i':
             // --ignore-checksum
-            COptions::ignore_checksum = " --ignore-sha256sum ";
+            config->ignore_checksum = " --ignore-sha256sum ";
 				break;
 			case 'u':
             // --update-checksum
-            COptions::update_checksum = " --update-sha256sum ";
+            config->update_checksum = " --update-sha256sum ";
 				break;
 			
 			case 'v':
@@ -95,13 +88,13 @@ void COptions::Parse(int argc, char *argv[])
 
    /* Parse command */
    if (command == "download")
-      COptions::download = true;
+      config->download = true;
    else
    if (command == "build")
-      COptions::build = true;
+      config->build = true;
    else
    if (command == "info")
-      COptions::info = true;
+      config->info = true;
    else
    {
       cout << "Missing command!" << endl;
@@ -114,7 +107,7 @@ void COptions::Parse(int argc, char *argv[])
       optind++;
       
       // Get NAME of buildfile
-      COptions::name = argv[optind++];
+      config->name = argv[optind++];
       
       if (optind < argc)
       {
@@ -167,12 +160,4 @@ void COptions::ShowVersion(void)
    cout << "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n";
    cout << "This is free software: you are free to change and redistribute it.\n";
    cout << "There is NO WARRANTY, to the extent permitted by law.\n";
-}
-
-void COptions::CorrectName(string prefix)
-{
-   // Prepend default name prefix if none is provided
-   if ((COptions::name.find("target/") != 0) &&
-      (COptions::name.find("host/") != 0))
-      COptions::name = prefix + COptions::name;
 }

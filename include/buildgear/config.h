@@ -1,3 +1,28 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#include "buildgear/filesystem.h"
+
+using namespace std;
+
+class CConfig
+{
+   public:
+      string name;
+      bool download;
+      bool build;
+      bool info;
+      string ignore_checksum;
+      string update_checksum;
+      string default_name_prefix;
+      string source_dir;
+      CConfig();
+      void CorrectName(void);
+      void CorrectSourceDir(void);
+   private:
+};
+
+
 /* Buildgear static configuration */
 #define VERSION                  "0.3 alpha"
 
@@ -38,3 +63,8 @@
 #define TERMINFO_CNORM           "\033[?25h"
 
 #define SCRIPT "/home/mgl/projects/buildgear/git/buildgear/buildgear.sh"
+
+
+#endif
+
+

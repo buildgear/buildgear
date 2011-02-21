@@ -14,13 +14,7 @@
 
 extern void stripChar(string &str, char c);
 
-CConfigFile::CConfigFile()
-{
-   CConfigFile::default_name_prefix = "target/";
-   CConfigFile::source_dir = SOURCE_DIR;
-}
-
-void CConfigFile::Parse(string filename)
+void CConfigFile::Parse(string filename, CConfig *config)
 {
       FILE *fp;
       char line_buffer[PATH_MAX];
@@ -54,40 +48,10 @@ void CConfigFile::Parse(string filename)
          if (value != "")
          {
             if (key == CONFIG_KEY_DEFAULT_NAME_PREFIX)
-               CConfigFile::default_name_prefix = value;
+               config->default_name_prefix = value;
             if (key == CONFIG_KEY_SOURCE_DIR)
-               CConfigFile::source_dir = value;
+               config->source_dir = value;
          }
       }
       pclose(fp);
-}
-
-void CConfigFile::CorrectSourceDir(void)
-{
-   // Replace "~" with $HOME value
-   if (CConfigFile::source_dir.find("~/") == 0)
-   {
-      FILE *fp;
-      char line_buffer[PATH_MAX];
-      string command = "echo $HOME";
-      string home;
-      
-      fp = popen(command.c_str(), "r");
-      if (fp == NULL)
-         throw std::runtime_error(strerror(errno));
-      
-      while (fgets(line_buffer, PATH_MAX, fp) != NULL)
-      {
-         home = line_buffer;
-         stripChar(home, '\n');
-      }
-      
-      pclose(fp);
-
-      if (home != "")
-      {
-         CConfigFile::source_dir.erase(0,1);
-         CConfigFile::source_dir = home + CConfigFile::source_dir;
-      }
-   }
 }
