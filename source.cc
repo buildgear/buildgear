@@ -63,21 +63,24 @@ void CSource::Build(list<CBuildFile*> *buildfiles, string source_dir)
    list<CBuildFile*>::iterator it;
    string config;
    string command;
-   int i;
    
-   string action[][3] = { { "do_checksum", " Checksum  ", "[Checksum mismatch]"       },
-                          {  "do_extract", " Extract   ", "[Extracting source failed]"},
-                          {    "do_build", " Build     ", "[Build() failed]"          },
-                          {    "do_strip", " Strip     ", "[Striping failed]"         },
-                          {  "do_package", " Package   ", "[Creating package failed]" },
-                          {"do_footprint", " Footprint ", "[Footprint mismatch]"      },
-                          {  "do_cleanup", " Clean     ", "[Cleanup failed]"          },
-                          {            "",            "", ""                          } };
+   // Build action sequence
+   string action[][3] = 
+   { { "do_checksum", " Checksum  ", "[Checksum mismatch]"       },
+     {  "do_extract", " Extract   ", "[Extracting source failed]"},
+     {    "do_build", " Build     ", "[Build() failed]"          },
+     {    "do_strip", " Strip     ", "[Striping failed]"         },
+     {  "do_package", " Package   ", "[Creating package failed]" },
+     {"do_footprint", " Footprint ", "[Footprint mismatch]"      },
+     {    "do_clean", " Clean     ", "[Cleanup failed]"          },
+     {            "",            "", ""                          } };
 
    // Traverse build files (build order)
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
-      i = 0;
+      int i=0;
+      
+      // Announce build name in progress
       cout << "  Building    '" << (*it)->name << "'" << endl;
       
       // Set required buildgear script variables
@@ -88,21 +91,26 @@ void CSource::Build(list<CBuildFile*> *buildfiles, string source_dir)
       config += " SOURCE_DIR=" + source_dir;
       config += " BUILD_FILE_DIR=" + string(BUILD_FILES_DIR) + "/" + (*it)->name;
       config += " BUILD_LOG_FILE=" BUILD_LOG_FILE;
-      
+      config += " NAME=" + (*it)->name;
+    
       while (action[i][0] != "")
       {
+         // Announce build action in progress
+         cout << setw(14) << action[i][1] << "'" << (*it)->name << "'" << endl;
+         
          command = config + " " SCRIPT " " + action[i][0] + " " + (*it)->filename;
 
-         cout << setw(14) << action[i][1] << "'" << (*it)->name << "'" << endl;
-
+         // Fire action command
          if (system(command.c_str()) != 0)
          {
-            cout << "    Error     '" << (*it)->name << "' " << action[i][2] << endl;
+            // Announce action failure message
+            cout << "  Error       '" << (*it)->name << "' " << action[i][2] << endl;
             cout << "Failed" << endl << endl;
             return;
          }
          i++;
       }
    }
+   // Announce successful build
    cout << "Done" << endl << endl;
 }

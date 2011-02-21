@@ -25,15 +25,19 @@
 #
 
 info() {
-	echo " $1"
+	echo "$1"
 }
 
 warning() {
-	info "WARNING: $1"
+	echo "WARNING: $1"
 }
 
 error() {
-	info "ERROR: $1"
+	echo "ERROR: $1"
+}
+
+show_action() {
+   echo "======== $1 '$NAME' ==========================================="
 }
 
 get_filename() {
@@ -76,6 +80,13 @@ check_create_directory() {
 	fi
 }
 
+make_footprint() {
+	tar tvf $TARGET | \
+      awk '{print $1 "\t" $2 "\t" $6}' | \
+		sed "s|\tlib/modules/`uname -r`/|\tlib/modules/<kernel-version>/|g" | \
+		sort -k 3
+}
+
 make_sha256sum() {
 	local FILE LOCAL_FILENAMES
 	
@@ -86,12 +97,6 @@ make_sha256sum() {
 
 		sha256sum $LOCAL_FILENAMES | sed -e 's|  .*/|  |' | sort -k 2
 	fi
-}
-
-make_footprint() {
-	tar tvf $TARGET | \
-		sed "s|\tlib/modules/`uname -r`/|\tlib/modules/<kernel-version>/|g" | \
-		sort -k 3
 }
 
 check_sha256sum() {
@@ -134,7 +139,8 @@ check_sha256sum() {
 
 do_checksum() {
 	
-   rm -rf $BUILD_LOG_FILE
+   show_action "Checksum "
+   
    mkdir -p $SRC $PKG
    
    check_sha256sum
@@ -142,6 +148,8 @@ do_checksum() {
 
 do_extract() {
 	local FILE LOCAL_FILENAME COMMAND
+
+   show_action "Extract  "
 
    check_create_directory "$BG_WORK_DIR"
    check_create_directory "$PKG"
@@ -171,6 +179,8 @@ do_extract() {
 
 do_build() {
    
+   show_action "Build    "
+   
    cd $SRC
    
    (fakeroot set -e -x ; build)
@@ -181,6 +191,8 @@ do_build() {
 do_strip() {
 	local FILE FILTER
 	
+   show_action "Strip    "
+   
 	cd $PKG
 	
 	if [ -f $BG_ROOT/$BG_NOSTRIP ]; then
@@ -204,6 +216,8 @@ do_strip() {
 
 do_package() {
    
+   show_action "Package  "
+   
    cd $PKG
    
    fakeroot tar czvvf $TARGET *
@@ -212,7 +226,11 @@ do_package() {
 }
 
 do_footprint() {
-	local FILE="$BG_WORK_DIR/.tmp"
+	local FILE
+   
+   show_action "Footprint"
+   
+   FILE="$BG_WORK_DIR/.tmp"
 	
 	if [ -f $TARGET ]; then
 		make_footprint > $FILE.footprint
@@ -240,7 +258,9 @@ do_footprint() {
 }
 
 
-do_cleanup() {
+do_clean() {
+   
+   show_action "Clean    "
    
    rm -rf $BG_WORK_DIR
 }

@@ -12,6 +12,7 @@ void CTools::Check(void)
                       "fakeroot",
                      "sha256sum",
                            "sed",
+                           "awk",
                            "tar",
                           "gzip",
                          "bzip2",
