@@ -95,42 +95,26 @@ void CSource::Do(string action, CBuildFile* buildfile)
 void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
 {
    list<CBuildFile*>::iterator it;
-   list<CBuildFile*> host_remove;
-   list<CBuildFile*> target_remove;
+   list<CBuildFile*>::reverse_iterator rit;
    
    CSource::config = config;
-   
+
    // Process build order
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
-      if ((*it)->type == "target")
-      {
-         Do("build", (*it));
+      Do("build", (*it));
+      
+      if ((*it) != buildfiles->back())
          Do("add", (*it));
-         target_remove.push_back(*it);
-         while (!host_remove.empty())
-         {
-            Do("remove", host_remove.back());
-            host_remove.pop_back();
-         }
-      } 
-      else
-      {
-         Do("build", (*it));
-         Do("add", (*it));
-         host_remove.push_back(*it);
-      }
    }
-   
-   // Remove targets from sysroot
-   while (!target_remove.empty())
+
+   // Process build order
+   for (rit=buildfiles->rbegin(); rit!=buildfiles->rend(); rit++)
    {
-      Do("remove", target_remove.back());
-      target_remove.pop_back();
+      if ((*rit) != buildfiles->front())
+         Do("remove", (*rit));
    }
-   
-   // FIXME: Handle case when top build taret is 'host/*'
-   
+
    // Announce successful build of all
    cout << "Done" << endl << endl;
 }

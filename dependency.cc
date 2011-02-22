@@ -25,8 +25,8 @@ void CDependency::Resolve(string name, list<CBuildFile*> *buildfiles)
       if (name == (*it)->name)
       {
          // Resolve target dependency
-         CDependency::ResolveDep(*it, &target_resolved, 
-                                      &target_unresolved, TARGET);
+         CDependency::ResolveDep(*it, &resolved, 
+                                      &unresolved);
          found = true;
       }
    }
@@ -35,35 +35,10 @@ void CDependency::Resolve(string name, list<CBuildFile*> *buildfiles)
    {
       cout << "Error: " << name << " is not found" << endl;
       exit(EXIT_FAILURE);
-   }
-
-   /* Traverse resolved target buildfiles to resolve host dependencies */
-   for (it=target_resolved.begin(); 
-        it!=target_resolved.end();
-        it++)
-   {
-      // Resolve host dependency
-      CDependency::ResolveDep(*it, &(*it)->host_resolved, 
-                                   &(*it)->host_unresolved, HOST);
-   }
-   
-   /* Traverse resolved target buildfiles to create build order */
-   for (it=target_resolved.begin(); 
-        it!=target_resolved.end();
-        it++)
-   {
-//      build_order.push_back(*it); // FIXME: This sould be correct?
-      
-      for (itr=(*it)->host_resolved.begin(); 
-         itr!=(*it)->host_resolved.end();
-         itr++)
-      {
-         build_order.push_back(*itr);
-      }
-   }
+   }   
 
    /* Create download order list */
-   download_order = build_order;
+   download_order = resolved;
    download_order.sort();
    download_order.unique();
    
@@ -75,28 +50,7 @@ void CDependency::ShowResolved(void)
    int i=1;
 
    list<CBuildFile*>::iterator it;
-
-   cout <<  "Target resolved:" << endl;
-
-   for (it=target_resolved.begin(); it!=target_resolved.end(); it++, i++)
-   {
-      cout << " " << i << ". " << (*it)->name << endl;
-   }
-   cout << endl;
-
-   i=1;
-
-   cout <<  "Build order:" << endl;
-
-   for (it=build_order.begin(); it!=build_order.end(); it++, i++)
-   {
-      cout << " " << i << ". " << (*it)->name << endl;
-   }
    
-   cout << endl;
-   
-   i=1;
-
    cout <<  "Download order:" << endl;
 
    for (it=download_order.begin(); it!=download_order.end(); it++, i++)
@@ -105,27 +59,30 @@ void CDependency::ShowResolved(void)
    }
    
    cout << endl;
+   
+   i=1;
+
+   cout <<  "Build order:" << endl;
+
+   for (it=resolved.begin(); it!=resolved.end(); it++, i++)
+   {
+      cout << " " << i << ". " << (*it)->name << endl;
+   }
+   cout << endl;
 }
 
 void CDependency::ResolveDep(CBuildFile *buildfile,
                              list<CBuildFile*> *resolved,
-                             list<CBuildFile*> *unresolved,
-                             bool type)
+                             list<CBuildFile*> *unresolved)
 {	
 	list<CBuildFile*>::iterator it;
-   list<CBuildFile*> *dependency;
 	
    debug << buildfile->filename << endl;
    
    unresolved->push_back(buildfile);
 
-   if (type == TARGET)
-      dependency = &buildfile->target_dependency;
-   else
-      dependency = &buildfile->host_dependency;
-
-	for (it=dependency->begin(); 
-        it!=dependency->end(); it++)
+	for (it=buildfile->dependency.begin(); 
+        it!=buildfile->dependency.end(); it++)
    {
       if(find(resolved->begin(), resolved->end(), *it) == resolved->end())
       {
@@ -136,7 +93,7 @@ void CDependency::ResolveDep(CBuildFile *buildfile,
                  << (*it)->name << ")" << endl;
             exit(EXIT_FAILURE);
          }
-         CDependency::ResolveDep(*it, resolved, unresolved, type);
+         CDependency::ResolveDep(*it, resolved, unresolved);
       }
    }
 	

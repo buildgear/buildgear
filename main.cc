@@ -63,32 +63,24 @@ int main (int argc, char *argv[])
 
    /* Find host and target build files */
    cout << "Searching for build files...\n";
-   FileSystem.FindFiles(BUILD_FILES_HOST_DIR,
+   FileSystem.FindFiles(BUILD_FILES_DIR,
                         BUILD_FILE,
-                        &BuildFiles.host_buildfiles);
-   FileSystem.FindFiles(BUILD_FILES_TARGET_DIR,
-                        BUILD_FILE,
-                        &BuildFiles.target_buildfiles);
+                        &BuildFiles.buildfiles);
 
    /* Print number of buildfiles found */
-   cout << BuildFiles.host_buildfiles.size() +
-           BuildFiles.target_buildfiles.size() 
-        << " files found\n\n";
+   cout << BuildFiles.buildfiles.size() << " files found\n\n";
 
    /* Parse and verify buildfiles */
    cout << "Verifying build files...\n";
-   BuildFiles.ParseAndVerify(&BuildFiles.host_buildfiles, HOST);
-   BuildFiles.ParseAndVerify(&BuildFiles.target_buildfiles, TARGET);
+   BuildFiles.ParseAndVerify(&BuildFiles.buildfiles);
    cout << "Done\n\n";
    
    /* Show buildfiles meta info (debug only) */
-//   BuildFiles.ShowMeta(&BuildFiles.host_buildfiles);
-//   BuildFiles.ShowMeta(&BuildFiles.target_buildfiles);
+//   BuildFiles.ShowMeta(&BuildFiles.buildfiles);
    
    /* Load dependencies */
    cout << "Loading dependencies...\n";
-   BuildFiles.LoadDependency(&BuildFiles.target_buildfiles);
-   BuildFiles.LoadDependency(&BuildFiles.host_buildfiles);
+   BuildFiles.LoadDependency(&BuildFiles.buildfiles);
    cout << "Done\n\n";
 
    /* Note: 
@@ -98,7 +90,7 @@ int main (int argc, char *argv[])
     */
 
    /* Resolve dependencies (FIXME: handle also host/..)  */
-   Dependency.Resolve(Config.name, &BuildFiles.target_buildfiles);
+   Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
 
    /* Print resolved */
 //   Dependency.ShowResolved();
@@ -124,7 +116,7 @@ int main (int argc, char *argv[])
    /* Start building */
    cout << "Building '" << Config.name << "'" << endl;
    if (Config.build)
-      Source.Build(&Dependency.build_order, &Config);
+      Source.Build(&Dependency.resolved, &Config);
 
    /* Stop counting elapsed time */
    Time.Stop();

@@ -11,15 +11,14 @@ class CDependency
 	public:
       void ShowResolved(void);
       void Resolve(string name, list<CBuildFile*> *buildfiles);
-      list<CBuildFile*> target_resolved; // Maybe move to CBuildfile
-      list<CBuildFile*> target_unresolved;
+      list<CBuildFile*> resolved;
+      list<CBuildFile*> unresolved;
       list<CBuildFile*> build_order;
       list<CBuildFile*> download_order;
    private:
       void ResolveDep(CBuildFile *buildfile,
                    list<CBuildFile*> *resolved,
-                   list<CBuildFile*> *unresolved,
-                   bool type);
+                   list<CBuildFile*> *unresolved);
 };
 
 #endif

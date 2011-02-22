@@ -31,7 +31,7 @@ void stripChar(string &str, char c)
       }
 }
 
-void CBuildFiles::ParseAndVerify(list<CBuildFile*> *buildfiles, bool type)
+void CBuildFiles::ParseAndVerify(list<CBuildFile*> *buildfiles)
 {   
    list<CBuildFile*>::iterator it;
    
@@ -56,11 +56,9 @@ void CBuildFiles::ParseAndVerify(list<CBuildFile*> *buildfiles, bool type)
          throw std::runtime_error(strerror(errno));
 
       // Assign name and type based on filename
-      if (type == TARGET)
-      {
-         pos = (*it)->filename.rfind("target/");
+      pos = (*it)->filename.rfind("target/");
+      if (pos != (*it)->filename.npos)
          (*it)->type = "target";
-      }
       else
       {
          pos = (*it)->filename.rfind("host/");
@@ -149,37 +147,17 @@ void CBuildFiles::LoadDependency(list<CBuildFile*> *buildfiles)
          // Reset match state
          no_match = true;
 
-         if (dep.find("target/") == 0)
+         // Find matching target buildfile
+         for (itr=CBuildFiles::buildfiles.begin(); 
+              itr!=CBuildFiles::buildfiles.end();
+              itr++)
          {
-            // Find matching target buildfile
-            for (itr=CBuildFiles::target_buildfiles.begin(); 
-               itr!=CBuildFiles::target_buildfiles.end();
-               itr++)
+            // If match found make target dependency relation
+            if (dep == (*itr)->name)
             {
-               // If match found make target dependency relation
-               if (dep == (*itr)->name)
-               {
-                  (*it)->target_dependency.push_back((*itr));
-                  no_match = false;
-               }
+               (*it)->dependency.push_back((*itr));
+               no_match = false;
             }
-         } else if (dep.find("host/") == 0)
-         {
-            // Find matching host buildfile
-            for (itr=CBuildFiles::host_buildfiles.begin(); 
-               itr!=CBuildFiles::host_buildfiles.end();
-               itr++)
-            {
-               // If match found make host dependency relation
-               if (dep == (*itr)->name)
-               {
-                  (*it)->host_dependency.push_back((*itr));
-                  no_match = false;
-               }
-            }
-         } else
-         {
-            cout << "Error: Invalid dependency element." << endl;
          }
          
          // Warn if missing buildfile(s)
