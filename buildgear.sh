@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#  buildgear build script
+#  buildgear build/add/remove script
 #
 #  Copyright (c) 2011 Martin Lund
 #  Copyright (c) 2000-2005 Per Liden
@@ -183,7 +183,7 @@ do_build() {
    
    cd $SRC
    
-   (fakeroot set -e -x ; build)
+   (set -e -x ; build)
    
    cd $BG_ROOT_DIR
 }
@@ -220,7 +220,7 @@ do_package() {
    
    cd $PKG
    
-   fakeroot tar czvvf $TARGET *
+   tar czvvf $TARGET *
    
    cd $BG_ROOT_DIR
 }
@@ -262,16 +262,34 @@ do_clean() {
    
    show_action "Clean    "
    
-   rm -rf $BG_WORK_DIR
+   if [ -d $BG_WORK_DIR ]
+   then
+      rm -rf $BG_WORK_DIR
+   fi
 }
 
 do_add() {
-   tar -C $BG_SYSROOT_DIR -xf $TARGET
+   
+   show_action "Add      "
+   
+   if [ -d $BG_SYSROOT_DIR ]; then
+      tar -C $BG_SYSROOT_DIR -xf $TARGET
+   fi
+}
+
+do_remove() {
+   
+   show_action "Remove   "
+   
+   if [ -d $BG_SYSROOT_DIR ]; then
+      cd $BG_SYSROOT_DIR
+      tar -tvf $TARGET | awk '{print $6}' | xargs rm -rf
+      cd $BG_ROOT
+   fi
 }
 
 parse_options() {
-   BG_COMMAND=$1
-	BG_BUILDFILE=$2
+	BG_BUILDFILE=$1
 }
 
 main() {
@@ -288,7 +306,7 @@ main() {
    . $BG_BUILDFILE
 
    BG_ROOT_DIR="$PWD"
-   BG_BUILD_FILE_DIR="$BUILD_FILE_DIR"
+   BG_BUILD_FILE_DIR="`dirname $BG_BUILDFILE`"
    BG_SOURCE_DIR="$SOURCE_DIR"
    BG_WORK_DIR="$WORK_DIR/$BUILD_TYPE/$name"
    BG_PACKAGE_DIR="$PACKAGE_DIR/$BUILD_TYPE"
@@ -299,8 +317,8 @@ main() {
 
 	TARGET="$BG_ROOT_DIR/$BG_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
 
-	PKG="$BG_ROOT_DIR/$BG_WORK_DIR/pkg"
-	SRC="$BG_ROOT_DIR/$BG_WORK_DIR/src"
+	export PKG="$BG_ROOT_DIR/$BG_WORK_DIR/pkg"
+	export SRC="$BG_ROOT_DIR/$BG_WORK_DIR/src"
 	
    umask 022
 
@@ -309,8 +327,22 @@ main() {
 	check_create_directory "$BG_PACKAGE_DIR"
 	check_create_directory "$BG_SYSROOT_DIR"
 
-   $BG_COMMAND
-
+   # Action sequence
+   
+   if [ "$ACTION" == "build" ]; then
+      # do_remove
+      do_checksum
+      do_extract
+      do_build
+      do_strip
+      do_package
+      do_footprint
+      do_clean
+   elif [ "$ACTION" == "add" ]; then
+      do_add
+   elif [ "$ACTION" == "remove" ]; then
+      do_remove
+   fi
    exit 0
 }
 

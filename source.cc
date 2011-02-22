@@ -58,66 +58,79 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    }
 }
 
-void CSource::Build(list<CBuildFile*> *buildfiles, string source_dir)
+void CSource::Do(string action, CBuildFile* buildfile)
 {
-   list<CBuildFile*>::iterator it;
    string config;
    string command;
    
-   // Build action sequence
-   string action[][3] = 
-   { { "do_checksum", " Checksum  ", "[Checksum mismatch]"       },
-     {  "do_extract", " Extract   ", "[Extracting source failed]"},
-     {    "do_build", " Build     ", "[Build() failed]"          },
-     {    "do_strip", " Strip     ", "[Striping failed]"         },
-     {  "do_package", " Package   ", "[Creating package failed]" },
-     {"do_footprint", " Footprint ", "[Footprint mismatch]"      },
-     {    "do_clean", " Clean     ", "[Cleanup failed]"          },
-     {            "",            "", ""                          } };
+   // Set action
+   config  = " ACTION=" + action;
+   
+   // Set required script variables
+   config += " BUILD_FILES_CONFIG=" BUILD_FILES_CONFIG;
+   config += " BUILD_TYPE=" + buildfile->type;
+   config += " WORK_DIR=" WORK_DIR;
+   config += " PACKAGE_DIR=" PACKAGE_DIR;
+   config += " SOURCE_DIR=" + CSource::config->source_dir;
+   config += " BUILD_LOG_FILE=" BUILD_LOG_FILE;
+   config += " NAME=" + buildfile->name;
+   
+   command = config + " fakeroot " SCRIPT " " + buildfile->filename;      
+   
+   if (action == "build")
+      cout << "   Building     '" << buildfile->name << "'" << endl;
+   
+   if (action == "add")
+      cout << "   Adding       '" << buildfile->name << "'" << endl;
+   
+   if (action == "remove")
+   {
+      cout << "   Removing     '" << buildfile->name << "'" << endl;
+   }
+   
+   if (system(command.c_str()) != 0)
+      throw std::runtime_error(strerror(errno));
+}
 
-   // Traverse build files (build order)
+void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
+{
+   list<CBuildFile*>::iterator it;
+   list<CBuildFile*> host_remove;
+   list<CBuildFile*> target_remove;
+   
+   CSource::config = config;
+   
+   // Process build order
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
-      int i=0;
-      
-      // Announce build name in progress
-      cout << "   Building     '" << (*it)->name << "'" << endl;
-      
-      // Set required buildgear script variables
-      config  = " BUILD_FILES_CONFIG=" BUILD_FILES_CONFIG;
-      config += " BUILD_TYPE=" + (*it)->type;
-      config += " WORK_DIR=" WORK_DIR;
-      config += " PACKAGE_DIR=" PACKAGE_DIR;
-      config += " SOURCE_DIR=" + source_dir;
-      config += " BUILD_FILE_DIR=" + string(BUILD_FILES_DIR) + "/" + (*it)->name;
-      config += " BUILD_LOG_FILE=" BUILD_LOG_FILE;
-      config += " NAME=" + (*it)->name;
-    
-      while (action[i][0] != "")
+      if ((*it)->type == "target")
       {
-         // Announce build action in progress
-         cout << setw(16) << action[i][1] << "'" << (*it)->name << "'" << endl;
-         
-         command = config + " " SCRIPT " " + action[i][0] + " " + (*it)->filename;
-
-         // Fire action command
-         if (system(command.c_str()) != 0)
+         Do("build", (*it));
+         Do("add", (*it));
+         target_remove.push_back(*it);
+         while (!host_remove.empty())
          {
-            // Announce action failure message
-            cout << "   Error       '" << (*it)->name << "' " << action[i][2] << endl;
-            cout << "Failed" << endl << endl;
-            return;
+            Do("remove", host_remove.back());
+            host_remove.pop_back();
          }
-         i++;
+      } 
+      else
+      {
+         Do("build", (*it));
+         Do("add", (*it));
+         host_remove.push_back(*it);
       }
-   // Announce successful build
-   cout << "   Done         '" << (*it)->name << "'" << endl;
-   
-   // Add contents of package to sysroot
-//   command = config + " " SCRIPT " do_add " + (*it)->filename;
-//   system(command.c_str());
-   
    }
+   
+   // Remove targets from sysroot
+   while (!target_remove.empty())
+   {
+      Do("remove", target_remove.back());
+      target_remove.pop_back();
+   }
+   
+   // FIXME: Handle case when top build taret is 'host/*'
+   
    // Announce successful build of all
    cout << "Done" << endl << endl;
 }

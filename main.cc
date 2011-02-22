@@ -41,7 +41,7 @@ int main (int argc, char *argv[])
    /* Search for build root directory */
    FileSystem.FindRoot(ROOT_DIR);
    
-   /* Parse configuration file(s) */
+   /* Parse buildgear configuration file(s) */
    ConfigFile.Parse(GLOBAL_CONFIG_FILE, &Config);
    ConfigFile.Parse(LOCAL_CONFIG_FILE, &Config);
    
@@ -88,7 +88,6 @@ int main (int argc, char *argv[])
    /* Load dependencies */
    cout << "Loading dependencies...\n";
    BuildFiles.LoadDependency(&BuildFiles.target_buildfiles);
-   BuildFiles.LoadDependency(&BuildFiles.target_buildfiles);
    BuildFiles.LoadDependency(&BuildFiles.host_buildfiles);
    cout << "Done\n\n";
 
@@ -125,7 +124,7 @@ int main (int argc, char *argv[])
    /* Start building */
    cout << "Building '" << Config.name << "'" << endl;
    if (Config.build)
-      Source.Build(&Dependency.build_order, Config.source_dir);
+      Source.Build(&Dependency.build_order, &Config);
 
    /* Stop counting elapsed time */
    Time.Stop();
