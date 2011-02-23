@@ -123,39 +123,40 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
 
 void COptions::ShowHelp(char *argv[])
 {
-	cout << "Usage: " << argv[0] << " [COMMAND] [OPTIONS] [BUILDFILE NAME]\n\n";
+	cout << "Usage: " << argv[0] << " [COMMAND] [OPTIONS] [BUILD NAME]\n\n";
    cout << "Commands:\n";
-   cout << "  build                   Build buildfile\n";
-   cout << "  clean                   Remove package, work, and downloaded files\n";
-	cout << "  download                Download source files\n";
-   cout << "  extract                 Extract source files to work area\n";
-   cout << "  show                    Show various information\n\n";
-   cout << "Build options:\n";
-   cout << "  -s, --skip-download     Do not download remote source files\n";
-	cout << "  -c, --ignore-checksum   Do not perform source checksum check\n";
-	cout << "  -C, --update-checksum   Update source checksum\n";
-   cout << "  -k, --keep-work         Do not delete work files\n";
-   cout << "  -e, --enforce-footprint Build and enforce footprint match\n";
-   cout << "  -u, --update-footprint  Build and update footprint\n";
-   cout << "  -n, --no-strip          Do not strip executable libraries or binaries\n";
-   cout << "  -d, --up-to-date        Do not build, only check if package is up to date\n";
-   cout << "  -f, --force             Build even if build appears to be up to date\n\n";
+   cout << "  download                Download source files\n";
+   cout << "  build                   Build\n";
+   cout << "  clean                   Remove package and work files\n";
+   cout << "  show                    Show various build information\n\n";
    cout << "Download options:\n";
-   cout << "  -a, --all               Download remote source of all buildfiles\n\n";
+   cout << "  --all                   Download source files of all builds\n";
+   cout << "  --update-checksum       Update source checksum\n";
+   cout << "  --update-checksum-all   Update source checksum of all builds\n\n";
+   cout << "Build options:\n";
+   cout << "  --no-download           Do not download\n";
+   cout << "  --keep-work             Do not delete work files\n";
+   cout << "  --keep-work-all         Do not delete work files of all builds\n";
+   cout << "  --update-footprint      Update footprint\n";
+   cout << "  --update-footprint-all  Update footprint of all builds\n";
+   cout << "  --no-strip              Do not strip libraries or executables\n";
+   cout << "  --no-strip-all          Do not strip libraries or executables of all builds\n\n";
+   cout << "Clean options:\n";
+   cout << "  --all                   Remove package and work files of all builds\n\n";
    cout << "Show options:\n";
-	cout << "  -t, --dependency-tree   Show dependency tree\n";
-	cout << "  -o, --build-order       Show build order\n";
-	cout << "  -b, --download-order    Show download order\n";
-   cout << "  -i, --build-help        Show build help\n\n";
+	cout << "  --dependency-tree       Show dependency tree\n";
+	cout << "  --build-order           Show build order\n";
+	cout << "  --download-order        Show download order\n";
+   cout << "  --build-actions         Show build actions\n\n";
    cout << "General options:\n";
-	cout << "  -v, --version           Display version\n";
-	cout << "  -h, --help              Display help\n";
+	cout << "  --version               Display version\n";
+	cout << "  --help                  Display help\n";
 }
 
 void COptions::ShowVersion(void)
 {
    cout << "buildgear " << VERSION << "\n";
-   cout << "Copyright (C) 2011 Martin G. Lund\n";
+   cout << "Copyright (C) 2011 Martin Lund\n";
    cout << "\n";
    cout << "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n";
    cout << "This is free software: you are free to change and redistribute it.\n";
