@@ -17,6 +17,7 @@
 CBuildFile::CBuildFile(string filename)
 {
    CBuildFile::filename = filename;
+   CBuildFile::build = false;
 }
 
 void stripChar(string &str, char c)

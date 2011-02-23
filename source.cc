@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
 #include <stdexcept>
+#include <sstream>
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -15,7 +17,7 @@
 #include "buildgear/source.h"
 #include "buildgear/download.h"
 
-int CSource::remote(string item)
+int CSource::Remote(string item)
 {
    int i;
    string protocol[4] = { "http://",
@@ -52,7 +54,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
       while ( getline(iss, item, ' ') )
       {
          // Download item if it is a remote URL
-         if (CSource::remote(item))
+         if (CSource::Remote(item))
             Download.URL(item, source_dir);
       }
    }
@@ -62,6 +64,10 @@ void CSource::Do(string action, CBuildFile* buildfile)
 {
    string config;
    string command;
+   stringstream pid;
+   
+   // Get PID
+   pid << (int) getpid();
    
    // Set action
    config  = " ACTION=" + action;
@@ -74,36 +80,127 @@ void CSource::Do(string action, CBuildFile* buildfile)
    config += " SOURCE_DIR=" + CSource::config->source_dir;
    config += " BUILD_LOG_FILE=" BUILD_LOG_FILE;
    config += " NAME=" + buildfile->name;
+   config += " BG_PID=" + pid.str();
+   config += " VERBOSE=no";
    
-   command = config + " fakeroot " SCRIPT " " + buildfile->filename;      
+   command = config + " " SCRIPT " " + buildfile->filename;
    
    if (action == "build")
-      cout << "   Building     '" << buildfile->name << "'" << endl;
-   
-   if (action == "add")
-      cout << "   Adding       '" << buildfile->name << "'" << endl;
-   
-   if (action == "remove")
    {
-      cout << "   Removing     '" << buildfile->name << "'" << endl;
+      cout << "   Building      '" << buildfile->name << "'" << endl;
    }
    
+   if (action == "add")
+      cout << "   Adding        '" << buildfile->name << "'" << endl;
+   
+   if (action == "remove")
+      cout << "   Removing      '" << buildfile->name << "'" << endl;
+   
    if (system(command.c_str()) != 0)
-      throw std::runtime_error(strerror(errno));
+   {
+      cout << "Failed" << endl;
+      exit(EXIT_FAILURE);
+   }
+}
+
+bool CSource::UpToDate(CBuildFile *buildfile)
+{
+   string package;
+   
+   package = PACKAGE_DIR "/" +
+             buildfile->name + "#" + 
+             buildfile->version + "-" +
+             buildfile->release + PACKAGE_EXTENSION;
+   
+   if (!FileExists(package))
+      return false;
+   
+   if (Age(package) > Age(buildfile->filename))
+      return true;
+   
+   return false;
+}
+
+bool CSource::DepBuildNeeded(CBuildFile *buildfile)
+{
+   list<CBuildFile*>::iterator it;
+   
+   for (it=buildfile->dependency.begin(); it!=buildfile->dependency.end(); it++)
+   {
+      if ((*it)->build)
+         return true;
+      
+      if (DepBuildNeeded(*it))
+         return true;
+   }
+   
+   return false;
 }
 
 void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
 {
    list<CBuildFile*>::iterator it;
    list<CBuildFile*>::reverse_iterator rit;
+   int result;
    
    CSource::config = config;
+
+   // Remove old build log
+   result = system("rm -f " BUILD_LOG_FILE);
+
+   // FIXME:
+   // Add toolchain build first in build order
+   // Restrictions: no dependencies allowed for toolchain Buildfile.
+
+   // FIXME:
+   // Check if buildfiles/config is newer than target package or target buildfiles
+   // If so warn and delete work/packages (forces total rebuild)
+
+   // Set which builds are up to date wrt. package vs. Buildfile age
+   for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
+   {
+      if (!UpToDate((*it)))
+         (*it)->build = true;
+      
+      //cout << "   " << (*it)->name << ":build = " << (*it)->build << endl;
+   }
+
+   // Traverse and set build action (based on dependencies build action)
+   for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
+   {
+      // Skip if build needed already set
+      if ((*it)->build)
+         continue;
+      
+      // If one or more dependencies needs to be build
+      if (DepBuildNeeded((*it)))
+      {
+         // Then build is needed
+         (*it)->build = true;
+      } else
+      {
+         // Else no build is needed
+         (*it)->build = false;
+      }
+   }
+
+/*
+   // Show new build status
+   cout << "New build status:" << endl;
+   for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
+   {
+      cout << "   " << (*it)->name << ":build = " << (*it)->build << endl;
+   }
+*/
 
    // Process build order
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
-      Do("build", (*it));
+      // Only build if build (package) is not up to date
+      if ((*it)->build == true)
+         Do("build", (*it));
       
+      // Don't add primary build
       if ((*it) != buildfiles->back())
          Do("add", (*it));
    }
@@ -111,6 +208,7 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
    // Process build order
    for (rit=buildfiles->rbegin(); rit!=buildfiles->rend(); rit++)
    {
+      // Remove all except primary build
       if ((*rit) != buildfiles->front())
          Do("remove", (*rit));
    }

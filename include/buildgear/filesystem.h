@@ -12,7 +12,9 @@ class CFileSystem
       void FindFiles(string dirname, string filename, list<CBuildFile*> *buildfiles);
       void FindRoot(string dirname);
       void CreateDirectory(string dirname);
-       int DirExists(string dirname);
+      bool DirExists(string dirname);
+      bool FileExists(string filename);
+      long Age(string filename);
       void Move(string source, string destination);
       string root;
    private:

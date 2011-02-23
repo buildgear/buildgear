@@ -14,8 +14,10 @@ class CSource : public CFileSystem, COptions
       void Download(list<CBuildFile*> *, string);
       void Build(list<CBuildFile*> *, CConfig *);
       void Do(string, CBuildFile*);
+      bool UpToDate(CBuildFile *);
+      bool DepBuildNeeded(CBuildFile *buildfile);
    private:
-      int remote(string item);
+      int Remote(string item);
 };
 
 #endif

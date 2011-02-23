@@ -93,7 +93,7 @@ int main (int argc, char *argv[])
    Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
 
    /* Print resolved */
-//   Dependency.ShowResolved();
+   Dependency.ShowResolved();
 
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);

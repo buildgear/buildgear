@@ -29,7 +29,7 @@ class CConfig
 
 
 /* Buildgear static configuration */
-#define VERSION                  "0.3 alpha"
+#define VERSION                  "0.4 alpha"
 
 #define ROOT_DIR                 ".buildgear"
 #define BUILD_FILES_DIR          "buildfiles"
@@ -39,6 +39,7 @@ class CConfig
 #define SOURCE_DIR               BUILD_DIR  "/source"
 #define WORK_DIR                 BUILD_DIR  "/work"
 #define PACKAGE_DIR              BUILD_DIR  "/package"
+#define PACKAGE_EXTENSION        ".pkg.tar.gz"
 
 #define GLOBAL_CONFIG_FILE       "~/.buildgearconfig"
 #define LOCAL_CONFIG_FILE        ROOT_DIR "/config"

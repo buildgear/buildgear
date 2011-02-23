@@ -24,20 +24,29 @@
 #  USA.
 #
 
+bg_put() {
+   if [ "$VERBOSE" = "yes" ]; then
+      echo "$1" > /proc/$BG_PID/fd/2
+   fi
+}
+
 info() {
 	echo "$1"
 }
 
 warning() {
 	echo "WARNING: $1"
+   echo "         Warning '$BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
 error() {
 	echo "ERROR: $1"
+   echo "       Error     '$BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
-show_action() {
+log_action() {
    echo "======== $1 '$NAME' ==========================================="
+   bg_put "      $1  '$BUILD_TYPE/$name'"
 }
 
 get_filename() {
@@ -54,16 +63,16 @@ get_filename() {
 
 check_buildfile() {
 	if [ ! "$name" ]; then
-		error "Variable 'name' not specified in $BG_BUILDFILE."
+		error "Variable 'name' not specified in $BG_BUILDFILE"
 		exit 1
 	elif [ ! "$version" ]; then
-		error "Variable 'version' not specified in $BG_BUILDFILE."
+		error "Variable 'version' not specified in $BG_BUILDFILE"
 		exit 1
 	elif [ ! "$release" ]; then
-		error "Variable 'release' not specified in $BG_BUILDFILE."
+		error "Variable 'release' not specified in $BG_BUILDFILE"
 		exit 1
 	elif [ "`type -t build`" != "function" ]; then
-		error "Function 'build' not specified in $BG_BUILDFILE."
+		error "Function 'build' not specified in $BG_BUILDFILE"
 		exit 1
 	fi
 }
@@ -72,10 +81,10 @@ check_create_directory() {
 	if [ ! -d $1 ]; then
       mkdir -p $1
 	elif [ ! -w $1 ]; then
-		error "Directory '$1' not writable."
+		error "Directory '$1' not writable"
 		exit 1
 	elif [ ! -x $1 ] || [ ! -r $1 ]; then
-		error "Directory '$1' not readable."
+		error "Directory '$1' not readable"
 		exit 1
 	fi
 }
@@ -112,44 +121,44 @@ check_sha256sum() {
 			sed 's/^+/  NEW       /g' | \
 			sed 's/^-/  MISSING   /g' > $FILE.sha256sum.diff
 		if [ -s $FILE.sha256sum.diff ]; then
-			error "Sha256sum mismatch found:"
+			error "Sha256sum mismatch found"
 			cat $FILE.sha256sum.diff
 
 			if [ "$BG_CHECK_SHA256SUM" = "yes" ]; then
-				error "Sha256sum not ok."
+				error "Sha256sum mismatch"
 				exit 1
 			fi
 			exit 1
 		fi
 	else
 		if [ "$BG_CHECK_SHA256SUM" = "yes" ]; then
-			info "Sha256sum not found."
+			info "Sha256sum not found"
 			exit 1
 		fi
 		
-		warning "Sha256sum not found, creating new."
+		warning "Sha256sum not found, creating new"
 		make_sha256sum > $BG_SHA256SUM
 	fi
 
 	if [ "$BG_CHECK_SHA256SUM" = "yes" ]; then
-		info "Sha256sum ok."
+		info "Sha256sum ok"
 		exit 0
 	fi
 }
 
 do_checksum() {
 	
-   show_action "Checksum "
+   log_action "Checksum "
    
-   mkdir -p $SRC $PKG
-   
-   check_sha256sum
+   if [ "$source" ]; then
+      check_sha256sum
+   fi
 }
 
 do_extract() {
 	local FILE LOCAL_FILENAME COMMAND
 
-   show_action "Extract  "
+   log_action "Extract  "
 
    check_create_directory "$BG_WORK_DIR"
    check_create_directory "$PKG"
@@ -179,11 +188,16 @@ do_extract() {
 
 do_build() {
    
-   show_action "Build    "
+   log_action "Build    "
    
    cd $SRC
    
    (set -e -x ; build)
+
+   if [ "$?" != "0" ]; then
+      error "build() failed"
+      exit 1
+   fi
    
    cd $BG_ROOT_DIR
 }
@@ -191,7 +205,7 @@ do_build() {
 do_strip() {
 	local FILE FILTER
 	
-   show_action "Strip    "
+   log_action "Strip    "
    
 	cd $PKG
 	
@@ -216,7 +230,7 @@ do_strip() {
 
 do_package() {
    
-   show_action "Package  "
+   log_action "Package  "
    
    cd $PKG
    
@@ -228,7 +242,7 @@ do_package() {
 do_footprint() {
 	local FILE
    
-   show_action "Footprint"
+   log_action "Footprint"
    
    FILE="$BG_WORK_DIR/.tmp"
 	
@@ -243,24 +257,23 @@ do_footprint() {
 				sed 's/^+/NEW		 /g' | \
 				sed 's/^-/MISSING	/g' > $FILE.footprint.diff
 			if [ -s $FILE.footprint.diff ]; then
-				error "Footprint mismatch found:"
+				warning "Footprint mismatch found"
 				cat $FILE.footprint.diff
 				BUILD_SUCCESSFUL="no"
 			fi
 		else
-			warning "Footprint not found, creating new."
+			warning "Footprint not found, creating new"
 			mv $FILE.footprint $BG_FOOTPRINT
 		fi
 	else
-		error "Package '$TARGET' was not found."
+		error "Package '$TARGET' was not found"
 		BUILD_SUCCESSFUL="no"
 	fi
 }
 
-
 do_clean() {
    
-   show_action "Clean    "
+   log_action "Clean    "
    
    if [ -d $BG_WORK_DIR ]
    then
@@ -270,7 +283,7 @@ do_clean() {
 
 do_add() {
    
-   show_action "Add      "
+   log_action "Add      "
    
    if [ -d $BG_SYSROOT_DIR ]; then
       tar -C $BG_SYSROOT_DIR -xf $TARGET
@@ -279,7 +292,7 @@ do_add() {
 
 do_remove() {
    
-   show_action "Remove   "
+   log_action "Remove   "
    
    if [ -d $BG_SYSROOT_DIR ]; then
       cd $BG_SYSROOT_DIR
@@ -319,13 +332,15 @@ main() {
 
 	export PKG="$BG_ROOT_DIR/$BG_WORK_DIR/pkg"
 	export SRC="$BG_ROOT_DIR/$BG_WORK_DIR/src"
-	
+   
    umask 022
 
 	check_buildfile
 
 	check_create_directory "$BG_PACKAGE_DIR"
 	check_create_directory "$BG_SYSROOT_DIR"
+   check_create_directory "$SRC"
+   check_create_directory "$PKG"
 
    # Action sequence
    

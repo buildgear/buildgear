@@ -108,7 +108,7 @@ void CFileSystem::FindFiles(string dirname, string filename, list<CBuildFile*> *
       throw std::runtime_error(strerror(errno));
 }
 
-int CFileSystem::DirExists(string dirname)
+bool CFileSystem::DirExists(string dirname)
 {
    struct stat st;
 
@@ -118,6 +118,28 @@ int CFileSystem::DirExists(string dirname)
       return false;
       
    return true;
+}
+
+bool CFileSystem::FileExists(string filename)
+{
+   struct stat st;
+
+   if (stat(filename.c_str(), &st) != 0)
+      return false;
+   else if (!S_ISREG(st.st_mode))
+      return false;
+      
+   return true;
+}
+
+long CFileSystem::Age(string filename)
+{
+   struct stat st;
+
+   if (stat(filename.c_str(), &st) != 0)
+      return -1;
+   
+   return st.st_mtime;
 }
 
 void CFileSystem::CreateDirectory(string dirname)
