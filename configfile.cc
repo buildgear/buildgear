@@ -18,16 +18,25 @@ void CConfigFile::Parse(string filename, CConfig *config)
 {
       FILE *fp;
       char line_buffer[PATH_MAX];
-      string command =  "bash -c 'source " + filename + " 2> /dev/null" +
-                        "; echo source_dir=$source_dir \
-                         ; echo source_mirror=$source_mirror \
-                         ; echo required_version=$required_version \
-                         ; echo default_name_prefix=$default_name_prefix \
-                         ; echo ignore_footprint=$ignore_footprint \
-                         ; echo ignore_checksum=$ignore_checksum \
-                         ; echo download_parallel_level=$download_parallel_level \
-                         ; echo build_parallel_level=$build_parallel_level \
-                         ; echo package_compression_level=$package_compression_level'";
+      string command =  "bash -c 'source " + filename + " 2> /dev/null";
+      
+      if (filename != BUILD_CONFIG_FILE)
+         command += "; echo source_dir=$source_dir \
+                     ; echo source_mirror=$source_mirror \
+                     ; echo required_version=$required_version \
+                     ; echo default_name_prefix=$default_name_prefix \
+                     ; echo ignore_footprint=$ignore_footprint \
+                     ; echo ignore_checksum=$ignore_checksum \
+                     ; echo download_parallel_level=$download_parallel_level \
+                     ; echo build_parallel_level=$build_parallel_level \
+                     ; echo package_compression_level=$package_compression_level \
+                     '";
+      else
+         command += "; echo target_toolchain=$TARGET_TOOLCHAIN \
+                     ; echo build=$BUILD \
+                     ; echo host=$HOST \
+                     ; echo target=$TARGET \
+                     '";
       
       fp = popen(command.c_str(), "r");
       if (fp == NULL)
@@ -47,10 +56,26 @@ void CConfigFile::Parse(string filename, CConfig *config)
 
          if (value != "")
          {
-            if (key == CONFIG_KEY_DEFAULT_NAME_PREFIX)
-               config->default_name_prefix = value;
-            if (key == CONFIG_KEY_SOURCE_DIR)
-               config->source_dir = value;
+            if (filename != BUILD_CONFIG_FILE)
+            {
+               // ~/.buildgearconfig, .buildgear/config :
+               if (key == CONFIG_KEY_DEFAULT_NAME_PREFIX)
+                  config->default_name_prefix = value;
+               if (key == CONFIG_KEY_SOURCE_DIR)
+                  config->source_dir = value;
+            }
+            else
+            {
+               // buildfiles/config :
+               if (key == CONFIG_KEY_TARGET_TOOLCHAIN)
+                  config->target_toolchain = value;
+               if (key == CONFIG_KEY_BUILD)
+                  config->build_system = value;
+               if (key == CONFIG_KEY_HOST)
+                  config->host_system = value;
+               if (key == CONFIG_KEY_TARGET)
+                  config->target_system = value;
+            }
          }
       }
       pclose(fp);

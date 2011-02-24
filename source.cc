@@ -156,19 +156,19 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
    // Check if buildfiles/config is newer than target package or target buildfiles
    // If so warn and delete work/packages (forces total rebuild)
 
-   // Set which builds are up to date wrt. package vs. Buildfile age
+   // Set build action of all builds (based on package vs. Buildfile age)
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
       if (!UpToDate((*it)))
          (*it)->build = true;
       
-      //cout << "   " << (*it)->name << ":build = " << (*it)->build << endl;
+//      cout << "   " << (*it)->name << ":build = " << (*it)->build << endl;
    }
 
-   // Traverse and set build action (based on dependencies build action)
+   // Set build action of all builds (based on dependencies build status)
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
-      // Skip if build needed already set
+      // Skip if build status already set
       if ((*it)->build)
          continue;
       
@@ -193,25 +193,32 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
    }
 */
 
-   // Process build order
-   for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
+   // Only build if selected build requires a build
+   if (buildfiles->back()->build)
    {
-      // Only build if build (package) is not up to date
-      if ((*it)->build == true)
-         Do("build", (*it));
+      // Process build order
+      for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
+      {
+         // Only build if build (package) is not up to date
+         if ((*it)->build == true)
+            Do("build", (*it));
       
-      // Don't add primary build
-      if ((*it) != buildfiles->back())
-         Do("add", (*it));
+         // Don't add primary build
+         if ((*it) != buildfiles->back())
+            Do("add", (*it));
+      }
+   
+      // Process build order in reverse
+      for (rit=buildfiles->rbegin(); rit!=buildfiles->rend(); rit++)
+      {
+         // Remove all except primary build
+         if ((*rit) != buildfiles->front())
+            Do("remove", (*rit));
+      }
    }
 
-   // Process build order
-   for (rit=buildfiles->rbegin(); rit!=buildfiles->rend(); rit++)
-   {
-      // Remove all except primary build
-      if ((*rit) != buildfiles->front())
-         Do("remove", (*rit));
-   }
+   // Delete work dir
+   result = system("rm -rf " WORK_DIR);
 
    // Announce successful build of all
    cout << "Done" << endl << endl;

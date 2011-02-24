@@ -19,6 +19,7 @@ class CConfig
       string build_system;
       string host_system;
       string target_system;
+      string target_toolchain;
       CConfig();
       void CorrectName(void);
       void CorrectSourceDir(void);
@@ -46,6 +47,7 @@ class CConfig
 #define BUILD_FILE               "Buildfile"
 #define BUILD_FILES_CONFIG       BUILD_FILES_DIR "/config"
 #define BUILD_LOG_FILE           BUILD_DIR "/build.log"
+#define BUILD_CONFIG_FILE        BUILD_FILES_DIR "/config"
 
 #define KEY_NAME                 "name"
 #define KEY_VERSION              "version"
@@ -61,6 +63,11 @@ class CConfig
 #define CONFIG_KEY_PACKAGE_COMPRESSION_LEVEL "package_compression_level"
 #define CONFIG_KEY_IGNORE_CHECKSUM           "ignore_checksum"
 #define CONFIG_KEY_IGNORE_FOOTPRINT          "ignore_footprint"
+
+#define CONFIG_KEY_TARGET_TOOLCHAIN          "target_toolchain"
+#define CONFIG_KEY_BUILD                     "build"
+#define CONFIG_KEY_HOST                      "host"
+#define CONFIG_KEY_TARGET                    "target"
 
 #define HOST                     0
 #define TARGET                   1

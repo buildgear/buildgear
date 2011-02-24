@@ -40,10 +40,16 @@ int main (int argc, char *argv[])
 
    /* Search for build root directory */
    FileSystem.FindRoot(ROOT_DIR);
-   
+
+   /* Guess host and build */
+   Config.GuessSystem();
+
    /* Parse buildgear configuration file(s) */
    ConfigFile.Parse(GLOBAL_CONFIG_FILE, &Config);
    ConfigFile.Parse(LOCAL_CONFIG_FILE, &Config);
+
+   /* Parse buildfiles configuration file */
+   ConfigFile.Parse(BUILD_CONFIG_FILE, &Config);
    
    /* Correct source dir */
    Config.CorrectSourceDir();
@@ -93,7 +99,7 @@ int main (int argc, char *argv[])
    Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
 
    /* Print resolved */
-   Dependency.ShowResolved();
+//   Dependency.ShowResolved();
 
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
@@ -107,10 +113,7 @@ int main (int argc, char *argv[])
    if (Config.download)
       exit(EXIT_SUCCESS);
    
-   /* Guess host and build */
-   Config.GuessSystem();
-   
-   /* Show systen information */
+   /* Show system information */
    Config.ShowSystem();
    
    /* Start building */
@@ -124,7 +127,7 @@ int main (int argc, char *argv[])
    /* Show elapsed time */
    Time.ShowElapsedTime();
    
-   /* Inform about log availability */
+   /* Show log location */
    cout << "See " BUILD_LOG_FILE " for details." << endl << endl;
    
    /* Enable cursor again */
