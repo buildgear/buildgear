@@ -215,13 +215,19 @@ do_strip() {
 		FILTER="cat"
 	fi
 
+   if [ "$BUILD_TYPE" == "target" ]; then
+      STRIP="$TARGET-strip"
+   else
+      STRIP="strip"
+   fi
+
 	find . -type f -printf "%P\n" | $FILTER | while read FILE; do
 		if file -b "$FILE" | grep '^.*ELF.*executable.*not stripped$' &> /dev/null; then
-			strip --strip-all "$FILE"
+			$STRIP --strip-all "$FILE"
 		elif file -b "$FILE" | grep '^.*ELF.*shared object.*not stripped$' &> /dev/null; then
-			strip --strip-unneeded "$FILE"
+			$STRIP --strip-unneeded "$FILE"
 		elif file -b "$FILE" | grep '^current ar archive$' &> /dev/null; then
-			strip --strip-debug "$FILE"
+			$STRIP --strip-debug "$FILE"
 		fi
 	done
    
@@ -334,17 +340,19 @@ main() {
    BG_SOURCE_DIR="$BG_ROOT_DIR/$SOURCE_DIR"
    BG_WORK_DIR="$WORK_DIR/$BUILD_TYPE/$name"
    BG_PACKAGE_DIR="$PACKAGE_DIR/$BUILD_TYPE"
-   BG_SYSROOT_DIR="$WORK_DIR/$BUILD_TYPE/sysroot"
+   BG_SYSROOT_DIR="$BG_ROOT_DIR/build/work/$BUILD_TYPE/sysroot"
    BG_HOST_SYSROOT_DIR="$BG_ROOT_DIR/build/work/host/sysroot"
-   BG_BG_PACKAGE_SYSROOT_DIR="$BG_ROOT_DIR/build/work/BG_PACKAGE/sysroot"
+   BG_TARGET_SYSROOT_DIR="$BG_ROOT_DIR/build/work/BG_PACKAGE/sysroot"
    BG_SHA256SUM="$BG_BUILD_FILE_DIR/.sha256sum"
    BG_FOOTPRINT="$BG_BUILD_FILE_DIR/.footprint"
    BG_NOSTRIP="$BG_BUILD_FILE_DIR/.nostrip"
+   
 
-	BG_PACKAGE="$BG_ROOT_DIR/$BG_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
+   BG_PACKAGE="$BG_ROOT_DIR/$BG_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
 
-	export PKG="$BG_ROOT_DIR/$BG_WORK_DIR/pkg"
-	export SRC="$BG_ROOT_DIR/$BG_WORK_DIR/src"
+   PKG="$BG_ROOT_DIR/$BG_WORK_DIR/pkg"
+   SRC="$BG_ROOT_DIR/$BG_WORK_DIR/src"
+   BUILD="$BG_ROOT_DIR/build"
    
    umask 022
 
@@ -364,7 +372,7 @@ main() {
       do_checksum
       do_extract
       do_build
-      #do_strip
+      do_strip
       do_package
       do_footprint
       do_clean
