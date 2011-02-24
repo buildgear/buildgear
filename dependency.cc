@@ -14,7 +14,9 @@ void CDependency::Resolve(string name, list<CBuildFile*> *buildfiles)
    bool found = false;
    list<CBuildFile*>::iterator it, itr;
    
-   cout << "Resolving dependencies..." << endl;
+   // Clear lists
+   unresolved.clear();
+   resolved.clear();
    
    /* Traverse buildfiles */
    for (it=buildfiles->begin(); 
@@ -37,12 +39,13 @@ void CDependency::Resolve(string name, list<CBuildFile*> *buildfiles)
       exit(EXIT_FAILURE);
    }   
 
-   /* Create download order list */
-   download_order = resolved;
+   /* Add to download order list */
+   download_order.insert(download_order.end(), resolved.begin(), resolved.end());
    download_order.sort();
    download_order.unique();
    
-   cout << "Done" << endl << endl;
+   /* Add to build order list */
+   build_order.insert(build_order.end(), resolved.begin(), resolved.end());
 }
 
 void CDependency::ShowResolved(void)
@@ -64,7 +67,7 @@ void CDependency::ShowResolved(void)
 
    cout <<  "Build order:" << endl;
 
-   for (it=resolved.begin(); it!=resolved.end(); it++, i++)
+   for (it=build_order.begin(); it!=build_order.end(); it++, i++)
    {
       cout << " " << i << ". " << (*it)->name << endl;
    }

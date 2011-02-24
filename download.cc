@@ -130,7 +130,7 @@ void CDownload::URL(string url, string source_dir)
    {
       int result;
       
-      cout << "   Downloading '" << url << "'" << endl;
+      cout << endl << "   Downloading '" << url << "'" << endl;
       
       // Download to partial file in source dir
       result = CDownload::File(url, source_dir + "/" + filename + ".part");
@@ -184,7 +184,7 @@ int CDownload::File(string url, string filename)
          curl_easy_setopt(curl, CURLOPT_RESUME_FROM, filesize);
       }
 
-      // Enable full curl rotocol/debug output
+      // Enable curl debug output
       //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
       cout << "   Progress [";

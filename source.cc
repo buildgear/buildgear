@@ -196,6 +196,8 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
    // Only build if selected build requires a build
    if (buildfiles->back()->build)
    {
+      cout << endl;
+      
       // Process build order
       for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
       {
@@ -219,7 +221,4 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
 
    // Delete work dir
    result = system("rm -rf " WORK_DIR);
-
-   // Announce successful build of all
-   cout << "Done" << endl << endl;
 }

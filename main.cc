@@ -68,7 +68,7 @@ int main (int argc, char *argv[])
     */
 
    /* Find host and target build files */
-   cout << "Searching for build files...\n";
+   cout << "Searching for build files.. ";
    FileSystem.FindFiles(BUILD_FILES_DIR,
                         BUILD_FILE,
                         &BuildFiles.buildfiles);
@@ -77,15 +77,14 @@ int main (int argc, char *argv[])
    cout << BuildFiles.buildfiles.size() << " files found\n\n";
 
    /* Parse and verify buildfiles */
-   cout << "Verifying build files...\n";
+   cout << "Loading build files.. ";
    BuildFiles.ParseAndVerify(&BuildFiles.buildfiles);
-   cout << "Done\n\n";
    
    /* Show buildfiles meta info (debug only) */
 //   BuildFiles.ShowMeta(&BuildFiles.buildfiles);
    
    /* Load dependencies */
-   cout << "Loading dependencies...\n";
+
    BuildFiles.LoadDependency(&BuildFiles.buildfiles);
    cout << "Done\n\n";
 
@@ -95,17 +94,20 @@ int main (int argc, char *argv[])
     *                                 HOST -> HOST
     */
 
-   /* Resolve dependencies (FIXME: handle also host/..)  */
+   /* Resolve dependencies */
+   cout << "Resolving dependencies.. ";
+   Dependency.Resolve(Config.target_toolchain, &BuildFiles.buildfiles);
    Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
+   cout << "Done" << endl << endl;
 
    /* Print resolved */
-//   Dependency.ShowResolved();
+   Dependency.ShowResolved();
 
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
 
    /* Download source files */
-   cout << "Downloading sources..." << endl;
+   cout << "Downloading sources.. ";
    Source.Download(&Dependency.download_order, Config.source_dir);
    cout << "Done\n\n";
 
@@ -117,9 +119,10 @@ int main (int argc, char *argv[])
    Config.ShowSystem();
    
    /* Start building */
-   cout << "Building '" << Config.name << "'" << endl;
+   cout << "Building '" << Config.name << "'.. ";
    if (Config.build)
-      Source.Build(&Dependency.resolved, &Config);
+      Source.Build(&Dependency.build_order, &Config);
+   cout << "Done" << endl << endl;
 
    /* Stop counting elapsed time */
    Time.Stop();

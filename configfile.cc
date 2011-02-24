@@ -75,6 +75,13 @@ void CConfigFile::Parse(string filename, CConfig *config)
                   config->host_system = value;
                if (key == CONFIG_KEY_TARGET)
                   config->target_system = value;
+                  
+               // Require target_toolchain to be defined
+               if (config->target_toolchain == "")
+               {
+                  cout << "Error: target_toolchain must be defined" << endl;
+                  exit(EXIT_FAILURE);
+               }
             }
          }
       }
