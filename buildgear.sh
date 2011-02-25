@@ -91,9 +91,8 @@ check_create_directory() {
 
 make_footprint() {
 	tar tvf $BG_PACKAGE | \
-      awk '{print $1 "\t" $2 "\t" $6}' | \
-		sed "s|\tlib/modules/`uname -r`/|\tlib/modules/<kernel-version>/|g" | \
-		sort -k 3
+      awk '{print $1 "\t" $6}' | \
+		sort -k 2
 }
 
 make_sha256sum() {
@@ -255,7 +254,7 @@ do_footprint() {
 	if [ -f $BG_PACKAGE ]; then
 		make_footprint > $FILE.footprint
 		if [ -f $BG_FOOTPRINT ]; then
-			sort -k 3 $BG_FOOTPRINT > $FILE.footprint.orig
+			sort -k 2 $BG_FOOTPRINT > $FILE.footprint.orig
 			diff -w -t -U 0 $FILE.footprint.orig $FILE.footprint | \
 				sed '/^@@/d' | \
 				sed '/^+++/d' | \
@@ -326,7 +325,14 @@ parse_options() {
 main() {
 	local FILE BG_PACKAGE
    
+   # respawn with out redirected to log file
    exec &>> $BUILD_LOG_FILE
+   
+   # Clear aliases
+   unalias -a
+   
+   # Sanitize environment
+   GREP_OPTIONS=""
    
 	parse_options "$@"
    
@@ -334,7 +340,8 @@ main() {
    
    check_buildfile
 
-   # All user exposed paths must be based on BG_ROOT
+   # All paths must be based on BG_ROOT! (FIXME)
+   # Deduct all paths from BG_ROOT and BG_BUILD_TYPE, BG_BUILD_FILE_DIR!
    BG_ROOT_DIR="$PWD"
    BG_BUILD_FILE_DIR="`dirname $BG_BUILDFILE`"
    BG_SOURCE_DIR="$BG_ROOT_DIR/$SOURCE_DIR"
@@ -346,8 +353,6 @@ main() {
    BG_SHA256SUM="$BG_BUILD_FILE_DIR/.sha256sum"
    BG_FOOTPRINT="$BG_BUILD_FILE_DIR/.footprint"
    BG_NOSTRIP="$BG_BUILD_FILE_DIR/.nostrip"
-   
-
    BG_PACKAGE="$BG_ROOT_DIR/$BG_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
 
    PKG="$BG_ROOT_DIR/$BG_WORK_DIR/pkg"

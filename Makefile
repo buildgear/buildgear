@@ -1,7 +1,7 @@
 
 HOST_CXX = g++
 
-HOST_CXXFLAGS  = -g -O2 -Wall
+HOST_CXXFLAGS  = -Wall -O2
 HOST_CXXFLAGS += -Iinclude
 HOST_CXXFLAGS += -lrt -lcurl
 
