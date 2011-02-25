@@ -269,8 +269,8 @@ do_footprint() {
 				sed '/^@@/d' | \
 				sed '/^+++/d' | \
 				sed '/^---/d' | \
-				sed 's/^+/NEW		 /g' | \
-				sed 's/^-/MISSING	/g' > $FILE.footprint.diff
+				sed 's/^+/NEW     /g' | \
+				sed 's/^-/MISSING /g' > $FILE.footprint.diff
 			if [ -s $FILE.footprint.diff ]; then
 				warning "Footprint mismatch found"
 				cat $FILE.footprint.diff
