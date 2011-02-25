@@ -68,16 +68,16 @@ int main (int argc, char *argv[])
     */
 
    /* Find host and target build files */
-   cout << "Searching for build files.. ";
+   cout << "\nSearching for build files.. ";
    FileSystem.FindFiles(BUILD_FILES_DIR,
                         BUILD_FILE,
                         &BuildFiles.buildfiles);
 
    /* Print number of buildfiles found */
-   cout << BuildFiles.buildfiles.size() << " files found\n\n";
+   cout << BuildFiles.buildfiles.size() << " files found\n";
 
    /* Parse and verify buildfiles */
-   cout << "Loading build files.. ";
+   cout << "Loading build files..       ";
    BuildFiles.ParseAndVerify(&BuildFiles.buildfiles);
    
    /* Show buildfiles meta info (debug only) */
@@ -86,7 +86,7 @@ int main (int argc, char *argv[])
    /* Load dependencies */
 
    BuildFiles.LoadDependency(&BuildFiles.buildfiles);
-   cout << "Done\n\n";
+   cout << "Done\n";
 
    /* Note: 
     * Allowed dependency relations: TARGET -> TARGET
@@ -95,19 +95,19 @@ int main (int argc, char *argv[])
     */
 
    /* Resolve dependencies */
-   cout << "Resolving dependencies.. ";
+   cout << "Resolving dependencies..    ";
    Dependency.Resolve(Config.target_toolchain, &BuildFiles.buildfiles);
    Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
-   cout << "Done" << endl << endl;
+   cout << "Done\n";
 
    /* Print resolved */
-   Dependency.ShowResolved();
+//   Dependency.ShowResolved();
 
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
 
    /* Download source files */
-   cout << "Downloading sources.. ";
+   cout << "Downloading sources..       ";
    Source.Download(&Dependency.download_order, Config.source_dir);
    cout << "Done\n\n";
 

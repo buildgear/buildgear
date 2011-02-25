@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <time.h>
 #include "buildgear/time.h"
 
@@ -30,6 +31,8 @@ void CTime::Stop(void)
 void CTime::ShowElapsedTime(void)
 {
    cout << "Elapsed time: " 
+        << fixed
+        << setprecision(3)
         << (CTime::time_stop - CTime::time_start)
         << " seconds"
         << endl << endl;
