@@ -45,7 +45,7 @@ error() {
 }
 
 log_action() {
-   echo "======== $1 '$NAME' ==========================================="
+   echo "======> $1 '$NAME'"
    bg_put "    $1    '$BUILD_TYPE/$name'"
 }
 
@@ -230,6 +230,11 @@ do_strip() {
 		fi
 	done
    
+   if [ "$?" != "0" ]; then
+      error "Strip failed"
+      exit 1
+   fi
+   
    cd $BG_ROOT_DIR
 }
 
@@ -240,6 +245,11 @@ do_package() {
    cd $PKG
    
    tar czvvf $BG_PACKAGE *
+
+   if [ "$?" != "0" ]; then
+      error "Package failed"
+      exit 1
+   fi
    
    cd $BG_ROOT_DIR
 }
@@ -296,7 +306,6 @@ do_add() {
    log_action "Add      "
    
    if [ -d $BG_SYSROOT_DIR ]; then
-      echo tar -C $BG_SYSROOT_DIR -xf $BG_PACKAGE
       tar -C $BG_SYSROOT_DIR -xf $BG_PACKAGE
    fi
    
@@ -316,6 +325,12 @@ do_remove() {
       tar -tvf $BG_PACKAGE | awk '{print $6}' | xargs rm -rf
       cd $BG_ROOT
    fi
+
+   if [ "$?" != "0" ]; then
+      error "Remove failed"
+      exit 1
+   fi
+
 }
 
 parse_options() {
