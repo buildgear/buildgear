@@ -3,7 +3,7 @@
 #include "buildgear/config.h"
 #include "buildgear/configfile.h"
 #include "buildgear/debug.h"
-#include "buildgear/time.h"
+#include "buildgear/clock.h"
 #include "buildgear/options.h"
 #include "buildgear/filesystem.h"
 #include "buildgear/buildfiles.h"
@@ -19,7 +19,7 @@ int main (int argc, char *argv[])
    CConfig      Config;
    COptions     Options;
    CConfigFile  ConfigFile;
-   CTime        Time;
+   CClock       Clock;
    CFileSystem  FileSystem;
    CBuildFiles  BuildFiles;
    CDependency  Dependency;
@@ -27,7 +27,7 @@ int main (int argc, char *argv[])
    CTools       Tools;
 
    /* Start counting elapsed time */
-   Time.Start();
+   Clock.Start();
    
    /* Disable cursor */
 //   cout << TERMINFO_CIVIS;
@@ -125,10 +125,10 @@ int main (int argc, char *argv[])
    cout << "Done" << endl << endl;
 
    /* Stop counting elapsed time */
-   Time.Stop();
+   Clock.Stop();
    
    /* Show elapsed time */
-   Time.ShowElapsedTime();
+   Clock.ShowElapsedTime();
    
    /* Show log location */
    cout << "See " BUILD_LOG_FILE " for details." << endl << endl;

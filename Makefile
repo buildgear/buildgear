@@ -14,7 +14,7 @@ all: buildgear
 buildgear: main.o \
 	filesystem.o \
 	buildfiles.o \
-	time.o \
+	clock.o \
 	dependency.o \
 	source.o \
 	options.o \
