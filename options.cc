@@ -130,13 +130,13 @@ void COptions::ShowHelp(char *argv[])
    cout << "  clean                   Remove package and work files\n";
    cout << "  show                    Show various build information\n\n";
    cout << "Download options:\n";
-   cout << "  --all                   Download source files of all builds\n";
-   cout << "  --update-checksum       Update source checksum\n";
-   cout << "  --update-checksum-all   Update source checksum of all builds\n\n";
+   cout << "  --all                   Download source files of all builds\n\n";
    cout << "Build options:\n";
    cout << "  --no-download           Do not download\n";
    cout << "  --keep-work             Do not delete work files\n";
    cout << "  --keep-work-all         Do not delete work files of all builds\n";
+   cout << "  --update-checksum       Update source checksum\n";
+   cout << "  --update-checksum-all   Update source checksum of all builds\n";
    cout << "  --update-footprint      Update footprint\n";
    cout << "  --update-footprint-all  Update footprint of all builds\n";
    cout << "  --no-strip              Do not strip libraries or executables\n";

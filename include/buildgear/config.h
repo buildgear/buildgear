@@ -30,7 +30,7 @@ class CConfig
 
 
 /* Buildgear static configuration */
-#define VERSION                  "0.4 alpha"
+#define VERSION                  "0.4 beta"
 
 #define ROOT_DIR                 ".buildgear"
 #define BUILD_FILES_DIR          "buildfiles"

@@ -36,17 +36,17 @@ info() {
 
 warning() {
 	echo "WARNING: $1"
-   echo "       Warning   '$BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
+   echo "     Warning     '$BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
 error() {
 	echo "ERROR: $1"
-   echo "       Error     '$BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
+   echo "     Error       '$BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
 log_action() {
    echo "======== $1 '$NAME' ==========================================="
-   bg_put "     $1   '$BUILD_TYPE/$name'"
+   bg_put "    $1    '$BUILD_TYPE/$name'"
 }
 
 get_filename() {
