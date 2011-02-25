@@ -149,10 +149,6 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
    result = system("rm -f " BUILD_LOG_FILE);
 
    // FIXME:
-   // Add toolchain build first in build order
-   // Restrictions: no dependencies allowed for toolchain Buildfile.
-
-   // FIXME:
    // Check if buildfiles/config is newer than target package or target buildfiles
    // If so warn and delete work/packages (forces total rebuild)
 
@@ -214,7 +210,7 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
       for (rit=buildfiles->rbegin(); rit!=buildfiles->rend(); rit++)
       {
          // Remove all except primary build
-         if ((*rit) != buildfiles->front())
+         if ((*rit) != buildfiles->back())
             Do("remove", (*rit));
       }
    }
