@@ -364,7 +364,7 @@ main() {
    BG_PACKAGE_DIR="$PACKAGE_DIR/$BUILD_TYPE"
    BG_SYSROOT_DIR="$BG_ROOT_DIR/build/work/$BUILD_TYPE/sysroot"
    BG_HOST_SYSROOT_DIR="$BG_ROOT_DIR/build/work/host/sysroot"
-   BG_TARGET_SYSROOT_DIR="$BG_ROOT_DIR/build/work/BG_PACKAGE/sysroot"
+   BG_TARGET_SYSROOT_DIR="$BG_ROOT_DIR/build/work/target/sysroot"
    BG_SHA256SUM="$BG_BUILD_FILE_DIR/.sha256sum"
    BG_FOOTPRINT="$BG_BUILD_FILE_DIR/.footprint"
    BG_NOSTRIP="$BG_BUILD_FILE_DIR/.nostrip"
@@ -376,18 +376,17 @@ main() {
    
    umask 022
 
-   # Include buildfiles configuration
-	if [ -f $1 ]; then
-      . $BUILD_FILES_CONFIG
-   fi
-
 	check_create_directory "$BG_PACKAGE_DIR"
 	check_create_directory "$BG_SYSROOT_DIR"
    check_create_directory "$SRC"
    check_create_directory "$PKG"
 
+   # Include buildfiles configuration
+	if [ -f $1 ]; then
+      . $BUILD_FILES_CONFIG
+   fi
+
    # Action sequence
-   
    if [ "$ACTION" == "build" ]; then
       do_checksum
       do_extract
