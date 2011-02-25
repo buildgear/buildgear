@@ -57,9 +57,6 @@ int main (int argc, char *argv[])
    /* Correct name */
    Config.CorrectName();
 
-   /* Check for tools required by buildgear */
-   Tools.Check();
-
    /* Future optimization
     * 
     * Track and load dependent buildfiles
@@ -109,11 +106,17 @@ int main (int argc, char *argv[])
    /* Download source files */
    cout << "Downloading sources..       ";
    Source.Download(&Dependency.download_order, Config.source_dir);
-   cout << "Done\n\n";
+   cout << "Done\n";
 
    /* Quit if download command */
    if (Config.download)
       exit(EXIT_SUCCESS);
+   
+   /* Check for required preinstalled host tools */
+   cout << "Checking tools..            " << flush;
+   Tools.Check();
+   Tools.RunToolsFile();
+   cout << "Done\n\n";
    
    /* Show system information */
    Config.ShowSystem();
@@ -122,7 +125,7 @@ int main (int argc, char *argv[])
    cout << "Building '" << Config.name << "'.. ";
    if (Config.build)
       Source.Build(&Dependency.build_order, &Config);
-   cout << "Done" << endl << endl;
+   cout << "Done\n\n";
 
    /* Stop counting elapsed time */
    Clock.Stop();
@@ -131,7 +134,7 @@ int main (int argc, char *argv[])
    Clock.ShowElapsedTime();
    
    /* Show log location */
-   cout << "See " BUILD_LOG_FILE " for details." << endl << endl;
+   cout << "See " BUILD_LOG_FILE " for details.\n\n";
    
    /* Enable cursor again */
    cout << TERMINFO_CNORM;

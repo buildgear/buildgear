@@ -3,7 +3,9 @@
 #include <unistd.h>
 #include <string.h>
 #include <getopt.h>
+#include "buildgear/config.h"
 #include "buildgear/tools.h"
+#include "buildgear/filesystem.h"
 
 void CTools::Check(void)
 {
@@ -30,6 +32,7 @@ void CTools::Check(void)
                             "cp",
                        "dirname",
                       "basename",
+                       "unalias",
                               "" };
 
    while (tool[i] != "")
@@ -40,10 +43,26 @@ void CTools::Check(void)
       
       if (status != 0)
       {
-         cout << "Command '" << tool[i] << "' is not found. Please install." << endl;
+         cout << "Failed ('" << tool[i] << "' is not found)" << endl;
          exit(EXIT_FAILURE);
       }
       
       i++;
+   }
+}
+
+void CTools::RunToolsFile(void)
+{
+   int result;
+   
+   // Run buildfiles/tools file
+   if (FileExists(string(BUILD_TOOLS_FILE)))
+   {
+      result = system("bash -c 'source " BUILD_TOOLS_FILE " 2> /dev/null'");
+      if (result != 0)
+      {
+         cout << endl << "Please install missing tools." << endl << endl;
+         exit(EXIT_FAILURE);
+      }
    }
 }
