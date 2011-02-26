@@ -82,6 +82,9 @@ void CSource::Do(string action, CBuildFile* buildfile)
    config += " NAME=" + buildfile->name;
    config += " BG_PID=" + pid.str();
    config += " VERBOSE=no";
+   config += " BUILD=" + CSource::config->build_system;
+   config += " HOST=" + CSource::config->host_system;
+   config += " TARGET=" + CSource::config->target_system;
    
    command = config + " " SCRIPT " " + buildfile->filename;
    
