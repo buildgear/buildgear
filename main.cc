@@ -89,10 +89,14 @@ int main (int argc, char *argv[])
     * Allowed dependency relations: TARGET -> TARGET
     *                               TARGET -> HOST
     *                                 HOST -> HOST
+    * But for SDK we might need eg.:
+    * host/ct-ng-sdk -> (target/fs, host/crosstool-ng)
+    *                               HOST -> TARGET
     */
 
    /* Resolve dependencies */
    cout << "Resolving dependencies..    ";
+//   Dependency.Resolve(Config.host_toolchain, &BuildFiles.buildfiles);
    Dependency.Resolve(Config.target_toolchain, &BuildFiles.buildfiles);
    Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
    cout << "Done\n";

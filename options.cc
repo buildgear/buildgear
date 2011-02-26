@@ -147,7 +147,8 @@ void COptions::ShowHelp(char *argv[])
 	cout << "  --dependency-tree       Show dependency tree\n";
 	cout << "  --build-order           Show build order\n";
 	cout << "  --download-order        Show download order\n";
-   cout << "  --build-actions         Show build actions\n\n";
+   cout << "  --build-actions         Show build actions\n";
+   cout << "  --footprint-conflicts   Show footprint conflicts\n\n";
    cout << "General options:\n";
 	cout << "  --version               Display version\n";
 	cout << "  --help                  Display help\n";

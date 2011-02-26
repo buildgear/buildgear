@@ -82,7 +82,7 @@ void CConfig::GuessSystem(void)
 void CConfig::ShowSystem(void)
 {
    cout << "Building '" << CConfig::name << "' for:" << endl;
-   cout << "   build  = " << CConfig::build_system << endl;
-   cout << "   host   = " << CConfig::host_system << endl;
-   cout << "   target = " << CConfig::target_system << endl << endl;
+   cout << "   BUILD  = " << CConfig::build_system << endl;
+   cout << "   HOST   = " << CConfig::host_system << endl;
+   cout << "   TARGET = " << CConfig::target_system << endl << endl;
 }
