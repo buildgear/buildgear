@@ -388,10 +388,14 @@ main() {
    check_create_directory "$BG_ROOT_DIR/build/work/target"
 
    # Create target sysroot (based on link)
-   if [ ! -L $BG_TARGET_SYSROOT_DIR ]; then
-      cd "$BG_ROOT_DIR/build/work/target"
-      ln -s $TARGET_SYSROOT_LINK sysroot
-      cd $BG_ROOT
+   if [ "$BG_TARGET_SYSROOT_DIR" != "" ]; then
+      if [ ! -L $BG_TARGET_SYSROOT_DIR ]; then
+         cd "$BG_ROOT_DIR/build/work/target"
+         ln -s $TARGET_SYSROOT_LINK sysroot
+         cd $BG_ROOT
+      fi
+   else
+      check_create_directory $BG_TARGET_SYSROOT_DIR
    fi
 
    # Action sequence
@@ -405,6 +409,7 @@ main() {
       do_clean
    elif [ "$ACTION" == "add" ]; then
       do_add
+      do_footprint
    elif [ "$ACTION" == "remove" ]; then
       do_remove
    fi
