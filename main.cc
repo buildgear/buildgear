@@ -114,7 +114,10 @@ int main (int argc, char *argv[])
 
    /* Quit if download command */
    if (Config.download)
+   {
+      cout << endl;
       exit(EXIT_SUCCESS);
+   }
    
    /* Check for required preinstalled host tools */
    cout << "Checking host tools and libs..  " << flush;
