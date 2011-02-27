@@ -9,11 +9,32 @@ class CConfig
 {
    public:
       string name;
+      
       bool download;
+      bool download_all;
+      
       bool build;
-      bool info;
-      string ignore_checksum;
-      string update_checksum;
+      bool keep_work;
+      bool keep_work_all;
+      bool keep_sysroot;
+      bool update_checksum;
+      bool update_checksum_all;
+      bool update_footprint;
+      bool update_footprint_all;
+      bool no_strip;
+      bool no_strip_all;
+      bool no_download;
+      
+      bool clean;
+      bool clean_all;
+      
+      bool show;
+      bool build_order;
+      bool build_actions;
+      bool download_order;
+      bool footprint_conflicts;
+      bool help;
+      
       string default_name_prefix;
       string source_dir;
       string build_system;

@@ -15,11 +15,33 @@ extern void stripChar(string &str, char c);
 
 CConfig::CConfig()
 {
-   CConfig::download = false;
-   CConfig::build = false;
-   CConfig::info = false;   
-   CConfig::default_name_prefix = "target/";
-   CConfig::source_dir = SOURCE_DIR;
+   download = false;
+   download_all = false;
+      
+   build = false;
+   keep_work = false;
+   keep_work_all = false;
+   keep_sysroot = false;
+   update_checksum = false;
+   update_checksum_all = false;
+   update_footprint = false;
+   update_footprint_all = false;
+   no_strip = false;
+   no_strip_all = false;
+   no_download = false;
+      
+   clean = false;
+   clean_all = false;
+      
+   show = false;
+   build_order = false;
+   build_actions = false;
+   download_order = false;
+   footprint_conflicts = false;
+   help = false;
+   
+   default_name_prefix = "target/";
+   source_dir = SOURCE_DIR;
 }
 
 void CConfig::CorrectName()
