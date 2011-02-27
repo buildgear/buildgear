@@ -44,7 +44,7 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
          switch( option ) 
          {
             case 'a':
-               config->download_all = true;
+               config->all = true;
                break;
 				
             default:
@@ -63,15 +63,11 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
       static struct option long_options[] =
 		{
          {"keep-work",            no_argument, 0, 'w'},
-         {"keep-work-all",        no_argument, 0, 'W'},
          {"keep-sysroot",         no_argument, 0, 'r'},
          {"update-checksum",      no_argument, 0, 'c'},
-         {"update-checksum-all",  no_argument, 0, 'C'},
          {"update-footprint",     no_argument, 0, 'f'},
-         {"update-footprint-all", no_argument, 0, 'F'},
          {"no-strip",             no_argument, 0, 's'},
-         {"no-strip-all",         no_argument, 0, 'S'},
-         {"no-download",          no_argument, 0, 'd'},
+         {"all",                  no_argument, 0, 'a'},
 			{0,                      0,           0,  0 }
 		};
       
@@ -83,32 +79,21 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
             case 'w':
                config->keep_work = true;
                break;
-            case 'W':
-               config->keep_work_all = true;
-               break;
             case 'r':
                config->keep_sysroot = true;
                break;
             case 'c':
                config->update_checksum = true;
                break;
-            case 'C':
-               config->update_checksum_all = true;
-               break;
             case 'f':
                config->update_footprint = true;
-               break;
-            case 'F':
-               config->update_footprint_all = true;
                break;
             case 's':
                config->no_strip = true;
                break;
-            case 'S':
-               config->no_strip_all = true;
+            case 'a':
+               config->all = true;
                break;
-            case 'd':
-               config->no_download = true;
             break;
 				
             default:
@@ -136,7 +121,7 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
          switch( option ) 
          {
             case 'a':
-               config->clean_all = true;
+               config->all = true;
                break;
 				
             default:
@@ -253,18 +238,14 @@ void COptions::ShowHelp(char *argv[])
    cout << "  clean                   Remove package and work files\n";
    cout << "  show                    Show various information\n\n";
    cout << "Download options:\n";
-   cout << "  --all                   Download source files of all builds\n\n";
+   cout << "  --all                   Download source files of all available builds\n\n";
    cout << "Build options:\n";
    cout << "  --keep-work             Do not delete work files\n";
-   cout << "  --keep-work-all         Do not delete work files of all builds\n";
    cout << "  --keep-sysroot          Do not delete sysroot\n";
    cout << "  --update-checksum       Update source checksum\n";
-   cout << "  --update-checksum-all   Update source checksum of all builds\n";
    cout << "  --update-footprint      Update footprint\n";
-   cout << "  --update-footprint-all  Update footprint of all builds\n";
    cout << "  --no-strip              Do not strip libraries or executables\n";
-   cout << "  --no-strip-all          Do not strip libraries or executables of all builds\n";
-   cout << "  --no-download           Do not download\n\n";
+   cout << "  --all                   Apply to all builds\n\n";
    cout << "Clean options:\n";
    cout << "  --all                   Remove package and work files of all builds\n\n";
    cout << "Show options:\n";
