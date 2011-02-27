@@ -135,6 +135,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --no-download           Do not download\n";
    cout << "  --keep-work             Do not delete work files\n";
    cout << "  --keep-work-all         Do not delete work files of all builds\n";
+   cout << "  --keep-sysroot          Do not delete sysroot\n";
    cout << "  --update-checksum       Update source checksum\n";
    cout << "  --update-checksum-all   Update source checksum of all builds\n";
    cout << "  --update-footprint      Update footprint\n";

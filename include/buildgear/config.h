@@ -49,7 +49,7 @@ class CConfig
 #define BUILD_LOG_FILE           BUILD_DIR "/build.log"
 #define BUILD_CONFIG_FILE        BUILD_FILES_DIR "/config"
 #define BUILD_HELP_FILE          BUILD_FILES_DIR "/help"
-#define BUILD_TOOLS_FILE         BUILD_FILES_DIR "/tools"
+#define BUILD_CHECK_FILE         BUILD_FILES_DIR "/check"
 
 #define KEY_NAME                 "name"
 #define KEY_VERSION              "version"

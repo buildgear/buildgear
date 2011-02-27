@@ -65,7 +65,7 @@ int main (int argc, char *argv[])
     */
 
    /* Find host and target build files */
-   cout << "\nSearching for build files.. ";
+   cout << "\nSearching for build files..     ";
    FileSystem.FindFiles(BUILD_FILES_DIR,
                         BUILD_FILE,
                         &BuildFiles.buildfiles);
@@ -74,7 +74,7 @@ int main (int argc, char *argv[])
    cout << BuildFiles.buildfiles.size() << " files found\n";
 
    /* Parse and verify buildfiles */
-   cout << "Loading build files..       ";
+   cout << "Loading build files..           ";
    BuildFiles.ParseAndVerify(&BuildFiles.buildfiles);
    
    /* Show buildfiles meta info (debug only) */
@@ -95,7 +95,7 @@ int main (int argc, char *argv[])
     */
 
    /* Resolve dependencies */
-   cout << "Resolving dependencies..    ";
+   cout << "Resolving dependencies..        ";
 //   Dependency.Resolve(Config.host_toolchain, &BuildFiles.buildfiles);
    Dependency.Resolve(Config.target_toolchain, &BuildFiles.buildfiles);
    Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
@@ -108,7 +108,7 @@ int main (int argc, char *argv[])
    FileSystem.CreateDirectory(BUILD_DIR);
 
    /* Download source files */
-   cout << "Downloading sources..       ";
+   cout << "Downloading sources..           ";
    Source.Download(&Dependency.download_order, Config.source_dir);
    cout << "Done\n";
 
@@ -117,7 +117,7 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    
    /* Check for required preinstalled host tools */
-   cout << "Checking tools..            " << flush;
+   cout << "Checking host tools and libs..  " << flush;
    Tools.Check();
    Tools.RunToolsFile();
    cout << "Done\n\n";
