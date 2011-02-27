@@ -215,7 +215,6 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
 	{
       // Get NAME of build
       config->name = argv[optind++];
-      cout << "name=" << config->name << endl;
       
       if (optind < argc)
       {
