@@ -9,7 +9,8 @@ using namespace std;
 class CDependency
 {
 	public:
-      void ShowResolved(void);
+      void ShowDownloadOrder(void);
+      void ShowBuildOrder(void);
       void Resolve(string name, list<CBuildFile*> *buildfiles);
       list<CBuildFile*> resolved;
       list<CBuildFile*> unresolved;

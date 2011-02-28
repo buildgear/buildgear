@@ -35,7 +35,7 @@ void CDependency::Resolve(string name, list<CBuildFile*> *buildfiles)
 
    if (!found)
    {
-      cout << "Error: " << name << " is not found" << endl;
+      cout << "Error: build '" << name << "' is not found" << endl;
       exit(EXIT_FAILURE);
    }   
 
@@ -48,30 +48,33 @@ void CDependency::Resolve(string name, list<CBuildFile*> *buildfiles)
    build_order.insert(build_order.end(), resolved.begin(), resolved.end());
 }
 
-void CDependency::ShowResolved(void)
+void CDependency::ShowDownloadOrder(void)
 {
    int i=1;
 
    list<CBuildFile*>::iterator it;
    
-   cout <<  "Download order:" << endl;
+   cout <<  "\nDownload order:" << endl;
 
    for (it=download_order.begin(); it!=download_order.end(); it++, i++)
    {
-      cout << " " << i << ". " << (*it)->name << endl;
+      cout << "   " << i << ". " << (*it)->name << endl;
    }
-   
-   cout << endl;
-   
-   i=1;
+}
 
-   cout <<  "Build order:" << endl;
+
+void CDependency::ShowBuildOrder(void)
+{
+   int i=1;
+
+   list<CBuildFile*>::iterator it;
+   
+   cout <<  "\nBuild order:" << endl;
 
    for (it=build_order.begin(); it!=build_order.end(); it++, i++)
    {
-      cout << " " << i << ". " << (*it)->name << endl;
+      cout << "   " << i << ". " << (*it)->name << endl;
    }
-   cout << endl;
 }
 
 void CDependency::ResolveDep(CBuildFile *buildfile,

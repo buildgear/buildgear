@@ -237,7 +237,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  clean                   Remove package and work files\n";
    cout << "  show                    Show various information\n\n";
    cout << "Download options:\n";
-   cout << "  --all                   Download source files of all available builds\n\n";
+   cout << "  --all                   Download source files of all found builds\n\n";
    cout << "Build options:\n";
    cout << "  --keep-work             Do not delete work files\n";
    cout << "  --keep-sysroot          Do not delete sysroot\n";

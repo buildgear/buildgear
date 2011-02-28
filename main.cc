@@ -57,13 +57,6 @@ int main (int argc, char *argv[])
    /* Correct name */
    Config.CorrectName();
 
-   /* Future optimization
-    * 
-    * Track and load dependent buildfiles
-    *  -> does not load all files
-    *  -> minimizes I/O load
-    */
-
    /* Find host and target build files */
    cout << "\nSearching for build files..     ";
    FileSystem.FindFiles(BUILD_FILES_DIR,
@@ -101,9 +94,20 @@ int main (int argc, char *argv[])
    Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
    cout << "Done\n";
 
-   /* Print resolved */
-//   Dependency.ShowResolved();
-
+   /* Handle show options */
+   if (Config.show)
+   {
+      if (Config.download_order)
+         Dependency.ShowDownloadOrder();
+      
+      if (Config.build_order)
+         Dependency.ShowBuildOrder();
+         
+      cout << endl;
+      
+      exit(EXIT_SUCCESS);
+   }
+   
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
 
