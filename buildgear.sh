@@ -214,7 +214,7 @@ do_strip() {
 		FILTER="cat"
 	fi
 
-   if [ "$BUILD_TYPE" == "target" ]; then
+   if [ "$BUILD_TYPE" = "target" ]; then
       STRIP="$TARGET-strip"
    else
       STRIP="strip"
@@ -399,7 +399,7 @@ main() {
    fi
 
    # Action sequence
-   if [ "$ACTION" == "build" ]; then
+   if [ "$ACTION" = "build" ]; then
       do_checksum
       do_extract
       do_build
@@ -407,10 +407,10 @@ main() {
       do_package
       do_footprint
       do_clean
-   elif [ "$ACTION" == "add" ]; then
+   elif [ "$ACTION" = "add" ]; then
       do_add
       do_footprint
-   elif [ "$ACTION" == "remove" ]; then
+   elif [ "$ACTION" = "remove" ]; then
       do_remove
    fi
    exit 0
