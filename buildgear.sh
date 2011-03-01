@@ -228,7 +228,9 @@ do_package() {
    
    cd $PKG
    
-   tar czvvf $BG_PACKAGE *
+   if [ "`ls -A`" != "" ]; then
+      tar czvvf $BG_PACKAGE *
+   fi
 
    if [ "$?" != "0" ]; then
       error "Package failed"
