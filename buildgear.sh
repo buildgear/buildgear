@@ -339,9 +339,9 @@ main() {
    BG_BUILD_FILE_DIR="`dirname $BG_BUILDFILE`"
    BG_SOURCE_DIR="$BG_ROOT_DIR/$SOURCE_DIR"
    BG_PACKAGE_DIR="$PACKAGE_DIR/$BUILD_TYPE"
-   BG_SYSROOT_DIR="$BG_ROOT_DIR/build/sysroot/$BUILD_TYPE"
-   BG_HOST_SYSROOT_DIR="$BG_ROOT_DIR/build/sysroot/host"
-   BG_TARGET_SYSROOT_DIR="$BG_ROOT_DIR/build/sysroot/target"
+   BG_SYSROOT_DIR="$BG_ROOT_DIR/build/work/sysroot/$BUILD_TYPE"
+   BG_HOST_SYSROOT_DIR="$BG_ROOT_DIR/build/work/sysroot/host"
+   BG_TARGET_SYSROOT_DIR="$BG_ROOT_DIR/build/work/sysroot/target"
    BG_SHA256SUM="$BG_BUILD_FILE_DIR/.sha256sum"
    BG_FOOTPRINT="$BG_BUILD_FILE_DIR/.footprint"
    BG_NOSTRIP="$BG_BUILD_FILE_DIR/.nostrip"
@@ -368,12 +368,12 @@ main() {
    check_create_directory "$SRC"
    check_create_directory "$PKG"
    check_create_directory "$BG_PACKAGE_DIR"
-   check_create_directory "$BG_ROOT_DIR/build/sysroot"
+   check_create_directory "$BG_ROOT_DIR/build/work/sysroot"
 
    # Create link to target sysroot if target sysroot link is configured
    if [ "$TARGET_SYSROOT_LINK" != "" ]; then
       if [ ! -e "$BG_TARGET_SYSROOT_DIR" ]; then
-         cd "$BG_ROOT_DIR/build/sysroot"
+         cd "$BG_ROOT_DIR/build/work/sysroot"
          ln -s $TARGET_SYSROOT_LINK target
          cd $BG_ROOT
       fi
