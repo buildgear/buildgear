@@ -53,10 +53,12 @@ class CConfig
 #define BUILD_FILES_HOST_DIR     BUILD_FILES_DIR "/host"
 #define BUILD_FILES_TARGET_DIR   BUILD_FILES_DIR "/target"
 #define BUILD_DIR                "build"
-#define SOURCE_DIR               BUILD_DIR  "/source"
-#define WORK_DIR                 BUILD_DIR  "/work"
-#define PACKAGE_DIR              BUILD_DIR  "/package"
+#define SOURCE_DIR               BUILD_DIR "/source"
+#define WORK_DIR                 BUILD_DIR "/work"
+#define PACKAGE_DIR              BUILD_DIR "/package"
+#define SYSROOT_DIR              BUILD_DIR "/sysroot"
 #define PACKAGE_EXTENSION        ".pkg.tar.gz"
+
 
 #define GLOBAL_CONFIG_FILE       "~/.buildgearconfig"
 #define LOCAL_CONFIG_FILE        ROOT_DIR "/config"

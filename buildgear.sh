@@ -61,22 +61,6 @@ get_filename() {
 	echo $FILE
 }
 
-check_buildfile() {
-	if [ ! "$name" ]; then
-		error "Variable 'name' not specified in $BG_BUILDFILE"
-		exit 1
-	elif [ ! "$version" ]; then
-		error "Variable 'version' not specified in $BG_BUILDFILE"
-		exit 1
-	elif [ ! "$release" ]; then
-		error "Variable 'release' not specified in $BG_BUILDFILE"
-		exit 1
-	elif [ "`type -t build`" != "function" ]; then
-		error "Function 'build' not specified in $BG_BUILDFILE"
-		exit 1
-	fi
-}
-
 check_create_directory() {
 	if [ ! -d $1 ]; then
       mkdir -p $1
@@ -340,7 +324,7 @@ parse_options() {
 main() {
 	local FILE BG_PACKAGE
    
-   # respawn with out redirected to log file
+   # respawn with output redirected to log file
    exec &>> $BUILD_LOG_FILE
    
    # Clear aliases
@@ -350,24 +334,29 @@ main() {
    GREP_OPTIONS=""
    
 	parse_options "$@"
-   
-   . $BG_BUILDFILE
-   
-   check_buildfile
 
-   # All paths must be based on BG_ROOT! (FIXME)
-   # Deduct all paths from BG_ROOT and BG_BUILD_TYPE, BG_BUILD_FILE_DIR!
    BG_ROOT_DIR="$PWD"
    BG_BUILD_FILE_DIR="`dirname $BG_BUILDFILE`"
    BG_SOURCE_DIR="$BG_ROOT_DIR/$SOURCE_DIR"
-   BG_WORK_DIR="$WORK_DIR/$BUILD_TYPE/$name"
    BG_PACKAGE_DIR="$PACKAGE_DIR/$BUILD_TYPE"
-   BG_SYSROOT_DIR="$BG_ROOT_DIR/build/work/$BUILD_TYPE/sysroot"
-   BG_HOST_SYSROOT_DIR="$BG_ROOT_DIR/build/work/host/sysroot"
-   BG_TARGET_SYSROOT_DIR="$BG_ROOT_DIR/build/work/target/sysroot"
+   BG_SYSROOT_DIR="$BG_ROOT_DIR/build/sysroot/$BUILD_TYPE"
+   BG_HOST_SYSROOT_DIR="$BG_ROOT_DIR/build/sysroot/host"
+   BG_TARGET_SYSROOT_DIR="$BG_ROOT_DIR/build/sysroot/target"
    BG_SHA256SUM="$BG_BUILD_FILE_DIR/.sha256sum"
    BG_FOOTPRINT="$BG_BUILD_FILE_DIR/.footprint"
    BG_NOSTRIP="$BG_BUILD_FILE_DIR/.nostrip"
+
+   # Include buildfiles configuration
+	if [ -f $1 ]; then
+      . $BUILD_FILES_CONFIG
+   fi
+   
+   # Include buildfile
+   . $BG_BUILDFILE
+
+   # All paths must be based on BG_ROOT! (FIXME)
+   # Deduct all paths from BG_ROOT and BG_BUILD_TYPE, BG_BUILD_FILE_DIR!
+   BG_WORK_DIR="$WORK_DIR/$BUILD_TYPE/$name"
    BG_PACKAGE="$BG_ROOT_DIR/$BG_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
 
    PKG="$BG_ROOT_DIR/$BG_WORK_DIR/pkg"
@@ -376,27 +365,21 @@ main() {
    
    umask 022
 
-   # Include buildfiles configuration
-	if [ -f $1 ]; then
-      . $BUILD_FILES_CONFIG
-   fi
-
-   check_create_directory "$BG_PACKAGE_DIR"
-   check_create_directory "$BG_HOST_SYSROOT_DIR"
    check_create_directory "$SRC"
    check_create_directory "$PKG"
-   check_create_directory "$BG_ROOT_DIR/build/work/target"
+   check_create_directory "$BG_PACKAGE_DIR"
+   check_create_directory "$BG_ROOT_DIR/build/sysroot"
 
-   # Create target sysroot (based on link)
-   if [ "$BG_TARGET_SYSROOT_DIR" != "" ]; then
-      if [ ! -L $BG_TARGET_SYSROOT_DIR ]; then
-         cd "$BG_ROOT_DIR/build/work/target"
-         ln -s $TARGET_SYSROOT_LINK sysroot
+   # Create link to target sysroot if target sysroot link is configured
+   if [ "$TARGET_SYSROOT_LINK" != "" ]; then
+      if [ ! -e "$BG_TARGET_SYSROOT_DIR" ]; then
+         cd "$BG_ROOT_DIR/build/sysroot"
+         ln -s $TARGET_SYSROOT_LINK target
          cd $BG_ROOT
       fi
-   else
-      check_create_directory $BG_TARGET_SYSROOT_DIR
    fi
+
+   check_create_directory "$BG_SYSROOT_DIR"
 
    # Action sequence
    if [ "$ACTION" = "build" ]; then

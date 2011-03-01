@@ -208,13 +208,21 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
          if ((*it) != buildfiles->back())
             Do("add", (*it));
       }
-   
+
+/*   
       // Process build order in reverse
       for (rit=buildfiles->rbegin(); rit!=buildfiles->rend(); rit++)
       {
          // Remove all except primary build
          if ((*rit) != buildfiles->back())
             Do("remove", (*rit));
+      }
+*/
+  
+      if (!config->keep_sysroot)
+      {
+         cout << "   Removing       build/sysroot" << endl;
+         result = system("rm -rf " SYSROOT_DIR);
       }
    }
 
