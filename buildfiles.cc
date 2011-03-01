@@ -148,12 +148,12 @@ void CBuildFiles::LoadDependency(list<CBuildFile*> *buildfiles)
          // Reset match state
          no_match = true;
 
-         // Find matching target buildfile
+         // Find matching buildfile
          for (itr=CBuildFiles::buildfiles.begin(); 
               itr!=CBuildFiles::buildfiles.end();
               itr++)
          {
-            // If match found make target dependency relation
+            // If match found make dependency relation
             if (dep == (*itr)->name)
             {
                (*it)->dependency.push_back((*itr));
@@ -161,7 +161,7 @@ void CBuildFiles::LoadDependency(list<CBuildFile*> *buildfiles)
             }
          }
          
-         // Warn if missing buildfile(s)
+         // Warn if missing buildfile
          if (no_match)
          {
             cout << "Error: " << (*it)->name << " " << dep << " not found" << endl;
