@@ -14,7 +14,6 @@ class CConfig
       
       bool build;
       bool keep_work;
-      bool keep_sysroot;
       bool update_checksum;
       bool update_footprint;
       bool no_strip;
@@ -23,9 +22,7 @@ class CConfig
       
       bool show;
       bool build_order;
-      bool build_actions;
       bool download_order;
-      bool footprint_conflicts;
       bool help;
       
       bool all;
@@ -56,7 +53,6 @@ class CConfig
 #define SOURCE_DIR               BUILD_DIR "/source"
 #define WORK_DIR                 BUILD_DIR "/work"
 #define PACKAGE_DIR              BUILD_DIR "/package"
-#define SYSROOT_DIR              BUILD_DIR "/sysroot"
 #define PACKAGE_EXTENSION        ".pkg.tar.gz"
 
 

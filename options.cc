@@ -62,13 +62,12 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
       // Parse command OPTIONS
       static struct option long_options[] =
 		{
-         {"keep-work",            no_argument, 0, 'w'},
-         {"keep-sysroot",         no_argument, 0, 'r'},
-         {"update-checksum",      no_argument, 0, 'c'},
-         {"update-footprint",     no_argument, 0, 'f'},
-         {"no-strip",             no_argument, 0, 's'},
-         {"all",                  no_argument, 0, 'a'},
-			{0,                      0,           0,  0 }
+         {"keep-work",        no_argument, 0, 'w'},
+         {"update-checksum",  no_argument, 0, 'c'},
+         {"update-footprint", no_argument, 0, 'f'},
+         {"no-strip",         no_argument, 0, 's'},
+         {"all",              no_argument, 0, 'a'},
+         {0,                  0,           0,  0 }
 		};
       
       option = getopt_long (argc, argv, "", long_options, &option_index);
@@ -78,9 +77,6 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
          {
             case 'w':
                config->keep_work = true;
-               break;
-            case 'r':
-               config->keep_sysroot = true;
                break;
             case 'c':
                config->update_checksum = true;
@@ -140,9 +136,7 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
       static struct option long_options[] =
 		{
 			{"build-order",         no_argument, 0, 'o'},
-         {"build-actions",       no_argument, 0, 'a'},
          {"download-order",      no_argument, 0, 'd'},
-         {"footprint-conflicts", no_argument, 0, 'c'},
          {"help",                no_argument, 0, 'h'},
 			{0,                     0,           0,  0 }
 		};
@@ -155,14 +149,8 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
             case 'o':
                config->build_order = true;
                break;
-            case 'a':
-               config->build_actions = true;
-               break;
             case 'd':
                config->download_order = true;
-               break;
-            case 'c':
-               config->footprint_conflicts = true;
                break;
             case 'h':
                config->help = true;
@@ -237,10 +225,9 @@ void COptions::ShowHelp(char *argv[])
    cout << "  clean                   Remove package and work files\n";
    cout << "  show                    Show various information\n\n";
    cout << "Download options:\n";
-   cout << "  --all                   Download source files of all available builds\n\n";
+   cout << "  --all                   Download source files of all builds\n\n";
    cout << "Build options:\n";
    cout << "  --keep-work             Do not delete work files\n";
-   cout << "  --keep-sysroot          Do not delete sysroot\n";
    cout << "  --update-checksum       Update source checksum\n";
    cout << "  --update-footprint      Update footprint\n";
    cout << "  --no-strip              Do not strip libraries or executables\n";

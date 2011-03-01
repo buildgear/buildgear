@@ -19,7 +19,6 @@ CConfig::CConfig()
       
    build = false;
    keep_work = false;
-   keep_sysroot = false;
    update_checksum = false;
    update_footprint = false;
    no_strip = false;
@@ -28,9 +27,7 @@ CConfig::CConfig()
       
    show = false;
    build_order = false;
-   build_actions = false;
    download_order = false;
-   footprint_conflicts = false;
    help = false;
    
    all = false;

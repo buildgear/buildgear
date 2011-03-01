@@ -218,12 +218,6 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
             Do("remove", (*rit));
       }
 */
-  
-      if (!config->keep_sysroot)
-      {
-         cout << "   Removing       build/sysroot" << endl;
-         result = system("rm -rf " SYSROOT_DIR);
-      }
    }
 
    // Delete work dir
