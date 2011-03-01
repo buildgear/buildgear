@@ -38,6 +38,14 @@ int main (int argc, char *argv[])
    /* Debug stream option */
    debug.On() = false;
 
+   /* Show buildfiles help*/
+   if (Config.show)
+   {
+      if (Config.help)
+         Source.ShowBuildHelp();
+         exit(EXIT_SUCCESS);
+   }
+
    /* Search for build root directory */
    FileSystem.FindRoot(ROOT_DIR);
 

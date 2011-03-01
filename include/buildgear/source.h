@@ -11,6 +11,7 @@ class CSource : public CFileSystem, COptions
 {
    public:
       CConfig *config;
+      void ShowBuildHelp(void);
       void Download(list<CBuildFile*> *, string);
       void Build(list<CBuildFile*> *, CConfig *);
       void Do(string, CBuildFile*);

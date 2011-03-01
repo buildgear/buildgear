@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <stdexcept>
 #include <sstream>
@@ -222,4 +223,29 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
 
    // Delete work dir
    result = system("rm -rf " WORK_DIR);
+}
+
+void CSource::ShowBuildHelp(void)
+{
+  ifstream fin;
+  char s[10000];
+  
+  if (FileExists(string(BUILD_HELP_FILE)))
+  {
+      fin.open(BUILD_HELP_FILE, ios::in);
+  
+      if(fin.fail())
+      {
+         cout << "Error: Unable to open " << BUILD_HELP_FILE << endl;
+         exit(EXIT_FAILURE);
+      }
+   
+      while(!fin.fail() && !fin.eof())
+      {
+         fin.getline(s, 10000);
+         if (s[0] != '#')
+            cout << s << endl;
+      }
+      fin.close();
+   }
 }
