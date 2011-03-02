@@ -93,7 +93,11 @@ make_sha256sum() {
 
 check_sha256sum() {
 	local FILE="$BG_BUILD_WORK_DIR/.tmp"
-	
+   
+   if [ "$BG_UPDATE_CHECKSUM" = "yes" ]; then
+      rm -f $BG_BUILD_SHA256SUM
+   fi
+   
 	if [ -f $BG_BUILD_SHA256SUM ]; then
 		make_sha256sum > $FILE.sha256sum
 		sort -k 2 $BG_BUILD_SHA256SUM > $FILE.sha256sum.orig
@@ -104,28 +108,18 @@ check_sha256sum() {
 			sed 's/^+/  NEW       /g' | \
 			sed 's/^-/  MISSING   /g' > $FILE.sha256sum.diff
 		if [ -s $FILE.sha256sum.diff ]; then
-			error "Sha256sum mismatch found"
+			warning "Sha256sum mismatch found"
 			cat $FILE.sha256sum.diff
-
-			if [ "$BG_CHECK_SHA256SUM" = "yes" ]; then
-				error "Sha256sum mismatch"
-				exit 1
-			fi
-			exit 1
+      else
+         info "Sha256sum ok"
 		fi
 	else
-		if [ "$BG_CHECK_SHA256SUM" = "yes" ]; then
-			info "Sha256sum not found"
-			exit 1
-		fi
-		
-		warning "Sha256sum not found, creating new"
+      if [ "$BG_UPDATE_CHECKSUM" = "yes" ]; then
+         info "Updated sha256 checksum"
+      else
+         info "Sha256sum not found, creating new"
+      fi
 		make_sha256sum > $BG_BUILD_SHA256SUM
-	fi
-
-	if [ "$BG_CHECK_SHA256SUM" = "yes" ]; then
-		info "Sha256sum ok"
-		exit 0
 	fi
 }
 
@@ -264,19 +258,18 @@ do_footprint() {
 			if [ -s $FILE.footprint.diff ]; then
 				warning "Footprint mismatch found"
 				cat $FILE.footprint.diff
-				BUILD_SUCCESSFUL="no"
 			fi
 		else
          if [ "$BG_UPDATE_FOOTPRINT" = "yes" ]; then
             info "Updated footprint"
          else
-            warning "Footprint not found, creating new"
+            info "Footprint not found, creating new"
          fi
          mv $FILE.footprint $BG_BUILD_FOOTPRINT
 		fi
 	else
 		error "Package '$BG_BUILD_PACKAGE' was not found"
-		BUILD_SUCCESSFUL="no"
+      exit 1
 	fi
 }
 
@@ -411,7 +404,12 @@ main() {
       do_clean
    elif [ "$BG_ACTION" = "add" ]; then
       do_add
-      do_footprint
+      if [ "$BG_UPDATE_CHECKSUM" = "yes" ]; then
+         do_checksum
+      fi
+      if [ "$BG_UPDATE_FOOTPRINT" = "yes" ]; then
+         do_footprint
+      fi
    elif [ "$BG_ACTION" = "remove" ]; then
       do_remove
    fi
