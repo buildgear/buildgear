@@ -1,0 +1,15 @@
+
+=== README for BuildGear ===
+
+1. Introduction
+
+   BuildGear is a lightweight embedded build system for experienced GNU/Linux developers. The primary focus of this build system is to keep it simple, which is reflected in a straightforward command line build interface, and easy to maintain build files. The secondary focus is build performance and build reproducability. It is easy to use and well suited for product or prototype development.
+
+2. Installation
+
+   See INSTALL file for how to build and install BuildGear.
+
+3. Website
+
+   Visit http://www.buildgear-project.org for more information.
+

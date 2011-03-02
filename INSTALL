@@ -1,0 +1,10 @@
+
+Prerequisites:
+
+   libcurl
+
+Installation:
+
+   ./configure --prefix=/usr
+   make
+   make install
