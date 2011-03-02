@@ -221,8 +221,8 @@ void COptions::ShowHelp(char *argv[])
 	cout << "Usage: " << argv[0] << " [COMMAND] [OPTIONS] [BUILD NAME]\n\n";
    cout << "Commands:\n";
    cout << "  download                Download source files\n";
-   cout << "  build                   Build\n";
-   cout << "  clean                   Remove package and work files\n";
+   cout << "  build                   Build build\n";
+   cout << "  clean                   Clean build\n";
    cout << "  show                    Show various information\n\n";
    cout << "Download options:\n";
    cout << "  --all                   Download source files of all builds\n\n";
@@ -233,7 +233,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --no-strip              Do not strip libraries or executables\n";
    cout << "  --all                   Apply to all builds\n\n";
    cout << "Clean options:\n";
-   cout << "  --all                   Remove package and work files of all builds\n\n";
+   cout << "  --all                   Clean all builds\n\n";
    cout << "Show options:\n";
 	cout << "  --build-order           Show build order\n";
    cout << "  --download-order        Show download order\n";
