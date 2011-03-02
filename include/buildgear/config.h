@@ -32,6 +32,7 @@ class CConfig
       string build_system;
       string host_system;
       string target_system;
+      string host_toolchain;
       string target_toolchain;
       CConfig();
       void CorrectName(void);
@@ -79,6 +80,7 @@ class CConfig
 #define CONFIG_KEY_IGNORE_CHECKSUM           "ignore_checksum"
 #define CONFIG_KEY_IGNORE_FOOTPRINT          "ignore_footprint"
 
+#define CONFIG_KEY_HOST_TOOLCHAIN            "host_toolchain"
 #define CONFIG_KEY_TARGET_TOOLCHAIN          "target_toolchain"
 #define CONFIG_KEY_BUILD                     "build"
 #define CONFIG_KEY_HOST                      "host"

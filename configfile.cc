@@ -32,7 +32,8 @@ void CConfigFile::Parse(string filename, CConfig *config)
                      ; echo package_compression_level=$package_compression_level \
                      '";
       else
-         command += "; echo target_toolchain=$TARGET_TOOLCHAIN \
+         command += "; echo host_toolchain=$HOST_TOOLCHAIN \
+                     ; echo target_toolchain=$TARGET_TOOLCHAIN \
                      ; echo build=$BUILD \
                      ; echo host=$HOST \
                      ; echo target=$TARGET \
@@ -67,6 +68,8 @@ void CConfigFile::Parse(string filename, CConfig *config)
             else
             {
                // buildfiles/config :
+               if (key == CONFIG_KEY_HOST_TOOLCHAIN)
+                  config->host_toolchain = value;
                if (key == CONFIG_KEY_TARGET_TOOLCHAIN)
                   config->target_toolchain = value;
                if (key == CONFIG_KEY_BUILD)
@@ -75,13 +78,6 @@ void CConfigFile::Parse(string filename, CConfig *config)
                   config->host_system = value;
                if (key == CONFIG_KEY_TARGET)
                   config->target_system = value;
-                  
-               // Require target_toolchain to be defined
-               if (config->target_toolchain == "")
-               {
-                  cout << "Error: target_toolchain must be defined" << endl;
-                  exit(EXIT_FAILURE);
-               }
             }
          }
       }

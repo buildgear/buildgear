@@ -86,13 +86,18 @@ int main (int argc, char *argv[])
    BuildFiles.LoadDependency(&BuildFiles.buildfiles);
    cout << "Done\n";
 
-   /* Resolve dependencies */
-   cout << "Resolving dependencies..        ";
-//   Dependency.Resolve(Config.host_toolchain, &BuildFiles.buildfiles);
-   Dependency.Resolve(Config.target_toolchain, &BuildFiles.buildfiles);
-   Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
-   cout << "Done\n";
-
+   if (!Config.download)
+   {
+      /* Resolve dependencies */
+      cout << "Resolving dependencies..        ";
+      if (Config.host_toolchain != "")
+         Dependency.Resolve(Config.host_toolchain, &BuildFiles.buildfiles);
+      if (Config.target_toolchain != "")
+         Dependency.Resolve(Config.target_toolchain, &BuildFiles.buildfiles);
+      Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
+      cout << "Done\n";
+   }
+   
    /* Handle show options */
    if (Config.show)
    {
@@ -109,6 +114,9 @@ int main (int argc, char *argv[])
    
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
+
+   if ((Config.download) && (Config.all))
+      Dependency.download_order=BuildFiles.buildfiles;
 
    /* Download source files */
    cout << "Downloading sources..           ";
