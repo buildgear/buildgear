@@ -403,7 +403,9 @@ main() {
       fi
       do_package
       do_footprint
-      do_clean
+      if [ "$BG_KEEP_WORK" = "no" ]; then
+         do_clean
+      fi
    elif [ "$BG_ACTION" = "add" ]; then
       do_add
       if [ "$BG_UPDATE_CHECKSUM" = "yes" ]; then

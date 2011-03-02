@@ -89,6 +89,7 @@ void CSource::Do(string action, CBuildFile* buildfile)
    config += " BG_UPDATE_CHECKSUM=" + CSource::config->update_checksum;
    config += " BG_UPDATE_FOOTPRINT=" + CSource::config->update_footprint;
    config += " BG_NO_STRIP=" + CSource::config->no_strip;
+   config += " BG_KEEP_WORK=" + CSource::config->keep_work;
    
    command = config + " " SCRIPT " " + buildfile->filename;
    
@@ -224,8 +225,11 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
 */
    }
 
-   // Delete work dir
-   result = system("rm -rf " WORK_DIR);
+   if (CSource::config->keep_work == "no")
+   {
+      // Delete work dir
+      result = system("rm -rf " WORK_DIR);
+   }
 }
 
 void CSource::ShowBuildHelp(void)

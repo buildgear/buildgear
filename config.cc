@@ -18,7 +18,7 @@ CConfig::CConfig()
    download = false;
       
    build = false;
-   keep_work = false;
+   keep_work = "no";
    update_checksum = "no";
    update_footprint = "no";
    no_strip = "no";

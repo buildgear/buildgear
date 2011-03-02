@@ -13,7 +13,7 @@ class CConfig
       bool download;
       
       bool build;
-      bool keep_work;
+      string keep_work;
       string update_checksum;
       string update_footprint;
       string no_strip;
