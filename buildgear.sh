@@ -398,7 +398,9 @@ main() {
       do_checksum
       do_extract
       do_build
-      do_strip
+      if [ "$BG_NO_STRIP" = "no" ]; then
+         do_strip
+      fi
       do_package
       do_footprint
       do_clean
