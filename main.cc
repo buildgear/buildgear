@@ -57,7 +57,7 @@ int main (int argc, char *argv[])
    ConfigFile.Parse(LOCAL_CONFIG_FILE, &Config);
 
    /* Parse buildfiles configuration file */
-   ConfigFile.Parse(BUILD_CONFIG_FILE, &Config);
+   ConfigFile.Parse(BUILD_FILES_CONFIG, &Config);
    
    /* Correct source dir */
    Config.CorrectSourceDir();
@@ -144,7 +144,7 @@ int main (int argc, char *argv[])
    Clock.ShowElapsedTime();
    
    /* Show log location */
-   cout << "See " BUILD_LOG_FILE " for details.\n\n";
+   cout << "See " BUILD_LOG " for details.\n\n";
    
    /* Enable cursor again */
    cout << TERMINFO_CNORM;

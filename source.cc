@@ -70,22 +70,22 @@ void CSource::Do(string action, CBuildFile* buildfile)
    // Get PID
    pid << (int) getpid();
    
-   // Set action
-   config  = " ACTION=" + action;
+   // Set script action
+   config  = " BG_ACTION=" + action;
    
    // Set required script variables
-   config += " BUILD_FILES_CONFIG=" BUILD_FILES_CONFIG;
-   config += " BUILD_TYPE=" + buildfile->type;
-   config += " WORK_DIR=" WORK_DIR;
-   config += " PACKAGE_DIR=" PACKAGE_DIR;
-   config += " SOURCE_DIR=" + CSource::config->source_dir;
-   config += " BUILD_LOG_FILE=" BUILD_LOG_FILE;
-   config += " NAME=" + buildfile->name;
+   config += " BG_BUILD_FILES_CONFIG=" BUILD_FILES_CONFIG;
+   config += " BG_BUILD_TYPE=" + buildfile->type;
+   config += " BG_WORK_DIR=" WORK_DIR;
+   config += " BG_PACKAGE_DIR=" PACKAGE_DIR;
+   config += " BG_SOURCE_DIR=" SOURCE_DIR;
+   config += " BG_SYSROOT_DIR=" SYSROOT_DIR;
+   config += " BG_BUILD_LOG=" BUILD_LOG;
    config += " BG_PID=" + pid.str();
-   config += " VERBOSE=no";
-   config += " BUILD=" + CSource::config->build_system;
-   config += " HOST=" + CSource::config->host_system;
-   config += " TARGET=" + CSource::config->target_system;
+   config += " BG_VERBOSE=no";
+   config += " BG_BUILD=" + CSource::config->build_system;
+   config += " BG_HOST=" + CSource::config->host_system;
+   config += " BG_TARGET=" + CSource::config->target_system;
    
    command = config + " " SCRIPT " " + buildfile->filename;
    
@@ -150,7 +150,7 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
    CSource::config = config;
 
    // Remove old build log
-   result = system("rm -f " BUILD_LOG_FILE);
+   result = system("rm -f " BUILD_LOG);
 
    // FIXME:
    // Check if buildfiles/config is newer than target package or target buildfiles
@@ -230,13 +230,13 @@ void CSource::ShowBuildHelp(void)
   ifstream fin;
   char s[10000];
   
-  if (FileExists(string(BUILD_HELP_FILE)))
+  if (FileExists(string(BUILD_FILES_HELP)))
   {
-      fin.open(BUILD_HELP_FILE, ios::in);
+      fin.open(BUILD_FILES_HELP, ios::in);
   
       if(fin.fail())
       {
-         cout << "Error: Unable to open " << BUILD_HELP_FILE << endl;
+         cout << "Error: Unable to open " << BUILD_FILES_HELP << endl;
          exit(EXIT_FAILURE);
       }
    

@@ -25,7 +25,7 @@
 #
 
 bg_put() {
-   if [ "$VERBOSE" = "yes" ]; then
+   if [ "$BG_VERBOSE" = "yes" ]; then
       echo "$1" > /proc/$BG_PID/fd/2
    fi
 }
@@ -36,17 +36,17 @@ info() {
 
 warning() {
 	echo "WARNING: $1"
-   echo "     Warning     '$BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
+   echo "     Warning     '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
 error() {
 	echo "ERROR: $1"
-   echo "     Error       '$BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
+   echo "     Error       '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
 log_action() {
-   echo "======> $1 '$NAME'"
-   bg_put "    $1    '$BUILD_TYPE/$name'"
+   echo "======> $1 '$BG_BUILD_TYPE/$name'"
+   bg_put "    $1    '$BG_BUILD_TYPE/$name'"
 }
 
 get_filename() {
@@ -74,7 +74,7 @@ check_create_directory() {
 }
 
 make_footprint() {
-	tar tvf $BG_PACKAGE | \
+	tar tvf $BG_BUILD_PACKAGE | \
       awk '{print $1 "\t" $6}' | \
 		sort -k 2
 }
@@ -92,11 +92,11 @@ make_sha256sum() {
 }
 
 check_sha256sum() {
-	local FILE="$BG_WORK_DIR/.tmp"
+	local FILE="$BG_BUILD_WORK_DIR/.tmp"
 	
-	if [ -f $BG_SHA256SUM ]; then
+	if [ -f $BG_BUILD_SHA256SUM ]; then
 		make_sha256sum > $FILE.sha256sum
-		sort -k 2 $BG_SHA256SUM > $FILE.sha256sum.orig
+		sort -k 2 $BG_BUILD_SHA256SUM > $FILE.sha256sum.orig
 		diff -w -t -U 0 $FILE.sha256sum.orig $FILE.sha256sum | \
 			sed '/^@@/d' | \
 			sed '/^+++/d' | \
@@ -120,7 +120,7 @@ check_sha256sum() {
 		fi
 		
 		warning "Sha256sum not found, creating new"
-		make_sha256sum > $BG_SHA256SUM
+		make_sha256sum > $BG_BUILD_SHA256SUM
 	fi
 
 	if [ "$BG_CHECK_SHA256SUM" = "yes" ]; then
@@ -143,7 +143,7 @@ do_extract() {
 
    log_action "Extract  "
 
-   check_create_directory "$BG_WORK_DIR"
+   check_create_directory "$BG_BUILD_WORK_DIR"
    check_create_directory "$PKG"
    check_create_directory "$SRC"
 	
@@ -192,13 +192,13 @@ do_strip() {
    
 	cd $PKG
 	
-	if [ -f $BG_ROOT/$BG_NOSTRIP ]; then
-		FILTER="grep -v -f $BG_ROOT/$BG_NOSTRIP"
+	if [ -f $BG_ROOT/$BG_BUILD_NOSTRIP ]; then
+		FILTER="grep -v -f $BG_ROOT/$BG_BUILD_NOSTRIP"
 	else
 		FILTER="cat"
 	fi
 
-   if [ "$BUILD_TYPE" = "target" ]; then
+   if [ "$BG_BUILD_TYPE" = "target" ]; then
       STRIP="$TARGET-strip"
    else
       STRIP="strip"
@@ -229,7 +229,7 @@ do_package() {
    cd $PKG
    
    if [ "`ls -A`" != "" ]; then
-      tar czvvf $BG_PACKAGE *
+      tar czvvf $BG_BUILD_PACKAGE *
    fi
 
    if [ "$?" != "0" ]; then
@@ -245,12 +245,12 @@ do_footprint() {
    
    log_action "Footprint"
    
-   FILE="$BG_WORK_DIR/.tmp"
+   FILE="$BG_BUILD_WORK_DIR/.tmp"
 	
-	if [ -f $BG_PACKAGE ]; then
+	if [ -f $BG_BUILD_PACKAGE ]; then
 		make_footprint > $FILE.footprint
-		if [ -f $BG_FOOTPRINT ]; then
-			sort -k 2 $BG_FOOTPRINT > $FILE.footprint.orig
+		if [ -f $BG_BUILD_FOOTPRINT ]; then
+			sort -k 2 $BG_BUILD_FOOTPRINT > $FILE.footprint.orig
 			diff -w -t -U 0 $FILE.footprint.orig $FILE.footprint | \
 				sed '/^@@/d' | \
 				sed '/^+++/d' | \
@@ -264,10 +264,10 @@ do_footprint() {
 			fi
 		else
 			warning "Footprint not found, creating new"
-			mv $FILE.footprint $BG_FOOTPRINT
+			mv $FILE.footprint $BG_BUILD_FOOTPRINT
 		fi
 	else
-		error "Package '$BG_PACKAGE' was not found"
+		error "Package '$BG_BUILD_PACKAGE' was not found"
 		BUILD_SUCCESSFUL="no"
 	fi
 }
@@ -276,9 +276,9 @@ do_clean() {
    
    log_action "Clean    "
    
-   if [ -d $BG_WORK_DIR ]
+   if [ -d $BG_BUILD_WORK_DIR ]
    then
-      rm -rf $BG_WORK_DIR
+      rm -rf $BG_BUILD_WORK_DIR
    fi
    
    if [ "$?" != "0" ]; then
@@ -291,8 +291,8 @@ do_add() {
    
    log_action "Add      "
    
-   if [ -d $BG_SYSROOT_DIR ]; then
-      tar -C $BG_SYSROOT_DIR -xf $BG_PACKAGE
+   if [ -d $BG_BUILD_SYSROOT_DIR ]; then
+      tar -C $BG_BUILD_SYSROOT_DIR -xf $BG_BUILD_PACKAGE
    fi
    
    if [ "$?" != "0" ]; then
@@ -306,9 +306,9 @@ do_remove() {
    
    log_action "Remove   "
    
-   if [ -d $BG_SYSROOT_DIR ]; then
-      cd $BG_SYSROOT_DIR
-      tar -tvf $BG_PACKAGE | awk '{print $6}' | xargs rm -rf
+   if [ -d $BG_BUILD_SYSROOT_DIR ]; then
+      cd $BG_BUILD_SYSROOT_DIR
+      tar -tvf $BG_BUILD_PACKAGE | awk '{print $6}' | xargs rm -rf
       cd $BG_ROOT
    fi
 
@@ -319,15 +319,20 @@ do_remove() {
 
 }
 
+do_buildfile() {
+
+   # Include buildfile
+   . $BG_BUILD_FILE
+}
+
 parse_options() {
-	BG_BUILDFILE=$1
+	BG_BUILD_FILE=$1
 }
 
 main() {
-	local FILE BG_PACKAGE
    
-   # respawn with output redirected to log file
-   exec &>> $BUILD_LOG_FILE
+   # respawn with output redirected to build log file
+   exec &>> $BG_BUILD_LOG
    
    # Clear aliases
    unalias -a
@@ -338,53 +343,57 @@ main() {
 	parse_options "$@"
 
    BG_ROOT_DIR="$PWD"
-   BG_BUILD_FILE_DIR="`dirname $BG_BUILDFILE`"
-   BG_SOURCE_DIR="$BG_ROOT_DIR/$SOURCE_DIR"
-   BG_PACKAGE_DIR="$PACKAGE_DIR/$BUILD_TYPE"
-   BG_SYSROOT_DIR="$BG_ROOT_DIR/build/work/sysroot/$BUILD_TYPE"
-   BG_HOST_SYSROOT_DIR="$BG_ROOT_DIR/build/work/sysroot/host"
-   BG_TARGET_SYSROOT_DIR="$BG_ROOT_DIR/build/work/sysroot/target"
-   BG_SHA256SUM="$BG_BUILD_FILE_DIR/.sha256sum"
-   BG_FOOTPRINT="$BG_BUILD_FILE_DIR/.footprint"
-   BG_NOSTRIP="$BG_BUILD_FILE_DIR/.nostrip"
+   BG_SOURCE_DIR="$BG_ROOT_DIR/$BG_SOURCE_DIR"
+   BG_BUILD_FILE_DIR="`dirname $BG_BUILD_FILE`"
+   BG_BUILD_PACKAGE_DIR="$BG_ROOT_DIR/$BG_PACKAGE_DIR/$BG_BUILD_TYPE"
+   BG_BUILD_SHA256SUM="$BG_BUILD_FILE_DIR/.sha256sum"
+   BG_BUILD_FOOTPRINT="$BG_BUILD_FILE_DIR/.footprint"
+   BG_BUILD_NOSTRIP="$BG_BUILD_FILE_DIR/.nostrip"
+   BG_BUILD_SYSROOT_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/$BG_BUILD_TYPE"
+   BG_HOST_SYSROOT_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/host"
+   BG_TARGET_SYSROOT_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/target"
+
+   export HOST_SYSROOT="$BG_HOST_SYSROOT_DIR"
+   export TARGET_SYSROOT="$BG_TARGET_SYSROOT_DIR"
 
    # Include buildfiles configuration
 	if [ -f $1 ]; then
-      . $BUILD_FILES_CONFIG
+      . $BG_BUILD_FILES_CONFIG
    fi
    
-   # Include buildfile
-   . $BG_BUILDFILE
+   do_buildfile
 
-   # All paths must be based on BG_ROOT! (FIXME)
-   # Deduct all paths from BG_ROOT and BG_BUILD_TYPE, BG_BUILD_FILE_DIR!
-   BG_WORK_DIR="$WORK_DIR/$BUILD_TYPE/$name"
-   BG_PACKAGE="$BG_ROOT_DIR/$BG_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
+   BG_BUILD_WORK_DIR="$BG_WORK_DIR/$BG_BUILD_TYPE/$name"
+   BG_BUILD_PACKAGE="$BG_BUILD_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
 
-   PKG="$BG_ROOT_DIR/$BG_WORK_DIR/pkg"
-   SRC="$BG_ROOT_DIR/$BG_WORK_DIR/src"
-   BLD="$BG_ROOT_DIR/build"
+   export PKG="$BG_ROOT_DIR/$BG_BUILD_WORK_DIR/pkg"
+   export SRC="$BG_ROOT_DIR/$BG_BUILD_WORK_DIR/src"
+   export BLD="$BG_ROOT_DIR/build"
+   export BUILD="$BG_BUILD"
+   export HOST="$BG_HOST"
+   export TARGET="$BG_TARGET"
+   export SYSROOT="$BG_BUILD_SYSROOT_DIR"
    
    umask 022
 
    check_create_directory "$SRC"
    check_create_directory "$PKG"
-   check_create_directory "$BG_PACKAGE_DIR"
-   check_create_directory "$BG_ROOT_DIR/build/work/sysroot"
+   check_create_directory "$BG_BUILD_PACKAGE_DIR"
+   check_create_directory "$BG_SYSROOT_DIR"
 
    # Create link to target sysroot if target sysroot link is configured
    if [ "$TARGET_SYSROOT_LINK" != "" ]; then
       if [ ! -e "$BG_TARGET_SYSROOT_DIR" ]; then
-         cd "$BG_ROOT_DIR/build/work/sysroot"
+         cd "$BG_SYSROOT_DIR"
          ln -s $TARGET_SYSROOT_LINK target
          cd $BG_ROOT
       fi
    fi
 
-   check_create_directory "$BG_SYSROOT_DIR"
+   check_create_directory "$BG_BUILD_SYSROOT_DIR"
 
    # Action sequence
-   if [ "$ACTION" = "build" ]; then
+   if [ "$BG_ACTION" = "build" ]; then
       do_checksum
       do_extract
       do_build
@@ -392,10 +401,10 @@ main() {
       do_package
       do_footprint
       do_clean
-   elif [ "$ACTION" = "add" ]; then
+   elif [ "$BG_ACTION" = "add" ]; then
       do_add
       do_footprint
-   elif [ "$ACTION" = "remove" ]; then
+   elif [ "$BG_ACTION" = "remove" ]; then
       do_remove
    fi
    exit 0

@@ -53,17 +53,16 @@ class CConfig
 #define SOURCE_DIR               BUILD_DIR "/source"
 #define WORK_DIR                 BUILD_DIR "/work"
 #define PACKAGE_DIR              BUILD_DIR "/package"
+#define SYSROOT_DIR              WORK_DIR  "/sysroot"
+#define BUILD_LOG                BUILD_DIR "/build.log"
+#define BUILD_FILE               "Buildfile"
 #define PACKAGE_EXTENSION        ".pkg.tar.gz"
-
 
 #define GLOBAL_CONFIG_FILE       "~/.buildgearconfig"
 #define LOCAL_CONFIG_FILE        ROOT_DIR "/config"
-#define BUILD_FILE               "Buildfile"
 #define BUILD_FILES_CONFIG       BUILD_FILES_DIR "/config"
-#define BUILD_LOG_FILE           BUILD_DIR "/build.log"
-#define BUILD_CONFIG_FILE        BUILD_FILES_DIR "/config"
-#define BUILD_HELP_FILE          BUILD_FILES_DIR "/help"
-#define BUILD_CHECK_FILE         BUILD_FILES_DIR "/check"
+#define BUILD_FILES_HELP         BUILD_FILES_DIR "/help"
+#define BUILD_FILES_CHECK        BUILD_FILES_DIR "/check"
 
 #define KEY_NAME                 "name"
 #define KEY_VERSION              "version"
@@ -84,9 +83,6 @@ class CConfig
 #define CONFIG_KEY_BUILD                     "build"
 #define CONFIG_KEY_HOST                      "host"
 #define CONFIG_KEY_TARGET                    "target"
-
-#define HOST                     0
-#define TARGET                   1
 
 #define TERMINFO_CIVIS           "\033[?25l"
 #define TERMINFO_CNORM           "\033[?25h"

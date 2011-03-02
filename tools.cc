@@ -56,9 +56,9 @@ void CTools::RunToolsFile(void)
    int result;
    
    // Run buildfiles/tools file
-   if (FileExists(string(BUILD_CHECK_FILE)))
+   if (FileExists(string(BUILD_FILES_CHECK)))
    {
-      result = system("bash -c 'source " BUILD_CHECK_FILE " 2> /dev/null'");
+      result = system("bash -c 'source " BUILD_FILES_CHECK " 2> /dev/null'");
       if (result != 0)
       {
          cout << endl << "Please install missing tools." << endl << endl;

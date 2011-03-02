@@ -20,7 +20,7 @@ void CConfigFile::Parse(string filename, CConfig *config)
       char line_buffer[PATH_MAX];
       string command =  "bash -c 'source " + filename + " 2> /dev/null";
       
-      if (filename != BUILD_CONFIG_FILE)
+      if (filename != BUILD_FILES_CONFIG)
          command += "; echo source_dir=$source_dir \
                      ; echo source_mirror=$source_mirror \
                      ; echo required_version=$required_version \
@@ -56,7 +56,7 @@ void CConfigFile::Parse(string filename, CConfig *config)
 
          if (value != "")
          {
-            if (filename != BUILD_CONFIG_FILE)
+            if (filename != BUILD_FILES_CONFIG)
             {
                // ~/.buildgearconfig, .buildgear/config :
                if (key == CONFIG_KEY_DEFAULT_NAME_PREFIX)
