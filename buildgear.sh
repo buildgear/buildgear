@@ -245,8 +245,12 @@ do_footprint() {
    
    log_action "Footprint"
    
+   if [ "$BG_UPDATE_FOOTPRINT" = "yes" ]; then
+      rm -f $BG_BUILD_FOOTPRINT
+   fi
+   
    FILE="$BG_BUILD_WORK_DIR/.tmp"
-	
+   
 	if [ -f $BG_BUILD_PACKAGE ]; then
 		make_footprint > $FILE.footprint
 		if [ -f $BG_BUILD_FOOTPRINT ]; then
@@ -263,8 +267,12 @@ do_footprint() {
 				BUILD_SUCCESSFUL="no"
 			fi
 		else
-			warning "Footprint not found, creating new"
-			mv $FILE.footprint $BG_BUILD_FOOTPRINT
+         if [ "$BG_UPDATE_FOOTPRINT" = "yes" ]; then
+            info "Updated footprint"
+         else
+            warning "Footprint not found, creating new"
+         fi
+         mv $FILE.footprint $BG_BUILD_FOOTPRINT
 		fi
 	else
 		error "Package '$BG_BUILD_PACKAGE' was not found"

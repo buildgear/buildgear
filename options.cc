@@ -79,13 +79,13 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
                config->keep_work = true;
                break;
             case 'c':
-               config->update_checksum = true;
+               config->update_checksum = "yes";
                break;
             case 'f':
-               config->update_footprint = true;
+               config->update_footprint = "yes";
                break;
             case 's':
-               config->no_strip = true;
+               config->no_strip = "yes";
                break;
             case 'a':
                config->all = true;

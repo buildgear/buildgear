@@ -14,9 +14,9 @@ class CConfig
       
       bool build;
       bool keep_work;
-      bool update_checksum;
-      bool update_footprint;
-      bool no_strip;
+      string update_checksum;
+      string update_footprint;
+      string no_strip;
       
       bool clean;
       

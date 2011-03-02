@@ -19,9 +19,9 @@ CConfig::CConfig()
       
    build = false;
    keep_work = false;
-   update_checksum = false;
-   update_footprint = false;
-   no_strip = false;
+   update_checksum = "no";
+   update_footprint = "no";
+   no_strip = "no";
       
    clean = false;
       

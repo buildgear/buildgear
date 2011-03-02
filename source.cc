@@ -86,6 +86,9 @@ void CSource::Do(string action, CBuildFile* buildfile)
    config += " BG_BUILD=" + CSource::config->build_system;
    config += " BG_HOST=" + CSource::config->host_system;
    config += " BG_TARGET=" + CSource::config->target_system;
+   config += " BG_UPDATE_CHECKSUM=" + CSource::config->update_checksum;
+   config += " BG_UPDATE_FOOTPRINT=" + CSource::config->update_footprint;
+   config += " BG_NO_STRIP=" + CSource::config->no_strip;
    
    command = config + " " SCRIPT " " + buildfile->filename;
    
