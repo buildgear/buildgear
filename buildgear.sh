@@ -186,8 +186,8 @@ do_strip() {
    
 	cd $PKG
 	
-	if [ -f $BG_ROOT/$BG_BUILD_NOSTRIP ]; then
-		FILTER="grep -v -f $BG_ROOT/$BG_BUILD_NOSTRIP"
+	if [ -f $BG_BUILD_NOSTRIP ]; then
+		FILTER="grep -v -f $BG_BUILD_NOSTRIP"
 	else
 		FILTER="cat"
 	fi
@@ -314,7 +314,7 @@ do_remove() {
    if [ -d $BG_BUILD_SYSROOT_DIR ]; then
       cd $BG_BUILD_SYSROOT_DIR
       tar -tvf $BG_BUILD_PACKAGE | awk '{print $6}' | xargs rm -rf
-      cd $BG_ROOT
+      cd $BG_ROOT_DIR
    fi
 
    if [ "$?" != "0" ]; then
@@ -391,10 +391,10 @@ main() {
       if [ ! -e "$BG_TARGET_SYSROOT_DIR" ]; then
          cd "$BG_SYSROOT_DIR"
          ln -s $TARGET_SYSROOT_LINK target
-         cd $BG_ROOT
+         cd $BG_ROOT_DIR
       fi
    fi
-
+   
    check_create_directory "$BG_BUILD_SYSROOT_DIR"
 
    # Action sequence
