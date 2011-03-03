@@ -177,7 +177,7 @@ void CSource::Build(list<CBuildFile*> *buildfiles)
    result = system("rm -f " BUILD_LOG);
 
    // Delete work dir (FIXME: potential for improvement)
-   result = system("rm -f " WORK_DIR);
+   result = system("rm -rf " WORK_DIR);
 
    // FIXME:
    // Check if buildfiles/config is newer than target package or target buildfiles
