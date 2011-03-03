@@ -151,8 +151,11 @@ void CSource::Build(list<CBuildFile*> *buildfiles)
    list<CBuildFile*>::reverse_iterator rit;
    int result;
 
-   // Remove old build log
+   // Delete old build log
    result = system("rm -f " BUILD_LOG);
+
+   // Delete work dir (FIXME: potential for improvement)
+   result = system("rm -f " WORK_DIR);
 
    // FIXME:
    // Check if buildfiles/config is newer than target package or target buildfiles
