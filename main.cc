@@ -26,6 +26,9 @@ int main (int argc, char *argv[])
    CSource      Source;
    CTools       Tools;
 
+   /* Debug stream option */
+   debug.On() = false;
+
    /* Start counting elapsed time */
    Clock.Start();
    
@@ -38,12 +41,23 @@ int main (int argc, char *argv[])
    /* Display help hint on incorrect download command */
    if ((Config.download) && (Config.name == "") && (Config.all==false))
    {
-      cout << "Please specify build name or use 'download --all' to download source files of all builds.\n";
+      cout << "Please specify build name or use 'download --all' to download source files of all builds\n";
       exit(EXIT_FAILURE);
    }
    
-   /* Debug stream option */
-   debug.On() = false;
+   /* Display help hint on incorrect build command */
+   if ((Config.build) && (Config.name == ""))
+   {
+      cout << "Please specify build name\n";
+      exit(EXIT_FAILURE);
+   }
+   
+   /* Display help hint on incorrect clean command */
+   if ((Config.clean) && (Config.name == "") && (Config.all==false))
+   {
+      cout << "Please specify build name or use 'clean --all' to clean all builds\n";
+      exit(EXIT_FAILURE);
+   }
 
    /* Show buildfiles help*/
    if (Config.show)
