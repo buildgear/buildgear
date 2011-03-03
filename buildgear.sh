@@ -243,6 +243,10 @@ do_footprint() {
       rm -f $BG_BUILD_FOOTPRINT
    fi
    
+#   if [ ! -f $BG_BUILD_PACKAGE ]; then
+#      exit 0
+#   fi
+   
    FILE="$BG_BUILD_WORK_DIR/.tmp"
    
 	if [ -f $BG_BUILD_PACKAGE ]; then
