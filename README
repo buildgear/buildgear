@@ -1,37 +1,42 @@
 
 === README for BuildGear ===
 
+
 1. Introduction
 
-   BuildGear is a lightweight embedded build system for experienced GNU/Linux users and developers. The primary focus of this build system is to keep it simple, which is reflected in a straightforward command line build interface, and easy to maintain build files. The secondary focus is build performance and build reproducability. It is easy to use and well suited for product or prototype development.
+   BuildGear is a lightweight embedded build system for experienced GNU/Linux users and developers. The primary focus of this build system is to keep it simple, which is reflected in a straightforward command line build interface, and easy to maintain build files. The secondary focus is build performance and build integrity. BuildGear is easy to use and well suited for product or prototype development.
+
 
 2. Installation
 
    See INSTALL file for details on how to build and install BuildGear.
 
+
 3. Documentation
 
    To be done..
 
+
 4. License
 
-   BuildGear is GPLv3.
+   BuildGear is GPLv3. See COPYING file for license details.
 
-   See COPYING file for license details.
 
 5. Website
 
    Visit http://www.buildgear-project.org for more information.
 
+
 6. Bugs / feature requests
 
-   Please report any bugs or feature requests in the github issue tracker:
-   
+   Please report any bugs or feature requests in the github issue tracker:   
    http://github.com/martinlund/buildgear/issues
+
 
 7. Contributing
 
    To be done...
+
 
 8. Authors
 
