@@ -418,6 +418,9 @@ main() {
       if [ "$BG_UPDATE_FOOTPRINT" = "yes" ]; then
          do_footprint
       fi
+      if [ "$BG_KEEP_WORK" = "no" ]; then
+         do_clean
+      fi
    elif [ "$BG_ACTION" = "remove" ]; then
       do_remove
    fi

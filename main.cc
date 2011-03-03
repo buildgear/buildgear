@@ -59,16 +59,22 @@ int main (int argc, char *argv[])
       exit(EXIT_FAILURE);
    }
 
-   /* Show buildfiles help*/
-   if (Config.show)
+   /* Display help hint on incorrect show command */
+   if ((Config.show) && (Config.name == "") && (!Config.help))
    {
-      if (Config.help)
-         Source.ShowBuildHelp();
-         exit(EXIT_SUCCESS);
+      cout << "Please specify build name to show\n";
+      exit(EXIT_FAILURE);
    }
 
    /* Search for build root directory */
    FileSystem.FindRoot(ROOT_DIR);
+
+   /* Show buildfiles help*/
+   if ((Config.show) && (Config.help))
+   {
+         Source.ShowBuildHelp();
+         exit(EXIT_SUCCESS);
+   }
 
    /* Guess host and build */
    Config.GuessSystem();

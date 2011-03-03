@@ -9,6 +9,7 @@ class CConfig
 {
    public:
       string name;
+      string root;
       
       bool download;
       int download_timeout;

@@ -50,6 +50,7 @@ void CFileSystem::FindRoot(string dirname)
    }
    
    CFileSystem::root = cwd;
+   Config.root = cwd;
    
    // Change to buildgear root dir and stay there
    if (chdir(CFileSystem::root.c_str()) != 0)

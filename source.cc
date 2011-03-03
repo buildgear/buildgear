@@ -260,13 +260,16 @@ void CSource::ShowBuildHelp(void)
   ifstream fin;
   char s[10000];
   
-  if (FileExists(string(BUILD_FILES_HELP)))
+  string help_file = Config.root + "/" + string(BUILD_FILES_HELP);
+  
+  if (FileExists(help_file))
   {
-      fin.open(BUILD_FILES_HELP, ios::in);
+      
+      fin.open(help_file.c_str(), ios::in);
   
       if(fin.fail())
       {
-         cout << "Error: Unable to open " << BUILD_FILES_HELP << endl;
+         cout << "Error: Unable to open " << help_file << endl;
          exit(EXIT_FAILURE);
       }
    
