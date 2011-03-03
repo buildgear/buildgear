@@ -28,6 +28,8 @@ void CConfigFile::Parse(string filename, CConfig *config)
                      ; echo ignore_footprint=$ignore_footprint \
                      ; echo ignore_checksum=$ignore_checksum \
                      ; echo download_parallel_level=$download_parallel_level \
+                     ; echo download_timeout=$download_timeout \
+                     ; echo download_retry=$download_retry \
                      ; echo build_parallel_level=$build_parallel_level \
                      ; echo package_compression_level=$package_compression_level \
                      '";
@@ -64,6 +66,10 @@ void CConfigFile::Parse(string filename, CConfig *config)
                   config->default_name_prefix = value;
                if (key == CONFIG_KEY_SOURCE_DIR)
                   config->source_dir = value;
+               if (key == CONFIG_KEY_DOWNLOAD_TIMEOUT)
+                  config->download_timeout = atoi(value.c_str());
+               if (key == CONFIG_KEY_DOWNLOAD_RETRY)
+                  config->download_retry = atoi(value.c_str());
             }
             else
             {

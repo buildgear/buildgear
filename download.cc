@@ -128,12 +128,17 @@ void CDownload::URL(string url, string source_dir)
    // If file does not exist in source dir
    if (!file_exist(source_dir + "/" + filename, filesize))
    {
-      int result;
+      int result = CURLE_OPERATION_TIMEDOUT;
+      int retry = Config.download_retry;
       
       cout << endl << "   Downloading '" << url << "'" << endl;
       
-      // Download to partial file in source dir
-      result = CDownload::File(url, source_dir + "/" + filename + ".part");
+      while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
+      {
+         // Download to partial file in source dir
+         result = CDownload::File(url, source_dir + "/" + filename + ".part");
+         retry--;
+      }
 
       if (result == CURLE_OK)
       {
@@ -172,6 +177,12 @@ int CDownload::File(string url, string filename)
       
       // Disable curls builtin progress indicator
       curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
+      
+      // Set timeout
+      curl_easy_setopt(curl, CURLOPT_TIMEOUT, Config.download_timeout);
+      
+      // Fail on http error (400+)
+      curl_easy_setopt(curl, CURLOPT_FAILONERROR, true);
 
       // Define progress indication callback
       curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progress);
@@ -187,11 +198,10 @@ int CDownload::File(string url, string filename)
       // Enable curl debug output
       //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
+      cout << "   Requesting file..\r" << flush;
       cout << "   Progress [";
 
       result = curl_easy_perform(curl);
-
-      cout << endl;
 
       // Curl cleanup
       curl_easy_cleanup(curl);
@@ -199,8 +209,10 @@ int CDownload::File(string url, string filename)
       if(result != CURLE_OK)
       {
          // Download failure
-         cout << "   Warning: libcurl told us " << result << endl;
+         cout << "\r   Error: " << curl_easy_strerror(result) << endl;
       }
+      
+      cout << endl;
    }
 
    // close download file

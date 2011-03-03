@@ -11,6 +11,8 @@ class CConfig
       string name;
       
       bool download;
+      int download_timeout;
+      int download_retry;
       
       bool build;
       string keep_work;
@@ -74,6 +76,8 @@ class CConfig
 #define CONFIG_KEY_DEFAULT_NAME_PREFIX       "default_name_prefix"
 #define CONFIG_KEY_BUILD_PARALLEL_LEVEL      "build_parallel_level"
 #define CONFIG_KEY_DOWNLOAD_PARALLEL_LEVEL   "download_parallel_level"
+#define CONFIG_KEY_DOWNLOAD_TIMEOUT          "download_timeout"
+#define CONFIG_KEY_DOWNLOAD_RETRY            "download_retry"
 #define CONFIG_KEY_SOURCE_DIR                "source_dir"
 #define CONFIG_KEY_SOURCE_MIRROR             "source_mirror"
 #define CONFIG_KEY_PACKAGE_COMPRESSION_LEVEL "package_compression_level"
@@ -94,4 +98,4 @@ class CConfig
 
 #endif
 
-
+extern CConfig Config;

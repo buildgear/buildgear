@@ -13,10 +13,10 @@
 #include "buildgear/tools.h"
 
 Debug debug(cout);
+CConfig      Config;
 
 int main (int argc, char *argv[])
 {
-   CConfig      Config;
    COptions     Options;
    CConfigFile  ConfigFile;
    CClock       Clock;

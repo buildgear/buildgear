@@ -16,6 +16,8 @@ extern void stripChar(string &str, char c);
 CConfig::CConfig()
 {
    download = false;
+   download_timeout = 20;
+   download_retry = 3;
       
    build = false;
    keep_work = "no";
