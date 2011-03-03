@@ -134,10 +134,15 @@ int main (int argc, char *argv[])
    {
       /* Resolve dependencies */
       cout << "Resolving dependencies..        ";
-      if (Config.host_toolchain != "")
-         Dependency.Resolve(Config.host_toolchain, &BuildFiles.buildfiles);
-      if (Config.target_toolchain != "")
-         Dependency.Resolve(Config.target_toolchain, &BuildFiles.buildfiles);
+      
+      if ((Config.name != Config.host_toolchain) &&
+          (Config.name != Config.target_toolchain))
+      {
+         if (Config.host_toolchain != "")
+            Dependency.Resolve(Config.host_toolchain, &BuildFiles.buildfiles);
+         if (Config.target_toolchain != "")
+            Dependency.Resolve(Config.target_toolchain, &BuildFiles.buildfiles);
+      }
       Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
       cout << "Done\n";
    }
