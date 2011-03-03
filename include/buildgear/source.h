@@ -13,8 +13,10 @@ class CSource : public CFileSystem, COptions
       CConfig *config;
       void ShowBuildHelp(void);
       void Download(list<CBuildFile*> *, string);
-      void Build(list<CBuildFile*> *, CConfig *);
+      void Build(list<CBuildFile*> *);
       void Do(string, CBuildFile*);
+      void Clean(CBuildFile *);
+      void CleanAll(void);
       bool UpToDate(CBuildFile *);
       bool DepBuildNeeded(CBuildFile *buildfile);
    private:

@@ -6,7 +6,7 @@ using namespace std;
 class COptions
 {
    public:
-      void Parse(int argc, char *argv[], CConfig *config);
+      void Parse(int argc, char *argv[]);
       void CorrectName(string);
    private:
       void ShowHelp(char *argv[]);

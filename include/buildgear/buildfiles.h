@@ -31,6 +31,7 @@ class CBuildFiles
       void ParseAndVerify(list<CBuildFile*> *buildfiles);
       void ShowMeta(list<CBuildFile*> *buildfiles);
       void LoadDependency(list<CBuildFile*> *buildfiles);
+      CBuildFile * BuildFile(string name, list<CBuildFile*> *buildfiles);
    private:
 };
 

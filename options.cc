@@ -5,7 +5,7 @@
 #include "buildgear/config.h"
 #include "buildgear/options.h"
 
-void COptions::Parse(int argc, char *argv[], CConfig *config)
+void COptions::Parse(int argc, char *argv[])
 {
 	int option;
    string command;
@@ -29,7 +29,7 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
    // Download command
    if (command == "download")
    {
-      config->download = true;
+      Config.download = true;
       
       // Parse command OPTIONS
       static struct option long_options[] =
@@ -44,7 +44,7 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
          switch( option ) 
          {
             case 'a':
-               config->all = true;
+               Config.all = true;
                break;
 				
             default:
@@ -57,7 +57,7 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
    // Build command
    else if (command == "build")
    {
-      config->build = true;
+      Config.build = true;
       
       // Parse command OPTIONS
       static struct option long_options[] =
@@ -76,19 +76,19 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
          switch( option ) 
          {
             case 'w':
-               config->keep_work = true;
+               Config.keep_work = true;
                break;
             case 'c':
-               config->update_checksum = "yes";
+               Config.update_checksum = "yes";
                break;
             case 'f':
-               config->update_footprint = "yes";
+               Config.update_footprint = "yes";
                break;
             case 's':
-               config->no_strip = "yes";
+               Config.no_strip = "yes";
                break;
             case 'a':
-               config->all = true;
+               Config.all = true;
                break;
             break;
 				
@@ -102,7 +102,7 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
    // Clean command
    else if (command == "clean")
    {
-      config->clean = true;
+      Config.clean = true;
       
       // Parse command OPTIONS
       static struct option long_options[] =
@@ -117,7 +117,7 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
          switch( option ) 
          {
             case 'a':
-               config->all = true;
+               Config.all = true;
                break;
 				
             default:
@@ -130,7 +130,7 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
    // Show command
    else if (command == "show")
    {
-      config->show = true;
+      Config.show = true;
       
       // Parse command OPTIONS
       static struct option long_options[] =
@@ -147,13 +147,13 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
          switch( option ) 
          {
             case 'o':
-               config->build_order = true;
+               Config.build_order = true;
                break;
             case 'd':
-               config->download_order = true;
+               Config.download_order = true;
                break;
             case 'h':
-               config->help = true;
+               Config.help = true;
                break;				
             default:
                exit(EXIT_FAILURE);
@@ -202,7 +202,7 @@ void COptions::Parse(int argc, char *argv[], CConfig *config)
 	if (optind < argc)
 	{
       // Get NAME of build
-      config->name = argv[optind++];
+      Config.name = argv[optind++];
       
       if (optind < argc)
       {

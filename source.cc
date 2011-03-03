@@ -83,13 +83,13 @@ void CSource::Do(string action, CBuildFile* buildfile)
    config += " BG_BUILD_LOG=" BUILD_LOG;
    config += " BG_PID=" + pid.str();
    config += " BG_VERBOSE=no";
-   config += " BG_BUILD=" + CSource::config->build_system;
-   config += " BG_HOST=" + CSource::config->host_system;
-   config += " BG_TARGET=" + CSource::config->target_system;
-   config += " BG_UPDATE_CHECKSUM=" + CSource::config->update_checksum;
-   config += " BG_UPDATE_FOOTPRINT=" + CSource::config->update_footprint;
-   config += " BG_NO_STRIP=" + CSource::config->no_strip;
-   config += " BG_KEEP_WORK=" + CSource::config->keep_work;
+   config += " BG_BUILD=" + Config.build_system;
+   config += " BG_HOST=" + Config.host_system;
+   config += " BG_TARGET=" + Config.target_system;
+   config += " BG_UPDATE_CHECKSUM=" + Config.update_checksum;
+   config += " BG_UPDATE_FOOTPRINT=" + Config.update_footprint;
+   config += " BG_NO_STRIP=" + Config.no_strip;
+   config += " BG_KEEP_WORK=" + Config.keep_work;
    
    command = config + " " SCRIPT " " + buildfile->filename;
    
@@ -145,13 +145,11 @@ bool CSource::DepBuildNeeded(CBuildFile *buildfile)
    return false;
 }
 
-void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
+void CSource::Build(list<CBuildFile*> *buildfiles)
 {
    list<CBuildFile*>::iterator it;
    list<CBuildFile*>::reverse_iterator rit;
    int result;
-   
-   CSource::config = config;
 
    // Remove old build log
    result = system("rm -f " BUILD_LOG);
@@ -225,7 +223,7 @@ void CSource::Build(list<CBuildFile*> *buildfiles, CConfig *config)
 */
    }
 
-   if (CSource::config->keep_work == "no")
+   if (Config.keep_work == "no")
    {
       // Delete work dir
       result = system("rm -rf " WORK_DIR);
@@ -255,4 +253,29 @@ void CSource::ShowBuildHelp(void)
       }
       fin.close();
    }
+}
+
+void CSource::Clean(CBuildFile *buildfile)
+{
+   int result;
+   string command;
+   
+   command  = "rm -f ";
+   command += string(PACKAGE_DIR) + "/" + 
+              buildfile->name + "#" +
+              buildfile->version + "-" +
+              buildfile->release + 
+              PACKAGE_EXTENSION;
+   
+   result = system(command.c_str());
+}
+
+void CSource::CleanAll(void)
+{
+   int result;
+   string command;
+   
+   command = "rm -rf " + string(PACKAGE_DIR);
+   
+   result = system("rm -rf " PACKAGE_DIR);
 }

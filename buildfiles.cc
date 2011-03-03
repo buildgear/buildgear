@@ -114,18 +114,18 @@ void CBuildFiles::ShowMeta(list<CBuildFile*> *buildfiles)
 {   
    list<CBuildFile*>::iterator it;
 
-   cout << endl << "Buildfiles:" << endl << endl;
+   debug << endl << "Buildfiles:" << endl << endl;
    
    /* Traverse through all buildfiles */
    for (it=buildfiles->begin(); 
         it!=buildfiles->end();
         it++)
    {
-      cout << KEY_NAME << ":    " << (*it)->name << endl;
-      cout << KEY_VERSION << ": " << (*it)->version << endl;
-      cout << KEY_RELEASE << ": " << (*it)->release << endl;
-      cout << KEY_SOURCE << ":  " << (*it)->source << endl;
-      cout << KEY_DEPENDS ": " << (*it)->depends << endl << endl;
+      debug << KEY_NAME << ":    " << (*it)->name << endl;
+      debug << KEY_VERSION << ": " << (*it)->version << endl;
+      debug << KEY_RELEASE << ": " << (*it)->release << endl;
+      debug << KEY_SOURCE << ":  " << (*it)->source << endl;
+      debug << KEY_DEPENDS ": " << (*it)->depends << endl << endl;
    }
 }
 
@@ -175,4 +175,19 @@ void CBuildFiles::LoadDependency(list<CBuildFile*> *buildfiles)
          exit(EXIT_FAILURE);
       }
    }
+}
+
+CBuildFile * CBuildFiles::BuildFile(string name, list<CBuildFile*> *buildfiles)
+{   
+   list<CBuildFile*>::iterator it;
+   
+   /* Traverse through all buildfiles */
+   for (it=buildfiles->begin(); 
+        it!=buildfiles->end();
+        it++)
+      if ((*it)->name == name)
+         return (*it);
+   
+   cout << "Error: build '" << name << " is not found" << endl;
+   exit(EXIT_FAILURE);
 }

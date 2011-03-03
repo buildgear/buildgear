@@ -14,7 +14,7 @@
 
 extern void stripChar(string &str, char c);
 
-void CConfigFile::Parse(string filename, CConfig *config)
+void CConfigFile::Parse(string filename)
 {
       FILE *fp;
       char line_buffer[PATH_MAX];
@@ -63,27 +63,27 @@ void CConfigFile::Parse(string filename, CConfig *config)
             {
                // ~/.buildgearconfig, .buildgear/config :
                if (key == CONFIG_KEY_DEFAULT_NAME_PREFIX)
-                  config->default_name_prefix = value;
+                  Config.default_name_prefix = value;
                if (key == CONFIG_KEY_SOURCE_DIR)
-                  config->source_dir = value;
+                  Config.source_dir = value;
                if (key == CONFIG_KEY_DOWNLOAD_TIMEOUT)
-                  config->download_timeout = atoi(value.c_str());
+                  Config.download_timeout = atoi(value.c_str());
                if (key == CONFIG_KEY_DOWNLOAD_RETRY)
-                  config->download_retry = atoi(value.c_str());
+                  Config.download_retry = atoi(value.c_str());
             }
             else
             {
                // buildfiles/config :
                if (key == CONFIG_KEY_HOST_TOOLCHAIN)
-                  config->host_toolchain = value;
+                  Config.host_toolchain = value;
                if (key == CONFIG_KEY_TARGET_TOOLCHAIN)
-                  config->target_toolchain = value;
+                  Config.target_toolchain = value;
                if (key == CONFIG_KEY_BUILD)
-                  config->build_system = value;
+                  Config.build_system = value;
                if (key == CONFIG_KEY_HOST)
-                  config->host_system = value;
+                  Config.host_system = value;
                if (key == CONFIG_KEY_TARGET)
-                  config->target_system = value;
+                  Config.target_system = value;
             }
          }
       }

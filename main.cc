@@ -13,19 +13,19 @@
 #include "buildgear/tools.h"
 
 Debug debug(cout);
+
 CConfig      Config;
+COptions     Options;
+CConfigFile  ConfigFile;
+CClock       Clock;
+CFileSystem  FileSystem;
+CBuildFiles  BuildFiles;
+CDependency  Dependency;
+CSource      Source;
+CTools       Tools;
 
 int main (int argc, char *argv[])
 {
-   COptions     Options;
-   CConfigFile  ConfigFile;
-   CClock       Clock;
-   CFileSystem  FileSystem;
-   CBuildFiles  BuildFiles;
-   CDependency  Dependency;
-   CSource      Source;
-   CTools       Tools;
-
    /* Debug stream option */
    debug.On() = false;
 
@@ -36,7 +36,7 @@ int main (int argc, char *argv[])
 //   cout << TERMINFO_CIVIS;
    
    /* Parse command line options */
-   Options.Parse(argc, argv, &Config);
+   Options.Parse(argc, argv);
    
    /* Display help hint on incorrect download command */
    if ((Config.download) && (Config.name == "") && (Config.all==false))
@@ -74,17 +74,26 @@ int main (int argc, char *argv[])
    Config.GuessSystem();
 
    /* Parse buildgear configuration file(s) */
-   ConfigFile.Parse(GLOBAL_CONFIG_FILE, &Config);
-   ConfigFile.Parse(LOCAL_CONFIG_FILE, &Config);
+   ConfigFile.Parse(GLOBAL_CONFIG_FILE);
+   ConfigFile.Parse(LOCAL_CONFIG_FILE);
 
    /* Parse buildfiles configuration file */
-   ConfigFile.Parse(BUILD_FILES_CONFIG, &Config);
+   ConfigFile.Parse(BUILD_FILES_CONFIG);
    
    /* Correct source dir */
    Config.CorrectSourceDir();
 
    /* Correct name */
    Config.CorrectName();
+
+   /* Handle 'clean --all' command */
+   if ((Config.clean) && (Config.all))
+   {
+      cout << "\nCleaning all builds.. ";
+      Source.CleanAll();
+      cout << "Done\n\n";
+      exit(EXIT_SUCCESS);
+   }
 
    /* Find host and target build files */
    cout << "\nSearching for build files..     ";
@@ -100,12 +109,20 @@ int main (int argc, char *argv[])
    BuildFiles.ParseAndVerify(&BuildFiles.buildfiles);
    
    /* Show buildfiles meta info (debug only) */
-//   BuildFiles.ShowMeta(&BuildFiles.buildfiles);
+   BuildFiles.ShowMeta(&BuildFiles.buildfiles);
    
    /* Load dependencies */
-
    BuildFiles.LoadDependency(&BuildFiles.buildfiles);
    cout << "Done\n";
+
+   /* Handle clean command */
+   if (Config.clean)
+   {
+      cout << "\nCleaning build '" << Config.name << "'.. ";
+      Source.Clean(BuildFiles.BuildFile(Config.name, &BuildFiles.buildfiles));
+      cout << "Done\n\n";
+      exit(EXIT_SUCCESS);
+   }
 
    if (!Config.download)
    {
@@ -163,17 +180,17 @@ int main (int argc, char *argv[])
    /* Start building */
    cout << "Building '" << Config.name << "'.. ";
    if (Config.build)
-      Source.Build(&Dependency.build_order, &Config);
+      Source.Build(&Dependency.build_order);
    cout << "Done\n\n";
+   
+   /* Show log location */
+   cout << "See " BUILD_LOG " for details.\n\n";
 
    /* Stop counting elapsed time */
    Clock.Stop();
    
    /* Show elapsed time */
    Clock.ShowElapsedTime();
-   
-   /* Show log location */
-   cout << "See " BUILD_LOG " for details.\n\n";
    
    /* Enable cursor again */
    cout << TERMINFO_CNORM;
