@@ -35,6 +35,13 @@ int main (int argc, char *argv[])
    /* Parse command line options */
    Options.Parse(argc, argv, &Config);
    
+   /* Display help hint on incorrect download command */
+   if ((Config.download) && (Config.name == "") && (Config.all==false))
+   {
+      cout << "Please specify build name or use 'download --all' to download source files of all builds.\n";
+      exit(EXIT_FAILURE);
+   }
+   
    /* Debug stream option */
    debug.On() = false;
 
