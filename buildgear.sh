@@ -426,6 +426,4 @@ main() {
 
 main "$@"
 
-BG_CHECK_SHA256SUM="yes"
-
 # End of file

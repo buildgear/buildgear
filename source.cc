@@ -86,10 +86,32 @@ void CSource::Do(string action, CBuildFile* buildfile)
    config += " BG_BUILD=" + Config.build_system;
    config += " BG_HOST=" + Config.host_system;
    config += " BG_TARGET=" + Config.target_system;
-   config += " BG_UPDATE_CHECKSUM=" + Config.update_checksum;
-   config += " BG_UPDATE_FOOTPRINT=" + Config.update_footprint;
-   config += " BG_NO_STRIP=" + Config.no_strip;
-   config += " BG_KEEP_WORK=" + Config.keep_work;
+
+   // Apply build settings to all builds if '--all' is used
+   if (Config.all)
+   {
+      config += " BG_UPDATE_CHECKSUM=" + Config.update_checksum;
+      config += " BG_UPDATE_FOOTPRINT=" + Config.update_footprint;
+      config += " BG_NO_STRIP=" + Config.no_strip;
+      config += " BG_KEEP_WORK=" + Config.keep_work;
+   } else
+   {
+      // Apply settings to main build
+      if (Config.name == buildfile->name)
+      {
+         config += " BG_UPDATE_CHECKSUM=" + Config.update_checksum;
+         config += " BG_UPDATE_FOOTPRINT=" + Config.update_footprint;
+         config += " BG_NO_STRIP=" + Config.no_strip;
+         config += " BG_KEEP_WORK=" + Config.keep_work;
+      } else
+      {
+         // Apply default settings to the build dependants
+         config += " BG_UPDATE_CHECKSUM=no";
+         config += " BG_UPDATE_FOOTPRINT=no";
+         config += " BG_NO_STRIP=no";
+         config += " BG_KEEP_WORK=no";
+      }
+   }
    
    command = config + " " SCRIPT " " + buildfile->filename;
    
