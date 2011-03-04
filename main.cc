@@ -180,9 +180,9 @@ int main (int argc, char *argv[])
    }
    
    /* Check for required preinstalled host tools */
-   cout << "Checking host tools and libs..  " << flush;
+   cout << "Running host check..            " << flush;
    Tools.Check();
-   Tools.RunToolsFile();
+   Tools.RunCheckFile();
    cout << "Done\n\n";
    
    /* Show system information */

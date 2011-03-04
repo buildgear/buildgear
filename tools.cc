@@ -51,7 +51,7 @@ void CTools::Check(void)
    }
 }
 
-void CTools::RunToolsFile(void)
+void CTools::RunCheckFile(void)
 {
    int result;
    
