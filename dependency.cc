@@ -26,7 +26,7 @@ void CDependency::Resolve(string name, list<CBuildFile*> *buildfiles)
       // If matching buildfile found
       if (name == (*it)->name)
       {
-         // Resolve target dependency
+         // Resolve dependency
          CDependency::ResolveDep(*it, &resolved, 
                                       &unresolved);
          found = true;

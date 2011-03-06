@@ -36,15 +36,15 @@ CConfig::CConfig()
    
    all = false;
    
-   default_name_prefix = "target/";
+   default_name_prefix = "host/";
    source_dir = SOURCE_DIR;
 }
 
 void CConfig::CorrectName()
 {
    // Prepend default name prefix if none is provided
-   if ((CConfig::name.find("target/") != 0) &&
-      (CConfig::name.find("host/") != 0))
+   if ((CConfig::name.find("host/") != 0) &&
+      (CConfig::name.find("build/") != 0))
       CConfig::name = CConfig::default_name_prefix + CConfig::name;
 }
 
@@ -89,9 +89,8 @@ void CConfig::GuessSystem(void)
       
       while (fgets(line_buffer, PATH_MAX, fp) != NULL)
       {
-         CConfig::host_system = line_buffer;
-         stripChar(host_system, '\n');
-         CConfig::build_system = CConfig::host_system;
+         build_system = line_buffer;
+         stripChar(build_system, '\n');
       }
       
       pclose(fp);
@@ -102,5 +101,4 @@ void CConfig::ShowSystem(void)
    cout << "Building '" << CConfig::name << "' for:" << endl;
    cout << "   BUILD  = " << CConfig::build_system << endl;
    cout << "   HOST   = " << CConfig::host_system << endl;
-   cout << "   TARGET = " << CConfig::target_system << endl << endl;
 }

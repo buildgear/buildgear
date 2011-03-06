@@ -34,9 +34,8 @@ class CConfig
       string source_dir;
       string build_system;
       string host_system;
-      string target_system;
+      string build_toolchain;
       string host_toolchain;
-      string target_toolchain;
       CConfig();
       void CorrectName(void);
       void CorrectSourceDir(void);
@@ -51,8 +50,8 @@ class CConfig
 
 #define ROOT_DIR                 ".buildgear"
 #define BUILD_FILES_DIR          "buildfiles"
+#define BUILD_FILES_BUILD_DIR    BUILD_FILES_DIR "/build"
 #define BUILD_FILES_HOST_DIR     BUILD_FILES_DIR "/host"
-#define BUILD_FILES_TARGET_DIR   BUILD_FILES_DIR "/target"
 #define BUILD_DIR                "build"
 #define SOURCE_DIR               BUILD_DIR "/source"
 #define WORK_DIR                 BUILD_DIR "/work"
@@ -85,11 +84,10 @@ class CConfig
 #define CONFIG_KEY_IGNORE_CHECKSUM           "ignore_checksum"
 #define CONFIG_KEY_IGNORE_FOOTPRINT          "ignore_footprint"
 
+#define CONFIG_KEY_BUILD_TOOLCHAIN           "build_toolchain"
 #define CONFIG_KEY_HOST_TOOLCHAIN            "host_toolchain"
-#define CONFIG_KEY_TARGET_TOOLCHAIN          "target_toolchain"
 #define CONFIG_KEY_BUILD                     "build"
 #define CONFIG_KEY_HOST                      "host"
-#define CONFIG_KEY_TARGET                    "target"
 
 #define TERMINFO_CIVIS           "\033[?25l"
 #define TERMINFO_CNORM           "\033[?25h"

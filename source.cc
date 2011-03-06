@@ -85,7 +85,6 @@ void CSource::Do(string action, CBuildFile* buildfile)
    config += " BG_VERBOSE=no";
    config += " BG_BUILD=" + Config.build_system;
    config += " BG_HOST=" + Config.host_system;
-   config += " BG_TARGET=" + Config.target_system;
 
    // Apply build settings to all builds if '--all' is used
    if (Config.all)
@@ -180,7 +179,7 @@ void CSource::Build(list<CBuildFile*> *buildfiles)
    result = system("rm -rf " WORK_DIR);
 
    // FIXME:
-   // Check if buildfiles/config is newer than target package or target buildfiles
+   // Check if buildfiles/config is newer than package or buildfiles
    // If so warn and delete work/packages (forces total rebuild)
 
    // Set build action of all builds (based on package vs. Buildfile age)

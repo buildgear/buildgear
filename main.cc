@@ -76,7 +76,7 @@ int main (int argc, char *argv[])
          exit(EXIT_SUCCESS);
    }
 
-   /* Guess host and build */
+   /* Guess build system */
    Config.GuessSystem();
 
    /* Parse buildgear configuration file(s) */
@@ -101,7 +101,7 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
-   /* Find host and target build files */
+   /* Find all build files */
    cout << "\nSearching for build files..     ";
    FileSystem.FindFiles(BUILD_FILES_DIR,
                         BUILD_FILE,
@@ -135,13 +135,13 @@ int main (int argc, char *argv[])
       /* Resolve dependencies */
       cout << "Resolving dependencies..        ";
       
-      if ((Config.name != Config.host_toolchain) &&
-          (Config.name != Config.target_toolchain))
+      if ((Config.name != Config.build_toolchain) &&
+          (Config.name != Config.host_toolchain))
       {
+         if (Config.build_toolchain != "")
+            Dependency.Resolve(Config.build_toolchain, &BuildFiles.buildfiles);
          if (Config.host_toolchain != "")
             Dependency.Resolve(Config.host_toolchain, &BuildFiles.buildfiles);
-         if (Config.target_toolchain != "")
-            Dependency.Resolve(Config.target_toolchain, &BuildFiles.buildfiles);
       }
       Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
       cout << "Done\n";
@@ -179,8 +179,8 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
    
-   /* Check for required preinstalled host tools */
-   cout << "Running host check..            " << flush;
+   /* Check for required preinstalled build system tools */
+   cout << "Running build system check..     " << flush;
    Tools.Check();
    Tools.RunCheckFile();
    cout << "Done\n\n";

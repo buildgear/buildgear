@@ -57,13 +57,13 @@ void CBuildFiles::ParseAndVerify(list<CBuildFile*> *buildfiles)
          throw std::runtime_error(strerror(errno));
 
       // Assign name and type based on filename
-      pos = (*it)->filename.rfind("target/");
+      pos = (*it)->filename.rfind("host/");
       if (pos != (*it)->filename.npos)
-         (*it)->type = "target";
+         (*it)->type = "host";
       else
       {
-         pos = (*it)->filename.rfind("host/");
-         (*it)->type = "host";
+         pos = (*it)->filename.rfind("build/");
+         (*it)->type = "build";
       }
 
       if (pos == (*it)->filename.npos)

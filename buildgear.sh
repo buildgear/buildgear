@@ -192,8 +192,8 @@ do_strip() {
 		FILTER="cat"
 	fi
 
-   if [ "$BG_BUILD_TYPE" = "target" ]; then
-      STRIP="$TARGET-strip"
+   if [ "$BG_BUILD_TYPE" = "host" ]; then
+      STRIP="$HOST-strip"
    else
       STRIP="strip"
    fi
@@ -355,11 +355,11 @@ main() {
    BG_BUILD_FOOTPRINT="$BG_BUILD_FILE_DIR/.footprint"
    BG_BUILD_NOSTRIP="$BG_BUILD_FILE_DIR/.nostrip"
    BG_BUILD_SYSROOT_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/$BG_BUILD_TYPE"
-   BG_HOST_SYSROOT_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/host"
-   BG_TARGET_SYSROOT_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/target"
+   BG_SYSROOT_BUILD_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/build"
+   BG_SYSROOT_HOST_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/host"
 
-   export HOST_SYSROOT="$BG_HOST_SYSROOT_DIR"
-   export TARGET_SYSROOT="$BG_TARGET_SYSROOT_DIR"
+   export BUILD_SYSROOT="$BG_SYSROOT_BUILD_DIR"
+   export HOST_SYSROOT="$BG_SYSROOT_HOST_DIR"
 
    # Include buildfiles configuration
 	if [ -f $1 ]; then
@@ -376,7 +376,6 @@ main() {
    export BLD="$BG_ROOT_DIR/build"
    export BUILD="$BG_BUILD"
    export HOST="$BG_HOST"
-   export TARGET="$BG_TARGET"
    export SYSROOT="$BG_BUILD_SYSROOT_DIR"
    
    umask 022
@@ -386,11 +385,11 @@ main() {
    check_create_directory "$BG_BUILD_PACKAGE_DIR"
    check_create_directory "$BG_SYSROOT_DIR"
 
-   # Create link to target sysroot if target sysroot link is configured
-   if [ "$TARGET_SYSROOT_LINK" != "" ]; then
-      if [ ! -e "$BG_TARGET_SYSROOT_DIR" ]; then
+   # Create link to host sysroot if host sysroot link is configured
+   if [ "$HOST_SYSROOT_LINK" != "" ]; then
+      if [ ! -e "$BG_SYSROOT_HOST_DIR" ]; then
          cd "$BG_SYSROOT_DIR"
-         ln -s $TARGET_SYSROOT_LINK target
+         ln -s $HOST_SYSROOT_LINK host
          cd $BG_ROOT_DIR
       fi
    fi

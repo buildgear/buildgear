@@ -34,11 +34,10 @@ void CConfigFile::Parse(string filename)
                      ; echo package_compression_level=$package_compression_level \
                      '";
       else
-         command += "; echo host_toolchain=$HOST_TOOLCHAIN \
-                     ; echo target_toolchain=$TARGET_TOOLCHAIN \
+         command += "; echo build_toolchain=$BUILD_TOOLCHAIN \
+                     ; echo host_toolchain=$HOST_TOOLCHAIN \
                      ; echo build=$BUILD \
                      ; echo host=$HOST \
-                     ; echo target=$TARGET \
                      '";
       
       fp = popen(command.c_str(), "r");
@@ -74,16 +73,14 @@ void CConfigFile::Parse(string filename)
             else
             {
                // buildfiles/config :
+               if (key == CONFIG_KEY_BUILD_TOOLCHAIN)
+                  Config.build_toolchain = value;
                if (key == CONFIG_KEY_HOST_TOOLCHAIN)
                   Config.host_toolchain = value;
-               if (key == CONFIG_KEY_TARGET_TOOLCHAIN)
-                  Config.target_toolchain = value;
                if (key == CONFIG_KEY_BUILD)
                   Config.build_system = value;
                if (key == CONFIG_KEY_HOST)
                   Config.host_system = value;
-               if (key == CONFIG_KEY_TARGET)
-                  Config.target_system = value;
             }
          }
       }
