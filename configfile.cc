@@ -30,7 +30,7 @@ void CConfigFile::Parse(string filename)
                      ; echo download_parallel_level=$download_parallel_level \
                      ; echo download_timeout=$download_timeout \
                      ; echo download_retry=$download_retry \
-                     ; echo build_parallel_level=$build_parallel_level \
+                     ; echo parallel_builds=$parallel_builds \
                      ; echo package_compression_level=$package_compression_level \
                      '";
       else

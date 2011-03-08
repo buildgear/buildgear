@@ -62,6 +62,43 @@ void CDependency::ShowDownloadOrder(void)
    }
 }
 
+int CDependency::countDependencies(CBuildFile *buildfile)
+{
+   int count;
+   list<CBuildFile*>::iterator it;
+   
+   count = buildfile->dependency.size();
+   
+   for (it=buildfile->dependency.begin(); it!=buildfile->dependency.end(); it++)
+      count += countDependencies(*it);
+   
+   return count;
+}
+
+void CDependency::ResolveParallelOrder(void)
+{
+   unsigned int i,j;
+   unsigned int dependencies;
+   
+   list<CBuildFile*>::iterator it;
+   
+   i = build_order.size();
+   
+   int depth[i];
+   
+   // Calculate dependency depth of builds
+   for (it=build_order.begin(),i=0; it!=build_order.end(); it++, i++)
+   {
+      (*it)->depth = 0;
+      depth[i] = 0;
+      dependencies = countDependencies(*it);
+      
+      for (j=0; j<dependencies; j++)
+         depth[i]=max(depth[i], depth[j] + 1);
+      
+      (*it)->depth = depth[i];
+   }
+}
 
 void CDependency::ShowBuildOrder(void)
 {
@@ -71,9 +108,9 @@ void CDependency::ShowBuildOrder(void)
    
    cout <<  "\nBuild order:" << endl;
 
-   for (it=build_order.begin(); it!=build_order.end(); it++, i++)
+   for (it=build_order.begin(), i=0; it!=build_order.end(); it++, i++)
    {
-      cout << "   " << i << ". " << (*it)->name << endl;
+      cout << "   [" << (*it)->depth << "] " << i << ". " << (*it)->name << endl;
    }
 }
 

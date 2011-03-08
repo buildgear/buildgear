@@ -257,7 +257,7 @@ void CSource::Build(list<CBuildFile*> *buildfiles)
 void CSource::ShowBuildHelp(void)
 {
   ifstream fin;
-  char s[10000];
+  char s[100000];
   
   string help_file = Config.root + "/" + string(BUILD_FILES_HELP);
   
@@ -274,7 +274,7 @@ void CSource::ShowBuildHelp(void)
    
       while(!fin.fail() && !fin.eof())
       {
-         fin.getline(s, 10000);
+         fin.getline(s, 100000);
          if (s[0] != '#')
             cout << s << endl;
       }

@@ -20,6 +20,7 @@ class CBuildFile
       string host_depends;
       string type;
       bool build;
+      int depth;
       list<CBuildFile*> dependency;
       private:
 };

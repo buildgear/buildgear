@@ -144,6 +144,8 @@ int main (int argc, char *argv[])
             Dependency.Resolve(Config.host_toolchain, &BuildFiles.buildfiles);
       }
       Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
+      
+      Dependency.ResolveParallelOrder();
       cout << "Done\n";
    }
    
@@ -180,7 +182,7 @@ int main (int argc, char *argv[])
    }
    
    /* Check for required preinstalled build system tools */
-   cout << "Running build system check..     " << flush;
+   cout << "Running build system check..    " << flush;
    Tools.Check();
    Tools.RunCheckFile();
    cout << "Done\n\n";

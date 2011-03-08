@@ -101,4 +101,5 @@ void CConfig::ShowSystem(void)
    cout << "Building '" << CConfig::name << "' for:" << endl;
    cout << "   BUILD  = " << CConfig::build_system << endl;
    cout << "   HOST   = " << CConfig::host_system << endl;
+   cout << endl;
 }
