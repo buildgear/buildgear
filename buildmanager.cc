@@ -137,7 +137,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
 
    // FIXME:
    // Check if buildfiles/config is newer than package or buildfiles
-   // If so warn and delete work/packages (forces total rebuild)
+   // If so warn and delete work/packages (force total rebuild)
 
    // Set build action of all builds (based on package vs. Buildfile age)
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)

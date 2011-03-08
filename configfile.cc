@@ -69,6 +69,8 @@ void CConfigFile::Parse(string filename)
                   Config.download_timeout = atoi(value.c_str());
                if (key == CONFIG_KEY_DOWNLOAD_RETRY)
                   Config.download_retry = atoi(value.c_str());
+               if (key == CONFIG_KEY_PARALLEL_BUILDS)
+                  Config.parallel_builds = atoi(value.c_str());
             }
             else
             {

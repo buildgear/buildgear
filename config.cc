@@ -38,6 +38,8 @@ CConfig::CConfig()
    
    default_name_prefix = "host/";
    source_dir = SOURCE_DIR;
+   
+   parallel_builds = 1;
 }
 
 void CConfig::CorrectName()

@@ -32,6 +32,7 @@ class CConfig
       
       string default_name_prefix;
       string source_dir;
+      unsigned int parallel_builds;
       string build_system;
       string host_system;
       string build_toolchain;
@@ -74,7 +75,7 @@ class CConfig
 #define KEY_DEPENDS              "depends"
 
 #define CONFIG_KEY_DEFAULT_NAME_PREFIX       "default_name_prefix"
-#define CONFIG_KEY_BUILD_PARALLEL_LEVEL      "build_parallel_level"
+#define CONFIG_KEY_PARALLEL_BUILDS           "parallel_builds"
 #define CONFIG_KEY_DOWNLOAD_PARALLEL_LEVEL   "download_parallel_level"
 #define CONFIG_KEY_DOWNLOAD_TIMEOUT          "download_timeout"
 #define CONFIG_KEY_DOWNLOAD_RETRY            "download_retry"
