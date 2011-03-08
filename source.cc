@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <iomanip>
 #include <stdexcept>
 #include <sstream>
@@ -194,7 +193,7 @@ void CSource::Build(list<CBuildFile*> *buildfiles)
    // Set build action of all builds (based on dependencies build status)
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
-      // Skip if build status already set
+      // Skip if build action already set
       if ((*it)->build)
          continue;
       
@@ -251,34 +250,6 @@ void CSource::Build(list<CBuildFile*> *buildfiles)
    {
       // Delete work dir
       result = system("rm -rf " WORK_DIR);
-   }
-}
-
-void CSource::ShowBuildHelp(void)
-{
-  ifstream fin;
-  char s[100000];
-  
-  string help_file = Config.root + "/" + string(BUILD_FILES_HELP);
-  
-  if (FileExists(help_file))
-  {
-      
-      fin.open(help_file.c_str(), ios::in);
-  
-      if(fin.fail())
-      {
-         cout << "Error: Unable to open " << help_file << endl;
-         exit(EXIT_FAILURE);
-      }
-   
-      while(!fin.fail() && !fin.eof())
-      {
-         fin.getline(s, 100000);
-         if (s[0] != '#')
-            cout << s << endl;
-      }
-      fin.close();
    }
 }
 

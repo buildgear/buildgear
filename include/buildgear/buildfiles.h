@@ -2,36 +2,20 @@
 #define BUILDFILES_H
 
 #include <list>
+#include "buildgear/config.h"
+#include "buildgear/buildfile.h"
 #include "buildgear/filesystem.h"
 
 using namespace std;
-
-class CBuildFile
-{
-   public:
-      CBuildFile(string filename);
-      string filename;
-      string name;
-      string version;
-      string release;
-      string source;
-      string depends;
-      string build_depends;
-      string host_depends;
-      string type;
-      bool build;
-      int depth;
-      list<CBuildFile*> dependency;
-      private:
-};
 
 class CBuildFiles
 {
    public:
       list<CBuildFile*> buildfiles;
       void ParseAndVerify(list<CBuildFile*> *buildfiles);
-      void ShowMeta(list<CBuildFile*> *buildfiles);
       void LoadDependency(list<CBuildFile*> *buildfiles);
+      void ShowMeta(list<CBuildFile*> *buildfiles);
+      void ShowHelp(void);
       CBuildFile * BuildFile(string name, list<CBuildFile*> *buildfiles);
    private:
 };

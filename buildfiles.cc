@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <string>
 #include <stdexcept>
@@ -12,13 +13,10 @@
 #include "buildgear/config.h"
 #include "buildgear/filesystem.h"
 #include "buildgear/debug.h"
+#include "buildgear/buildfile.h"
 #include "buildgear/buildfiles.h"
 
-CBuildFile::CBuildFile(string filename)
-{
-   CBuildFile::filename = filename;
-   CBuildFile::build = false;
-}
+extern CFileSystem FileSystem;
 
 void stripChar(string &str, char c)
 {
@@ -190,4 +188,32 @@ CBuildFile * CBuildFiles::BuildFile(string name, list<CBuildFile*> *buildfiles)
    
    cout << "Error: build '" << name << " is not found" << endl;
    exit(EXIT_FAILURE);
+}
+
+void CBuildFiles::ShowHelp(void)
+{
+  ifstream fin;
+  char s[100000];
+  
+  string help_file = Config.root + "/" + string(BUILD_FILES_HELP);
+  
+  if (FileSystem.FileExists(help_file))
+  {
+      
+      fin.open(help_file.c_str(), ios::in);
+  
+      if(fin.fail())
+      {
+         cout << "Error: Unable to open " << help_file << endl;
+         exit(EXIT_FAILURE);
+      }
+   
+      while(!fin.fail() && !fin.eof())
+      {
+         fin.getline(s, 100000);
+         if (s[0] != '#')
+            cout << s << endl;
+      }
+      fin.close();
+   }
 }

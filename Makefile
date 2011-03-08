@@ -13,6 +13,7 @@ all: buildgear
 
 buildgear: main.o \
 	filesystem.o \
+	buildfile.o \
 	buildfiles.o \
 	clock.o \
 	dependency.o \

@@ -72,7 +72,7 @@ int main (int argc, char *argv[])
    /* Show buildfiles help*/
    if ((Config.show) && (Config.help))
    {
-         Source.ShowBuildHelp();
+         BuildFiles.ShowHelp();
          exit(EXIT_SUCCESS);
    }
 
