@@ -21,6 +21,7 @@ buildgear: main.o \
 	options.o \
 	download.o \
 	configfile.o \
+	buildmanager.o \
 	tools.o \
 	config.o
 	$(HOST_CXX) $(HOST_CXXFLAGS) $^ -o $@

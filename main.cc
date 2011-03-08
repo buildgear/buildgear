@@ -9,20 +9,22 @@
 #include "buildgear/buildfiles.h"
 #include "buildgear/dependency.h"
 #include "buildgear/source.h"
+#include "buildgear/buildmanager.h"
 #include "buildgear/download.h"
 #include "buildgear/tools.h"
 
 Debug debug(cout);
 
-CConfig      Config;
-COptions     Options;
-CConfigFile  ConfigFile;
-CClock       Clock;
-CFileSystem  FileSystem;
-CBuildFiles  BuildFiles;
-CDependency  Dependency;
-CSource      Source;
-CTools       Tools;
+CConfig       Config;
+COptions      Options;
+CConfigFile   ConfigFile;
+CClock        Clock;
+CFileSystem   FileSystem;
+CBuildFiles   BuildFiles;
+CDependency   Dependency;
+CSource       Source;
+CBuildManager BuildManager;
+CTools        Tools;
 
 int main (int argc, char *argv[])
 {
@@ -96,7 +98,7 @@ int main (int argc, char *argv[])
    if ((Config.clean) && (Config.all))
    {
       cout << "\nCleaning all builds.. ";
-      Source.CleanAll();
+      BuildManager.CleanAll();
       cout << "Done\n\n";
       exit(EXIT_SUCCESS);
    }
@@ -125,7 +127,7 @@ int main (int argc, char *argv[])
    if (Config.clean)
    {
       cout << "\nCleaning build '" << Config.name << "'.. ";
-      Source.Clean(BuildFiles.BuildFile(Config.name, &BuildFiles.buildfiles));
+      BuildManager.Clean(BuildFiles.BuildFile(Config.name, &BuildFiles.buildfiles));
       cout << "Done\n\n";
       exit(EXIT_SUCCESS);
    }
@@ -193,7 +195,7 @@ int main (int argc, char *argv[])
    /* Start building */
    cout << "Building '" << Config.name << "'.. ";
    if (Config.build)
-      Source.Build(&Dependency.build_order);
+      BuildManager.Build(&Dependency.build_order);
    cout << "Done\n\n";
    
    /* Show log location */
