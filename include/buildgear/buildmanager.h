@@ -14,6 +14,7 @@ class CBuildManager : public CFileSystem, COptions
       void Do(string, CBuildFile*);
       void Clean(CBuildFile *);
       void CleanAll(void);
+      void CleanWork(void);
       bool UpToDate(CBuildFile *);
       bool DepBuildNeeded(CBuildFile *buildfile);
    private:

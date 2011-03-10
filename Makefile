@@ -3,7 +3,7 @@ HOST_CXX = g++
 
 HOST_CXXFLAGS  = -Wall -O2
 HOST_CXXFLAGS += -Iinclude
-HOST_CXXFLAGS += -lrt -lcurl
+HOST_CXXFLAGS += -lrt -lcurl-gnutls
 
 
 all: buildgear

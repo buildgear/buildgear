@@ -9,7 +9,9 @@
 #include "buildgear/buildfiles.h"
 #include "buildgear/dependency.h"
 
-void CDependency::Resolve(string name, list<CBuildFile*> *buildfiles)
+void CDependency::Resolve(string name,
+                          list<CBuildFile*> *buildfiles,
+                          list<CBuildFile*> *build_order)
 {
    bool found = false;
    list<CBuildFile*>::iterator it, itr;
@@ -45,7 +47,7 @@ void CDependency::Resolve(string name, list<CBuildFile*> *buildfiles)
    download_order.unique();
    
    /* Add to build order list */
-   build_order.insert(build_order.end(), resolved.begin(), resolved.end());
+   build_order->insert(build_order->end(), resolved.begin(), resolved.end());
 }
 
 void CDependency::ShowDownloadOrder(void)
@@ -75,19 +77,18 @@ int CDependency::countDependencies(CBuildFile *buildfile)
    return count;
 }
 
-void CDependency::ResolveParallelOrder(void)
+void CDependency::ResolveDepths(list<CBuildFile*> *build_order)
 {
    unsigned int i,j;
    unsigned int dependencies;
-   
    list<CBuildFile*>::iterator it;
    
-   i = build_order.size();
+   i = build_order->size();
    
    int depth[i];
    
    // Calculate dependency depth of builds
-   for (it=build_order.begin(),i=0; it!=build_order.end(); it++, i++)
+   for (it=build_order->begin(),i=0; it!=build_order->end(); it++, i++)
    {
       (*it)->depth = 0;
       depth[i] = 0;

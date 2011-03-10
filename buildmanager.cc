@@ -203,12 +203,6 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       }
 */
    }
-
-   if (Config.keep_work == "no")
-   {
-      // Delete work dir
-      result = system("rm -rf " WORK_DIR);
-   }
 }
 
 void CBuildManager::Clean(CBuildFile *buildfile)
@@ -229,9 +223,13 @@ void CBuildManager::Clean(CBuildFile *buildfile)
 void CBuildManager::CleanAll(void)
 {
    int result;
-   string command;
-   
-   command = "rm -rf " + string(PACKAGE_DIR);
    
    result = system("rm -rf " PACKAGE_DIR);
+}
+
+void CBuildManager::CleanWork(void)
+{
+   int result;
+   
+   result = system("rm -rf " WORK_DIR);
 }

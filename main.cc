@@ -134,20 +134,34 @@ int main (int argc, char *argv[])
 
    if (!Config.download)
    {
-      /* Resolve dependencies */
+      /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";
       
       if ((Config.name != Config.build_toolchain) &&
           (Config.name != Config.host_toolchain))
       {
          if (Config.build_toolchain != "")
-            Dependency.Resolve(Config.build_toolchain, &BuildFiles.buildfiles);
+            Dependency.Resolve(Config.build_toolchain,
+                               &BuildFiles.buildfiles,
+                               &Dependency.build_toolchain_build_order);
          if (Config.host_toolchain != "")
-            Dependency.Resolve(Config.host_toolchain, &BuildFiles.buildfiles);
+            Dependency.Resolve(Config.host_toolchain,
+                               &BuildFiles.buildfiles,
+                               &Dependency.host_toolchain_build_order);
       }
-      Dependency.Resolve(Config.name, &BuildFiles.buildfiles);
       
-      Dependency.ResolveParallelOrder();
+      if (Config.name == Config.host_toolchain)
+      {
+         if (Config.build_toolchain != "")
+            Dependency.Resolve(Config.build_toolchain,
+                               &BuildFiles.buildfiles,
+                               &Dependency.build_toolchain_build_order);
+      } else
+      {
+         Dependency.Resolve(Config.name,
+                            &BuildFiles.buildfiles,
+                            &Dependency.build_order);
+      }
       cout << "Done\n";
    }
    
@@ -183,7 +197,7 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
    
-   /* Check for required preinstalled build system tools */
+   /* Check for build system prerequisites */
    cout << "Running build system check..    " << flush;
    Tools.Check();
    Tools.RunCheckFile();
@@ -194,8 +208,20 @@ int main (int argc, char *argv[])
    
    /* Start building */
    cout << "Building '" << Config.name << "'.. ";
-   if (Config.build)
-      BuildManager.Build(&Dependency.build_order);
+   if (Config.build_toolchain != "")
+   {
+      Dependency.ResolveDepths(&Dependency.build_toolchain_build_order);
+      BuildManager.Build(&Dependency.build_toolchain_build_order);
+   }
+   if (Config.host_toolchain != "")
+   {
+      Dependency.ResolveDepths(&Dependency.host_toolchain_build_order);
+      BuildManager.Build(&Dependency.host_toolchain_build_order);
+   }
+   Dependency.ResolveDepths(&Dependency.build_order);
+   BuildManager.Build(&Dependency.build_order);
+   if (Config.keep_work == "no")
+      BuildManager.CleanWork();
    cout << "Done\n\n";
    
    /* Show log location */
