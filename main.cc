@@ -138,7 +138,7 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
-   if (!Config.download)
+   if (Config.build)
    {
       /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";
