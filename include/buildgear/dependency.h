@@ -18,11 +18,8 @@ class CDependency
       list<CBuildFile*> resolved;
       list<CBuildFile*> unresolved;
       list<CBuildFile*> build_order;
-      list<CBuildFile*> build_toolchain_build_order;
-      list<CBuildFile*> host_toolchain_build_order;
       list<CBuildFile*> download_order;
    private:
-      int countDependencies(CBuildFile *buildfile);
       void ResolveDep(CBuildFile *buildfile,
                    list<CBuildFile*> *resolved,
                    list<CBuildFile*> *unresolved);

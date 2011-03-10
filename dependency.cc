@@ -52,47 +52,33 @@ void CDependency::Resolve(string name,
 
 void CDependency::ShowDownloadOrder(void)
 {
-   int i=1;
+   int i;
 
    list<CBuildFile*>::iterator it;
    
    cout <<  "\nDownload order:" << endl;
 
-   for (it=download_order.begin(); it!=download_order.end(); it++, i++)
+   for (it=download_order.begin(), i=0; it!=download_order.end(); it++, i++)
    {
       cout << "   " << i << ". " << (*it)->name << endl;
    }
 }
 
-int CDependency::countDependencies(CBuildFile *buildfile)
-{
-   int count;
-   list<CBuildFile*>::iterator it;
-   
-   count = buildfile->dependency.size();
-   
-   for (it=buildfile->dependency.begin(); it!=buildfile->dependency.end(); it++)
-      count += countDependencies(*it);
-   
-   return count;
-}
-
 void CDependency::ResolveDepths(list<CBuildFile*> *build_order)
 {
-   unsigned int i,j;
+   unsigned int* depth = NULL; 
+   unsigned int size,i,j;
    unsigned int dependencies;
    list<CBuildFile*>::iterator it;
    
-   i = build_order->size();
-   
-   int depth[i];
+   size = build_order->size();
+   depth = new unsigned int[size];
    
    // Calculate dependency depth of builds
    for (it=build_order->begin(),i=0; it!=build_order->end(); it++, i++)
    {
-      (*it)->depth = 0;
       depth[i] = 0;
-      dependencies = countDependencies(*it);
+      dependencies = (*it)->dependency.size();
       
       for (j=0; j<dependencies; j++)
          depth[i]=max(depth[i], depth[j] + 1);
@@ -103,7 +89,7 @@ void CDependency::ResolveDepths(list<CBuildFile*> *build_order)
 
 void CDependency::ShowBuildOrder(void)
 {
-   int i=1;
+   int i;
 
    list<CBuildFile*>::iterator it;
    

@@ -18,6 +18,11 @@
 
 extern CFileSystem FileSystem;
 
+CBuildFiles::CBuildFiles()
+{
+   host_toolchain = NULL;
+}
+
 void stripChar(string &str, char c)
 {
    unsigned int i;
@@ -49,7 +54,8 @@ void CBuildFiles::ParseAndVerify(list<CBuildFile*> *buildfiles)
                          ; echo release=$release \
                          ; echo source=${source[@]} \
                          ; echo depends=${depends[@]}'";
-      
+
+      // Open buildfile for reading
       fp = popen(command.c_str(), "r");
       if (fp == NULL)
          throw std::runtime_error(strerror(errno));
@@ -105,8 +111,38 @@ void CBuildFiles::ParseAndVerify(list<CBuildFile*> *buildfiles)
             (*it)->depends = value;
       }
       pclose(fp);
+      
+      // If host toolchain defined
+      if ((Config.host_toolchain != "") && 
+          ((*it)->name == Config.host_toolchain))
+      {
+         // Save reference to host toolchain buildfile
+         CBuildFiles::host_toolchain = (*it);
+      }
+   }
+   
+   if ((Config.host_toolchain != "") && 
+       (CBuildFiles::host_toolchain == NULL))
+   {
+      cout << "Error: Host toolchain buildfile is not found."<< endl;
+      exit(EXIT_FAILURE);
    }
 }
+
+void CBuildFiles::AddDependencyHost(list<CBuildFile*> *buildfiles, CBuildFile *buildfile)
+{
+   list<CBuildFile*>::iterator it;
+   
+   /* Traverse through all buildfiles */
+   for (it=buildfiles->begin(); 
+        it!=buildfiles->end();
+        it++)
+   {
+      if ((*it)->type == "host")
+         (*it)->dependency.push_back(buildfile);
+   }
+}
+
 
 void CBuildFiles::ShowMeta(list<CBuildFile*> *buildfiles)
 {   
