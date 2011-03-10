@@ -127,13 +127,6 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
 {
    list<CBuildFile*>::iterator it;
    list<CBuildFile*>::reverse_iterator rit;
-   int result;
-
-   // Delete old build log
-   result = system("rm -f " BUILD_LOG);
-
-   // Delete work dir (FIXME: potential for improvement)
-   result = system("rm -rf " WORK_DIR);
 
    // FIXME:
    // Check if buildfiles/config is newer than package or buildfiles
@@ -232,4 +225,11 @@ void CBuildManager::CleanWork(void)
    int result;
    
    result = system("rm -rf " WORK_DIR);
+}
+
+void CBuildManager::CleanLog(void)
+{
+   int result;
+   
+   result = system("rm -f " BUILD_LOG);
 }

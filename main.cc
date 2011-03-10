@@ -208,20 +208,31 @@ int main (int argc, char *argv[])
    
    /* Start building */
    cout << "Building '" << Config.name << "'.. ";
+   
+   // Delete old build log
+   BuildManager.CleanLog();
+
+   // Delete old work
+   BuildManager.CleanWork();
+   
    if (Config.build_toolchain != "")
    {
       Dependency.ResolveDepths(&Dependency.build_toolchain_build_order);
       BuildManager.Build(&Dependency.build_toolchain_build_order);
    }
+   
    if (Config.host_toolchain != "")
    {
       Dependency.ResolveDepths(&Dependency.host_toolchain_build_order);
       BuildManager.Build(&Dependency.host_toolchain_build_order);
    }
+   
    Dependency.ResolveDepths(&Dependency.build_order);
    BuildManager.Build(&Dependency.build_order);
+   
    if (Config.keep_work == "no")
       BuildManager.CleanWork();
+   
    cout << "Done\n\n";
    
    /* Show log location */
