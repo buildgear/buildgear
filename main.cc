@@ -43,7 +43,8 @@ int main (int argc, char *argv[])
    /* Display help hint on incorrect download command */
    if ((Config.download) && (Config.name == "") && (Config.all==false))
    {
-      cout << "Please specify build name or use 'download --all' to download source files of all builds\n";
+      cout << "Please specify build name or use 'download --all' " << 
+                                    "to download source files of all builds\n";
       exit(EXIT_FAILURE);
    }
    
@@ -138,7 +139,7 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
-   if (Config.build)
+   if (!Config.download)
    {
       /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";

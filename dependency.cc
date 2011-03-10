@@ -58,9 +58,23 @@ void CDependency::ShowDownloadOrder(void)
    
    cout <<  "\nDownload order:" << endl;
 
-   for (it=download_order.begin(), i=0; it!=download_order.end(); it++, i++)
+   for (it=download_order.begin(), i=1; it!=download_order.end(); it++, i++)
    {
       cout << "   " << i << ". " << (*it)->name << endl;
+   }
+}
+
+void CDependency::ShowBuildOrder(void)
+{
+   int i;
+
+   list<CBuildFile*>::iterator it;
+   
+   cout <<  "\nBuild order:" << endl;
+
+   for (it=build_order.begin(), i=1; it!=build_order.end(); it++, i++)
+   {
+      cout << "   [" << (*it)->depth << "] " << i << ". " << (*it)->name << endl;
    }
 }
 
@@ -84,20 +98,6 @@ void CDependency::ResolveDepths(list<CBuildFile*> *build_order)
          depth[i]=max(depth[i], depth[j] + 1);
       
       (*it)->depth = depth[i];
-   }
-}
-
-void CDependency::ShowBuildOrder(void)
-{
-   int i;
-
-   list<CBuildFile*>::iterator it;
-   
-   cout <<  "\nBuild order:" << endl;
-
-   for (it=build_order.begin(), i=0; it!=build_order.end(); it++, i++)
-   {
-      cout << "   [" << (*it)->depth << "] " << i << ". " << (*it)->name << endl;
    }
 }
 
