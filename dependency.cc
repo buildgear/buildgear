@@ -78,27 +78,39 @@ void CDependency::ShowBuildOrder(void)
    }
 }
 
-void CDependency::ResolveDepths(list<CBuildFile*> *build_order)
+int countDependencies(CBuildFile *buildfile)
 {
-   unsigned int* depth = NULL; 
-   unsigned int size,i,j;
-   unsigned int dependencies;
+   int count;
    list<CBuildFile*>::iterator it;
    
-   size = build_order->size();
-   depth = new unsigned int[size];
+   count = buildfile->dependency.size();
    
-   // Calculate dependency depth of builds
-   for (it=build_order->begin(),i=0; it!=build_order->end(); it++, i++)
+   for (it=buildfile->dependency.begin(); it!=buildfile->dependency.end(); it++)
+      count += countDependencies(*it);
+   
+   return count;
+}
+
+void CDependency::SetDepths(CBuildFile *buildfile, int depth)
+{
+   unsigned int i;
+   list<CBuildFile*>::iterator it;
+   
+   // DFS
+   buildfile->visited = true;
+   buildfile->depth = depth;
+
+   for (it=buildfile->dependency.begin(),i=0; it!=buildfile->dependency.end(); it++, i++)
    {
-      depth[i] = 0;
-      dependencies = (*it)->dependency.size();
-      
-      for (j=0; j<dependencies; j++)
-         depth[i]=max(depth[i], depth[j] + 1);
-      
-      (*it)->depth = depth[i];
+      if ((*it)->visited == false)
+         SetDepths(*it, depth + 1);
    }
+}
+
+
+void CDependency::ResolveDepths(CBuildFile *buildfile)
+{
+   SetDepths(buildfile, 0);   
 }
 
 void CDependency::ResolveDep(CBuildFile *buildfile,

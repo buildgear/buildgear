@@ -146,7 +146,8 @@ int main (int argc, char *argv[])
       Dependency.Resolve(Config.name,
                          &BuildFiles.buildfiles,
                          &Dependency.build_order);
-      Dependency.ResolveDepths(&Dependency.build_order);
+      Dependency.ResolveDepths(BuildFiles.BuildFile(Config.name, 
+                               &BuildFiles.buildfiles));
       cout << "Done\n";
    }
    

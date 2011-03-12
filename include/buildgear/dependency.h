@@ -14,7 +14,7 @@ class CDependency
       void Resolve(string name,
                    list<CBuildFile*> *buildfiles,
                    list<CBuildFile*> *build_order);
-      void ResolveDepths(list<CBuildFile*> *build_order);
+      void ResolveDepths(CBuildFile *buildfile);
       list<CBuildFile*> resolved;
       list<CBuildFile*> unresolved;
       list<CBuildFile*> build_order;
@@ -23,6 +23,7 @@ class CDependency
       void ResolveDep(CBuildFile *buildfile,
                    list<CBuildFile*> *resolved,
                    list<CBuildFile*> *unresolved);
+      void SetDepths(CBuildFile *buildfile, int depth);
 };
 
 #endif
