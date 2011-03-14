@@ -1,2 +1,4 @@
 /buildgear
+/lib/lemon-1.2.1
+/libemon.a
 *.o
