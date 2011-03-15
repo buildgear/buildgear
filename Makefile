@@ -1,16 +1,16 @@
 
-BUILD_CXX = g++
+CXX = g++
 
-BUILD_CXXFLAGS  = -Wall -O2
-BUILD_CXXFLAGS += -Iinclude -Ilib/lemon-1.2.1/lemon
-BUILD_CXXFLAGS += -L.
-BUILD_CXXFLAGS += -lrt -lcurl-gnutls -lemon
+CXXFLAGS  = -Wall -O2
+CXXFLAGS += -Iinclude -Ilib/lemon-1.2.1
+CXXFLAGS += -L.
+CXXFLAGS += -lrt -lcurl-gnutls -lemon
 
 
 all: buildgear
 
 %.o: %.cc
-	$(BUILD_CXX) $(BUILD_CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 libemon.a:
 	tar -C lib -xf lib/lemon-nodoc-1.2.1.tar.gz
@@ -33,7 +33,7 @@ buildgear: libemon.a \
 	buildmanager.o \
 	tools.o \
 	config.o
-	$(BUILD_CXX) $(BUILD_CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ -o $@
 	strip $@
 
 clean:
