@@ -146,8 +146,7 @@ int main (int argc, char *argv[])
       Dependency.Resolve(Config.name,
                          &BuildFiles.buildfiles,
                          &Dependency.build_order);
-      Dependency.ResolveDepths(BuildFiles.BuildFile(Config.name, 
-                               &BuildFiles.buildfiles));
+      Dependency.ResolveDepths(&Dependency.build_order);
       cout << "Done\n";
    }
    
@@ -159,6 +158,9 @@ int main (int argc, char *argv[])
       
       if (Config.build_order)
          Dependency.ShowBuildOrder();
+         
+      if (Config.dependency_circle)
+         Dependency.ShowDependencyCircleEps("dependency_circle.eps");
          
       cout << endl;
       

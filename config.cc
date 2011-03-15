@@ -33,6 +33,7 @@ CConfig::CConfig()
    build_order = false;
    download_order = false;
    help = false;
+   dependency_circle=false;
    
    all = false;
    

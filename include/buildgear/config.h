@@ -27,6 +27,7 @@ class CConfig
       bool build_order;
       bool download_order;
       bool help;
+      bool dependency_circle;
       
       bool all;
       

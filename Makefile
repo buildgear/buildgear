@@ -7,7 +7,7 @@ CXXFLAGS += -L.
 CXXFLAGS += -lrt -lcurl-gnutls -lemon
 
 
-all: buildgear
+all: libemon.a buildgear
 
 %.o: %.cc
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -19,8 +19,7 @@ libemon.a:
    make ; \
 	cp lemon/.libs/libemon.a ../.. )
 
-buildgear: libemon.a \
-	main.o \
+buildgear: main.o \
 	filesystem.o \
 	buildfile.o \
 	buildfiles.o \
@@ -33,7 +32,7 @@ buildgear: libemon.a \
 	buildmanager.o \
 	tools.o \
 	config.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ libemon.a -o $@
 	strip $@
 
 clean:

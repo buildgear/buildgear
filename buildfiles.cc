@@ -97,8 +97,8 @@ void CBuildFiles::ParseAndVerify(list<CBuildFile*> *buildfiles)
          stripChar(value, '\n');
 
          // Required keys (FIXME: add check for "" values)
-//         if (key == KEY_NAME)
-//            (*it)->name = value;
+         if (key == KEY_NAME)
+            (*it)->short_name = value;
          if (key == KEY_VERSION)
             (*it)->version = value;
          if (key == KEY_RELEASE)
