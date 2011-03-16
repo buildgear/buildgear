@@ -17,6 +17,21 @@
 #include "buildgear/source.h"
 #include "buildgear/buildmanager.h"
 #include "buildgear/download.h"
+#include "buildgear/thread.h"
+
+class buildThread: public Thread 
+{
+   public:
+	   buildThread(int ID) : buildID(ID) {}
+	   virtual void* run();
+   private:
+	   int buildID;
+};
+
+void* buildThread::run() {
+	cout << "Builder thread " << buildID << " is running!" << endl;
+	return 0;
+}
 
 void CBuildManager::Do(string action, CBuildFile* buildfile)
 {
@@ -173,6 +188,22 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
    if (buildfiles->back()->build)
    {
       cout << endl;
+      
+      // Build experiment
+      vector<buildThread *> builder;
+
+      for (int i=0; i<10; i++)
+      {
+         buildThread* build(new buildThread(i));
+         builder.push_back(build);
+         builder[i]->start();
+      }
+
+      for (int i=0; i<10; i++)
+      {
+         builder[i]->join();
+         delete builder[i];
+      }
       
       // Process build order
       for (it=buildfiles->begin(); it!=buildfiles->end(); it++)

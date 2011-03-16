@@ -31,7 +31,8 @@ buildgear: main.o \
 	configfile.o \
 	buildmanager.o \
 	tools.o \
-	config.o
+	config.o \
+   thread.o
 	$(CXX) $(CXXFLAGS) $^ libemon.a -o $@
 	strip $@
 
