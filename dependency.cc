@@ -169,7 +169,7 @@ void CDependency::ShowDependencyCircleEps(string filename)
    
    // Assign layout attributes for nodes
    double angle = 360 / (double) build_order.size();
-   int r = 10 + 2*build_order.size();
+   int r = 3 + 3*build_order.size();
    angle = angle * 3.14159265/180;
    
    for (it=build_order.begin(), i=0; it!=build_order.end(); it++, i++)
