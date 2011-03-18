@@ -22,6 +22,7 @@
 
 sem_t build_semaphore;
 pthread_mutex_t add_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t cout_mutex = PTHREAD_MUTEX_INITIALIZER;
 CBuildFile *last_build;
 
 class buildThread: public Thread, CBuildManager
@@ -40,7 +41,7 @@ void* buildThread::run() {
    if (buildfile->build == true)
       Do("build", buildfile);
  
-   pthread_mutex_lock(&add_mutex);     
+   pthread_mutex_lock(&add_mutex);
    // Don't add last build
    if (buildfile != last_build)
       Do("add", buildfile);   
@@ -103,6 +104,8 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    
    command = config + " " SCRIPT " " + buildfile->filename;
    
+   pthread_mutex_lock(&cout_mutex);
+   
    if (action == "build")
    {
       cout << "   Building      '" << buildfile->name << "'" << endl;
@@ -113,6 +116,8 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    
    if (action == "remove")
       cout << "   Removing      '" << buildfile->name << "'" << endl;
+   
+   pthread_mutex_unlock(&cout_mutex);
    
    if (system(command.c_str()) != 0)
    {
@@ -218,8 +223,6 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
 
       int current_depth = buildfiles->front()->depth;
       last_build = buildfiles->back();
-
-      cout << "parallel_builds = " << Config.parallel_builds << endl;
 
       // Process build order
       it=buildfiles->begin();
