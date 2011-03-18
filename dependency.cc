@@ -13,8 +13,7 @@
 #include "buildgear/dependency.h"
 
 void CDependency::ResolveSequentialBuildOrder(string name,
-                          list<CBuildFile*> *buildfiles,
-                          list<CBuildFile*> *build_order)
+                          list<CBuildFile*> *buildfiles)
 {
    bool found = false;
    list<CBuildFile*>::iterator it, itr;
@@ -50,7 +49,7 @@ void CDependency::ResolveSequentialBuildOrder(string name,
    download_order.unique();
    
    /* Add to build order list */
-   build_order->insert(build_order->end(), resolved.begin(), resolved.end());
+   build_order.insert(build_order.end(), resolved.begin(), resolved.end());
 }
 
 void CDependency::ShowDownloadOrder(void)

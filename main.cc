@@ -11,7 +11,7 @@
 #include "buildgear/source.h"
 #include "buildgear/buildmanager.h"
 #include "buildgear/download.h"
-#include "buildgear/tools.h"
+#include "buildgear/buildsystem.h"
 
 Debug debug(cout);
 
@@ -24,7 +24,7 @@ CBuildFiles   BuildFiles;
 CDependency   Dependency;
 CSource       Source;
 CBuildManager BuildManager;
-CTools        Tools;
+CBuildSystem  BuildSystem;
 
 int main (int argc, char *argv[])
 {
@@ -115,18 +115,18 @@ int main (int argc, char *argv[])
 
    /* Parse and verify buildfiles */
    cout << "Loading build files..           ";
-   BuildFiles.ParseAndVerify(&BuildFiles.buildfiles);
+   BuildFiles.ParseAndVerify();
    
    /* Show buildfiles meta info (debug only) */
-   BuildFiles.ShowMeta(&BuildFiles.buildfiles);
+   BuildFiles.ShowMeta();
    
    /* Load dependencies */
-   BuildFiles.LoadDependency(&BuildFiles.buildfiles);
+   BuildFiles.LoadDependency();
    
    if (Config.host_toolchain != "")
    {
       /* Add dependency to host toolchain for all host buildfiles */
-      BuildFiles.AddDependencyHost(&BuildFiles.buildfiles, BuildFiles.host_toolchain);
+      BuildFiles.AddHostToolchainDependency();
    }
    cout << "Done\n";
 
@@ -134,7 +134,7 @@ int main (int argc, char *argv[])
    if (Config.clean)
    {
       cout << "\nCleaning build '" << Config.name << "'.. ";
-      BuildManager.Clean(BuildFiles.BuildFile(Config.name, &BuildFiles.buildfiles));
+      BuildManager.Clean(BuildFiles.BuildFile(Config.name));
       cout << "Done\n\n";
       exit(EXIT_SUCCESS);
    }
@@ -143,9 +143,7 @@ int main (int argc, char *argv[])
    {
       /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";
-      Dependency.ResolveSequentialBuildOrder(Config.name,
-                         &BuildFiles.buildfiles,
-                         &Dependency.build_order);
+      Dependency.ResolveSequentialBuildOrder(Config.name, &BuildFiles.buildfiles);
       Dependency.ResolveParallelBuildOrder();
       cout << "Done\n";
    }
@@ -188,8 +186,8 @@ int main (int argc, char *argv[])
    
    /* Check for build system prerequisites */
    cout << "Running build system check..    " << flush;
-   Tools.Check();
-   Tools.RunCheckFile();
+   BuildSystem.Check();
+   BuildSystem.RunCheckFile();
    cout << "Done\n\n";
    
    /* Show system information */

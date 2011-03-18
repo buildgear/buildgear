@@ -4,10 +4,10 @@
 #include <string.h>
 #include <getopt.h>
 #include "buildgear/config.h"
-#include "buildgear/tools.h"
+#include "buildgear/buildsystem.h"
 #include "buildgear/filesystem.h"
 
-void CTools::Check(void)
+void CBuildSystem::Check(void)
 {
    int status, i=0;
    string tool[] = {      "bash",
@@ -51,7 +51,7 @@ void CTools::Check(void)
    }
 }
 
-void CTools::RunCheckFile(void)
+void CBuildSystem::RunCheckFile(void)
 {
    int result;
    
@@ -61,7 +61,8 @@ void CTools::RunCheckFile(void)
       result = system("bash -c 'source " BUILD_FILES_CHECK " 2> /dev/null'");
       if (result != 0)
       {
-         cout << endl << "Please install missing tools." << endl << endl;
+         cout << endl << "Please install missing tools or libraries." 
+              << endl << endl;
          exit(EXIT_FAILURE);
       }
    }

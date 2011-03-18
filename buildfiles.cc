@@ -35,13 +35,13 @@ void stripChar(string &str, char c)
       }
 }
 
-void CBuildFiles::ParseAndVerify(list<CBuildFile*> *buildfiles)
+void CBuildFiles::ParseAndVerify(void)
 {   
    list<CBuildFile*>::iterator it;
    
    /* Traverse through all buildfiles */
-   for (it=buildfiles->begin();
-        it!=buildfiles->end();
+   for (it=buildfiles.begin();
+        it!=buildfiles.end();
         it++)
    {
       FILE *fp;
@@ -129,30 +129,30 @@ void CBuildFiles::ParseAndVerify(list<CBuildFile*> *buildfiles)
    }
 }
 
-void CBuildFiles::AddDependencyHost(list<CBuildFile*> *buildfiles, CBuildFile *buildfile)
+void CBuildFiles::AddHostToolchainDependency(void)
 {
    list<CBuildFile*>::iterator it;
    
    /* Traverse through all buildfiles */
-   for (it=buildfiles->begin(); 
-        it!=buildfiles->end();
+   for (it=buildfiles.begin(); 
+        it!=buildfiles.end();
         it++)
    {
       if ((*it)->type == "host")
-         (*it)->dependency.push_back(buildfile);
+         (*it)->dependency.push_back(host_toolchain);
    }
 }
 
 
-void CBuildFiles::ShowMeta(list<CBuildFile*> *buildfiles)
+void CBuildFiles::ShowMeta(void)
 {   
    list<CBuildFile*>::iterator it;
 
    debug << endl << "Buildfiles:" << endl << endl;
    
    /* Traverse through all buildfiles */
-   for (it=buildfiles->begin(); 
-        it!=buildfiles->end();
+   for (it=buildfiles.begin(); 
+        it!=buildfiles.end();
         it++)
    {
       debug << KEY_NAME << ":    " << (*it)->name << endl;
@@ -163,13 +163,13 @@ void CBuildFiles::ShowMeta(list<CBuildFile*> *buildfiles)
    }
 }
 
-void CBuildFiles::LoadDependency(list<CBuildFile*> *buildfiles)
+void CBuildFiles::LoadDependency(void)
 {
    list<CBuildFile*>::iterator it, itr;
    
    /* Traverse buildfiles */
-   for (it=buildfiles->begin();
-        it!=buildfiles->end();
+   for (it=buildfiles.begin();
+        it!=buildfiles.end();
         it++)
    {
       int no_match, no_match_exit=false;
@@ -183,8 +183,8 @@ void CBuildFiles::LoadDependency(list<CBuildFile*> *buildfiles)
          no_match = true;
 
          // Find matching buildfile
-         for (itr=CBuildFiles::buildfiles.begin(); 
-              itr!=CBuildFiles::buildfiles.end();
+         for (itr=buildfiles.begin(); 
+              itr!=buildfiles.end();
               itr++)
          {
             // If match found make dependency relation
@@ -211,13 +211,13 @@ void CBuildFiles::LoadDependency(list<CBuildFile*> *buildfiles)
    }
 }
 
-CBuildFile * CBuildFiles::BuildFile(string name, list<CBuildFile*> *buildfiles)
+CBuildFile * CBuildFiles::BuildFile(string name)
 {   
    list<CBuildFile*>::iterator it;
    
    /* Traverse through all buildfiles */
-   for (it=buildfiles->begin(); 
-        it!=buildfiles->end();
+   for (it=buildfiles.begin(); 
+        it!=buildfiles.end();
         it++)
       if ((*it)->name == name)
          return (*it);

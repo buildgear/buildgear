@@ -13,12 +13,12 @@ class CBuildFiles
    public:
       CBuildFiles();
       list<CBuildFile*> buildfiles;
-      void ParseAndVerify(list<CBuildFile*> *buildfiles);
-      void LoadDependency(list<CBuildFile*> *buildfiles);
-      void AddDependencyHost(list<CBuildFile*> *buildfiles, CBuildFile *buildfile);
-      void ShowMeta(list<CBuildFile*> *buildfiles);
+      void ParseAndVerify(void);
+      void LoadDependency(void);
+      void AddHostToolchainDependency(void);
+      void ShowMeta(void);
       void ShowHelp(void);
-      CBuildFile * BuildFile(string name, list<CBuildFile*> *buildfiles);
+      CBuildFile * BuildFile(string name);
       CBuildFile * host_toolchain;
    private:
 };

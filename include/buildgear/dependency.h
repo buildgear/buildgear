@@ -15,8 +15,7 @@ class CDependency
       void ShowDownloadOrder(void);
       void ShowBuildOrder(void);
       void ResolveSequentialBuildOrder(string name,
-                   list<CBuildFile*> *buildfiles,
-                   list<CBuildFile*> *build_order);
+                   list<CBuildFile*> *buildfiles);
       void ResolveParallelBuildOrder(void);
       void ShowDependencyCircleEps(string filename);
       list<CBuildFile*> resolved;

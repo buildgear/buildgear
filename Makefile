@@ -15,7 +15,13 @@ all: libemon.a buildgear
 libemon.a:
 	tar -C lib -xf lib/lemon-nodoc-1.2.1.tar.gz
 	(cd lib/lemon-1.2.1 ; \
-	./configure --without-glpk --without-cplex --without-soplex --without-coin --disable-tools --disable-dependency-tracking --enable-static ; \
+	./configure --without-glpk \
+					--without-cplex \
+					--without-soplex \
+					--without-coin \
+					--disable-tools \
+					--disable-dependency-tracking \
+					--enable-static ; \
    make ; \
 	cp lemon/.libs/libemon.a ../.. )
 
@@ -30,7 +36,7 @@ buildgear: main.o \
 	download.o \
 	configfile.o \
 	buildmanager.o \
-	tools.o \
+	buildsystem.o \
 	config.o \
    thread.o
 	$(CXX) $(CXXFLAGS) $^ libemon.a -o $@

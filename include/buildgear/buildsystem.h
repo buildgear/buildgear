@@ -1,11 +1,11 @@
-#ifndef TOOLS_H
-#define TOOLS_H
+#ifndef BUILDSYSTEM_H
+#define BUILDSYSTEM_H
 
 #include "buildgear/filesystem.h"
 
 using namespace std;
 
-class CTools : public CFileSystem
+class CBuildSystem : public CFileSystem
 {
    public:
       void Check(void);
