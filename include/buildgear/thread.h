@@ -29,11 +29,11 @@ public:
 private:
 	// thread ID
 	pthread_t PthreadThreadID;
+	// runnable object will be deleted automatically
+	auto_ptr<Runnable> runnable;
 	// true if thread created in detached state
 	bool detached;
 	pthread_attr_t threadAttribute;
-	// runnable object will be deleted automatically
-	auto_ptr<Runnable> runnable;
 	Thread(const Thread&);
 	const Thread& operator=(const Thread&);
 	// called when run() completes
