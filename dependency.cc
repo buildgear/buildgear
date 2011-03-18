@@ -69,14 +69,15 @@ void CDependency::ShowDownloadOrder(void)
 void CDependency::ShowBuildOrder(void)
 {
    int i;
+   int max_depth = parallel_build_order.front()->depth;
 
    list<CBuildFile*>::iterator it;
    
    cout <<  "\nBuild order:" << endl;
 
-   for (it=build_order.begin(), i=1; it!=build_order.end(); it++, i++)
+   for (it=parallel_build_order.begin(), i=1; it!=parallel_build_order.end(); it++, i++)
    {
-      cout << "   [" << (*it)->depth << "] " << i << ". " << (*it)->name << endl;
+      cout << "   [" << max_depth - (*it)->depth + 1 << "] " << i << ". " << (*it)->name << endl;
    }
 }
 
