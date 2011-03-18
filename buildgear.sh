@@ -75,8 +75,8 @@ check_create_directory() {
 
 make_footprint() {
 	tar tvf $BG_BUILD_PACKAGE | \
-      awk '{print $1 "\t" $6}' | \
-		sort -k 2
+      awk '{print $1 "\t" $2 "\t" $6}' | \
+		sort -k 3
 }
 
 make_sha256sum() {
