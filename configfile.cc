@@ -25,13 +25,9 @@ void CConfigFile::Parse(string filename)
                      ; echo source_mirror=$source_mirror \
                      ; echo required_version=$required_version \
                      ; echo default_name_prefix=$default_name_prefix \
-                     ; echo ignore_footprint=$ignore_footprint \
-                     ; echo ignore_checksum=$ignore_checksum \
-                     ; echo download_parallel_level=$download_parallel_level \
                      ; echo download_timeout=$download_timeout \
                      ; echo download_retry=$download_retry \
                      ; echo parallel_builds=$parallel_builds \
-                     ; echo package_compression_level=$package_compression_level \
                      '";
       else
          command += "; echo build_toolchain=$BUILD_TOOLCHAIN \

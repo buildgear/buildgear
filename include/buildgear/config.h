@@ -48,7 +48,7 @@ class CConfig
 
 
 /* Buildgear static configuration */
-#define VERSION                  "0.4 beta"
+#define VERSION                  "0.6 beta"
 
 #define ROOT_DIR                 ".buildgear"
 #define BUILD_FILES_DIR          "buildfiles"
@@ -77,14 +77,10 @@ class CConfig
 
 #define CONFIG_KEY_DEFAULT_NAME_PREFIX       "default_name_prefix"
 #define CONFIG_KEY_PARALLEL_BUILDS           "parallel_builds"
-#define CONFIG_KEY_DOWNLOAD_PARALLEL_LEVEL   "download_parallel_level"
 #define CONFIG_KEY_DOWNLOAD_TIMEOUT          "download_timeout"
 #define CONFIG_KEY_DOWNLOAD_RETRY            "download_retry"
 #define CONFIG_KEY_SOURCE_DIR                "source_dir"
 #define CONFIG_KEY_SOURCE_MIRROR             "source_mirror"
-#define CONFIG_KEY_PACKAGE_COMPRESSION_LEVEL "package_compression_level"
-#define CONFIG_KEY_IGNORE_CHECKSUM           "ignore_checksum"
-#define CONFIG_KEY_IGNORE_FOOTPRINT          "ignore_footprint"
 
 #define CONFIG_KEY_BUILD_TOOLCHAIN           "build_toolchain"
 #define CONFIG_KEY_HOST_TOOLCHAIN            "host_toolchain"
