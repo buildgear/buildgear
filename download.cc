@@ -178,7 +178,8 @@ int CDownload::File(string url, string filename)
       // Disable curls builtin progress indicator
       curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
       
-      // Set timeout
+      // Set timeouts
+      curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, Config.download_timeout);
       curl_easy_setopt(curl, CURLOPT_FTP_RESPONSE_TIMEOUT, Config.download_timeout);
       
       // Fail on http error (400+)
