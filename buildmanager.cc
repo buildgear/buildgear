@@ -9,6 +9,7 @@
 #include <string.h>
 #include <sstream>
 #include <linux/limits.h>
+#include <semaphore.h>
 #include "buildgear/config.h"
 #include "buildgear/options.h"
 #include "buildgear/filesystem.h"
@@ -19,17 +20,33 @@
 #include "buildgear/download.h"
 #include "buildgear/thread.h"
 
-class buildThread: public Thread 
+sem_t build_semaphore;
+pthread_mutex_t add_mutex = PTHREAD_MUTEX_INITIALIZER;
+CBuildFile *last_build;
+
+class buildThread: public Thread, CBuildManager
 {
    public:
-	   buildThread(int ID) : buildID(ID) {}
+	   buildThread(CBuildFile *bf) : buildfile(bf) {}
 	   virtual void* run();
    private:
-	   int buildID;
+	   CBuildFile *buildfile;
 };
 
 void* buildThread::run() {
-	cout << "Builder thread " << buildID << " is running!" << endl;
+   sem_wait(&build_semaphore);
+
+   // Only build if build (package) is not up to date
+   if (buildfile->build == true)
+      Do("build", buildfile);
+ 
+   pthread_mutex_lock(&add_mutex);     
+   // Don't add last build
+   if (buildfile != last_build)
+      Do("add", buildfile);   
+   pthread_mutex_unlock(&add_mutex);
+   
+   sem_post(&build_semaphore);
 	return 0;
 }
 
@@ -192,21 +209,46 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       // Build experiment
       vector<buildThread *> builder;
 
-      for (int i=0; i<10; i++)
+      // Initialize build semaphore
+      if (sem_init(&build_semaphore, 0, Config.parallel_builds) == -1)
       {
-         buildThread* build(new buildThread(i));
-         builder.push_back(build);
-         builder[i]->start();
+         cerr << "Error: Semaphore init failed" << endl;
+         exit(EXIT_FAILURE);
       }
 
-      for (int i=0; i<10; i++)
+      int current_depth = buildfiles->front()->depth;
+      last_build = buildfiles->back();
+
+      cout << "parallel_builds = " << Config.parallel_builds << endl;
+
+      // Process build order
+      it=buildfiles->begin();
+      while (it != buildfiles->end())
       {
-         builder[i]->join();
-         delete builder[i];
+         int i=0;
+         while ( ((*it)->depth == current_depth) && (it != buildfiles->end()))
+         {
+            // Start build threads of same depth (count how many started i)
+            buildThread* build(new buildThread(*it));
+            builder.push_back(build);
+            builder[i]->start();
+            i++;
+            it++;
+         }
+         
+         // Wait for i build threads to complete
+         for (int j=0; j<i; j++)
+         {
+            builder[j]->join();
+            delete builder[j];
+            builder.pop_back();
+         }
+         
+         // Proceed to next depth level
+         current_depth--;
       }
       
-      // Process build order
-      for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
+/*      for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
       {
          // Only build if build (package) is not up to date
          if ((*it)->build == true)
@@ -216,7 +258,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
          if ((*it) != buildfiles->back())
             Do("add", (*it));
       }
-
+*/
 /*   
       // Process build order in reverse
       for (rit=buildfiles->rbegin(); rit!=buildfiles->rend(); rit++)
@@ -226,6 +268,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
             Do("remove", (*rit));
       }
 */
+      sem_destroy(&build_semaphore);
    }
 }
 

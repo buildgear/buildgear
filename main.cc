@@ -143,10 +143,10 @@ int main (int argc, char *argv[])
    {
       /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";
-      Dependency.Resolve(Config.name,
+      Dependency.ResolveSequentialBuildOrder(Config.name,
                          &BuildFiles.buildfiles,
                          &Dependency.build_order);
-      Dependency.ResolveDepths(&Dependency.build_order);
+      Dependency.ResolveParallelBuildOrder();
       cout << "Done\n";
    }
    
@@ -170,6 +170,7 @@ int main (int argc, char *argv[])
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
 
+   /* Download source of all build files if 'download --all' */
    if ((Config.download) && (Config.all))
       Dependency.download_order=BuildFiles.buildfiles;
 
@@ -202,7 +203,7 @@ int main (int argc, char *argv[])
    
    /* Start building */
    cout << "Building '" << Config.name << "'.. ";
-   BuildManager.Build(&Dependency.build_order);
+   BuildManager.Build(&Dependency.parallel_build_order);
    if (Config.keep_work == "no")
       BuildManager.CleanWork();
    cout << "Done\n\n";

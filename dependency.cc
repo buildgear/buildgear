@@ -12,7 +12,7 @@
 #include "buildgear/buildfiles.h"
 #include "buildgear/dependency.h"
 
-void CDependency::Resolve(string name,
+void CDependency::ResolveSequentialBuildOrder(string name,
                           list<CBuildFile*> *buildfiles,
                           list<CBuildFile*> *build_order)
 {
@@ -32,7 +32,7 @@ void CDependency::Resolve(string name,
       if (name == (*it)->name)
       {
          // Resolve dependency
-         CDependency::ResolveDep(*it, &resolved, 
+         CDependency::ResolveDependency(*it, &resolved, 
                                       &unresolved);
          found = true;
       }
@@ -81,7 +81,15 @@ void CDependency::ShowBuildOrder(void)
    }
 }
 
-void CDependency::ResolveDepths(list<CBuildFile*> *build_order)
+bool compare(CBuildFile *first, CBuildFile *second)
+{
+   if (first->depth > second->depth)
+      return true;
+   else
+      return false;
+}
+
+void CDependency::ResolveParallelBuildOrder()
 {
    list<CBuildFile*>::iterator it;
    list<CBuildFile*>::iterator itr;
@@ -95,14 +103,14 @@ void CDependency::ResolveDepths(list<CBuildFile*> *build_order)
    InDegMap<ListDigraph> inDegree(graph);
    
    // Add nodes to graph
-   for (it=build_order->begin(); it!=build_order->end(); it++)
+   for (it=build_order.begin(); it!=build_order.end(); it++)
    {
       (*it)->node = graph.addNode();
       time.push_back(0);
    }
    
    // Add dependency arcs to nodes
-   for (it=build_order->begin(); it!=build_order->end(); it++)
+   for (it=build_order.begin(); it!=build_order.end(); it++)
    {
       for (itr=(*it)->dependency.begin(); itr!=(*it)->dependency.end(); itr++)
       {
@@ -119,7 +127,7 @@ void CDependency::ResolveDepths(list<CBuildFile*> *build_order)
    }
    
    // Find parallel timeslots
-   for (rit=build_order->rbegin(); rit!=build_order->rend(); rit++)
+   for (rit=build_order.rbegin(); rit!=build_order.rend(); rit++)
    {  
       ListDigraph::Node node = (*rit)->node;
       if (inDegree[node] > 0)
@@ -128,9 +136,16 @@ void CDependency::ResolveDepths(list<CBuildFile*> *build_order)
          for (ListDigraph::InArcIt iai(graph, node); iai != INVALID; ++iai)
             maxdist = max(time[graph.id(graph.source(iai))], maxdist);
          time[graph.id(node)] = maxdist + 1;
+         
+         // Set depth (timeslot)
          (*rit)->depth = maxdist + 1;
       }
    }
+   
+   parallel_build_order = build_order;
+   
+   // Sort parallel build order by time slots
+   parallel_build_order.sort(compare);
 }
 
 void CDependency::ShowDependencyCircleEps(string filename)
@@ -198,7 +213,7 @@ void CDependency::ShowDependencyCircleEps(string filename)
    cout << endl << "Saved dependency circle to " << filename << endl;
 }
 
-void CDependency::ResolveDep(CBuildFile *buildfile,
+void CDependency::ResolveDependency(CBuildFile *buildfile,
                              list<CBuildFile*> *resolved,
                              list<CBuildFile*> *unresolved)
 {	
@@ -220,7 +235,7 @@ void CDependency::ResolveDep(CBuildFile *buildfile,
                  << (*it)->name << ")" << endl;
             exit(EXIT_FAILURE);
          }
-         CDependency::ResolveDep(*it, resolved, unresolved);
+         CDependency::ResolveDependency(*it, resolved, unresolved);
       }
    }
 	
