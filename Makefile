@@ -38,8 +38,9 @@ buildgear: main.o \
 	buildmanager.o \
 	buildsystem.o \
 	config.o \
-   thread.o
-	$(CXX) $(CXXFLAGS) $^ libemon.a -o $@
+   thread.o \
+   libemon.a
+	$(CXX) $^ -o $@ $(CXXFLAGS)
 	strip $@
 
 clean:
