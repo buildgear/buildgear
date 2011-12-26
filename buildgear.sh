@@ -36,12 +36,12 @@ info() {
 
 warning() {
 	echo "WARNING: $1"
-   echo "     Warning     '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
+   echo "   Warning       '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
 error() {
 	echo "ERROR: $1"
-   echo "     Error       '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
+   echo "   Error         '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
 log_action() {
@@ -221,6 +221,10 @@ do_package() {
    log_action "Package  "
    
    cd $PKG
+   
+   if [ -d "$PKG/$BUILD_SYSROOT" ]; then
+      cd "$PKG/$BUILD_SYSROOT"
+   fi
    
    if [ "`ls -A`" != "" ]; then
       tar czvvf $BG_BUILD_PACKAGE *
