@@ -2,28 +2,15 @@
 CXX = g++
 
 CXXFLAGS  = -Wall -O2
-CXXFLAGS += -Iinclude -Ilib/lemon-1.2.1
+CXXFLAGS += -Iinclude
 CXXFLAGS += -L.
-CXXFLAGS += -lrt -lcurl-gnutls -lemon
+CXXFLAGS += -lrt -lcurl-gnutls
 
 
-all: libemon.a buildgear
+all: buildgear
 
 %.o: %.cc
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-libemon.a:
-	tar -C lib -xf lib/lemon-nodoc-1.2.1.tar.gz
-	(cd lib/lemon-1.2.1 ; \
-	./configure --without-glpk \
-					--without-cplex \
-					--without-soplex \
-					--without-coin \
-					--disable-tools \
-					--disable-dependency-tracking \
-					--enable-static ; \
-   make ; \
-	cp lemon/.libs/libemon.a ../.. )
 
 buildgear: main.o \
 	filesystem.o \
@@ -38,11 +25,9 @@ buildgear: main.o \
 	buildmanager.o \
 	buildsystem.o \
 	config.o \
-   thread.o \
-   libemon.a
+	thread.o
 	$(CXX) $^ -o $@ $(CXXFLAGS)
 	strip $@
 
 clean:
 	rm -rf buildgear *.o
-	rm -rf lib/lemon-1.2.1 libemon.a

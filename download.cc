@@ -9,7 +9,6 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <curl/curl.h>
-#include <curl/types.h>
 #include <curl/easy.h>
 #include "buildgear/config.h"
 #include "buildgear/filesystem.h"

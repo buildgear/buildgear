@@ -2,12 +2,8 @@
 #define BUILDFILE_H
 
 #include <list>
-#include "lemon/connectivity.h"
-#include "lemon/list_graph.h"
-#include "lemon/graph_to_eps.h"
 
 using namespace std;
-using namespace lemon;
 
 class CBuildFile
 {
@@ -27,7 +23,6 @@ class CBuildFile
       bool visited;
       int depth;
       list<CBuildFile*> dependency;
-      ListDigraph::Node node;
       private:
 };
 

@@ -1,13 +1,10 @@
 #ifndef DEPENDENCY_H
 #define DEPENDENCY_H
 
-#include "lemon/list_graph.h"
-#include "lemon/graph_to_eps.h"
 #include "buildgear/buildfiles.h"
 #include "buildgear/dependency.h"
 
 using namespace std;
-using namespace lemon;
 
 class CDependency
 {
@@ -17,7 +14,7 @@ class CDependency
       void ResolveSequentialBuildOrder(string name,
                    list<CBuildFile*> *buildfiles);
       void ResolveParallelBuildOrder(void);
-      void ShowDependencyCircleEps(string filename);
+      void ShowDependencyCircleSVG(string filename);
       list<CBuildFile*> resolved;
       list<CBuildFile*> unresolved;
       list<CBuildFile*> build_order;
@@ -28,7 +25,6 @@ class CDependency
                    list<CBuildFile*> *resolved,
                    list<CBuildFile*> *unresolved);
       int setDepth(CBuildFile *buildfile, int depth);
-      ListDigraph graph;
 };
 
 #endif

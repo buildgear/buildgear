@@ -277,7 +277,6 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
 
 void CBuildManager::Clean(CBuildFile *buildfile)
 {
-   int result;
    string command;
    
    command  = "rm -f ";
@@ -287,26 +286,24 @@ void CBuildManager::Clean(CBuildFile *buildfile)
               buildfile->release + 
               PACKAGE_EXTENSION;
    
-   result = system(command.c_str());
+   if (system(command.c_str()) < 0)
+	   perror("error\n");
 }
 
 void CBuildManager::CleanAll(void)
 {
-   int result;
-   
-   result = system("rm -rf " PACKAGE_DIR);
+   if (system("rm -rf " PACKAGE_DIR) < 0)
+	   perror("error\n");
 }
 
 void CBuildManager::CleanWork(void)
 {
-   int result;
-   
-   result = system("rm -rf " WORK_DIR);
+   if (system("rm -rf " WORK_DIR) < 0)
+	   perror("error\n");
 }
 
 void CBuildManager::CleanLog(void)
 {
-   int result;
-   
-   result = system("rm -f " BUILD_LOG);
+   if (system("rm -f " BUILD_LOG) < 0)
+	   perror("error\n");
 }

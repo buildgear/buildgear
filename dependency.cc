@@ -88,7 +88,7 @@ bool compare(CBuildFile *first, CBuildFile *second)
    else
       return false;
 }
-
+/*
 void CDependency::ResolveParallelBuildOrder()
 {
    list<CBuildFile*>::iterator it;
@@ -147,69 +147,10 @@ void CDependency::ResolveParallelBuildOrder()
    // Sort parallel build order by time slots
    parallel_build_order.sort(compare);
 }
+*/
 
-void CDependency::ShowDependencyCircleEps(string filename)
+void CDependency::ShowDependencyCircleSVG(string filename)
 {
-
-   list<CBuildFile*>::iterator it;
-   unsigned int i;
-   Palette palette;
-   Palette paletteW(true);
-   
-   typedef dim2::Point<int> Point;
-
-   // Layout attributes
-   ListDigraph::NodeMap<string> name(graph);
-   ListDigraph::NodeMap<Point> coords(graph);
-   ListDigraph::NodeMap<double> sizes(graph);
-   ListDigraph::NodeMap<int> colors(graph);
-   ListDigraph::NodeMap<int> shapes(graph);
-   ListDigraph::ArcMap<int> acolors(graph);
-   ListDigraph::ArcMap<int> widths(graph);
-   
-   // Assign layout attributes for nodes
-   double angle = 360 / (double) build_order.size();
-   int r = 3 + 3*build_order.size();
-   angle = angle * 3.14159265/180;
-   
-   for (it=build_order.begin(), i=0; it!=build_order.end(); it++, i++)
-   {
-      ListDigraph::Node node = (*it)->node;
-      coords[node] = Point(r*cos(i*angle),r*sin(i*angle));
-      sizes[node] = 5;
-      colors[node] = ((*it)->type == "host") ? 15 : 17;
-      shapes[node] = (build_order.size() != i+1) ? 0 : 2;
-      name[node] = (*it)->short_name;
-   }
-
-   // Assign layout attributes for arcs
-   for (ListDigraph::ArcIt a(graph); a != INVALID; ++a)
-   {
-      acolors[a]=0;
-      widths[a]=8;
-   }
-   
-   // Create .eps files showing the dependency circle
-   graphToEps(graph,filename).
-      coords(coords).
-      nodeTexts(name).
-      nodeTextSize(1).
-      drawArrows().
-      arrowWidth(1).
-      arrowLength(1).
-      absoluteNodeSizes().
-      absoluteArcWidths().
-      nodeScale(1).
-      nodeSizes(sizes).
-      nodeShapes(shapes).
-      nodeColors(composeMap(palette,colors)).
-      arcColors(composeMap(palette,acolors)).
-      arcWidthScale(.02).
-      arcWidths(widths).
-      title("BuildGear dependency circle").
-      copyright("(C) 2011 BuildGear Project").
-      run();
-      
    cout << endl << "Saved dependency circle to " << filename << endl;
 }
 

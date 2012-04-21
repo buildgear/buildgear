@@ -222,7 +222,7 @@ void COptions::Parse(int argc, char *argv[])
 
 void COptions::ShowHelp(char *argv[])
 {
-	cout << "Usage: " << argv[0] << " [COMMAND] [OPTIONS] [BUILD NAME]\n\n";
+   cout << "Usage: " << argv[0] << " [COMMAND] [OPTIONS] [BUILD NAME]\n\n";
    cout << "Commands:\n";
    cout << "  download                Download source files\n";
    cout << "  build                   Build build\n";
@@ -239,13 +239,13 @@ void COptions::ShowHelp(char *argv[])
    cout << "Clean options:\n";
    cout << "  --all                   Clean all builds or build dependants\n\n";
    cout << "Show options:\n";
-	cout << "  --build-order           Show build order\n";
+   cout << "  --build-order           Show build order\n";
    cout << "  --download-order        Show download order\n";
-   cout << "  --dependency-circle     Show dependency circle (dumps to .eps file)\n";
+   cout << "  --dependency-circle     Show dependency circle (dumps to .svg file)\n";
    cout << "  --help                  Show buildfiles help\n\n";
    cout << "Options:\n";
-	cout << "  --version               Display version\n";
-	cout << "  --help                  Display help\n";
+   cout << "  --version               Display version\n";
+   cout << "  --help                  Display help\n";
 }
 
 void COptions::ShowVersion(void)

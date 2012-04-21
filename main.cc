@@ -144,7 +144,8 @@ int main (int argc, char *argv[])
       /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";
       Dependency.ResolveSequentialBuildOrder(Config.name, &BuildFiles.buildfiles);
-      Dependency.ResolveParallelBuildOrder();
+//      Dependency.ResolveParallelBuildOrder();
+// Disabled parallel build ordering for now
       cout << "Done\n";
    }
    
@@ -158,7 +159,7 @@ int main (int argc, char *argv[])
          Dependency.ShowBuildOrder();
          
       if (Config.dependency_circle)
-         Dependency.ShowDependencyCircleEps("dependency_circle.eps");
+         Dependency.ShowDependencyCircleSVG("dependency_circle.eps");
          
       cout << endl;
       
