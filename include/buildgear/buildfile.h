@@ -22,6 +22,8 @@ class CBuildFile
       bool build;
       bool visited;
       int depth;
+      float x;
+      float y;
       list<CBuildFile*> dependency;
       private:
 };

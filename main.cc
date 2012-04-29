@@ -144,7 +144,7 @@ int main (int argc, char *argv[])
       /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";
       Dependency.ResolveSequentialBuildOrder(Config.name, &BuildFiles.buildfiles);
-//      Dependency.ResolveParallelBuildOrder();
+      Dependency.ResolveParallelBuildOrder();
 // Disabled parallel build ordering for now
       cout << "Done\n";
    }

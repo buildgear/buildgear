@@ -6,6 +6,7 @@
 #include <vector>
 #include <iomanip>
 #include <cmath>
+#include <fstream>
 #include "buildgear/config.h"
 #include "buildgear/filesystem.h"
 #include "buildgear/debug.h"
@@ -88,9 +89,10 @@ bool compare(CBuildFile *first, CBuildFile *second)
    else
       return false;
 }
-/*
+
 void CDependency::ResolveParallelBuildOrder()
 {
+/*
    list<CBuildFile*>::iterator it;
    list<CBuildFile*>::iterator itr;
    list<CBuildFile*>::reverse_iterator rit;
@@ -141,16 +143,39 @@ void CDependency::ResolveParallelBuildOrder()
          (*rit)->depth = maxdist + 1;
       }
    }
-   
+*/   
    parallel_build_order = build_order;
-   
+ 
    // Sort parallel build order by time slots
-   parallel_build_order.sort(compare);
+//   parallel_build_order.sort(compare);
 }
-*/
+
 
 void CDependency::ShowDependencyCircleSVG(string filename)
 {
+   list<CBuildFile*>::iterator it;
+   ofstream file;
+   int i;
+   int count;
+   float angle;
+   float radius;
+
+   // Count number of dependencies
+   count = build_order.size();
+   angle = 360/(float)count;
+   radius = 10*count;
+
+   // Calculate circle points
+   for (it=build_order.begin(), i=1; it!=build_order.end(); it++, i++)
+   {
+      (*it)->x = radius * cos(((angle*M_PI)/180)*i);
+      (*it)->y = radius * sin(((angle*M_PI)/180)*i);
+   }
+
+   file.open("dependecy.svg");
+   file.close();
+   // Plot arrows
+
    cout << endl << "Saved dependency circle to " << filename << endl;
 }
 
