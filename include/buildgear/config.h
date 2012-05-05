@@ -48,7 +48,7 @@ class CConfig
 
 
 /* Buildgear static configuration */
-#define VERSION                  "0.6 beta"
+#define VERSION                  "0.7 beta"
 
 #define ROOT_DIR                 ".buildgear"
 #define BUILD_FILES_DIR          "buildfiles"
