@@ -2,7 +2,7 @@
 #
 #  buildgear build/add/remove script
 #
-#  Copyright (c) 2011 Martin Lund
+#  Copyright (c) 2011-2012 Martin Lund <martin.lund@keep-it-simple.com>
 #  Copyright (c) 2000-2005 Per Liden
 # 
 #  This script file is originally written for pkgutils by Per Liden.
