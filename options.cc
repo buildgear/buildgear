@@ -137,7 +137,7 @@ void COptions::Parse(int argc, char *argv[])
 		{
 			{"build-order",         no_argument, 0, 'o'},
          {"download-order",      no_argument, 0, 'd'},
-         {"dependency-circle",   no_argument, 0, 'c'},
+         {"dependency",          no_argument, 0, 'c'},
          {"help",                no_argument, 0, 'h'},
 			{0,                     0,           0,  0 }
 		};
@@ -241,7 +241,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "Show options:\n";
    cout << "  --build-order           Show build order\n";
    cout << "  --download-order        Show download order\n";
-   cout << "  --dependency-circle     Show dependency circle (dumps to .svg file)\n";
+   cout << "  --dependency            Show dependency (dumps to .svg file)\n";
    cout << "  --help                  Show buildfiles help\n\n";
    cout << "Options:\n";
    cout << "  --version               Display version\n";

@@ -6,12 +6,12 @@
 #include <vector>
 #include <iomanip>
 #include <cmath>
-#include <fstream>
 #include "buildgear/config.h"
 #include "buildgear/filesystem.h"
 #include "buildgear/debug.h"
 #include "buildgear/buildfiles.h"
 #include "buildgear/dependency.h"
+#include "buildgear/svg.h"
 
 void CDependency::ResolveSequentialBuildOrder(string name,
                           list<CBuildFile*> *buildfiles)
@@ -153,8 +153,8 @@ void CDependency::ResolveParallelBuildOrder()
 
 void CDependency::ShowDependencyCircleSVG(string filename)
 {
+   CSvg Svg;
    list<CBuildFile*>::iterator it;
-   ofstream file;
    int i;
    int count;
    float angle;
@@ -165,18 +165,35 @@ void CDependency::ShowDependencyCircleSVG(string filename)
    angle = 360/(float)count;
    radius = 10*count;
 
-   // Calculate circle points
-   for (it=build_order.begin(), i=1; it!=build_order.end(); it++, i++)
+   // Calculate coordinates of build circles
+   for (it=build_order.begin(), i=0; it!=build_order.end(); it++, i++)
    {
       (*it)->x = radius * cos(((angle*M_PI)/180)*i);
       (*it)->y = radius * sin(((angle*M_PI)/180)*i);
    }
 
-   file.open("dependecy.svg");
-   file.close();
-   // Plot arrows
+   Svg.open(SVG_DEPENDENCY_FILE);
+   Svg.add_header(radius);
 
-   cout << endl << "Saved dependency circle to " << filename << endl;
+   // Go through sequential build list
+   //  For each build go through build dependencies and:
+   //   Calculate build x1,y1 -> build deps x2,y2
+   //   Draw arrow x1,y1 -> x2,y2
+   //
+
+   // Add circles
+   for (it=build_order.begin(), i=0; it!=build_order.end(); it++, i++)
+   {
+	   Svg.add_circle((*it)->x, (*it)->y,
+	                  (*it)->short_name,
+			  (*it)->type == "host" ? "green" : "yellow");
+   }
+
+
+   Svg.add_footer();
+   Svg.close();
+
+   cout << endl << "Saved dependency circle to " << SVG_DEPENDENCY_FILE << endl;
 }
 
 void CDependency::ResolveDependency(CBuildFile *buildfile,

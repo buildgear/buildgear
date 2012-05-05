@@ -25,7 +25,8 @@ buildgear: main.o \
 	buildmanager.o \
 	buildsystem.o \
 	config.o \
-	thread.o
+	thread.o \
+	svg.o
 	$(CXX) $^ -o $@ $(CXXFLAGS)
 	strip $@
 

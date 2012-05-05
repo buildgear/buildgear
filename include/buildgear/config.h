@@ -93,6 +93,8 @@ class CConfig
 #define SCRIPT "/home/mgl/projects/buildgear/git/buildgear/buildgear.sh"
 #define CONFIG_GUESS_SCRIPT "/home/mgl/projects/buildgear/git/buildgear/config.guess"
 
+#define SVG_DEPENDENCY_FILE      "dependency.svg"
+
 #endif
 
 extern CConfig Config;
