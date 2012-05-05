@@ -14,7 +14,7 @@ void CSvg::close(void)
 	fclose(file);
 }
 
-void CSvg::add_header(float radius)
+void CSvg::add_header(float distance)
 {
 	fprintf (file, 
 	"<svg version='1.1' xmlns='http://www.w3.org/2000/svg'>\n"
@@ -23,9 +23,10 @@ void CSvg::add_header(float radius)
         "  <polyline points='0,0 10,5 0,10 1,5' fill='black' />\n"
         "  </marker>\n"
         "</defs>\n"
-        "<rect x='0' y='0' width='100%%' height='100%%' style='fill:white'/>"
+        "<rect x='0' y='0' width='%f' height='%f' style='fill:white'/>\n"
 	"<g transform='translate(%f,%f)'>\n"
-	, radius, radius
+	, 2*distance, 2*distance 
+	, distance, distance
 	);
 }
 
@@ -37,12 +38,12 @@ void CSvg::add_arrow(float x1, float y1, float x2, float y2)
 	);
 }
 
-void CSvg::add_circle(float x, float y, string name, string color)
+void CSvg::add_circle(float x, float y, string name, string color, float stroke_width)
 {
 	fprintf (file, 
-        "<circle cx='%f' cy='%f' r='10' stroke='black' stroke-width='1' fill='%s'/>\n"
-	"<text x='%f' y='%f' fill='black' font-size='3' text-anchor='middle'>%s</text>\n"
-	, x, y, color.c_str()
+        "<circle cx='%f' cy='%f' r='14' stroke='black' stroke-width='%f' fill='%s'/>\n"
+	"<text x='%f' y='%f' fill='black' font-family='Verdana' font-size='3' text-anchor='middle'>%s</text>\n"
+	, x, y, stroke_width, color.c_str()
 	, x, y, name.c_str()
 	);
 }

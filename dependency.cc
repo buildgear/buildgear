@@ -163,7 +163,7 @@ void CDependency::ShowDependencyCircleSVG(string filename)
    // Count number of dependencies
    count = build_order.size();
    angle = 360/(float)count;
-   radius = 10*count;
+   radius = 8*count;
 
    // Calculate coordinates of build circles
    for (it=build_order.begin(), i=0; it!=build_order.end(); it++, i++)
@@ -173,7 +173,7 @@ void CDependency::ShowDependencyCircleSVG(string filename)
    }
 
    Svg.open(SVG_DEPENDENCY_FILE);
-   Svg.add_header(radius);
+   Svg.add_header(radius+40);
 
    // Go through sequential build list
    //  For each build go through build dependencies and:
@@ -186,7 +186,8 @@ void CDependency::ShowDependencyCircleSVG(string filename)
    {
 	   Svg.add_circle((*it)->x, (*it)->y,
 	                  (*it)->short_name,
-			  (*it)->type == "host" ? "green" : "yellow");
+			  (*it)->type == "host" ? "green" : "yellow",
+			  ((int)build_order.size() != i+1) ? 0.5 : 1.0 );
    }
 
 
