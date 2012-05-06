@@ -86,8 +86,8 @@ class CConfig
 #define TERMINFO_CIVIS           "\033[?25l"
 #define TERMINFO_CNORM           "\033[?25h"
 
-#define SCRIPT "/home/mgl/projects/buildgear/git/buildgear/buildgear.sh"
-#define CONFIG_GUESS_SCRIPT "/home/mgl/projects/buildgear/git/buildgear/config.guess"
+#define SCRIPT                   AM_PKGDATADIR "/buildgear.sh"
+#define CONFIG_GUESS_SCRIPT      AM_PKGDATADIR "/config.guess"
 
 #define SVG_DEPENDENCY_FILE      "dependency.svg"
 

@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.68])
-AC_INIT([buildgear], [0.8 beta], [bug-report@buildgear.org])
+AC_INIT([buildgear], [0.8beta], [bug-report@buildgear.org])
 #AC_CONFIG_SRCDIR([src/options.cc])
 AC_CONFIG_HEADERS([src/include/config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror])
