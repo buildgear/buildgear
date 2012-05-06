@@ -1,3 +1,4 @@
+#include "config.h"
 #include "buildgear/thread.h"
 
 // The following thread class is taken from 

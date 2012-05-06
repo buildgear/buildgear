@@ -1,3 +1,4 @@
+#include "config.h"
 #include <string>
 #include "buildgear/buildfile.h"
 

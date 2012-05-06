@@ -13,3 +13,6 @@ src/Makefile
 config.log
 config.status
 src/.deps/
+src/include/config.h
+src/include/config.h.in
+src/include/stamp-h1
