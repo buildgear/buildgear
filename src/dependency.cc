@@ -195,7 +195,7 @@ void CDependency::ShowDependencyCircleSVG(string filename)
    Svg.add_footer();
    Svg.close();
 
-   cout << endl << "Saved dependency circle to " << SVG_DEPENDENCY_FILE << endl;
+   cout << endl << "Saved dependency circle to " << filename << endl;
 }
 
 void CDependency::ResolveDependency(CBuildFile *buildfile,
