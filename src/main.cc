@@ -160,7 +160,7 @@ int main (int argc, char *argv[])
          Dependency.ShowBuildOrder();
          
       if (Config.dependency_circle)
-         Dependency.ShowDependencyCircleSVG("dependency_circle.eps");
+         Dependency.ShowDependencyCircleSVG(SVG_DEPENDENCY_FILE);
          
       cout << endl;
       
