@@ -25,8 +25,10 @@ void CSvg::add_header(float distance)
         "  </marker>\n"
         "</defs>\n"
         "<rect x='0' y='0' width='%f' height='%f' style='fill:white'/>\n"
+	"<text x='10' y='10' fill='black' font-family='Verdana' font-size='7' text-anchor='left'>Build Gear v%s</text>\n"
 	"<g transform='translate(%f,%f)'>\n"
 	, 2*distance, 2*distance 
+	, VERSION
 	, distance, distance
 	);
 }
