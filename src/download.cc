@@ -122,7 +122,7 @@ void CDownload::URL(string url, string source_dir)
    if (filename.length() == 0)
    {
       cout << "Error: " << url << " is invalid." << endl;
-         exit(EXIT_FAILURE);
+      exit(EXIT_FAILURE);
    }
    
    // If file does not exist in source dir
@@ -145,6 +145,11 @@ void CDownload::URL(string url, string source_dir)
          // Succesful download - remove .part extension
          Move(source_dir + "/" + filename + ".part",
               source_dir + "/" + filename);
+      } else 
+      {
+         // Timeout -> quit
+         cout << "Error: " << url << " is unreachable." << endl;
+         exit(EXIT_FAILURE);
       }
    }
    // TODO: Handle timeout, retry, and servers not supporting resume!
