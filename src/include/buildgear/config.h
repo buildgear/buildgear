@@ -31,6 +31,7 @@ class CConfig
       
       string default_name_prefix;
       string source_dir;
+      string download_mirror;
       unsigned int parallel_builds;
       string build_system;
       string host_system;
@@ -75,8 +76,8 @@ class CConfig
 #define CONFIG_KEY_PARALLEL_BUILDS           "parallel_builds"
 #define CONFIG_KEY_DOWNLOAD_TIMEOUT          "download_timeout"
 #define CONFIG_KEY_DOWNLOAD_RETRY            "download_retry"
+#define CONFIG_KEY_DOWNLOAD_MIRROR           "download_mirror"
 #define CONFIG_KEY_SOURCE_DIR                "source_dir"
-#define CONFIG_KEY_SOURCE_MIRROR             "source_mirror"
 
 #define CONFIG_KEY_BUILD_TOOLCHAIN           "build_toolchain"
 #define CONFIG_KEY_HOST_TOOLCHAIN            "host_toolchain"

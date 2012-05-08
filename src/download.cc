@@ -132,7 +132,7 @@ void CDownload::URL(string url, string source_dir)
       int retry = Config.download_retry;
       
       cout << endl << "   Downloading '" << url << "'" << endl;
-      
+
       while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
       {
          // Download to partial file in source dir
@@ -147,8 +147,29 @@ void CDownload::URL(string url, string source_dir)
               source_dir + "/" + filename);
       } else 
       {
-         // Timeout -> quit
-         cout << "Error: " << url << " is unreachable." << endl;
+	 // Timeout - try download mirror if available
+	 if (Config.download_mirror != "")
+         {
+            cout << "   Retrying download from mirror..";
+            cout << endl << "   Downloading '" << Config.download_mirror
+                                               << "/" << filename << "'" << endl;
+            retry = Config.download_retry;
+            result = CURLE_OPERATION_TIMEDOUT;
+
+	    while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
+            {
+               result = CDownload::File(Config.download_mirror + "/" + filename,
+	                                source_dir + "/" + filename + ".part");
+            }
+            if (result == CURLE_OK)
+            {
+               // Succesful download - remove .part extension
+               Move(source_dir + "/" + filename + ".part",
+                    source_dir + "/" + filename);
+            }
+         }
+
+         if (result != CURLE_OK)
          exit(EXIT_FAILURE);
       }
    }
