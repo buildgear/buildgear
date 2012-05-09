@@ -8,10 +8,10 @@ class CSvg
    public:
       void open(string filename);
       void close(void);
-      void add_header(float distance);
-      void add_arrow(float x1, float y1, float x2, float y2);
-      void add_circle(float x, float y, string name, string color, float stroke_width);
-      void add_footer(void);
+      void addHeader(float distance);
+      void addArrow(float x1, float y1, float x2, float y2);
+      void addCircle(float x, float y, string name, string color, float stroke_width);
+      void addFooter(void);
 
    private:
       FILE *file;

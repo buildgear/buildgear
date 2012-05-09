@@ -155,7 +155,7 @@ void CDependency::ResolveParallelBuildOrder()
 void CDependency::ShowDependencyCircleSVG(string filename)
 {
    CSvg Svg;
-   list<CBuildFile*>::iterator it;
+   list<CBuildFile*>::iterator it,itr;
    int i;
    int count;
    float angle;
@@ -174,28 +174,30 @@ void CDependency::ShowDependencyCircleSVG(string filename)
    }
 
    Svg.open(SVG_DEPENDENCY_FILE);
-   Svg.add_header(radius+40);
+   Svg.addHeader(radius+40);
 
-   // Go through sequential build list
-   //  For each build go through build dependencies and:
-   //   Calculate build x1,y1 -> build deps x2,y2
-   //   Draw arrow x1,y1 -> x2,y2
-   //
+   // Add arrows
+   for (it=build_order.begin(); it!=build_order.end(); it++)
+   {
+      for (itr=(*it)->dependency.begin(); itr!=(*it)->dependency.end(); itr++)
+      {
+         Svg.addArrow((*it)->x,(*it)->y,(*itr)->x,(*itr)->y);
+      }
+   }
 
    // Add circles
    for (it=build_order.begin(), i=0; it!=build_order.end(); it++, i++)
    {
-	   Svg.add_circle((*it)->x, (*it)->y,
+	   Svg.addCircle((*it)->x, (*it)->y,
 	                  (*it)->short_name,
 			  (*it)->type == "host" ? "green" : "yellow",
 			  ((int)build_order.size() != i+1) ? 0.5 : 1.0 );
    }
 
-
-   Svg.add_footer();
+   Svg.addFooter();
    Svg.close();
 
-   cout << endl << "Saved dependency circle to " << filename << endl;
+   cout << endl << "Saved dependency chart to " << filename << endl;
 }
 
 void CDependency::ResolveDependency(CBuildFile *buildfile,
