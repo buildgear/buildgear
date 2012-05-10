@@ -35,8 +35,8 @@ class CConfig
       unsigned int parallel_builds;
       string build_system;
       string host_system;
-      string build_toolchain;
-      string host_toolchain;
+      string native_toolchain;
+      string cross_toolchain;
       CConfig();
       void CorrectName(void);
       void CorrectSourceDir(void);
@@ -79,8 +79,8 @@ class CConfig
 #define CONFIG_KEY_DOWNLOAD_MIRROR           "download_mirror"
 #define CONFIG_KEY_SOURCE_DIR                "source_dir"
 
-#define CONFIG_KEY_BUILD_TOOLCHAIN           "build_toolchain"
-#define CONFIG_KEY_HOST_TOOLCHAIN            "host_toolchain"
+#define CONFIG_KEY_NATIVE_TOOLCHAIN          "native_toolchain"
+#define CONFIG_KEY_CROSS_TOOLCHAIN           "cross_toolchain"
 #define CONFIG_KEY_BUILD                     "build"
 #define CONFIG_KEY_HOST                      "host"
 

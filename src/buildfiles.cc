@@ -21,7 +21,7 @@ extern CFileSystem FileSystem;
 
 CBuildFiles::CBuildFiles()
 {
-   host_toolchain = NULL;
+   cross_toolchain = NULL;
 }
 
 void stripChar(string &str, char c)
@@ -113,19 +113,19 @@ void CBuildFiles::ParseAndVerify(void)
       }
       pclose(fp);
       
-      // If host toolchain defined
-      if ((Config.host_toolchain != "") && 
-          ((*it)->name == Config.host_toolchain))
+      // If cross toolchain defined
+      if ((Config.cross_toolchain != "") && 
+          ((*it)->name == Config.cross_toolchain))
       {
-         // Save reference to host toolchain buildfile
-         CBuildFiles::host_toolchain = (*it);
+         // Save reference to cross toolchain buildfile
+         CBuildFiles::cross_toolchain = (*it);
       }
    }
    
-   if ((Config.host_toolchain != "") && 
-       (CBuildFiles::host_toolchain == NULL))
+   if ((Config.cross_toolchain != "") && 
+       (CBuildFiles::cross_toolchain == NULL))
    {
-      cout << "Error: Host toolchain buildfile is not found."<< endl;
+      cout << "Error: Cross toolchain buildfile is not found."<< endl;
       exit(EXIT_FAILURE);
    }
 }
@@ -139,8 +139,8 @@ void CBuildFiles::AddHostToolchainDependency(void)
         it!=buildfiles.end();
         it++)
    {
-      if ((*it)->type == "host")
-         (*it)->dependency.push_back(host_toolchain);
+      if ((*it)->type == "cross")
+         (*it)->dependency.push_back(cross_toolchain);
    }
 }
 

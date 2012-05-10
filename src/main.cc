@@ -124,7 +124,7 @@ int main (int argc, char *argv[])
    /* Load dependencies */
    BuildFiles.LoadDependency();
    
-   if (Config.host_toolchain != "")
+   if (Config.cross_toolchain != "")
    {
       /* Add dependency to host toolchain for all host buildfiles */
       BuildFiles.AddHostToolchainDependency();

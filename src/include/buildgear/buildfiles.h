@@ -19,7 +19,7 @@ class CBuildFiles
       void ShowMeta(void);
       void ShowHelp(void);
       CBuildFile * BuildFile(string name);
-      CBuildFile * host_toolchain;
+      CBuildFile * cross_toolchain;
    private:
 };
 

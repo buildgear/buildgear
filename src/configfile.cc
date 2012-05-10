@@ -31,8 +31,8 @@ void CConfigFile::Parse(string filename)
                      ; echo parallel_builds=$parallel_builds \
                      '";
       else
-         command += "; echo build_toolchain=$BUILD_TOOLCHAIN \
-                     ; echo host_toolchain=$HOST_TOOLCHAIN \
+         command += "; echo native_toolchain=$NATIVE_TOOLCHAIN \
+                     ; echo cross_toolchain=$CROSS_TOOLCHAIN \
                      ; echo build=$BUILD \
                      ; echo host=$HOST \
                      '";
@@ -75,10 +75,10 @@ void CConfigFile::Parse(string filename)
             else
             {
                // buildfiles/config :
-               if (key == CONFIG_KEY_BUILD_TOOLCHAIN)
-                  Config.build_toolchain = value;
-               if (key == CONFIG_KEY_HOST_TOOLCHAIN)
-                  Config.host_toolchain = value;
+               if (key == CONFIG_KEY_NATIVE_TOOLCHAIN)
+                  Config.native_toolchain = value;
+               if (key == CONFIG_KEY_CROSS_TOOLCHAIN)
+                  Config.cross_toolchain = value;
                if (key == CONFIG_KEY_BUILD)
                   Config.build_system = value;
                if (key == CONFIG_KEY_HOST)
