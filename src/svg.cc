@@ -28,10 +28,11 @@ void CSvg::addHeader(float distance)
    "</defs>\n"
    "<rect x='0' y='0' width='%f' height='%f' style='fill:white'/>\n"
    "<text x='10' y='10' fill='black' font-family='Verdana' font-size='7' text-anchor='left'>Build Gear v%s</text>\n"
-   "<circle cx='20' cy='20' r='2' fill='yellow'/>\n"
-   "<text x='25' y='21' fill='black' font-family='Verdana' font-size='3' text-anchor='left'>build system type</text>\n"
-   "<circle cx='20' cy='26' r='2' fill='green'/>\n"
-   "<text x='25' y='27' fill='black' font-family='Verdana' font-size='3' text-anchor='left'>host system type</text>\n"
+   "<circle cx='15' cy='29' r='2' fill='yellow'/>\n"
+   "<text x='20' y='30' fill='black' font-family='Verdana' font-size='3' text-anchor='left'>native build</text>\n"
+   "<circle cx='15' cy='35' r='2' fill='green'/>\n"
+   "<text x='20' y='36' fill='black' font-family='Verdana' font-size='3' text-anchor='left'>cross build</text>\n"
+   "<rect x='12' y='26' width='27' height='12' stroke='black' fill='none' stroke-width='0.1'/>"
    "<g transform='translate(%f,%f)'>\n"
    , 2*distance, 2*distance 
    , VERSION
