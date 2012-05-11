@@ -126,8 +126,8 @@ int main (int argc, char *argv[])
    
    if (Config.cross_toolchain != "")
    {
-      /* Add dependency to host toolchain for all host buildfiles */
-      BuildFiles.AddHostToolchainDependency();
+      /* Add dependency to cross toolchain for all cross buildfiles */
+      BuildFiles.AddCrossToolchainDependency();
    }
    cout << "Done\n";
 

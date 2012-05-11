@@ -62,13 +62,13 @@ void CBuildFiles::ParseAndVerify(void)
          throw std::runtime_error(strerror(errno));
 
       // Assign name and type based on filename
-      pos = (*it)->filename.rfind("host/");
+      pos = (*it)->filename.rfind("cross/");
       if (pos != (*it)->filename.npos)
-         (*it)->type = "host";
+         (*it)->type = "cross";
       else
       {
-         pos = (*it)->filename.rfind("build/");
-         (*it)->type = "build";
+         pos = (*it)->filename.rfind("native/");
+         (*it)->type = "native";
       }
 
       if (pos == (*it)->filename.npos)
@@ -130,7 +130,7 @@ void CBuildFiles::ParseAndVerify(void)
    }
 }
 
-void CBuildFiles::AddHostToolchainDependency(void)
+void CBuildFiles::AddCrossToolchainDependency(void)
 {
    list<CBuildFile*>::iterator it;
    

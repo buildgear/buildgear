@@ -16,8 +16,6 @@ class CBuildFile
       string release;
       string source;
       string depends;
-      string build_depends;
-      string host_depends;
       string type;
       bool build;
       bool visited;

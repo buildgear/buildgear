@@ -15,7 +15,7 @@ class CBuildFiles
       list<CBuildFile*> buildfiles;
       void ParseAndVerify(void);
       void LoadDependency(void);
-      void AddHostToolchainDependency(void);
+      void AddCrossToolchainDependency(void);
       void ShowMeta(void);
       void ShowHelp(void);
       CBuildFile * BuildFile(string name);

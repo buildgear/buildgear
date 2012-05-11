@@ -38,7 +38,7 @@ CConfig::CConfig()
    
    all = false;
    
-   default_name_prefix = "host/";
+   default_name_prefix = "cross/";
    source_dir = SOURCE_DIR;
    
    parallel_builds = 1;
@@ -47,8 +47,8 @@ CConfig::CConfig()
 void CConfig::CorrectName()
 {
    // Prepend default name prefix if none is provided
-   if ((CConfig::name.find("host/") != 0) &&
-      (CConfig::name.find("build/") != 0))
+   if ((CConfig::name.find("cross/") != 0) &&
+      (CConfig::name.find("native/") != 0))
       CConfig::name = CConfig::default_name_prefix + CConfig::name;
 }
 

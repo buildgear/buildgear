@@ -49,8 +49,8 @@ class CConfig
 /* Buildgear configuration */
 #define ROOT_DIR                 ".buildgear"
 #define BUILD_FILES_DIR          "buildfiles"
-#define BUILD_FILES_BUILD_DIR    BUILD_FILES_DIR "/build"
-#define BUILD_FILES_HOST_DIR     BUILD_FILES_DIR "/host"
+#define BUILD_FILES_NATIVE_DIR   BUILD_FILES_DIR "/native"
+#define BUILD_FILES_CROSS_DIR    BUILD_FILES_DIR "/cross"
 #define BUILD_DIR                "build"
 #define SOURCE_DIR               BUILD_DIR "/source"
 #define WORK_DIR                 BUILD_DIR "/work"

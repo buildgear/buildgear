@@ -192,7 +192,7 @@ do_strip() {
 		FILTER="cat"
 	fi
 
-   if [ "$BG_BUILD_TYPE" = "host" ]; then
+   if [ "$BG_BUILD_TYPE" = "cross" ]; then
       STRIP="$HOST-strip"
    else
       STRIP="strip"
@@ -222,8 +222,8 @@ do_package() {
    
    cd $PKG
    
-   if [ -d "$PKG/$BUILD_SYSROOT" ]; then
-      cd "$PKG/$BUILD_SYSROOT"
+   if [ -d "$PKG/$NATIVE_SYSROOT" ]; then
+      cd "$PKG/$NATIVE_SYSROOT"
    fi
    
    if [ "`ls -A`" != "" ]; then
@@ -359,11 +359,11 @@ main() {
    BG_BUILD_FOOTPRINT="$BG_BUILD_FILE_DIR/.footprint"
    BG_BUILD_NOSTRIP="$BG_BUILD_FILE_DIR/.nostrip"
    BG_BUILD_SYSROOT_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/$BG_BUILD_TYPE"
-   BG_SYSROOT_BUILD_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/build"
-   BG_SYSROOT_HOST_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/host"
+   BG_SYSROOT_NATIVE_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/native"
+   BG_SYSROOT_CROSS_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/cross"
 
-   export BUILD_SYSROOT="$BG_SYSROOT_BUILD_DIR"
-   export HOST_SYSROOT="$BG_SYSROOT_HOST_DIR"
+   export NATIVE_SYSROOT="$BG_SYSROOT_NATIVE_DIR"
+   export CROSS_SYSROOT="$BG_SYSROOT_CROSS_DIR"
 
    # Include buildfiles configuration
 	if [ -f $1 ]; then
@@ -389,11 +389,11 @@ main() {
    check_create_directory "$BG_BUILD_PACKAGE_DIR"
    check_create_directory "$BG_SYSROOT_DIR"
 
-   # Create link to host sysroot if host sysroot link is configured
-   if [ "$HOST_SYSROOT_LINK" != "" ]; then
-      if [ ! -e "$BG_SYSROOT_HOST_DIR" ]; then
+   # Create link to cross sysroot if cross sysroot link is configured
+   if [ "$CROSS_SYSROOT_LINK" != "" ]; then
+      if [ ! -e "$BG_SYSROOT_CROSS_DIR" ]; then
          cd "$BG_SYSROOT_DIR"
-         ln -s $HOST_SYSROOT_LINK host
+         ln -s $CROSS_SYSROOT_LINK cross
          cd $BG_ROOT_DIR
       fi
    fi
