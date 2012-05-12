@@ -32,7 +32,7 @@ void CSvg::addHeader(float distance)
    "<text x='20' y='30' fill='black' font-family='Verdana' font-size='3' text-anchor='left'>native build</text>\n"
    "<circle cx='15' cy='35' r='2' fill='green'/>\n"
    "<text x='20' y='36' fill='black' font-family='Verdana' font-size='3' text-anchor='left'>cross build</text>\n"
-   "<rect x='12' y='26' width='27' height='12' stroke='black' fill='none' stroke-width='0.1'/>"
+   "<rect x='12' y='26' width='27' height='12' stroke='black' fill='none' stroke-width='0.3'/>"
    "<g transform='translate(%f,%f)'>\n"
    , 2*distance, 2*distance 
    , VERSION
