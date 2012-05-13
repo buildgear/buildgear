@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <time.h>
+#include "buildgear/config.h"
 #include "buildgear/svg.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,9 +35,9 @@ void CSvg::addHeader(float distance)
    "<text x='10' y='10' fill='black' font-family='Verdana' font-size='7' font-weight='bold' text-anchor='left'>Build Gear v%s</text>\n"
    "<g transform='translate(%f,%f)'>\n"
    "   <rect x='0' y='0' width='92' height='6' stroke='black' fill='none' stroke-width='0.3'/>"
-   "   <circle cx='8' cy='3' r='2' fill='yellow'/>\n"
+   "   <circle cx='8' cy='3' r='2' fill='%s'/>\n"
    "   <text x='11' y='4' fill='black' font-family='Verdana' font-size='3' text-anchor='left'>native build</text>\n"
-   "   <circle cx='36' cy='3' r='2' fill='green'/>\n"
+   "   <circle cx='36' cy='3' r='2' fill='%s'/>\n"
    "   <text x='39' y='4' fill='black' font-family='Verdana' font-size='3' text-anchor='left'>cross build</text>\n"
    "   <line x1='61' y1='3' x2='65' y2='3' stroke='black' stroke-width='0.5' marker-end='url(#endArrow2)'/>\n"
    "   <text x='68' y='4' fill='black' font-family='Verdana' font-size='3' text-anchor='left'>dependency</text>\n"
@@ -45,6 +46,8 @@ void CSvg::addHeader(float distance)
    , 2*distance, 2*distance 
    , VERSION
    , distance-46, 2*distance-10
+   , SVG_COLOR_NATIVE
+   , SVG_COLOR_CROSS
    , distance, distance
    );
 }
