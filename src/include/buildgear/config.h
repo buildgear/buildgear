@@ -91,8 +91,8 @@ class CConfig
 #define CONFIG_GUESS_SCRIPT      AM_PKGDATADIR "/config.guess"
 
 #define SVG_DEPENDENCY_FILE      BUILD_DIR "/dependency.svg"
-#define SVG_COLOR_NATIVE         "#fa9a02"
-#define SVG_COLOR_CROSS          "#66dc32"
+#define SVG_COLOR_NATIVE         "#fefe33"
+#define SVG_COLOR_CROSS          "#66de33"
 
 #endif
 
