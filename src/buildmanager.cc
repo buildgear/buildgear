@@ -95,7 +95,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
          config += " BG_KEEP_WORK=" + Config.keep_work;
       } else
       {
-         // Apply default settings to the build dependants
+         // Apply default settings to the build dependencies
          config += " BG_UPDATE_CHECKSUM=no";
          config += " BG_UPDATE_FOOTPRINT=no";
          config += " BG_NO_STRIP=no";

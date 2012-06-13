@@ -230,15 +230,15 @@ void COptions::ShowHelp(char *argv[])
    cout << "  clean                   Clean build\n";
    cout << "  show                    Show various information\n\n";
    cout << "Download options:\n";
-   cout << "  --all                   Download source files of all builds or build dependants\n\n";
+   cout << "  --all                   Download source files of all builds or build dependencies\n\n";
    cout << "Build options:\n";
    cout << "  --keep-work             Do not delete work files\n";
    cout << "  --update-checksum       Update source checksum\n";
    cout << "  --update-footprint      Update footprint\n";
    cout << "  --no-strip              Do not strip libraries or executables\n";
-   cout << "  --all                   Apply to all build dependants\n\n";
+   cout << "  --all                   Apply to all build dependencies\n\n";
    cout << "Clean options:\n";
-   cout << "  --all                   Clean all builds or build dependants\n\n";
+   cout << "  --all                   Clean all builds or build dependencies\n\n";
    cout << "Show options:\n";
    cout << "  --build-order           Show build order\n";
    cout << "  --download-order        Show download order\n";
