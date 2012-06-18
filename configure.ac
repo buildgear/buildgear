@@ -1,4 +1,4 @@
-# BuildGear autoconfigure script
+# Build Gear autoconfigure script
 #
 # Process this file with autoconf to produce the configure script.
 #

@@ -5,6 +5,6 @@ Prerequisites:
 
 Installation:
 
-   ./configure --prefix=/usr
+   ./configure
    make
    make install

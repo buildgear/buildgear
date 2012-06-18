@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-#  buildgear build/add/remove script
+#  Build Gear helper script
 #
 #  Copyright (c) 2011-2012 Martin Lund <martin.lund@keep-it-simple.com>
 #  Copyright (c) 2000-2005 Per Liden
 # 
 #  This script file is originally written for pkgutils by Per Liden.
-#  It is adopted and modified for buildgear by Martin Lund.
+#  It is adopted and rewritten for Build Gear.
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
