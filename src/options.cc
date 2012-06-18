@@ -8,7 +8,7 @@
 
 void COptions::Parse(int argc, char *argv[])
 {
-	int option;
+   int option;
    string command;
    
    /* Print usage help if no arguments are provided */
@@ -34,10 +34,10 @@ void COptions::Parse(int argc, char *argv[])
       
       // Parse command OPTIONS
       static struct option long_options[] =
-		{
-			{"all", no_argument, 0, 'a'},
-			{0,     0,           0,  0 }
-		};
+      {
+         {"all", no_argument, 0, 'a'},
+         {0,     0,           0,  0 }
+      };
       
       option = getopt_long (argc, argv, "", long_options, &option_index);
       while( option != -1 ) 
@@ -52,7 +52,7 @@ void COptions::Parse(int argc, char *argv[])
                exit(EXIT_FAILURE);
                break;
          }
-		option = getopt_long (argc, argv, "", long_options, &option_index);
+         option = getopt_long (argc, argv, "", long_options, &option_index);
       }
    }
    // Build command
@@ -97,7 +97,7 @@ void COptions::Parse(int argc, char *argv[])
                exit(EXIT_FAILURE);
                break;
          }
-		option = getopt_long (argc, argv, "", long_options, &option_index);
+         option = getopt_long (argc, argv, "", long_options, &option_index);
       }
    }
    // Clean command
@@ -107,10 +107,10 @@ void COptions::Parse(int argc, char *argv[])
       
       // Parse command OPTIONS
       static struct option long_options[] =
-		{
-			{"all", no_argument, 0, 'a'},
-			{0,     0,           0,  0 }
-		};
+      {
+         {"all", no_argument, 0, 'a'},
+         {0,     0,           0,  0 }
+      };
       
       option = getopt_long (argc, argv, "", long_options, &option_index);
       while( option != -1 ) 
@@ -135,13 +135,13 @@ void COptions::Parse(int argc, char *argv[])
       
       // Parse command OPTIONS
       static struct option long_options[] =
-		{
-			{"build-order",         no_argument, 0, 'o'},
+      {
+         {"build-order",         no_argument, 0, 'o'},
          {"download-order",      no_argument, 0, 'd'},
          {"dependency",          no_argument, 0, 'c'},
          {"help",                no_argument, 0, 'h'},
-			{0,                     0,           0,  0 }
-		};
+         {0,                     0,           0,  0 }
+      };
       
       option = getopt_long (argc, argv, "", long_options, &option_index);
       while( option != -1 ) 
@@ -164,7 +164,7 @@ void COptions::Parse(int argc, char *argv[])
                exit(EXIT_FAILURE);
                break;
          }
-		option = getopt_long (argc, argv, "", long_options, &option_index);
+         option = getopt_long (argc, argv, "", long_options, &option_index);
       }
    }
    // No-command
@@ -175,11 +175,11 @@ void COptions::Parse(int argc, char *argv[])
       
       // Parse OPTIONS
       static struct option long_options[] =
-		{
-			{"version", no_argument, 0, 'v'},
-         {"help",    no_argument, 0, 'h'},
-			{0,         0,           0,  0 }
-		};
+         {
+            {"version", no_argument, 0, 'v'},
+            {"help",    no_argument, 0, 'h'},
+            {0,         0,           0,  0 }
+         };
       
       option = getopt_long (argc, argv, "", long_options, &option_index);
       while( option != -1 ) 
@@ -198,14 +198,14 @@ void COptions::Parse(int argc, char *argv[])
                exit(EXIT_FAILURE);
                break;
          }
-		option = getopt_long (argc, argv, "", long_options, &option_index);
+         option = getopt_long (argc, argv, "", long_options, &option_index);
       }
       exit(EXIT_SUCCESS);
    }
 
-	// Handle remaining options (non '--', '-' options)
-	if (optind < argc)
-	{
+   // Handle remaining options (non '--', '-' options)
+   if (optind < argc)
+   {
       // Get NAME of build
       Config.name = argv[optind++];
       
@@ -218,7 +218,7 @@ void COptions::Parse(int argc, char *argv[])
          cout << endl;
          exit(EXIT_FAILURE);
       }
-	}
+   }
 }
 
 void COptions::ShowHelp(char *argv[])
