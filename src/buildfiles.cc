@@ -227,12 +227,12 @@ CBuildFile * CBuildFiles::BuildFile(string name)
    exit(EXIT_FAILURE);
 }
 
-void CBuildFiles::ShowHelp(void)
+void CBuildFiles::ShowReadme(void)
 {
   ifstream fin;
   char s[100000];
   
-  string help_file = Config.root + "/" + string(BUILD_FILES_HELP);
+  string help_file = Config.root + "/" + string(BUILD_FILES_README);
   
   if (FileSystem.FileExists(help_file))
   {

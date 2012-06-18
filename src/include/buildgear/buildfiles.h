@@ -17,7 +17,7 @@ class CBuildFiles
       void LoadDependency(void);
       void AddCrossToolchainDependency(void);
       void ShowMeta(void);
-      void ShowHelp(void);
+      void ShowReadme(void);
       CBuildFile * BuildFile(string name);
       CBuildFile * cross_toolchain;
    private:

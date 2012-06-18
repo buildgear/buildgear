@@ -29,12 +29,12 @@ CConfig::CConfig()
    no_strip = "no";
       
    clean = false;
-      
+
    show = false;
    build_order = false;
    download_order = false;
-   help = false;
    dependency_circle=false;
+   readme = false;
    
    all = false;
    

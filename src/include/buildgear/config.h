@@ -20,12 +20,12 @@ class CConfig
       string no_strip;
       
       bool clean;
-      
+
       bool show;
       bool build_order;
       bool download_order;
-      bool help;
       bool dependency_circle;
+      bool readme;
       
       bool all;
       
@@ -63,8 +63,8 @@ class CConfig
 #define GLOBAL_CONFIG_FILE       "~/.buildgearconfig"
 #define LOCAL_CONFIG_FILE        ROOT_DIR "/config"
 #define BUILD_FILES_CONFIG       BUILD_FILES_DIR "/config"
-#define BUILD_FILES_HELP         BUILD_FILES_DIR "/help"
 #define BUILD_FILES_CHECK        BUILD_FILES_DIR "/check"
+#define BUILD_FILES_README       BUILD_FILES_DIR "/readme"
 
 #define KEY_NAME                 "name"
 #define KEY_VERSION              "version"

@@ -64,7 +64,7 @@ int main (int argc, char *argv[])
    }
 
    /* Display help hint on incorrect show command */
-   if ((Config.show) && (Config.name == "") && (!Config.help))
+   if ((Config.show) && (Config.name == "") && (!Config.readme))
    {
       cout << "Please specify build name to show\n";
       exit(EXIT_FAILURE);
@@ -73,10 +73,10 @@ int main (int argc, char *argv[])
    /* Search for build root directory */
    FileSystem.FindRoot(ROOT_DIR);
 
-   /* Show buildfiles help*/
-   if ((Config.show) && (Config.help))
+   /* Show buildfiles readme */
+   if ((Config.show) && (Config.readme))
    {
-         BuildFiles.ShowHelp();
+         BuildFiles.ShowReadme();
          exit(EXIT_SUCCESS);
    }
 

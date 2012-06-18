@@ -139,7 +139,7 @@ void COptions::Parse(int argc, char *argv[])
          {"build-order",         no_argument, 0, 'o'},
          {"download-order",      no_argument, 0, 'd'},
          {"dependency",          no_argument, 0, 'c'},
-         {"help",                no_argument, 0, 'h'},
+         {"readme",              no_argument, 0, 'r'},
          {0,                     0,           0,  0 }
       };
       
@@ -157,8 +157,8 @@ void COptions::Parse(int argc, char *argv[])
             case 'c':
                Config.dependency_circle = true;
                break;
-            case 'h':
-               Config.help = true;
+            case 'r':
+               Config.readme = true;
                break;				
             default:
                exit(EXIT_FAILURE);
@@ -242,8 +242,8 @@ void COptions::ShowHelp(char *argv[])
    cout << "Show options:\n";
    cout << "  --build-order           Show build order\n";
    cout << "  --download-order        Show download order\n";
-   cout << "  --dependency            Show dependency (dumps to .svg file)\n";
-   cout << "  --help                  Show buildfiles help\n\n";
+   cout << "  --dependency            Show dependecy graph\n";
+   cout << "  --readme                Show buildfiles readme\n\n";
    cout << "Options:\n";
    cout << "  --version               Display version\n";
    cout << "  --help                  Display help\n";
