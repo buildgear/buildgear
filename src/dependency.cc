@@ -49,7 +49,7 @@ void CDependency::ResolveSequentialBuildOrder(string name,
    download_order.insert(download_order.end(), resolved.begin(), resolved.end());
    download_order.sort();
    download_order.unique();
-   
+
    /* Add to build order list */
    build_order.insert(build_order.end(), resolved.begin(), resolved.end());
 }

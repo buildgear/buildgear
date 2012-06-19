@@ -14,7 +14,7 @@
 #include "buildgear/download.h"
 #include "buildgear/buildsystem.h"
 
-Debug debug(cout);
+Debug         debug(cout);
 
 CConfig       Config;
 COptions      Options;
@@ -140,16 +140,16 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
-   if (!Config.download)
+   /* Only resolve dependencies if we are not downloading all sources */
+   if ((Config.download) && (Config.name != Config.default_name_prefix))
    {
       /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";
       Dependency.ResolveSequentialBuildOrder(Config.name, &BuildFiles.buildfiles);
-      Dependency.ResolveParallelBuildOrder();
-// Disabled parallel build ordering for now
+      Dependency.ResolveParallelBuildOrder(); // TODO: Fix parallel build support
       cout << "Done\n";
    }
-   
+
    /* Handle show options */
    if (Config.show)
    {
@@ -170,19 +170,25 @@ int main (int argc, char *argv[])
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
 
-   /* Download source of all build files if 'download --all' */
-   if ((Config.download) && (Config.all))
-      Dependency.download_order=BuildFiles.buildfiles;
-
-   /* Download source files */
-   cout << "Downloading sources..           ";
-   Source.Download(&Dependency.download_order, Config.source_dir);
-   cout << "Done\n";
-
-   /* Quit if download command */
    if (Config.download)
    {
-      cout << endl;
+      cout << "Downloading sources..           ";
+
+      /* If 'download --all' command then download source of all builds available */
+      if ((Config.all) && (Config.name == Config.default_name_prefix))
+         Dependency.download_order=BuildFiles.buildfiles;
+
+      /* If 'download <name>' command then only download source of named build  */
+      if ((!Config.all) && (Config.name != Config.default_name_prefix))
+      {
+         Dependency.download_order.clear();
+         Dependency.download_order.push_back(Dependency.build_order.back());
+      }
+
+      /* Download */
+      Source.Download(&Dependency.download_order, Config.source_dir);
+
+      cout << "Done\n\n";
       exit(EXIT_SUCCESS);
    }
    
