@@ -79,7 +79,7 @@ void CDependency::ShowBuildOrder(void)
 
    for (it=parallel_build_order.begin(), i=1; it!=parallel_build_order.end(); it++, i++)
    {
-      cout << "   [" << max_depth - (*it)->depth + 1 << "] " << i << ". " << (*it)->name << endl;
+      cout << "   [" << max_depth - (*it)->depth + 1 << "] " << std::setw(3) << i << ". " << (*it)->name << endl;
    }
 }
 
