@@ -93,7 +93,7 @@ int main (int argc, char *argv[])
    /* Correct source dir */
    Config.CorrectSourceDir();
 
-   /* Correct name */
+   /* Correct name - adds default prefix */
    Config.CorrectName();
 
    /* Handle 'clean --all' command */
@@ -140,8 +140,8 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
-   /* Only resolve dependencies if we are not downloading all sources */
-   if ((Config.download) && (Config.name != Config.default_name_prefix))
+   /* Only resolve dependencies if we are not downloading all sources or not downloading  */
+   if ((Config.download) && (Config.name != Config.default_name_prefix) || !Config.download)
    {
       /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";
@@ -170,10 +170,10 @@ int main (int argc, char *argv[])
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
 
+   cout << "Downloading sources..           ";
+
    if (Config.download)
    {
-      cout << "Downloading sources..           ";
-
       /* If 'download --all' command then download source of all builds available */
       if ((Config.all) && (Config.name == Config.default_name_prefix))
          Dependency.download_order=BuildFiles.buildfiles;
@@ -184,13 +184,15 @@ int main (int argc, char *argv[])
          Dependency.download_order.clear();
          Dependency.download_order.push_back(Dependency.build_order.back());
       }
-
-      /* Download */
-      Source.Download(&Dependency.download_order, Config.source_dir);
-
-      cout << "Done\n\n";
-      exit(EXIT_SUCCESS);
    }
+
+   /* Download */
+   Source.Download(&Dependency.download_order, Config.source_dir);
+      cout << "Done\n";
+
+   /* Quit if download command is used */
+   if (Config.download)
+      exit(EXIT_SUCCESS);
    
    /* Check for build system prerequisites */
    cout << "Running build system check..    " << flush;
