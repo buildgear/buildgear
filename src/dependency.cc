@@ -64,7 +64,7 @@ void CDependency::ShowDownloadOrder(void)
 
    for (it=download_order.begin(), i=1; it!=download_order.end(); it++, i++)
    {
-      cout << "   " << i << ". " << (*it)->name << endl;
+      cout << "   " << setw(3) << i << ". " << (*it)->name << endl;
    }
 }
 
