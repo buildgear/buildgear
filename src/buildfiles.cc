@@ -76,6 +76,7 @@ void CBuildFiles::ParseAndVerify(void)
          cout << "Error: " << (*it)->filename << " is invalid." << endl;
          exit(EXIT_FAILURE);
       }
+
       (*it)->name = (*it)->filename.substr(pos);
       pos = (*it)->name.rfind("/Buildfile");
       if (pos == (*it)->filename.npos)
@@ -83,7 +84,6 @@ void CBuildFiles::ParseAndVerify(void)
          cout << "Error: " << (*it)->filename << " is invalid." << endl;
          exit(EXIT_FAILURE);
       }
-      (*it)->name.erase(pos,10);
 
       while (fgets(line_buffer, PATH_MAX, fp) != NULL)
       {
@@ -97,7 +97,7 @@ void CBuildFiles::ParseAndVerify(void)
 
          stripChar(value, '\n');
 
-         // Required keys (FIXME: add check for "" values)
+         // Required keys (FIXME: add check for empty values)
          if (key == KEY_NAME)
             (*it)->short_name = value;
          if (key == KEY_VERSION)
@@ -112,6 +112,9 @@ void CBuildFiles::ParseAndVerify(void)
             (*it)->depends = value;
       }
       pclose(fp);
+
+      // Assign name based on type and name variable
+      (*it)->name = (*it)->type + "/" + (*it)->short_name;
       
       // If cross toolchain defined
       if ((Config.cross_toolchain != "") && 
