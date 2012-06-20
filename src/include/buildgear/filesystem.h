@@ -16,6 +16,7 @@ class CFileSystem
       bool FileExists(string filename);
       long Age(string filename);
       void Move(string source, string destination);
+      void Cat(string filename);
       string root;
    private:
       void FindFile(string dirname, string filename, list<CBuildFile*> *buildfiles);

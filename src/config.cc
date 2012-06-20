@@ -17,30 +17,36 @@ extern void stripChar(string &str, char c);
 CConfig::CConfig()
 {
    name = "";
-   
+
+   // Default commands
    download = false;
+   build = false;
+   clean = false;
+   show = false;
+
+   // Default download options
    download_timeout = 20;
    download_retry = 3;
-      
-   build = false;
+
+   // Default build options
    keep_work = "no";
    update_checksum = "no";
    update_footprint = "no";
    no_strip = "no";
-      
-   clean = false;
 
-   show = false;
+   // Default show options
    build_order = false;
    download_order = false;
    dependency_circle=false;
    readme = false;
-   
+   log = false;
+
+   // Misc defaults
    all = false;
-   
+
    default_name_prefix = "cross/";
    source_dir = SOURCE_DIR;
-   
+
    parallel_builds = 1;
 }
 

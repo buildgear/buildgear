@@ -26,6 +26,7 @@ class CConfig
       bool download_order;
       bool dependency_circle;
       bool readme;
+      bool log;
       
       bool all;
       

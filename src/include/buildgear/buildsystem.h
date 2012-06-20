@@ -10,6 +10,7 @@ class CBuildSystem : public CFileSystem
    public:
       void Check(void);
       void RunCheckFile(void);
+      void ShowLog(void);
    private:
 };
 

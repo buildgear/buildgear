@@ -8,6 +8,8 @@
 #include "buildgear/buildsystem.h"
 #include "buildgear/filesystem.h"
 
+extern CFileSystem FileSystem;
+
 void CBuildSystem::Check(void)
 {
    int status, i=0;
@@ -67,4 +69,10 @@ void CBuildSystem::RunCheckFile(void)
          exit(EXIT_FAILURE);
       }
    }
+}
+
+void CBuildSystem::ShowLog(void)
+{
+   string log_file = Config.root + "/" + string(BUILD_LOG);
+   FileSystem.Cat(log_file);
 }

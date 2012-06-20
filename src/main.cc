@@ -64,7 +64,7 @@ int main (int argc, char *argv[])
    }
 
    /* Display help hint on incorrect show command */
-   if ((Config.show) && (Config.name == "") && (!Config.readme))
+   if ((Config.show) && (Config.name == "") && (!Config.readme) && (!Config.log))
    {
       cout << "Please specify build name to show\n";
       exit(EXIT_FAILURE);
@@ -77,6 +77,13 @@ int main (int argc, char *argv[])
    if ((Config.show) && (Config.readme))
    {
          BuildFiles.ShowReadme();
+         exit(EXIT_SUCCESS);
+   }
+
+   /* Show build log */
+   if ((Config.show) && (Config.log))
+   {
+         BuildSystem.ShowLog();
          exit(EXIT_SUCCESS);
    }
 

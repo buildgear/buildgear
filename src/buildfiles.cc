@@ -1,6 +1,5 @@
 #include "config.h"
 #include <iostream>
-#include <fstream>
 #include <sstream>
 #include <string>
 #include <stdexcept>
@@ -232,28 +231,6 @@ CBuildFile * CBuildFiles::BuildFile(string name)
 
 void CBuildFiles::ShowReadme(void)
 {
-  ifstream fin;
-  char s[100000];
-  
-  string help_file = Config.root + "/" + string(BUILD_FILES_README);
-  
-  if (FileSystem.FileExists(help_file))
-  {
-      
-      fin.open(help_file.c_str(), ios::in);
-  
-      if(fin.fail())
-      {
-         cout << "Error: Unable to open " << help_file << endl;
-         exit(EXIT_FAILURE);
-      }
-   
-      while(!fin.fail() && !fin.eof())
-      {
-         fin.getline(s, 100000);
-         if (s[0] != '#')
-            cout << s << endl;
-      }
-      fin.close();
-   }
+   string readme_file = Config.root + "/" + string(BUILD_FILES_README);
+   FileSystem.Cat(readme_file);
 }

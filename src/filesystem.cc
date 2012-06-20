@@ -1,5 +1,6 @@
 #include "config.h"
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <stdexcept>
 #include <errno.h>
@@ -164,4 +165,28 @@ void CFileSystem::Move(string source, string destination)
    
    if (status != 0)
       throw std::runtime_error(strerror(errno));
+}
+
+void CFileSystem::Cat(string filename)
+{
+   ifstream fin;
+   char s[100000];
+
+   if (FileExists(filename))
+   {
+      fin.open(filename.c_str(), ios::in);
+
+      if(fin.fail())
+      {
+         cout << "Error: Unable to open " << filename << endl;
+         exit(EXIT_FAILURE);
+      }
+
+      while(!fin.fail() && !fin.eof())
+      {
+         fin.getline(s, 100000);
+            cout << s << endl;
+      }
+      fin.close();
+   }
 }
