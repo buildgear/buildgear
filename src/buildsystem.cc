@@ -33,6 +33,7 @@ void CBuildSystem::Check(void)
                             "mv",
                             "rm",
                             "cp",
+                         "xargs",
                        "dirname",
                       "basename",
                        "unalias",
