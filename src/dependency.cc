@@ -173,7 +173,7 @@ void CDependency::ShowDependencyCircleSVG(string filename)
       (*it)->y = radius * sin(((angle*M_PI)/180)*i);
    }
 
-   Svg.open(SVG_DEPENDENCY_FILE);
+   Svg.open(filename);
    Svg.addHeader(radius+40);
 
    // Add arrows
@@ -197,7 +197,7 @@ void CDependency::ShowDependencyCircleSVG(string filename)
    Svg.addFooter();
    Svg.close();
 
-   cout << endl << "Saved dependency chart to " << filename << endl;
+   cout << endl << "Saved dependency graph to " << filename << endl;
 }
 
 void CDependency::ResolveDependency(CBuildFile *buildfile,

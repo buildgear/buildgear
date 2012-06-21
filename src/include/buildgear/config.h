@@ -7,6 +7,7 @@ class CConfig
 {
    public:
       string name;
+      string name_stripped;
       string root;
       
       bool download;

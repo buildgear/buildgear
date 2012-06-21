@@ -212,6 +212,12 @@ void COptions::Parse(int argc, char *argv[])
    {
       // Get NAME of build
       Config.name = argv[optind++];
+
+      // Create name stripped from any cross/ or native/ parts
+      Config.name_stripped = Config.name;
+      int pos = Config.name_stripped.rfind("/");
+      if (pos != string::npos)
+         Config.name_stripped.erase(0,++pos);
       
       if (optind < argc)
       {

@@ -167,7 +167,7 @@ int main (int argc, char *argv[])
          Dependency.ShowBuildOrder();
          
       if (Config.dependency_circle)
-         Dependency.ShowDependencyCircleSVG(SVG_DEPENDENCY_FILE);
+         Dependency.ShowDependencyCircleSVG(BUILD_DIR "/" + Config.name_stripped + ".dependency.svg");
          
       cout << endl;
       
