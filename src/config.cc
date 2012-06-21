@@ -27,6 +27,8 @@ CConfig::CConfig()
    // Default download options
    download_timeout = 20;
    download_retry = 3;
+   download_mirror = "";
+   download_mirror_first = "no";
 
    // Default build options
    keep_work = "no";
@@ -37,7 +39,7 @@ CConfig::CConfig()
    // Default show options
    build_order = false;
    download_order = false;
-   dependency_circle=false;
+   dependency_circle = false;
    readme = false;
    log = false;
 

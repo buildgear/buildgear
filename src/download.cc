@@ -125,56 +125,76 @@ void CDownload::URL(string url, string source_dir)
       exit(EXIT_FAILURE);
    }
    
-   // If file does not exist in source dir
+   // Download if file does not exist in source dir
    if (!file_exist(source_dir + "/" + filename, filesize))
    {
       int result = CURLE_OPERATION_TIMEDOUT;
       int retry = Config.download_retry;
-      
-      cout << endl << "   Downloading '" << url << "'" << endl;
+      string mirror_url = Config.download_mirror + "/" + filename;
+      string part_file = source_dir + "/" + filename + ".part";
 
-      while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
+      if (Config.download_mirror_first != "yes")
       {
-         // Download to partial file in source dir
-         result = CDownload::File(url, source_dir + "/" + filename + ".part");
-         retry--;
-      }
-
-      if (result == CURLE_OK)
-      {
-         // Succesful download - remove .part extension
-         Move(source_dir + "/" + filename + ".part",
-              source_dir + "/" + filename);
-      } else 
-      {
-	 // Timeout - try download mirror if available
-	 if (Config.download_mirror != "")
+         // Download from original url
+         cout << endl << "   Downloading '" << url << "'" << endl;
+         while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
          {
-            cout << "   Retrying download from mirror..";
-            cout << endl << "   Downloading '" << Config.download_mirror
-                                               << "/" << filename << "'" << endl;
-            retry = Config.download_retry;
-            result = CURLE_OPERATION_TIMEDOUT;
-
-	    while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
-            {
-               result = CDownload::File(Config.download_mirror + "/" + filename,
-	                                source_dir + "/" + filename + ".part");
-            }
-            if (result == CURLE_OK)
-            {
-               // Succesful download - remove .part extension
-               Move(source_dir + "/" + filename + ".part",
-                    source_dir + "/" + filename);
-            }
+            result = CDownload::File(url, part_file);
+            retry--;
          }
 
-         if (result != CURLE_OK)
-         exit(EXIT_FAILURE);
+         if (result == CURLE_OK)
+            goto download_success;
+
+         if (Config.download_mirror != "")
+         {
+            // Retry download from mirror url
+            retry = Config.download_retry;
+            result = CURLE_OPERATION_TIMEDOUT;
+            cout << endl << "   Downloading '" << mirror_url << "'" << endl;
+	    while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
+            {
+               // Download from mirror url
+               result = CDownload::File(mirror_url, part_file);
+            }
+         }
+      } else
+      {
+         if (Config.download_mirror != "")
+         {
+            // Download from mirror url
+            cout << endl << "   Downloading '" << mirror_url << "'" << endl;
+            while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
+            {
+               result = CDownload::File(mirror_url, part_file);
+               retry--;
+            }
+
+            if (result == CURLE_OK)
+               goto download_success;
+         }
+
+         // Retry download from original url
+         retry = Config.download_retry;
+         result = CURLE_OPERATION_TIMEDOUT;
+         cout << endl << "   Downloading '" << url << "'" << endl;
+	 while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
+         {
+            // Download from original url
+            result = CDownload::File(url, part_file);
+         }
       }
+
+      if (result != CURLE_OK)
+         exit(EXIT_FAILURE);
+
+      download_success:
+         // Remove .part extension
+         Move(source_dir + "/" + filename + ".part",
+              source_dir + "/" + filename);
    }
-   // TODO: Handle timeout, retry, and servers not supporting resume!
 }
+
 int CDownload::File(string url, string filename)
 {
    CURL *curl;
