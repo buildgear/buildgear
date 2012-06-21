@@ -14,8 +14,7 @@
 #include "buildgear/download.h"
 #include "buildgear/buildsystem.h"
 
-Debug         debug(cout);
-
+CDebug        Debug(cout);
 CConfig       Config;
 COptions      Options;
 CConfigFile   ConfigFile;
@@ -30,7 +29,7 @@ CBuildSystem  BuildSystem;
 int main (int argc, char *argv[])
 {
    /* Debug stream option */
-   debug.On() = false;
+   Debug.On() = false;
 
    /* Start counting elapsed time */
    Clock.Start();

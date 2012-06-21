@@ -151,18 +151,18 @@ void CBuildFiles::ShowMeta(void)
 {   
    list<CBuildFile*>::iterator it;
 
-   debug << endl << "Buildfiles:" << endl << endl;
+   Debug << endl << "Buildfiles:" << endl << endl;
    
    /* Traverse through all buildfiles */
    for (it=buildfiles.begin(); 
         it!=buildfiles.end();
         it++)
    {
-      debug << KEY_NAME << ":    " << (*it)->name << endl;
-      debug << KEY_VERSION << ": " << (*it)->version << endl;
-      debug << KEY_RELEASE << ": " << (*it)->release << endl;
-      debug << KEY_SOURCE << ":  " << (*it)->source << endl;
-      debug << KEY_DEPENDS ": " << (*it)->depends << endl << endl;
+      Debug << KEY_NAME << ":    " << (*it)->name << endl;
+      Debug << KEY_VERSION << ": " << (*it)->version << endl;
+      Debug << KEY_RELEASE << ": " << (*it)->release << endl;
+      Debug << KEY_SOURCE << ":  " << (*it)->source << endl;
+      Debug << KEY_DEPENDS ": " << (*it)->depends << endl << endl;
    }
 }
 

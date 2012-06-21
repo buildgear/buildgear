@@ -206,7 +206,7 @@ void CDependency::ResolveDependency(CBuildFile *buildfile,
 {	
 	list<CBuildFile*>::iterator it;
 	
-   debug << buildfile->filename << endl;
+   Debug << buildfile->filename << endl;
    
    unresolved->push_back(buildfile);
 

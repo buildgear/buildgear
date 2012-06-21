@@ -3,20 +3,20 @@
 
 #include <iostream>
  
-class Debug
+class CDebug
 {
     std::ostream    &mStream;
     bool            mOn;
  
 public:
-    Debug(std::ostream &str, bool isOn = true)
+    CDebug(std::ostream &str, bool isOn = true)
         : mStream(str)
         , mOn(isOn)
     { }
  
     template <class T>
     inline
-    Debug& operator<<(const T &inVal)
+    CDebug& operator<<(const T &inVal)
     {
         if (mOn)
             mStream << inVal;
@@ -24,7 +24,7 @@ public:
     }
  
     inline
-    Debug& operator<<(std::ostream& (*inVal)(std::ostream&))
+    CDebug& operator<<(std::ostream& (*inVal)(std::ostream&))
     {
         if (mOn)
             mStream << inVal;
@@ -36,6 +36,6 @@ public:
     bool& On() { return mOn; }
 };
  
-extern Debug debug;
+extern CDebug Debug;
  
 #endif // DEBUG_H

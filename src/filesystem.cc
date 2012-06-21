@@ -42,7 +42,7 @@ void CFileSystem::FindRoot(string dirname)
       
       temp_dirname = cwd + "/" + dirname;
       
-      debug << "Backstepping to " << cwd << endl;
+      Debug << "Backstepping to " << cwd << endl;
    }
    
    if (cwd == "/")
@@ -58,7 +58,7 @@ void CFileSystem::FindRoot(string dirname)
    if (chdir(CFileSystem::root.c_str()) != 0)
       throw std::runtime_error(strerror(errno));
    
-   debug << "Build root: " << CFileSystem::root << endl;
+   Debug << "Build root: " << CFileSystem::root << endl;
 }
 
 void CFileSystem::FindFile(string dirname, string filename, list<CBuildFile*> *buildfiles) 
