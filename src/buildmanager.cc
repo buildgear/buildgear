@@ -293,6 +293,13 @@ void CBuildManager::Clean(CBuildFile *buildfile)
 
 void CBuildManager::CleanAll(void)
 {
+   CleanPackages();
+   CleanWork();
+   CleanLog();
+}
+
+void CBuildManager::CleanPackages(void)
+{
    if (system("rm -rf " PACKAGE_DIR) < 0)
 	   perror("error\n");
 }
