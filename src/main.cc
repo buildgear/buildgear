@@ -129,11 +129,14 @@ int main (int argc, char *argv[])
    
    /* Load dependencies */
    BuildFiles.LoadDependency();
-   
-   if (Config.cross_toolchain != "")
+
+   if (Config.cross_depends != "")
    {
-      /* Add dependency to cross toolchain for all cross buildfiles */
-      BuildFiles.AddCrossToolchainDependency();
+      /* Load dependencies defined in "CROSS_DEPENDS" */
+      BuildFiles.LoadCrossDependency();
+
+      /* Add cross dependency to all cross buildfiles */
+      BuildFiles.AddCrossDependency();
    }
    cout << "Done\n";
 
@@ -166,8 +169,7 @@ int main (int argc, char *argv[])
          Dependency.ShowBuildOrder();
          
       if (Config.dependency_circle)
-         Dependency.ShowDependencyCircleSVG(BUILD_DIR "/" + Config.name_stripped + ".dependency.svg");
-         
+         Dependency.ShowDependencyCircleSVG(BUILD_DIR "/dependency." + Config.name_stripped + ".svg");
       cout << endl;
       
       exit(EXIT_SUCCESS);

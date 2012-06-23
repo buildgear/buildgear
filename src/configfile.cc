@@ -25,15 +25,14 @@ void CConfigFile::Parse(string filename)
          command += "; echo source_dir=$source_dir \
                      ; echo download_mirror=$download_mirror \
                      ; echo download_mirror_first=$download_mirror_first \
-                     ; echo required_version=$required_version \
-                     ; echo default_name_prefix=$default_name_prefix \
                      ; echo download_timeout=$download_timeout \
                      ; echo download_retry=$download_retry \
+                     ; echo required_version=$required_version \
+                     ; echo default_name_prefix=$default_name_prefix \
                      ; echo parallel_builds=$parallel_builds \
                      '";
       else
-         command += "; echo native_toolchain=$NATIVE_TOOLCHAIN \
-                     ; echo cross_toolchain=$CROSS_TOOLCHAIN \
+         command += "; echo cross_depends=${CROSS_DEPENDS[@]} \
                      ; echo build=$BUILD \
                      ; echo host=$HOST \
                      '";
@@ -78,10 +77,8 @@ void CConfigFile::Parse(string filename)
             else
             {
                // buildfiles/config :
-               if (key == CONFIG_KEY_NATIVE_TOOLCHAIN)
-                  Config.native_toolchain = value;
-               if (key == CONFIG_KEY_CROSS_TOOLCHAIN)
-                  Config.cross_toolchain = value;
+               if (key == CONFIG_KEY_CROSS_DEPENDS)
+                  Config.cross_depends = value;
                if (key == CONFIG_KEY_BUILD)
                   Config.build_system = value;
                if (key == CONFIG_KEY_HOST)

@@ -14,12 +14,13 @@ class CBuildFiles
       CBuildFiles();
       list<CBuildFile*> buildfiles;
       void ParseAndVerify(void);
+      void LoadCrossDependency(void);
       void LoadDependency(void);
-      void AddCrossToolchainDependency(void);
+      void AddCrossDependency(void);
       void ShowMeta(void);
       void ShowReadme(void);
       CBuildFile * BuildFile(string name);
-      CBuildFile * cross_toolchain;
+      list<CBuildFile*> cross_dependency;
    private:
 };
 

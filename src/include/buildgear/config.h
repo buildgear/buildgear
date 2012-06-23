@@ -38,8 +38,7 @@ class CConfig
       unsigned int parallel_builds;
       string build_system;
       string host_system;
-      string native_toolchain;
-      string cross_toolchain;
+      string cross_depends;
       CConfig();
       void CorrectName(void);
       void CorrectSourceDir(void);
@@ -83,8 +82,7 @@ class CConfig
 #define CONFIG_KEY_DOWNLOAD_MIRROR_FIRST     "download_mirror_first"
 #define CONFIG_KEY_SOURCE_DIR                "source_dir"
 
-#define CONFIG_KEY_NATIVE_TOOLCHAIN          "native_toolchain"
-#define CONFIG_KEY_CROSS_TOOLCHAIN           "cross_toolchain"
+#define CONFIG_KEY_CROSS_DEPENDS             "cross_depends"
 #define CONFIG_KEY_BUILD                     "build"
 #define CONFIG_KEY_HOST                      "host"
 

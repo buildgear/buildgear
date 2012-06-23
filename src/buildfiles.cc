@@ -20,7 +20,6 @@ extern CFileSystem FileSystem;
 
 CBuildFiles::CBuildFiles()
 {
-   cross_toolchain = NULL;
 }
 
 void stripChar(string &str, char c)
@@ -84,6 +83,7 @@ void CBuildFiles::ParseAndVerify(void)
          exit(EXIT_FAILURE);
       }
 
+      // Parse Buildfile variables
       while (fgets(line_buffer, PATH_MAX, fp) != NULL)
       {
          // Parse key=value pairs
@@ -114,25 +114,10 @@ void CBuildFiles::ParseAndVerify(void)
 
       // Assign name based on type and name variable
       (*it)->name = (*it)->type + "/" + (*it)->short_name;
-      
-      // If cross toolchain defined
-      if ((Config.cross_toolchain != "") && 
-          ((*it)->name == Config.cross_toolchain))
-      {
-         // Save reference to cross toolchain buildfile
-         CBuildFiles::cross_toolchain = (*it);
-      }
-   }
-   
-   if ((Config.cross_toolchain != "") && 
-       (CBuildFiles::cross_toolchain == NULL))
-   {
-      cout << "Error: Cross toolchain buildfile is not found."<< endl;
-      exit(EXIT_FAILURE);
    }
 }
 
-void CBuildFiles::AddCrossToolchainDependency(void)
+void CBuildFiles::AddCrossDependency(void)
 {
    list<CBuildFile*>::iterator it;
    
@@ -142,10 +127,11 @@ void CBuildFiles::AddCrossToolchainDependency(void)
         it++)
    {
       if ((*it)->type == "cross")
-         (*it)->dependency.push_back(cross_toolchain);
+         (*it)->dependency.insert((*it)->dependency.end(),
+                                  cross_dependency.begin(),
+                                  cross_dependency.end());
    }
 }
-
 
 void CBuildFiles::ShowMeta(void)
 {   
@@ -212,6 +198,48 @@ void CBuildFiles::LoadDependency(void)
          exit(EXIT_FAILURE);
       }
    }
+}
+
+void CBuildFiles::LoadCrossDependency(void)
+{
+   list<CBuildFile*>::iterator it;
+
+   int no_match, no_match_exit=false;
+   string dep;
+   istringstream iss(Config.cross_depends);
+
+   // For each cross dependency element
+   while ( getline(iss, dep, ' ') )
+   {
+      // Reset match state
+      no_match = true;
+
+      // Find matching buildfile
+      for (it=buildfiles.begin();
+              it!=buildfiles.end();
+              it++)
+         {
+            // If match found add to cross dependency list
+            if (dep == (*it)->name)
+            {
+               cross_dependency.push_back((*it));
+               no_match = false;
+            }
+         }
+
+         // Warn if missing buildfile
+         if (no_match)
+         {
+            cout << "Error: " << (*it)->name << " " << dep << " not found" << endl;
+            no_match_exit = true;
+         }
+      }
+
+      if (no_match_exit)
+      {
+         cout << "Error: " << (*it)->name << " is missing one or more dependencies" << endl;
+         exit(EXIT_FAILURE);
+      }
 }
 
 CBuildFile * CBuildFiles::BuildFile(string name)
