@@ -95,6 +95,8 @@ class CConfig
 #define SVG_DEPENDENCY_FILE      BUILD_DIR "/dependency.svg"
 #define SVG_COLOR_NATIVE         "#ffff7f"
 #define SVG_COLOR_CROSS          "#7fff7f"
+#define SVG_DASH                 1
+#define SVG_DASH_NO              0
 
 #endif
 

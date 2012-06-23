@@ -60,12 +60,12 @@ void CSvg::addArrow(float x1, float y1, float x2, float y2)
    );
 }
 
-void CSvg::addCircle(float x, float y, string name, string color, float stroke_width)
+void CSvg::addCircle(float x, float y, string name, string color, int stroke_dash)
 {
    fprintf (file,
-   "   <circle cx='%f' cy='%f' r='14' stroke='black' stroke-width='%f' fill='%s'/>\n"
+   "   <circle cx='%f' cy='%f' r='14' stroke='black' stroke-width='0.5' style='stroke-dasharray: 2,%d' fill='%s'/>\n"
    "   <text x='%f' y='%f' fill='black' font-family='Verdana' font-size='3' text-anchor='middle'>%s</text>\n"
-   , x, y, stroke_width, color.c_str()
+   , x, y, stroke_dash, color.c_str()
    , x, y, name.c_str()
    );
 }
