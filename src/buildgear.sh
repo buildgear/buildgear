@@ -389,11 +389,11 @@ main() {
    check_create_directory "$BG_BUILD_PACKAGE_DIR"
    check_create_directory "$BG_SYSROOT_DIR"
 
-   # Create link to cross sysroot if cross sysroot link is configured
-   if [ "$CROSS_SYSROOT_LINK" != "" ]; then
+   # Create link to cross sysroot if cross sysroot is configured
+   if [ "$CROSS_SYSROOT" != "" ]; then
       if [ ! -e "$BG_SYSROOT_CROSS_DIR" ]; then
          cd "$BG_SYSROOT_DIR"
-         ln -s $CROSS_SYSROOT_LINK cross
+         ln -s $CROSS_SYSROOT cross
          cd $BG_ROOT_DIR
       fi
    fi
