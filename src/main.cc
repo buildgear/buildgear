@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdlib>
 #include "buildgear/config.h"
+#include "buildgear/fakeroot.h"
 #include "buildgear/configfile.h"
 #include "buildgear/debug.h"
 #include "buildgear/clock.h"
@@ -14,6 +15,7 @@
 #include "buildgear/download.h"
 #include "buildgear/buildsystem.h"
 
+CFakeroot     Fakeroot;
 CDebug        Debug(cout);
 CConfig       Config;
 COptions      Options;
@@ -28,6 +30,9 @@ CBuildSystem  BuildSystem;
 
 int main (int argc, char *argv[])
 {
+   /* Respawn into fakeroot session */
+   Fakeroot.Respawn(argc, argv);
+
    /* Debug stream option */
    Debug.On() = false;
 

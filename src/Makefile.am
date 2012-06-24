@@ -1,5 +1,6 @@
 bin_PROGRAMS = buildgear
 buildgear_SOURCES = \
+fakeroot.cc \
 buildfile.cc \
 buildfiles.cc \
 buildmanager.cc \

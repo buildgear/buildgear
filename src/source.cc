@@ -3,12 +3,10 @@
 #include <iomanip>
 #include <stdexcept>
 #include <sstream>
-#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include <sstream>
 #include <linux/limits.h>
 #include "buildgear/config.h"
 #include "buildgear/options.h"
