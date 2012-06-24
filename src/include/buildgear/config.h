@@ -19,6 +19,7 @@ class CConfig
       string update_checksum;
       string update_footprint;
       string no_strip;
+      bool no_fakeroot;
       
       bool clean;
 
@@ -30,7 +31,7 @@ class CConfig
       bool log;
       
       bool all;
-      
+
       string default_name_prefix;
       string source_dir;
       string download_mirror;

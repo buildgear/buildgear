@@ -30,9 +30,6 @@ CBuildSystem  BuildSystem;
 
 int main (int argc, char *argv[])
 {
-   /* Respawn into fakeroot session */
-   Fakeroot.Respawn(argc, argv);
-
    /* Debug stream option */
    Debug.On() = false;
 
@@ -73,6 +70,10 @@ int main (int argc, char *argv[])
       cout << "Please specify build name to show\n";
       exit(EXIT_FAILURE);
    }
+
+   /* Respawn into fakeroot session if building */
+   if ((!Config.no_fakeroot) && (Config.build))
+      Fakeroot.Respawn(argc, argv);
 
    /* Search for build root directory */
    FileSystem.FindRoot(ROOT_DIR);

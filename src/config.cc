@@ -35,6 +35,7 @@ CConfig::CConfig()
    update_checksum = "no";
    update_footprint = "no";
    no_strip = "no";
+   no_fakeroot = false;
 
    // Default show options
    build_order = false;

@@ -32,7 +32,7 @@ void COptions::Parse(int argc, char *argv[])
    {
       Config.download = true;
       
-      // Parse command OPTIONS
+      // Parse download OPTIONS
       static struct option long_options[] =
       {
          {"all", no_argument, 0, 'a'},
@@ -47,7 +47,6 @@ void COptions::Parse(int argc, char *argv[])
             case 'a':
                Config.all = true;
                break;
-				
             default:
                exit(EXIT_FAILURE);
                break;
@@ -60,7 +59,7 @@ void COptions::Parse(int argc, char *argv[])
    {
       Config.build = true;
       
-      // Parse command OPTIONS
+      // Parse build OPTIONS
       static struct option long_options[] =
 		{
          {"keep-work",        no_argument, 0, 'w'},
@@ -68,6 +67,7 @@ void COptions::Parse(int argc, char *argv[])
          {"update-footprint", no_argument, 0, 'f'},
          {"no-strip",         no_argument, 0, 's'},
          {"all",              no_argument, 0, 'a'},
+         {"no-fakeroot",      no_argument, 0, 'n'},
          {0,                  0,           0,  0 }
 		};
       
@@ -91,8 +91,9 @@ void COptions::Parse(int argc, char *argv[])
             case 'a':
                Config.all = true;
                break;
-            break;
-				
+            case 'n':
+               Config.no_fakeroot = true;
+               break;
             default:
                exit(EXIT_FAILURE);
                break;
@@ -105,7 +106,7 @@ void COptions::Parse(int argc, char *argv[])
    {
       Config.clean = true;
       
-      // Parse command OPTIONS
+      // Parse clean OPTIONS
       static struct option long_options[] =
       {
          {"all", no_argument, 0, 'a'},
@@ -120,7 +121,6 @@ void COptions::Parse(int argc, char *argv[])
             case 'a':
                Config.all = true;
                break;
-				
             default:
                exit(EXIT_FAILURE);
                break;
@@ -133,7 +133,7 @@ void COptions::Parse(int argc, char *argv[])
    {
       Config.show = true;
       
-      // Parse command OPTIONS
+      // Parse show OPTIONS
       static struct option long_options[] =
       {
          {"build-order",         no_argument, 0, 'o'},
@@ -236,8 +236,8 @@ void COptions::ShowHelp(char *argv[])
    cout << "Usage: " << argv[0] << " [COMMAND] [OPTIONS] [BUILD NAME]\n\n";
    cout << "Commands:\n";
    cout << "  download                Download source files\n";
-   cout << "  build                   Build build\n";
-   cout << "  clean                   Clean build\n";
+   cout << "  build                   Build\n";
+   cout << "  clean                   Clean\n";
    cout << "  show                    Show various information\n\n";
    cout << "Download options:\n";
    cout << "  --all                   Download source files of all builds or build dependencies\n\n";
@@ -245,7 +245,8 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --keep-work             Do not delete work files\n";
    cout << "  --update-checksum       Update source checksum\n";
    cout << "  --update-footprint      Update footprint\n";
-   cout << "  --no-strip              Do not strip libraries or executables\n";
+   cout << "  --no-strip              Do not strip libraries and executables\n";
+   cout << "  --no-fakeroot           Do not use fakeroot\n";
    cout << "  --all                   Apply to all build dependencies\n\n";
    cout << "Clean options:\n";
    cout << "  --all                   Clean all builds or build dependencies\n\n";
