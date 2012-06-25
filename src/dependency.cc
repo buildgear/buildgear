@@ -93,7 +93,8 @@ bool compare(CBuildFile *first, CBuildFile *second)
 
 void CDependency::ResolveParallelBuildOrder()
 {
-/*
+/* For now, parallel builds is not supported.
+
    list<CBuildFile*>::iterator it;
    list<CBuildFile*>::iterator itr;
    list<CBuildFile*>::reverse_iterator rit;
