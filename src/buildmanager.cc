@@ -175,8 +175,6 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
    {
       if (!UpToDate((*it)))
          (*it)->build = true;
-      
-//      cout << "   " << (*it)->name << ":build = " << (*it)->build << endl;
    }
 
    // Set build action of all builds (based on dependencies build status)
@@ -197,15 +195,6 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
          (*it)->build = false;
       }
    }
-
-/*
-   // Show new build status
-   cout << "New build status:" << endl;
-   for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
-   {
-      cout << "   " << (*it)->name << ":build = " << (*it)->build << endl;
-   }
-*/
 
    // Only build if selected build requires a build
    if (buildfiles->back()->build)
@@ -251,27 +240,6 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
          // Proceed to next depth level
          current_depth--;
       }
-      
-/*      for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
-      {
-         // Only build if build (package) is not up to date
-         if ((*it)->build == true)
-            Do("build", (*it));
-      
-         // Don't add primary build
-         if ((*it) != buildfiles->back())
-            Do("add", (*it));
-      }
-*/
-/*   
-      // Process build order in reverse
-      for (rit=buildfiles->rbegin(); rit!=buildfiles->rend(); rit++)
-      {
-         // Remove all except primary build
-         if ((*rit) != buildfiles->back())
-            Do("remove", (*rit));
-      }
-*/
       sem_destroy(&build_semaphore);
    }
 }
