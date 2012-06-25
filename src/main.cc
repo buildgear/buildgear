@@ -111,14 +111,14 @@ int main (int argc, char *argv[])
    /* Handle 'clean --all' command */
    if ((Config.clean) && (Config.all))
    {
-      cout << "\nCleaning all builds.. ";
+      cout << "\nCleaning all builds.. " << flush;
       BuildManager.CleanAll();
       cout << "Done\n\n";
       exit(EXIT_SUCCESS);
    }
 
    /* Find all build files */
-   cout << "\nSearching for build files..     ";
+   cout << "\nSearching for build files..     " << flush;
    FileSystem.FindFiles(BUILD_FILES_DIR,
                         BUILD_FILE,
                         &BuildFiles.buildfiles);
@@ -127,7 +127,7 @@ int main (int argc, char *argv[])
    cout << BuildFiles.buildfiles.size() << " files found\n";
 
    /* Parse and verify buildfiles */
-   cout << "Loading build files..           ";
+   cout << "Loading build files..           " << flush;
    BuildFiles.ParseAndVerify();
    
    /* Show buildfiles meta info (debug only) */
@@ -184,7 +184,7 @@ int main (int argc, char *argv[])
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
 
-   cout << "Downloading sources..           ";
+   cout << "Downloading sources..           " << flush;
 
    if (Config.download)
    {
@@ -224,7 +224,7 @@ int main (int argc, char *argv[])
    BuildManager.CleanWork();
    
    /* Start building */
-   cout << "Building '" << Config.name << "'.. ";
+   cout << "Building '" << Config.name << "'.. " << flush;
    BuildManager.Build(&Dependency.parallel_build_order);
    if (Config.keep_work == "no")
       BuildManager.CleanWork();
