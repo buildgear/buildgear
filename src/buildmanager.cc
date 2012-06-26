@@ -39,7 +39,7 @@ void* buildThread::run() {
    sem_wait(&build_semaphore);
 
    // Only build if build (package) is not up to date
-   if (buildfile->build == true)
+//   if (buildfile->build == true)
       Do("build", buildfile);
  
    pthread_mutex_lock(&add_mutex);
@@ -57,6 +57,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    string config;
    string command;
    stringstream pid;
+   string build(buildfile->build ? "yes" : "no");
    
    // Get PID
    pid << (int) getpid();
@@ -80,6 +81,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    // Apply build settings to all builds if '--all' is used
    if (Config.all)
    {
+      config += " BG_BUILD_BUILD=" + build;
       config += " BG_UPDATE_CHECKSUM=" + Config.update_checksum;
       config += " BG_UPDATE_FOOTPRINT=" + Config.update_footprint;
       config += " BG_NO_STRIP=" + Config.no_strip;
@@ -89,6 +91,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       // Apply settings to main build
       if (Config.name == buildfile->name)
       {
+         config += " BG_BUILD_BUILD=" + build;
          config += " BG_UPDATE_CHECKSUM=" + Config.update_checksum;
          config += " BG_UPDATE_FOOTPRINT=" + Config.update_footprint;
          config += " BG_NO_STRIP=" + Config.no_strip;
@@ -96,6 +99,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       } else
       {
          // Apply default settings to the build dependencies
+         config += " BG_BUILD_BUILD=" + build;
          config += " BG_UPDATE_CHECKSUM=no";
          config += " BG_UPDATE_FOOTPRINT=no";
          config += " BG_NO_STRIP=no";
@@ -107,7 +111,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    
    pthread_mutex_lock(&cout_mutex);
    
-   if (action == "build")
+   if ((action == "build") && (buildfile->build))
    {
       cout << "   Building      '" << buildfile->name << "'" << endl;
    }

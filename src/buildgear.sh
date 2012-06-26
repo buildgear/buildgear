@@ -37,6 +37,11 @@ warning() {
    echo "   Warning       '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
+updating() {
+   echo "UPDATING: $1"
+   echo "   Updating      '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
+}
+
 error() {
    echo "ERROR: $1"
    echo "   Error         '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
@@ -112,7 +117,7 @@ check_sha256sum() {
       fi
    else
       if [ "$BG_UPDATE_CHECKSUM" = "yes" ]; then
-         info "Updated sha256 checksum"
+         updating "Updated sha256 checksum"
       else
          info "Sha256sum not found, creating new"
       fi
@@ -262,7 +267,7 @@ do_footprint() {
          fi
       else
          if [ "$BG_UPDATE_FOOTPRINT" = "yes" ]; then
-            info "Updated footprint"
+            updating "Updated footprint"
          else
             info "Footprint not found, creating new"
          fi
@@ -378,7 +383,7 @@ main() {
    if [ "$CROSS_SYSROOT" != "" ]; then
       if [ ! -e "$BG_SYSROOT_CROSS_DIR" ]; then
          cd "$BG_SYSROOT_DIR"
-         ln -s $CROSS_SYSROOT cross
+         ln -sf $CROSS_SYSROOT cross
          cd $BG_ROOT_DIR
       fi
    fi
@@ -387,16 +392,25 @@ main() {
 
    # Action sequence
    if [ "$BG_ACTION" = "build" ]; then
-      do_checksum
-      do_extract
-      do_build
-      if [ "$BG_NO_STRIP" = "no" ]; then
-         do_strip
-      fi
-      do_package
-      do_footprint
-      if [ "$BG_KEEP_WORK" = "no" ]; then
-         do_clean
+      if [ "$BG_BUILD_BUILD" = "yes" ]; then
+         do_checksum
+         do_extract
+         do_build
+         if [ "$BG_NO_STRIP" = "no" ]; then
+            do_strip
+         fi
+         do_package
+         do_footprint
+         if [ "$BG_KEEP_WORK" = "no" ]; then
+            do_clean
+         fi
+      else
+         if [ "$BG_UPDATE_CHECKSUM" = "yes" ]; then
+            do_checksum
+         fi
+         if [ "$BG_UPDATE_FOOTPRINT" = "yes" ]; then
+            do_footprint
+         fi
       fi
    elif [ "$BG_ACTION" = "add" ]; then
       do_add
