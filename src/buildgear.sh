@@ -38,7 +38,7 @@ warning() {
 }
 
 updating() {
-   echo "UPDATING: $1"
+   echo "$1"
    echo "   Updating      '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
@@ -119,7 +119,7 @@ check_sha256sum() {
       if [ "$BG_UPDATE_CHECKSUM" = "yes" ]; then
          updating "Updated sha256 checksum"
       else
-         info "Sha256sum not found, creating new"
+         updating "Sha256sum not found, creating new"
       fi
    make_sha256sum > $BG_BUILD_SHA256SUM
    fi
@@ -269,7 +269,7 @@ do_footprint() {
          if [ "$BG_UPDATE_FOOTPRINT" = "yes" ]; then
             updating "Updated footprint"
          else
-            info "Footprint not found, creating new"
+            updating "Footprint not found, creating new"
          fi
          mv $FILE.footprint $BG_BUILD_FOOTPRINT
       fi
