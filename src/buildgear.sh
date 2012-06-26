@@ -254,7 +254,7 @@ do_footprint() {
    if [ -f $BG_BUILD_PACKAGE ]; then
       make_footprint > $FILE.footprint
       if [ -f $BG_BUILD_FOOTPRINT ]; then
-         sort -k 2 $BG_BUILD_FOOTPRINT > $FILE.footprint.orig
+         sort -k 3 $BG_BUILD_FOOTPRINT > $FILE.footprint.orig
          diff -w -t -U 0 $FILE.footprint.orig $FILE.footprint | \
             sed '/^@@/d' | \
             sed '/^+++/d' | \
