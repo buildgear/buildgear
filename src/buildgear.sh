@@ -330,11 +330,9 @@ main() {
    # respawn with output redirected to build log file
    exec &>> $BG_BUILD_LOG
    
-   # Clear aliases
-   unalias -a
-   
    # Sanitize environment
-   GREP_OPTIONS=""
+   unset GREP_OPTIONS
+   unalias -a
    
    parse_options "$@"
 
