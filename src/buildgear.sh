@@ -52,6 +52,10 @@ log_action() {
    bg_put "    $1    '$BG_BUILD_TYPE/$name'"
 }
 
+function_exist() {
+   type -t $1 | grep -q 'function'
+}
+
 get_filename() {
    local FILE="`echo $1 | sed 's|^.*://.*/||g'`"
 
@@ -353,6 +357,19 @@ main() {
    # Include buildfiles configuration
 	if [ -f $1 ]; then
       . $BG_BUILD_FILES_CONFIG
+   fi
+
+   # Call environment functions in 'config' file
+   if [ "$BG_BUILD_TYPE" = "cross" ]; then
+      function_exist cross_env
+      if [ $? -eq 0 ]; then
+         cross_env
+      fi
+   elif [ "$BG_BUILD_TYPE" = "native" ]; then
+      function_exist native_env
+      if [ $? -eq 0 ]; then
+         native_env
+      fi
    fi
    
    do_buildfile
