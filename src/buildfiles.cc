@@ -159,6 +159,10 @@ void CBuildFiles::LoadDependency(void)
          // Reset match state
          no_match = true;
 
+         // Prepend "cross/" if missing (default for depends)
+         if ((dep.find("cross/") != 0) && (dep.find("native/") != 0))
+            dep = "cross/" + dep;
+
          // Find matching buildfile
          for (itr=buildfiles.begin(); 
               itr!=buildfiles.end();
@@ -201,6 +205,10 @@ void CBuildFiles::LoadCrossDependency(void)
    {
       // Reset match state
       no_match = true;
+
+      // Prepend "native/" if missing (default for CROSS_DEPENDS)
+      if (dep.find("native/") != 0)
+         dep = "native/" + dep;
 
       // Find matching buildfile
       for (it=buildfiles.begin();
