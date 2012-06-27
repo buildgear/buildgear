@@ -140,7 +140,7 @@ bool CBuildManager::UpToDate(CBuildFile *buildfile)
              buildfile->version + "-" +
              buildfile->release + PACKAGE_EXTENSION;
    
-   if (!FileExists(package))
+   if (!FileExist(package))
       return false;
    
    if (Age(package) > Age(buildfile->filename))

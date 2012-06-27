@@ -13,7 +13,8 @@ class CFileSystem
       void FindRoot(string dirname);
       void CreateDirectory(string dirname);
       bool DirExists(string dirname);
-      bool FileExists(string filename);
+      bool FileExist(string filename);
+      bool FileExistSize(string filename, unsigned int &filesize);
       long Age(string filename);
       void Move(string source, string destination);
       void Cat(string filename);

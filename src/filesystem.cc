@@ -123,7 +123,7 @@ bool CFileSystem::DirExists(string dirname)
    return true;
 }
 
-bool CFileSystem::FileExists(string filename)
+bool CFileSystem::FileExist(string filename)
 {
    struct stat st;
 
@@ -132,6 +132,20 @@ bool CFileSystem::FileExists(string filename)
    else if (!S_ISREG(st.st_mode))
       return false;
       
+   return true;
+}
+
+bool CFileSystem::FileExistSize(string filename, unsigned int &filesize )
+{
+   struct stat buffer;
+
+   if (stat(filename.c_str(), &buffer ))
+   {
+      filesize = 0;
+      return false;
+   }
+
+   filesize = buffer.st_size;
    return true;
 }
 
@@ -172,7 +186,7 @@ void CFileSystem::Cat(string filename)
    ifstream fin;
    char s[100000];
 
-   if (FileExists(filename))
+   if (FileExist(filename))
    {
       fin.open(filename.c_str(), ios::in);
 

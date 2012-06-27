@@ -60,7 +60,7 @@ void CBuildSystem::RunCheckFile(void)
    int result;
    
    // Run buildfiles/tools file
-   if (FileExists(string(BUILD_FILES_CHECK)))
+   if (FileExist(string(BUILD_FILES_CHECK)))
    {
       result = system("bash -c 'source " BUILD_FILES_CHECK " 2> /dev/null'");
       if (result != 0)

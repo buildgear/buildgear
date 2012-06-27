@@ -10,7 +10,16 @@ class CDownload : public CFileSystem
    public:
       int File(string, string);
       void URL(string, string);
-   private:
+      static int progress(void *v,
+                          double dltotal,
+                          double dlnow,
+                          double ultotal,
+                          double ulnow);
+      static size_t CurlFileWrite(void *buffer,
+                                  size_t size,
+                                  size_t nmemb,
+                                  void *stream);
+  private:
 };
 
 #endif

@@ -15,8 +15,9 @@
 #include "buildgear/filesystem.h"
 #include "buildgear/download.h"
 
-pthread_mutex_t progress_mutex = PTHREAD_MUTEX_INITIALIZER;
-unsigned int filesize;
+static pthread_mutex_t progress_mutex = PTHREAD_MUTEX_INITIALIZER;
+static unsigned int filesize;
+static int old_progress;
 
 struct File
 {
@@ -24,7 +25,7 @@ struct File
    FILE *stream;
 };
 
-static size_t file_write(void *buffer, size_t size, size_t nmemb, void *stream)
+size_t CDownload::CurlFileWrite(void *buffer, size_t size, size_t nmemb, void *stream)
 {
    struct File *out=(struct File *)stream;
    if(out && !out->stream)
@@ -38,28 +39,11 @@ static size_t file_write(void *buffer, size_t size, size_t nmemb, void *stream)
    return fwrite(buffer, size, nmemb, out->stream);
 }
 
-int file_exist(string filename, unsigned int &filesize )
-{   
-   struct stat buffer;
-   
-   if (stat(filename.c_str(), &buffer ))
-   {
-      filesize = 0;
-      return false;
-   }
-   
-   // File exists
-   filesize = buffer.st_size;
-   return true;
-}
-
-static int old_progress;
-
-int progress(void *v,
-             double dltotal,
-             double dlnow,
-             double ultotal,
-             double ulnow)
+int CDownload::progress(void *v,
+                        double dltotal,
+                        double dlnow,
+                        double ultotal,
+                        double ulnow)
 {
    double percent;
    int elements;
@@ -126,7 +110,7 @@ void CDownload::URL(string url, string source_dir)
    }
    
    // Download if file does not exist in source dir
-   if (!file_exist(source_dir + "/" + filename, filesize))
+   if (!FileExistSize(source_dir + "/" + filename, filesize))
    {
       int result = CURLE_OPERATION_TIMEDOUT;
       int retry = Config.download_retry;
@@ -139,7 +123,7 @@ void CDownload::URL(string url, string source_dir)
          cout << endl << "   Downloading '" << url << "'" << endl;
          while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
          {
-            result = CDownload::File(url, part_file);
+            result = File(url, part_file);
             retry--;
          }
 
@@ -155,7 +139,7 @@ void CDownload::URL(string url, string source_dir)
 	    while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
             {
                // Download from mirror url
-               result = CDownload::File(mirror_url, part_file);
+               result = File(mirror_url, part_file);
             }
          }
       } else
@@ -166,7 +150,7 @@ void CDownload::URL(string url, string source_dir)
             cout << endl << "   Downloading '" << mirror_url << "'" << endl;
             while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
             {
-               result = CDownload::File(mirror_url, part_file);
+               result = File(mirror_url, part_file);
                retry--;
             }
 
@@ -181,7 +165,7 @@ void CDownload::URL(string url, string source_dir)
 	 while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
          {
             // Download from original url
-            result = CDownload::File(url, part_file);
+            result = File(url, part_file);
          }
       }
 
@@ -216,7 +200,7 @@ int CDownload::File(string url, string filename)
       curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
   
       // Define file write callback
-      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, file_write);
+      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlFileWrite);
   
       // Define write data callback
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, &file);
@@ -235,7 +219,7 @@ int CDownload::File(string url, string filename)
       curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progress);
 
       // Set resume option if file already exists
-      if (file_exist(filename, filesize))
+      if (FileExistSize(filename, filesize))
       {
          // Resume
          cout << "   Partial download detected - resuming..." << endl;
