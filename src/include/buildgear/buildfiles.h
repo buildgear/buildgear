@@ -5,10 +5,11 @@
 #include "buildgear/config.h"
 #include "buildgear/buildfile.h"
 #include "buildgear/filesystem.h"
+#include "buildgear/utility.h"
 
 using namespace std;
 
-class CBuildFiles
+class CBuildFiles : public CUtility
 {
    public:
       CBuildFiles();

@@ -1,9 +1,11 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include "buildgear/utility.h"
+
 using namespace std;
 
-class CConfig
+class CConfig : public CUtility
 {
    public:
       string name;
@@ -99,6 +101,6 @@ class CConfig
 #define SVG_DASH                 1
 #define SVG_DASH_NO              0
 
-#endif
-
 extern CConfig Config;
+
+#endif

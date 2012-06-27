@@ -13,8 +13,6 @@
 #include "buildgear/config.h"
 #include "buildgear/configfile.h"
 
-extern void stripChar(string &str, char c);
-
 void CConfigFile::Parse(string filename)
 {
       FILE *fp;
@@ -70,9 +68,9 @@ void CConfigFile::Parse(string filename)
                   Config.download_mirror = value;
                if (key == CONFIG_KEY_DOWNLOAD_MIRROR_FIRST)
                   Config.download_mirror_first = value;
+// Temporarily disabled support for parallel builds
 //               if (key == CONFIG_KEY_PARALLEL_BUILDS)
 //                  Config.parallel_builds = atoi(value.c_str());
-// Temporarily disabled support for parallel builds
             }
             else
             {

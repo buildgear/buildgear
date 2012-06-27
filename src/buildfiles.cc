@@ -22,18 +22,6 @@ CBuildFiles::CBuildFiles()
 {
 }
 
-void stripChar(string &str, char c)
-{
-   unsigned int i;
-
-   for (i=0; i<str.length(); i++)
-      if (str[i]==c)
-      {
-         str.erase(i,1);
-         i--;
-      }
-}
-
 void CBuildFiles::ParseAndVerify(void)
 {   
    list<CBuildFile*>::iterator it;

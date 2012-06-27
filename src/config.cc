@@ -12,8 +12,6 @@
 #include <string.h>
 #include "buildgear/config.h"
 
-extern void stripChar(string &str, char c);
-
 CConfig::CConfig()
 {
    name = "";

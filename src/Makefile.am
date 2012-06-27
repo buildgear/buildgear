@@ -6,6 +6,7 @@ buildgear_SOURCES = \
    buildmanager.cc \
    buildsystem.cc \
    clock.cc \
+   utility.cc \
    config.cc \
    configfile.cc \
    dependency.cc \
@@ -16,11 +17,13 @@ buildgear_SOURCES = \
    source.cc \
    svg.cc \
    thread.cc \
+   include/buildgear/fakeroot.h \
    include/buildgear/buildfile.h \
    include/buildgear/buildfiles.h \
    include/buildgear/buildmanager.h \
    include/buildgear/buildsystem.h \
    include/buildgear/clock.h \
+   include/buildgear/utility.h \
    include/buildgear/configfile.h \
    include/buildgear/config.h \
    include/buildgear/debug.h \
