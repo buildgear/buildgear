@@ -45,7 +45,7 @@ void* buildThread::run() {
    pthread_mutex_lock(&add_mutex);
    // Don't add last build
    if (buildfile != last_build)
-      Do("add", buildfile);   
+      Do("add", buildfile);
    pthread_mutex_unlock(&add_mutex);
    
    sem_post(&build_semaphore);
@@ -222,27 +222,36 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       it=buildfiles->begin();
       while (it != buildfiles->end())
       {
-         int i=0;
-         while ( ((*it)->depth == current_depth) && (it != buildfiles->end()))
-         {
-            // Start build threads of same depth (count how many started i)
-            buildThread* build(new buildThread(*it));
-            builder.push_back(build);
-            builder[i]->start();
-            i++;
-            it++;
-         }
-         
-         // Wait for i build threads to complete
-         for (int j=0; j<i; j++)
-         {
-            builder[j]->join();
-            delete builder[j];
-            builder.pop_back();
-         }
-         
-         // Proceed to next depth level
-         current_depth--;
+         Do("build", *it);
+
+         // Don't add last build
+         if (*it != last_build)
+            Do("add", *it);
+
+         it++;
+
+// FIXME: Fix broken thread implementation
+//         int i=0;
+//         while ( ((*it)->depth == current_depth) && (it != buildfiles->end()))
+//         {
+//            // Start build threads of same depth (count how many started i)
+//            buildThread* build(new buildThread(*it));
+//            builder.push_back(build);
+//            builder[i]->start();
+//            i++;
+//            it++;
+//         }
+//
+//         // Wait for i build threads to complete
+//         for (int j=0; j<i; j++)
+//         {
+//            builder[j]->join();
+//            delete builder[j];
+//            builder.pop_back();
+//         }
+//
+//         // Proceed to next depth level
+//         current_depth--;
       }
       sem_destroy(&build_semaphore);
    }
