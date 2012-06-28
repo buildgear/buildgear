@@ -110,6 +110,9 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    }
    
    command = config + " " SCRIPT " " + buildfile->filename;
+
+   /* Make sure we are using bash */
+   command = "bash -c '" + command + "'";
    
    pthread_mutex_lock(&cout_mutex);
    
@@ -125,7 +128,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       cout << "   Removing      '" << buildfile->name << "'" << endl;
    
    pthread_mutex_unlock(&cout_mutex);
-   
+
    result = system(command.c_str());
    if (result != 0)
    {
