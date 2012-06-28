@@ -1,5 +1,6 @@
 bin_PROGRAMS = buildgear
 buildgear_SOURCES = \
+   signals.cc \
    fakeroot.cc \
    buildfile.cc \
    buildfiles.cc \
@@ -17,6 +18,7 @@ buildgear_SOURCES = \
    source.cc \
    svg.cc \
    thread.cc \
+   include/buildgear/signals.h \
    include/buildgear/fakeroot.h \
    include/buildgear/buildfile.h \
    include/buildgear/buildfiles.h \

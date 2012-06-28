@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdlib>
 #include "buildgear/config.h"
+#include "buildgear/signals.h"
 #include "buildgear/fakeroot.h"
 #include "buildgear/configfile.h"
 #include "buildgear/debug.h"
@@ -15,6 +16,7 @@
 #include "buildgear/download.h"
 #include "buildgear/buildsystem.h"
 
+CSignals      Signals;
 CFakeroot     Fakeroot;
 CDebug        Debug(cout);
 CConfig       Config;
@@ -35,7 +37,10 @@ int main (int argc, char *argv[])
 
    /* Start counting elapsed time */
    Clock.Start();
-   
+
+   /* Install custom signal handlers */
+   Signals.Install();
+
    /* Disable cursor */
 //   cout << TERMINFO_CIVIS;
    

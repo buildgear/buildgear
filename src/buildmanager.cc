@@ -4,11 +4,12 @@
 #include <stdexcept>
 #include <sstream>
 #include <iostream>
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include <sstream>
+#include <signal.h>
 #include <linux/limits.h>
 #include <semaphore.h>
 #include "buildgear/config.h"
@@ -54,6 +55,7 @@ void* buildThread::run() {
 
 void CBuildManager::Do(string action, CBuildFile* buildfile)
 {
+   int result;
    string config;
    string command;
    stringstream pid;
@@ -124,9 +126,13 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    
    pthread_mutex_unlock(&cout_mutex);
    
-   if (system(command.c_str()) != 0)
+   result = system(command.c_str());
+   if (result != 0)
    {
-      cout << "Failed" << endl;
+      if (WIFSIGNALED(result) && (WTERMSIG(result) == SIGINT))
+         cout << "\n\nInterrupt signal received - stopped!\n";
+      else
+         cout << "\nsystem() failed\n";
       exit(EXIT_FAILURE);
    }
 }
