@@ -15,17 +15,25 @@ AC_PROG_CC
 AC_PROG_LN_S
 
 # Check for libraries and their interfaces
-AC_CHECK_LIB([rt], [clock_gettime])
-AC_CHECK_LIB([curl-gnutls], [curl_global_init])
-AC_CHECK_LIB([curl-gnutls], [curl_easy_init])
-AC_CHECK_LIB([curl-gnutls], [curl_easy_setopt])
-AC_CHECK_LIB([curl-gnutls], [curl_easy_perform])
-AC_CHECK_LIB([curl-gnutls], [curl_easy_cleanup])
-AC_CHECK_LIB([curl-gnutls], [curl_global_cleanup])
-AC_CHECK_LIB([curl-gnutls], [curl_easy_strerror])
+AC_CHECK_LIB([rt], [clock_gettime], , AC_MSG_ERROR([rt not found]))
+
+curl_gnutls=1
+AC_CHECK_LIB([curl-gnutls], [curl_global_init], , [curl_gnutls=0])
+AC_CHECK_LIB([curl-gnutls], [curl_easy_init], , [curl_gnutls=0])
+AC_CHECK_LIB([curl-gnutls], [curl_easy_setopt], , [curl_gnutls=0])
+AC_CHECK_LIB([curl-gnutls], [curl_easy_perform], , [curl_gnutls=0])
+AC_CHECK_LIB([curl-gnutls], [curl_easy_cleanup], , [curl_gnutls=0])
+AC_CHECK_LIB([curl-gnutls], [curl_global_cleanup], , [curl_gnutls=0])
+AC_CHECK_LIB([curl-gnutls], [curl_easy_strerror], , [curl_gnutls=0])
+
+if test $curl_gnutls == 0
+then
+	AC_MSG_ERROR([curl-gnutls not found])
+fi
 
 # Check for header files
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
+AC_CHECK_HEADERS([curl/curl.h])
 
 # Check for typedefs, structures, and compiler characteristics
 AC_HEADER_STDBOOL
