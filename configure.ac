@@ -4,7 +4,7 @@
 #
 
 AC_PREREQ([2.68])
-AC_INIT([buildgear], [0.8beta], [bug-report@buildgear.org])
+AC_INIT([buildgear], [0.10alpha], [bug-report@buildgear.org])
 AC_CONFIG_HEADERS([src/include/config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 
