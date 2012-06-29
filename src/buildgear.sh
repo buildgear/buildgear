@@ -273,9 +273,6 @@ do_footprint() {
          fi
          mv $FILE.footprint $BG_BUILD_FOOTPRINT
       fi
-   else
-      error "Package '$BG_BUILD_PACKAGE' was not found"
-      exit 1
    fi
 }
 
