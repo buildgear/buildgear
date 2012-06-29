@@ -1,3 +1,4 @@
+*.tar.xz
 src/buildgear
 src/*.o
 Makefile.in

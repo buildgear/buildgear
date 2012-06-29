@@ -6,7 +6,7 @@
 AC_PREREQ([2.68])
 AC_INIT([buildgear], [0.10alpha], [bug-report@buildgear.org])
 AC_CONFIG_HEADERS([src/include/config.h])
-AM_INIT_AUTOMAKE([-Wall -Werror])
+AM_INIT_AUTOMAKE([dist-xz no-dist-gzip -Wall -Werror])
 
 # Check for programs
 AC_PROG_AWK
