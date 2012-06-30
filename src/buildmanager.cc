@@ -209,8 +209,10 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       }
    }
 
-   // Only build if selected build requires a build
-   if (buildfiles->back()->build)
+   // Only build if main build requires a build
+   if ((buildfiles->back()->build) ||
+       (Config.update_footprint=="yes") ||
+       (Config.update_checksum=="yes"))
    {
       cout << endl;
       
@@ -239,7 +241,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
 
          it++;
 
-// FIXME: Fix broken thread implementation
+// FIXME: Fix broken thread implementation (replace with c++11 threads)
 //         int i=0;
 //         while ( ((*it)->depth == current_depth) && (it != buildfiles->end()))
 //         {
