@@ -1,3 +1,12 @@
+   #     #    #    ######  #     #   ###   #     #  #####
+   #  #  #   # #   #     # ##    #    #    ##    # #     #
+   #  #  #  #   #  #     # # #   #    #    # #   # #
+   #  #  # #     # ######  #  #  #    #    #  #  # #  ####
+   #  #  # ####### #   #   #   # #    #    #   # # #     #
+   #  #  # #     # #    #  #    ##    #    #    ## #     #
+    ## ##  #     # #     # #     #   ###   #     #  #####
+
+   ### This is an alpha release - use at your own risk! ###
 
 === Build Gear ===
 
@@ -9,7 +18,7 @@
    simple, which is reflected in a straightforward command line build interface,
    and easy to maintain build files. The secondary focus is build performance
    and build integrity. Build Gear is easy to use and well suited for rapid
-   product or prototype development of firmware to deploy in small to medium 
+   product and prototype development of firmware to deploy in small to medium 
    sized systems.
 
 
@@ -20,7 +29,8 @@
 
 3. Documentation
 
-   Visit http://www.buildgear-project.org/doc for documentation.
+   Visit http://www.buildgear.org for detailed documentation on how to
+   use the Build Gear tool and also on how to create build files.
 
 
 4. License
@@ -33,7 +43,7 @@
    Go visit http://www.buildgear.org
 
 
-6. Bugs / feature requests
+6. Bugs and feature requests
 
    Please report any bugs or feature requests in the github issue tracker:   
    http://github.com/buildgear/buildgear/issues
