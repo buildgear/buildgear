@@ -9,7 +9,7 @@ class CBuildSystem : public CFileSystem
 {
    public:
       void Check(void);
-      void RunCheckFile(void);
+      void CallCheck(list<CBuildFile*> *buildfiles);
       void ShowLog(void);
    private:
 };

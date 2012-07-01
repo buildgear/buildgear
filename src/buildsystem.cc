@@ -6,6 +6,8 @@
 #include <getopt.h>
 #include "buildgear/config.h"
 #include "buildgear/buildsystem.h"
+#include "buildgear/buildfile.h"
+#include "buildgear/buildfiles.h"
 #include "buildgear/filesystem.h"
 
 extern CFileSystem FileSystem;
@@ -55,19 +57,25 @@ void CBuildSystem::Check(void)
    }
 }
 
-void CBuildSystem::RunCheckFile(void)
+void CBuildSystem::CallCheck(list<CBuildFile*> *buildfiles)
 {
    int result;
+   string command;
+   list<CBuildFile*>::iterator it;
    
-   // Run buildfiles/tools file
-   if (FileExist(string(BUILD_FILES_CHECK)))
+   /* Traverse through all buildfiles */
+   for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
-      result = system("bash -c 'source " BUILD_FILES_CHECK " 2> /dev/null'");
-      if (result != 0)
+      if ((*it)->check == "yes")
       {
-         cout << endl << "Please install missing tools or libraries." 
-              << endl << endl;
-         exit(EXIT_FAILURE);
+         command = "bash -c 'source " + (*it)->filename + "; check 1> /dev/null'";
+         result = system(command.c_str());
+         if (result != 0)
+         {
+            cout << endl << "Build system check failed - please install missing tools or libraries."
+                 << endl << endl;
+            exit(EXIT_FAILURE);
+         }
       }
    }
 }

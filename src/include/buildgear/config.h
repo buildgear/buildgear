@@ -68,7 +68,6 @@ class CConfig : public CUtility
 #define GLOBAL_CONFIG_FILE       "~/.buildgearconfig"
 #define LOCAL_CONFIG_FILE        ROOT_DIR "/config"
 #define BUILD_FILES_CONFIG       BUILD_FILES_DIR "/config"
-#define BUILD_FILES_CHECK        BUILD_FILES_DIR "/check"
 #define BUILD_FILES_README       BUILD_FILES_DIR "/readme"
 
 #define KEY_NAME                 "name"

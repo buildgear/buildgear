@@ -216,7 +216,7 @@ int main (int argc, char *argv[])
    /* Check for build system prerequisites */
    cout << "Running build system check..    " << flush;
    BuildSystem.Check();
-   BuildSystem.RunCheckFile();
+   BuildSystem.CallCheck(&BuildFiles.buildfiles);
    cout << "Done\n\n";
    
    /* Show system information */
