@@ -263,7 +263,7 @@ void COptions::ShowHelp(char *argv[])
 
 void COptions::ShowVersion(void)
 {
-   cout << "buildgear " << VERSION << "\n";
+   cout << "Build Gear " << VERSION << "\n";
    cout << "Copyright (C) 2011-2012 Martin Lund\n";
    cout << "\n";
    cout << "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n";
