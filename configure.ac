@@ -6,7 +6,7 @@
 AC_PREREQ([2.68])
 AC_INIT([Build Gear], [0.9.1alpha], [bug-report@buildgear.org], [buildgear], [http://www.buildgear.org])
 AC_CONFIG_HEADERS([src/include/config.h])
-AM_INIT_AUTOMAKE([dist-xz no-dist-gzip -Wall -Werror])
+AM_INIT_AUTOMAKE([foreign dist-xz no-dist-gzip -Wall -Werror])
 
 # Check for programs
 AC_PROG_AWK
