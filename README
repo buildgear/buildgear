@@ -8,8 +8,9 @@
    users and developers. The primary focus of this build system is to keep it
    simple, which is reflected in a straightforward command line build interface,
    and easy to maintain build files. The secondary focus is build performance
-   and build integrity. Build Gear is easy to use and well suited for rapid product 
-   and prototype development of small to medium sized systems.
+   and build integrity. Build Gear is easy to use and well suited for rapid
+   product or prototype development of firmware to deploy in small to medium 
+   sized systems.
 
 
 2. Installation
@@ -29,7 +30,7 @@
 
 5. Website
 
-   Go visit http://www.buildgear-project.org
+   Go visit http://www.buildgear.org
 
 
 6. Bugs / feature requests
