@@ -1,5 +1,6 @@
-Prerequisites:
+Requirements:
 
+   g++
    libcurl4-gnutls-dev
 
 Installation:
