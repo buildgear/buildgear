@@ -9,10 +9,7 @@ AC_CONFIG_HEADERS([src/include/config.h])
 AM_INIT_AUTOMAKE([foreign dist-xz no-dist-gzip -Wall -Werror])
 
 # Check for programs
-AC_PROG_AWK
 AC_PROG_CXX
-AC_PROG_CC
-AC_PROG_LN_S
 
 # Check for libraries and their interfaces
 AC_CHECK_LIB([rt], [clock_gettime], , AC_MSG_ERROR([rt not found]))
