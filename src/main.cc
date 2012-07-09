@@ -129,7 +129,7 @@ int main (int argc, char *argv[])
                         &BuildFiles.buildfiles);
 
    /* Print number of buildfiles found */
-   cout << BuildFiles.buildfiles.size() << " files found\n";
+   cout << "Done (" << BuildFiles.buildfiles.size() << " files)\n";
 
    /* Parse and verify buildfiles */
    cout << "Loading build files..           " << flush;
@@ -167,7 +167,7 @@ int main (int argc, char *argv[])
       cout << "Resolving dependencies..        ";
       Dependency.ResolveSequentialBuildOrder(Config.name, &BuildFiles.buildfiles);
       Dependency.ResolveParallelBuildOrder(); // TODO: Fix parallel build support
-      cout << "Done\n";
+      cout << "Done (" << (Dependency.resolved.size()-1) << " dependencies)\n";
    }
 
    /* Handle show options */
@@ -221,7 +221,7 @@ int main (int argc, char *argv[])
    cout << "Done\n";
    
    /* Show system information */
-   cout << "Detecting BUILD type..          " << Config.build_system << endl;
+   cout << "Detected BUILD type..           " << Config.build_system << endl;
    cout << "Configured HOST type..          " << Config.host_system << endl;
    cout << endl;
    
