@@ -97,8 +97,8 @@ int main (int argc, char *argv[])
          exit(EXIT_SUCCESS);
    }
 
-   /* Guess build system */
-   Config.GuessSystem();
+   /* Guess build system type */
+   Config.GuessBuildSystem();
 
    /* Parse buildgear configuration file(s) */
    ConfigFile.Parse(GLOBAL_CONFIG_FILE);
@@ -218,10 +218,12 @@ int main (int argc, char *argv[])
    cout << "Running build system check..    " << flush;
    BuildSystem.Check();
    BuildSystem.CallCheck(&BuildFiles.buildfiles);
-   cout << "Done\n\n";
+   cout << "Done\n";
    
    /* Show system information */
-   Config.ShowSystem();
+   cout << "Detecting BUILD type..          " << Config.build_system << endl;
+   cout << "Configured HOST type..          " << Config.host_system << endl;
+   cout << endl;
    
    /* Delete old build log */
    BuildManager.CleanLog();

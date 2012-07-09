@@ -89,7 +89,7 @@ void CConfig::CorrectSourceDir(void)
    }
 }
 
-void CConfig::GuessSystem(void)
+void CConfig::GuessBuildSystem(void)
 {
       FILE *fp;
       char line_buffer[PATH_MAX];
@@ -105,12 +105,4 @@ void CConfig::GuessSystem(void)
       }
       
       pclose(fp);
-}
-
-void CConfig::ShowSystem(void)
-{
-   cout << "Building '" << CConfig::name << "' for:" << endl;
-   cout << "   BUILD  = " << CConfig::build_system << endl;
-   cout << "   HOST   = " << CConfig::host_system << endl;
-   cout << endl;
 }

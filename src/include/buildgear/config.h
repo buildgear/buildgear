@@ -45,8 +45,7 @@ class CConfig : public CUtility
       CConfig();
       void CorrectName(void);
       void CorrectSourceDir(void);
-      void GuessSystem(void);
-      void ShowSystem(void);
+      void GuessBuildSystem(void);
    private:
 };
 
