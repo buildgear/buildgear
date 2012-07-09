@@ -253,7 +253,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "Show options:\n";
    cout << "  --build-order           Show build order\n";
    cout << "  --download-order        Show download order\n";
-   cout << "  --dependency            Show dependecy graph\n";
+   cout << "  --dependency            Show dependency graph\n";
    cout << "  --readme                Show buildfiles readme\n";
    cout << "  --log                   Show build log\n\n";
    cout << "Options:\n";
