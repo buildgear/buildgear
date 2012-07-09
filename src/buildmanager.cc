@@ -72,6 +72,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    config += " BG_BUILD_TYPE=" + buildfile->type;
    config += " BG_WORK_DIR=" WORK_DIR;
    config += " BG_PACKAGE_DIR=" PACKAGE_DIR;
+   config += " BG_OUTPUT_DIR=" OUTPUT_DIR;
    config += " BG_SOURCE_DIR=" SOURCE_DIR;
    config += " BG_SYSROOT_DIR=" SYSROOT_DIR;
    config += " BG_BUILD_LOG=" BUILD_LOG;

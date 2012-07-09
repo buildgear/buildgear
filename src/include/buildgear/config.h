@@ -57,6 +57,7 @@ class CConfig : public CUtility
 #define BUILD_FILES_NATIVE_DIR   BUILD_FILES_DIR "/native"
 #define BUILD_FILES_CROSS_DIR    BUILD_FILES_DIR "/cross"
 #define BUILD_DIR                "build"
+#define OUTPUT_DIR               BUILD_DIR "/output"
 #define SOURCE_DIR               BUILD_DIR "/source"
 #define WORK_DIR                 BUILD_DIR "/work"
 #define PACKAGE_DIR              BUILD_DIR "/package"

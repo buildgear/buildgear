@@ -338,6 +338,7 @@ main() {
    parse_options "$@"
 
    BG_ROOT_DIR="$PWD"
+   BG_OUTPUT_DIR="$BG_ROOT_DIR/$BG_OUTPUT_DIR"
    BG_SOURCE_DIR="$BG_ROOT_DIR/$BG_SOURCE_DIR"
    BG_BUILD_FILE_DIR="`dirname $BG_BUILD_FILE`"
    BG_BUILD_PACKAGE_DIR="$BG_ROOT_DIR/$BG_PACKAGE_DIR/$BG_BUILD_TYPE"
@@ -348,6 +349,7 @@ main() {
    BG_SYSROOT_NATIVE_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/native"
    BG_SYSROOT_CROSS_DIR="$BG_ROOT_DIR/$BG_SYSROOT_DIR/cross"
 
+   # Special config and build file variables
    export NATIVE_SYSROOT="$BG_SYSROOT_NATIVE_DIR"
    export CROSS_SYSROOT="$BG_SYSROOT_CROSS_DIR"
 
@@ -374,9 +376,10 @@ main() {
    BG_BUILD_WORK_DIR="$BG_WORK_DIR/$BG_BUILD_TYPE/$name"
    BG_BUILD_PACKAGE="$BG_BUILD_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
 
+   # Special build file variables
    export PKG="$BG_ROOT_DIR/$BG_BUILD_WORK_DIR/pkg"
    export SRC="$BG_ROOT_DIR/$BG_BUILD_WORK_DIR/src"
-   export BLD="$BG_ROOT_DIR/build"
+   export OUTPUT="$BG_OUTPUT_DIR"
    export BUILD="$BG_BUILD"
    export HOST="$BG_HOST"
    export SYSROOT="$BG_BUILD_SYSROOT_DIR"

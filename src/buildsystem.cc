@@ -61,6 +61,8 @@ void CBuildSystem::CallCheck(list<CBuildFile*> *buildfiles)
 {
    int result;
    string command;
+   string check_tool_cmd = " check_tool() { type $1 &> /dev/null; if [ $? != 0 ]; then echo \"Failed ($1 is not found)\"; exit 1; fi }; ";
+   string check_lib_cmd = " check_lib() { test -e $1 &> /dev/null; if [ $? != 0 ]; then echo \"Failed ($1 is not found)\"; exit 1; fi }; ";
    list<CBuildFile*>::iterator it;
    
    /* Traverse through all buildfiles */
@@ -68,12 +70,12 @@ void CBuildSystem::CallCheck(list<CBuildFile*> *buildfiles)
    {
       if ((*it)->check == "yes")
       {
-         command = "bash -c 'source " + (*it)->filename + "; check 1> /dev/null'";
+         command = "bash -c '" + check_tool_cmd + check_lib_cmd + " source " + (*it)->filename + "; check '";
          result = system(command.c_str());
          if (result != 0)
          {
-            cout << endl << "Build system check failed - please install missing tools or libraries."
-                 << endl << endl;
+            cout << endl << "Build system check failed for " << (*it)->filename << endl << endl;
+            cout << "Please install missing tools or libraries." << endl << endl;
             exit(EXIT_FAILURE);
          }
       }

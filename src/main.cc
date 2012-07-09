@@ -180,7 +180,8 @@ int main (int argc, char *argv[])
          Dependency.ShowBuildOrder();
          
       if (Config.dependency_circle)
-         Dependency.ShowDependencyCircleSVG(BUILD_DIR "/dependency." + Config.name_stripped + ".svg");
+         FileSystem.CreateDirectory(OUTPUT_DIR);
+         Dependency.ShowDependencyCircleSVG(OUTPUT_DIR "/dependency." + Config.name_stripped + ".svg");
       cout << endl;
       
       exit(EXIT_SUCCESS);
@@ -228,6 +229,9 @@ int main (int argc, char *argv[])
    /* Delete old work */
    BuildManager.CleanWork();
    
+   /* Create build output directory */
+   FileSystem.CreateDirectory(OUTPUT_DIR);
+
    /* Start building */
    cout << "Building '" << Config.name << "'.. " << flush;
    BuildManager.Build(&Dependency.parallel_build_order);
