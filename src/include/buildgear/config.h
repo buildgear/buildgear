@@ -30,6 +30,7 @@ class CConfig : public CUtility
       bool download_order;
       bool dependency_circle;
       bool readme;
+      bool show_version;
       bool log;
       
       bool all;

@@ -40,6 +40,7 @@ CConfig::CConfig()
    download_order = false;
    dependency_circle = false;
    readme = false;
+   show_version = false;
    log = false;
 
    // Misc defaults

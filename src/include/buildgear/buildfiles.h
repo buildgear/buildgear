@@ -20,6 +20,8 @@ class CBuildFiles : public CUtility
       void AddCrossDependency(void);
       void ShowMeta(void);
       void ShowReadme(void);
+      void ShowVersion(CBuildFile *buildfile);
+      void ShowVersions(list<CBuildFile*> *buildfiles);
       CBuildFile * BuildFile(string name);
       list<CBuildFile*> cross_dependency;
    private:

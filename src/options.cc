@@ -141,6 +141,7 @@ void COptions::Parse(int argc, char *argv[])
          {"dependency",          no_argument, 0, 'c'},
          {"readme",              no_argument, 0, 'r'},
          {"log",                 no_argument, 0, 'l'},
+         {"version",             no_argument, 0, 'v'},
          {0,                     0,           0,  0 }
       };
       
@@ -163,6 +164,9 @@ void COptions::Parse(int argc, char *argv[])
                break;				
             case 'l':
                Config.log = true;
+               break;
+            case 'v':
+               Config.show_version = true;
                break;
             default:
                exit(EXIT_FAILURE);
@@ -255,6 +259,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --download-order        Show download order\n";
    cout << "  --dependency            Show dependency graph\n";
    cout << "  --readme                Show buildfiles readme\n";
+   cout << "  --version               Show build version\n";
    cout << "  --log                   Show build log\n\n";
    cout << "Options:\n";
    cout << "  --version               Display version\n";

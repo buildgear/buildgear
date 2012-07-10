@@ -70,7 +70,7 @@ int main (int argc, char *argv[])
    }
 
    /* Display help hint on incorrect show command */
-   if ((Config.show) && (Config.name == "") && (!Config.readme) && (!Config.log))
+   if ((Config.show) && (Config.name == "") && (!Config.readme) && (!Config.log) && (!Config.show_version))
    {
       cout << "Please specify build name to show\n";
       exit(EXIT_FAILURE);
@@ -134,7 +134,7 @@ int main (int argc, char *argv[])
    /* Parse and verify buildfiles */
    cout << "Loading build files..           " << flush;
    BuildFiles.ParseAndVerify();
-   
+
    /* Show buildfiles meta info (debug only) */
    BuildFiles.ShowMeta();
    
@@ -150,6 +150,13 @@ int main (int argc, char *argv[])
       BuildFiles.AddCrossDependency();
    }
    cout << "Done\n";
+
+   /* Show version of build */
+   if (Config.show_version)
+   {
+         BuildFiles.ShowVersion(BuildFiles.BuildFile(Config.name));
+         exit(EXIT_SUCCESS);
+   }
 
    /* Handle clean command */
    if (Config.clean)
@@ -180,10 +187,11 @@ int main (int argc, char *argv[])
          Dependency.ShowBuildOrder();
          
       if (Config.dependency_circle)
+      {
          FileSystem.CreateDirectory(OUTPUT_DIR);
          Dependency.ShowDependencyCircleSVG(OUTPUT_DIR "/dependency." + Config.name_stripped + ".svg");
+      }
       cout << endl;
-      
       exit(EXIT_SUCCESS);
    }
    

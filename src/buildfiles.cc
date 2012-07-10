@@ -143,6 +143,11 @@ void CBuildFiles::ShowMeta(void)
    }
 }
 
+void CBuildFiles::ShowVersion(CBuildFile *buildfile)
+{
+   cout << endl << buildfile->name << " " << buildfile->version << "-" << buildfile->release << endl << endl;
+}
+
 void CBuildFiles::LoadDependency(void)
 {
    list<CBuildFile*>::iterator it, itr;
