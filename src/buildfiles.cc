@@ -41,7 +41,8 @@ void CBuildFiles::ParseAndVerify(void)
                          ; echo release=$release \
                          ; echo source=${source[@]} \
                          ; echo depends=${depends[@]} \
-                         ; type check &> /dev/null && echo check=yes || echo check=no'";
+                         ; type build &> /dev/null && echo build_function=yes || echo build_function=no \
+                         ; type check &> /dev/null && echo check_function=yes || echo check_function=no'"; \
 
       // Open buildfile for reading
       fp = popen(command.c_str(), "r");
@@ -98,8 +99,10 @@ void CBuildFiles::ParseAndVerify(void)
             (*it)->source = value;
          if (key == KEY_DEPENDS)
             (*it)->depends = value;
-         if (key == "check")
-            (*it)->check = value;
+         if (key == "build_function")
+            (*it)->build_function = value;
+         if (key == "check_function")
+            (*it)->check_function = value;
       }
       pclose(fp);
 

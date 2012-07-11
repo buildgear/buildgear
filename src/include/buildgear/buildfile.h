@@ -17,7 +17,8 @@ class CBuildFile
       string source;
       string depends;
       string type;
-      string check;
+      string build_function;
+      string check_function;
       bool build;
       bool visited;
       int depth;
