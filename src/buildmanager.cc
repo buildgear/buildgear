@@ -234,11 +234,15 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       it=buildfiles->begin();
       while (it != buildfiles->end())
       {
-         Do("build", *it);
+         // Do not build nor add buildfiles which does not build anything
+         if ((*it)->build_function == "yes")
+         {
+            Do("build", *it);
 
-         // Don't add last build
-         if (*it != last_build)
-            Do("add", *it);
+            // Don't add last build
+            if (*it != last_build)
+               Do("add", *it);
+         }
 
          it++;
 
