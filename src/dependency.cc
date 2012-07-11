@@ -191,6 +191,7 @@ void CDependency::ShowDependencyCircleSVG(string filename)
    {
 	   Svg.addCircle((*it)->x, (*it)->y,
 	                  (*it)->short_name,
+	                  (*it)->version,
 			  (*it)->type == "cross" ? SVG_COLOR_CROSS : SVG_COLOR_NATIVE,
 			  ((int)build_order.size() != i+1) ? SVG_DASH_NO : SVG_DASH);
    }
