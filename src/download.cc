@@ -215,6 +215,9 @@ int CDownload::File(string url, string filename)
       // Fail on http error (400+)
       curl_easy_setopt(curl, CURLOPT_FAILONERROR, true);
 
+      // Follow URL redirections
+      curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, true);
+
       // Define progress indication callback
       curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progress);
 
