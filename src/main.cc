@@ -229,8 +229,8 @@ int main (int argc, char *argv[])
    cout << "Done\n";
    
    /* Show system information */
-   cout << "Detected BUILD type..           " << Config.build_system << endl;
-   cout << "Configured HOST type..          " << Config.host_system << endl;
+   cout << "Detected BUILD system type..    " << Config.build_system << endl;
+   cout << "Configured HOST system type..   " << Config.host_system << endl;
    cout << endl;
    
    /* Delete old build log */
