@@ -359,19 +359,6 @@ main() {
       . $BG_BUILD_FILES_CONFIG
    fi
 
-   # Call environment functions in 'config' file
-   if [ "$BG_BUILD_TYPE" = "cross" ]; then
-      function_exist cross_env
-      if [ $? -eq 0 ]; then
-         cross_env
-      fi
-   elif [ "$BG_BUILD_TYPE" = "native" ]; then
-      function_exist native_env
-      if [ $? -eq 0 ]; then
-         native_env
-      fi
-   fi
-   
    do_buildfile
 
    BG_BUILD_WORK_DIR="$BG_WORK_DIR/$BG_BUILD_TYPE/$name"
