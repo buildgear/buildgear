@@ -352,9 +352,10 @@ main() {
    # Special config and build file variables
    export NATIVE_SYSROOT="$BG_SYSROOT_NATIVE_DIR"
    export CROSS_SYSROOT="$BG_SYSROOT_CROSS_DIR"
+   export BUILD_TYPE="$BG_BUILD_TYPE"
 
    # Include buildfiles configuration
-	if [ -f $1 ]; then
+   if [ -f $1 ]; then
       . $BG_BUILD_FILES_CONFIG
    fi
 
