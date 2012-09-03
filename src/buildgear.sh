@@ -155,7 +155,7 @@ do_extract() {
             COMMAND="tar -C $SRC --use-compress-program=bzip2 -xf $LOCAL_FILENAME" ;;
          *.zip)
             COMMAND="unzip -qq -o -d $SRC $LOCAL_FILENAME" ;;
-         *.tar.xz| *.txz)
+         *.tar.xz| *.txz | *.tar.lzma)
             COMMAND="tar -C $SRC --use-compress-program=xz -xf $LOCAL_FILENAME" ;;
          *)
             COMMAND="cp $LOCAL_FILENAME $SRC" ;;
