@@ -12,7 +12,7 @@ void CFakeroot::Respawn(int argc, char *argv[])
    int status;
 
    // Check for installed fakeroot utility
-   status = system("type fakeroot &> /dev/null");
+   status = system("type fakeroot 2>&1 > /dev/null");
    if (status != 0)
    {
       cout << "\nFakeroot is not found - please install.\n\n";

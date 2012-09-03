@@ -1,6 +1,7 @@
 #include "config.h"
 #include <iostream>
 #include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <getopt.h>
@@ -14,9 +15,10 @@ extern CFileSystem FileSystem;
 
 void CBuildSystem::Check(void)
 {
+   FILE *fp;
+   char cmd_result[5];
    int status, i=0;
    string tool[] = {      "bash",
-                      "fakeroot",
                      "sha256sum",
                            "sed",
                            "awk",
@@ -39,21 +41,46 @@ void CBuildSystem::Check(void)
                        "dirname",
                       "basename",
                        "unalias",
+                      "readlink",
                               "" };
 
    while (tool[i] != "")
    {
-      string command = "type " + tool[i] + " > /dev/null";
+      string command = "type " + tool[i] + " &> /dev/null";
       
       status = system(command.c_str());
       
       if (status != 0)
       {
-         cout << "Failed ('" << tool[i] << "' is not found)" << endl;
+         cout << "Failed ('" << tool[i] << "' is not found)\n";
+         cout << "\nPlease install missing tool.\n\n";
          exit(EXIT_FAILURE);
       }
       
       i++;
+   }
+
+   // Make sure that /bin/sh points to bash!
+   fp = popen("readlink /bin/sh", "r");
+   if (fp == NULL)
+   {
+      cout << "Error popen" << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   if (fgets(cmd_result, 5, fp) == NULL)
+   {
+      cout << "fgets error" << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   pclose(fp);
+   string result(cmd_result);
+
+   if (result != "bash")
+   {
+      cout << "\n\nPlease make sure /bin/sh links to bash.\n\n";
+      exit(EXIT_FAILURE);
    }
 }
 
