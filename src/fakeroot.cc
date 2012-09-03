@@ -9,6 +9,15 @@ void CFakeroot::Respawn(int argc, char *argv[])
 {
    FILE *fp;
    char cmd_result[5];
+   int status;
+
+   // Check for installed fakeroot utility
+   status = system("type fakeroot &> /dev/null");
+   if (status != 0)
+   {
+      cout << "\nFakeroot is not found - please install.\n\n";
+      exit(EXIT_FAILURE);
+   }
 
    // Check user is "root"
    fp = popen("whoami", "r");
