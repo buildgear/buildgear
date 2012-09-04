@@ -183,11 +183,15 @@ do_build() {
 
 do_strip() {
    local FILE FILTER
-	
+
+   if [ -f $BG_BUILD_NOSTRIP ] && [ ! -s $BG_BUILD_NOSTRIP ]; then
+      return
+   fi
+
    log_action "Strip    "
-   
+
    cd $PKG
-	
+
    if [ -f $BG_BUILD_NOSTRIP ]; then
       FILTER="grep -v -f $BG_BUILD_NOSTRIP"
    else
@@ -214,7 +218,7 @@ do_strip() {
       error "Strip failed"
       exit 1
    fi
-   
+
    cd $BG_ROOT_DIR
 }
 
