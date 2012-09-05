@@ -243,7 +243,11 @@ int CDownload::File(string url, string filename)
       if(result != CURLE_OK)
       {
          // Download failure
-         cout << "\r   Error: " << curl_easy_strerror(result) << endl;
+         long response_code = 0;
+         curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &response_code);
+
+         cout << setw (80) << "\r   Error: " << curl_easy_strerror(result)
+                           << " (error " << response_code << ")" << endl;
       }
       
       cout << endl;
