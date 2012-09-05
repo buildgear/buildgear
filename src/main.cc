@@ -197,7 +197,15 @@ int main (int argc, char *argv[])
       cout << endl;
       exit(EXIT_SUCCESS);
    }
-   
+
+   if (Config.build)
+   {
+      /* Check for build system prerequisites */
+      cout << "Running build system checks..   " << flush;
+      BuildSystem.CallCheck(&Dependency.build_order);
+      cout << "Done\n";
+   }
+
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
 
@@ -224,12 +232,7 @@ int main (int argc, char *argv[])
    /* Quit if download command is used */
    if (Config.download)
       exit(EXIT_SUCCESS);
-   
-   /* Check for build system prerequisites */
-   cout << "Running build system checks..   " << flush;
-   BuildSystem.CallCheck(&Dependency.build_order);
-   cout << "Done\n";
-   
+
    /* Show system information */
    cout << "Detected BUILD system type..    " << Config.build_system << endl;
    cout << "Configured HOST system type..   " << Config.host_system << endl;
