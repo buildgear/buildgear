@@ -43,7 +43,10 @@ int main (int argc, char *argv[])
 
    /* Disable cursor */
 //   cout << TERMINFO_CIVIS;
-   
+
+   /* Make sure basic tools are installed */
+   BuildSystem.Check();
+
    /* Parse command line options */
    Options.Parse(argc, argv);
    
@@ -86,15 +89,15 @@ int main (int argc, char *argv[])
    /* Show buildfiles readme */
    if ((Config.show) && (Config.readme))
    {
-         BuildFiles.ShowReadme();
-         exit(EXIT_SUCCESS);
+      BuildFiles.ShowReadme();
+      exit(EXIT_SUCCESS);
    }
 
    /* Show build log */
-   if ((Config.show) && (Config.log))
+   if (Config.show && Config.log)
    {
-         BuildSystem.ShowLog();
-         exit(EXIT_SUCCESS);
+      BuildSystem.ShowLog();
+      exit(EXIT_SUCCESS);
    }
 
    /* Guess build system type */
@@ -154,8 +157,8 @@ int main (int argc, char *argv[])
    /* Show version of build */
    if (Config.show_version)
    {
-         BuildFiles.ShowVersion(BuildFiles.BuildFile(Config.name));
-         exit(EXIT_SUCCESS);
+      BuildFiles.ShowVersion(BuildFiles.BuildFile(Config.name));
+      exit(EXIT_SUCCESS);
    }
 
    /* Handle clean command */
@@ -223,8 +226,7 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    
    /* Check for build system prerequisites */
-   cout << "Running build system check..    " << flush;
-   BuildSystem.Check();
+   cout << "Running build system checks..   " << flush;
    BuildSystem.CallCheck(&Dependency.build_order);
    cout << "Done\n";
    

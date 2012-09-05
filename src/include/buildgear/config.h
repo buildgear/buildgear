@@ -32,6 +32,7 @@ class CConfig : public CUtility
       bool readme;
       bool show_version;
       bool log;
+      bool log_tail;
       
       bool all;
 

@@ -42,6 +42,7 @@ void CBuildSystem::Check(void)
                       "basename",
                        "unalias",
                       "readlink",
+                          "tail",
                               "" };
 
    while (tool[i] != "")
@@ -110,5 +111,9 @@ void CBuildSystem::CallCheck(list<CBuildFile*> *buildfiles)
 void CBuildSystem::ShowLog(void)
 {
    string log_file = Config.root + "/" + string(BUILD_LOG);
-   FileSystem.Cat(log_file);
+
+   if (Config.log_tail)
+      FileSystem.Tail(log_file);
+   else
+      FileSystem.Cat(log_file);
 }

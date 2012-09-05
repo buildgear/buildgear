@@ -183,24 +183,19 @@ void CFileSystem::Move(string source, string destination)
 
 void CFileSystem::Cat(string filename)
 {
-   ifstream fin;
-   char s[100000];
+   int status;
+   string command = "cat " + filename;
 
-   if (FileExist(filename))
-   {
-      fin.open(filename.c_str(), ios::in);
+   status = system(command.c_str());
 
-      if(fin.fail())
-      {
-         cout << "Error: Unable to open " << filename << endl;
-         exit(EXIT_FAILURE);
-      }
+   if (status != 0)
+      throw std::runtime_error(strerror(errno));
+}
 
-      while(!fin.fail() && !fin.eof())
-      {
-         fin.getline(s, 100000);
-            cout << s << endl;
-      }
-      fin.close();
-   }
+void CFileSystem::Tail(string filename)
+{
+   int status;
+   string command = "tail -f " + filename;
+
+   status = system(command.c_str());
 }

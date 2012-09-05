@@ -141,6 +141,7 @@ void COptions::Parse(int argc, char *argv[])
          {"dependency",          no_argument, 0, 'c'},
          {"readme",              no_argument, 0, 'r'},
          {"log",                 no_argument, 0, 'l'},
+         {"log-tail",            no_argument, 0, 't'},
          {"version",             no_argument, 0, 'v'},
          {0,                     0,           0,  0 }
       };
@@ -164,6 +165,10 @@ void COptions::Parse(int argc, char *argv[])
                break;				
             case 'l':
                Config.log = true;
+               break;
+            case 't':
+               Config.log = true;
+               Config.log_tail = true;
                break;
             case 'v':
                Config.show_version = true;
@@ -237,33 +242,41 @@ void COptions::Parse(int argc, char *argv[])
 
 void COptions::ShowHelp(char *argv[])
 {
-   cout << "Usage: " << argv[0] << " [COMMAND] [OPTIONS] [BUILD NAME]\n\n";
+   cout << "Usage: " << argv[0] << " [COMMAND] [OPTIONS] [BUILD NAME]\n";
+   cout << "\n";
    cout << "Commands:\n";
    cout << "  download                Download source files\n";
    cout << "  build                   Build\n";
    cout << "  clean                   Clean\n";
-   cout << "  show                    Show various information\n\n";
+   cout << "  show                    Show various information\n";
+   cout << "\n";
    cout << "Download options:\n";
-   cout << "  --all                   Download source files of all builds or build dependencies\n\n";
+   cout << "  --all                   Download source files of all builds or build dependencies\n";
+   cout << "\n";
    cout << "Build options:\n";
    cout << "  --keep-work             Do not delete work files\n";
    cout << "  --update-checksum       Update source checksum\n";
    cout << "  --update-footprint      Update footprint\n";
    cout << "  --no-strip              Do not strip libraries and executables\n";
    cout << "  --no-fakeroot           Do not use fakeroot\n";
-   cout << "  --all                   Apply to all build dependencies\n\n";
+   cout << "  --all                   Apply to all build dependencies\n";
+   cout << "\n";
    cout << "Clean options:\n";
-   cout << "  --all                   Clean all builds or build dependencies\n\n";
+   cout << "  --all                   Clean all builds or build dependencies\n";
+   cout << "\n";
    cout << "Show options:\n";
    cout << "  --build-order           Show build order\n";
    cout << "  --download-order        Show download order\n";
    cout << "  --dependency            Show dependency graph\n";
    cout << "  --readme                Show buildfiles readme\n";
    cout << "  --version               Show build version\n";
-   cout << "  --log                   Show build log\n\n";
+   cout << "  --log                   Show build log\n";
+   cout << "  --log-tail              Show build log (tailed)\n";
+   cout << "\n";
    cout << "Options:\n";
    cout << "  --version               Display version\n";
    cout << "  --help                  Display help\n";
+   cout << "\n";
 }
 
 void COptions::ShowVersion(void)
@@ -273,5 +286,6 @@ void COptions::ShowVersion(void)
    cout << "\n";
    cout << "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n";
    cout << "This is free software: you are free to change and redistribute it.\n";
-   cout << "There is NO WARRANTY, to the extent permitted by law.\n\n";
+   cout << "There is NO WARRANTY, to the extent permitted by law.\n";
+   cout << "\n";
 }

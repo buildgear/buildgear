@@ -18,6 +18,7 @@ class CFileSystem
       long Age(string filename);
       void Move(string source, string destination);
       void Cat(string filename);
+      void Tail(string filename);
       string root;
    private:
       void FindFile(string dirname, string filename, list<CBuildFile*> *buildfiles);

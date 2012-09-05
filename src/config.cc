@@ -42,6 +42,7 @@ CConfig::CConfig()
    readme = false;
    show_version = false;
    log = false;
+   log_tail = false;
 
    // Misc defaults
    all = false;
