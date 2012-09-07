@@ -1,3 +1,67 @@
-2012-07-01  Martin Lund  <martin.lund@keep-it-simple.com>
 
-	Version 0.9.1alpha released (first release).
+Build Gear v0.9.3 Change Log:
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+
+    Updated ChangeLog
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+
+    Swapped build system check and download order.
+
+    Moved build system checks ahead of download step to be quickly notified
+    of any missing tools/libs before the potential slow download step
+    starts.
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+
+    Added "show --log-tail" option. Cleanup.
+
+    Also, move ahead check for basic tools required by Build Gear for full functionality.
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+
+    Beautified donwload error messages.
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+
+    Added support for empty .nostrip file.
+
+    It used to be that one had to inject a space character in the .nostrip
+    file to force buildgear to not strip any files. Now the strip step is
+    skipped entirely if a zero sized .nostrip file exists.
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+
+    Bumped version
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+Date:   Mon Sep 3 16:31:25 2012 +0200
+
+    Fixed 'link to' missing last word.
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+Date:   Mon Sep 3 13:32:18 2012 +0200
+
+    Added support for lzma source tarballs.
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+Date:   Mon Sep 3 13:01:45 2012 +0200
+
+    Added check for '/bin/sh -> bash'. Fakeroot cleanup.
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+Date:   Mon Sep 3 11:28:11 2012 +0200
+
+    Added early check for fakeroot
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+Date:   Mon Sep 3 10:26:26 2012 +0200
+
+    Only perform check() for build files included in specific build
+
+Author: Martin Lund <martin.lund@keep-it-simple.com>
+Date:   Mon Sep 3 09:45:29 2012 +0200
+
+    Added symbolic link details to footprints
+
