@@ -17,7 +17,7 @@ class CBuildManager : public CFileSystem, COptions
       void CleanPackages(void);
       void CleanWork(void);
       void CleanLog(void);
-      bool UpToDate(CBuildFile *);
+      bool PackageUpToDate(CBuildFile *);
       bool DepBuildNeeded(CBuildFile *buildfile);
    private:
 };

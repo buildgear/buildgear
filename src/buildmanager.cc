@@ -141,7 +141,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    }
 }
 
-bool CBuildManager::UpToDate(CBuildFile *buildfile)
+bool CBuildManager::PackageUpToDate(CBuildFile *buildfile)
 {
    string package;
    
@@ -187,7 +187,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
    // Set build action of all builds (based on package vs. Buildfile age)
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
-      if (!UpToDate((*it)))
+      if (!PackageUpToDate((*it)))
          (*it)->build = true;
    }
 
