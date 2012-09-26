@@ -216,9 +216,8 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
        (Config.update_checksum=="yes"))
    {
       cout << endl;
-      
-      // Build experiment
-      vector<buildThread *> builder;
+
+//      vector<buildThread *> builder;
 
       // Initialize build semaphore
       if (sem_init(&build_semaphore, 0, Config.parallel_builds) == -1)
@@ -234,7 +233,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       it=buildfiles->begin();
       while (it != buildfiles->end())
       {
-         // Do not build nor add buildfiles which does not build anything
+         // Do not do build if no build() function available
          if ((*it)->build_function == "yes")
          {
             Do("build", *it);
