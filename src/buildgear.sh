@@ -114,16 +114,16 @@ check_sha256sum() {
          sed 's/^+/  NEW       /g' | \
          sed 's/^-/  MISSING   /g' > $FILE.sha256sum.diff
       if [ -s $FILE.sha256sum.diff ]; then
-         warning "Sha256sum mismatch found"
+         warning "Checksum mismatch found"
          cat $FILE.sha256sum.diff
       else
-         info "Sha256sum ok"
+         info "Checksum ok"
       fi
    else
       if [ "$BG_UPDATE_CHECKSUM" = "yes" ]; then
-         updating "Updated sha256 checksum"
+         updating "Updated checksum"
       else
-         updating "Sha256sum not found, creating new"
+         updating "Checksum not found, creating new"
       fi
    make_sha256sum > $BG_BUILD_SHA256SUM
    fi
