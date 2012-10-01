@@ -1,0 +1,16 @@
+# Local buildgear configuration
+
+# Default source download dir (default=build/source)
+#source_dir="$HOME/source"
+
+# Download mirror
+#download_mirror=
+
+# Download from mirror first? (default=no)
+#download_mirror_first=no
+
+# Download timeout in seconds (default=20)
+#download_timeout=20
+
+# Download retry count (default=3)
+#download_retry=3

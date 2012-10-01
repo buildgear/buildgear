@@ -34,6 +34,8 @@ class CConfig : public CUtility
       bool log;
       bool log_tail;
       
+      bool init;
+
       bool all;
 
       string default_name_prefix;
@@ -95,6 +97,9 @@ class CConfig : public CUtility
 
 #define SCRIPT                   AM_PKGDATADIR "/buildgear.sh"
 #define CONFIG_GUESS_SCRIPT      AM_PKGDATADIR "/config.guess"
+#define TEMPLATE_CONFIG          AM_PKGDATADIR "/template.config"
+#define TEMPLATE_README          AM_PKGDATADIR "/template.readme"
+#define TEMPLATE_LOCAL_CONFIG    AM_PKGDATADIR "/template.buildgearconfig"
 
 #define SVG_DEPENDENCY_FILE      BUILD_DIR "/dependency.svg"
 #define SVG_COLOR_NATIVE         "#ffff7f"

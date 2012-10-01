@@ -44,12 +44,19 @@ int main (int argc, char *argv[])
    /* Disable cursor */
 //   cout << TERMINFO_CIVIS;
 
+   /* Parse command line options */
+   Options.Parse(argc, argv);
+
+   /* Handle init command */
+   if (Config.init)
+   {
+      FileSystem.InitRoot();
+      exit(EXIT_SUCCESS);
+   }
+
    /* Make sure basic tools are installed */
    BuildSystem.Check();
 
-   /* Parse command line options */
-   Options.Parse(argc, argv);
-   
    /* Display help hint on incorrect download command */
    if ((Config.download) && (Config.name == "") && (Config.all==false))
    {

@@ -199,3 +199,35 @@ void CFileSystem::Tail(string filename)
 
    status = system(command.c_str());
 }
+
+void CFileSystem::CopyFile(string source, string destination)
+{
+   int status;
+   string command = "cp " + source + " " + destination;
+
+   status = system(command.c_str());
+
+   if (status != 0)
+      throw std::runtime_error(strerror(errno));
+}
+
+void CFileSystem::InitRoot(void)
+{
+   if (DirExists(ROOT_DIR))
+      cout << "Build Gear area already exists." << endl;
+   else
+   {
+      CreateDirectory(ROOT_DIR);
+      CreateDirectory(BUILD_FILES_DIR);
+      CreateDirectory(BUILD_FILES_NATIVE_DIR);
+      CreateDirectory(BUILD_FILES_CROSS_DIR);
+
+      CopyFile(TEMPLATE_CONFIG, BUILD_FILES_CONFIG);
+      CopyFile(TEMPLATE_README, BUILD_FILES_README);
+      CopyFile(TEMPLATE_LOCAL_CONFIG, LOCAL_CONFIG_FILE);
+
+      cout << "Initialized empty build area in "
+           << GetWorkingDir()
+           << "." << endl;
+   }
+}

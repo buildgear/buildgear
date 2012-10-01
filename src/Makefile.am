@@ -37,5 +37,9 @@ buildgear_SOURCES = \
    include/buildgear/svg.h \
    include/buildgear/thread.h
 buildgear_CPPFLAGS = -I$(srcdir)/include
-dist_pkgdata_SCRIPTS = config.guess buildgear.sh
+dist_pkgdata_SCRIPTS = config.guess \
+                       buildgear.sh \
+                       template.config \
+                       template.readme \
+                       template.buildgearconfig
 AM_CXXFLAGS = -DAM_PKGDATADIR='"$(pkgdatadir)"'

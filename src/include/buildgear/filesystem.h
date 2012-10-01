@@ -19,6 +19,8 @@ class CFileSystem
       void Move(string source, string destination);
       void Cat(string filename);
       void Tail(string filename);
+      void CopyFile(string source, string destination);
+      void InitRoot(void);
       string root;
    private:
       void FindFile(string dirname, string filename, list<CBuildFile*> *buildfiles);

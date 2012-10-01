@@ -21,6 +21,7 @@ CConfig::CConfig()
    build = false;
    clean = false;
    show = false;
+   init = false;
 
    // Default download options
    download_timeout = 20;

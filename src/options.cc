@@ -180,6 +180,11 @@ void COptions::Parse(int argc, char *argv[])
          option = getopt_long (argc, argv, "", long_options, &option_index);
       }
    }
+   // Init command
+   else if (command == "init")
+   {
+      Config.init = true;
+   }
    // No-command
    else
    {
@@ -249,6 +254,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  build                   Build\n";
    cout << "  clean                   Clean\n";
    cout << "  show                    Show various information\n";
+   cout << "  init                    Create an empty build area\n";
    cout << "\n";
    cout << "Download options:\n";
    cout << "  --all                   Download source files of all builds or build dependencies\n";
