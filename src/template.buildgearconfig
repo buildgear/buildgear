@@ -1,12 +1,12 @@
-# Local buildgear configuration
+# Local Build Gear tool configuration
 
-# Default source download dir (default=build/source)
+# Default source download dir (default="build/source")
 #source_dir="$HOME/source"
 
 # Download mirror
-#download_mirror=
+#download_mirror="http://www.mymirror.com/mysource"
 
-# Download from mirror first? (default=no)
+# Download from mirror first? (yes/no, default=no)
 #download_mirror_first=no
 
 # Download timeout in seconds (default=20)
