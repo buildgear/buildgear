@@ -1,53 +1,56 @@
+<This is an example build files readme template - change contents as you please>
+<It is recommended to keep the readme short and precise>
+
 Name:
 
-   Pandaboard Mini Distribution
+   <Name of your distribution>
 
 About:
 
-   A basic GNU/Linux distribution for the Pandaboard
+   <Short description of your distribution>
 
 Main features:
 
-   * Arm Cortex A9 optimized
-   * Glibc based toolchain
-   * Systemd init system
-   * GNU/Linux system utilities (no busybox)
-   * Ethernet and wifi network support
-   * OpenSSH client/server
+   * <Main feature 1>
+   * <Main feature 2>
+   * <Main feature 3>
+   * <Main feature 4>
+   * <Main feature 5>
+   * <Main feature 6>
+   * ...
 
 Main builds:
 
-   fs      - Filesystem
-   linux   - Linux kernel
-   u-boot  - Bootloader
+   <Build name 1>   - <Short description>
+   <Build name 2>   - <Short description>
 
 Quick build guide:
 
-   buildgear build fs
-   buildgear build linux
-   buildgear build u-boot
+   buildgear build <Build name 1>
+   buildgear build <Build name 2>
+
+   <Short description of output files>
 
 Build system requirements:
 
-   Tested on Ubuntu 12.04 Minimal (64-bit x86) with the following additional
+   Tested on <Name of your build system distribution> with the following additional
    packages installed:
 
-   $ sudo apt-get install unzip mtd-utils groff bison flex gperf texinfo \
-                          libtool automake libncurses5-dev gawk libexpat1-dev \
-                          gettext u-boot-tools libglib2.0-dev intltool
-
+   $ <Distribution specific command to install your additional packages>
 
    Also requires reconfiguring "/bin/sh" to use bash:
 
-   $ sudo dpkg-reconfigure dash
+   $ <Distribution specific command to make bash the default shell>
 
-   Fact: many software distributions fail to build using the dash shell.
+   Fact: Many software distributions fail to build using the dash shell.
 
 Known issues:
 
-   None
+   <List of known issues>
 
 Filesystem layout:
+
+   <Replace this section with your filesystem layout description>
 
    /usr/bin/            User binaries
    /usr/sbin/           System binaries (daemons, system utilities, etc.)
@@ -68,4 +71,4 @@ Filesystem layout:
 
 Maintainer:
 
-   Martin Lund <martin.lund@keep-it-simple.com>
+   <Maintainer name> - <Maintainer email>
