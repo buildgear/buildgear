@@ -1,14 +1,5 @@
-   #     #    #    ######  #     #   ###   #     #  #####
-   #  #  #   # #   #     # ##    #    #    ##    # #     #
-   #  #  #  #   #  #     # # #   #    #    # #   # #
-   #  #  # #     # ######  #  #  #    #    #  #  # #  ####
-   #  #  # ####### #   #   #   # #    #    #   # # #     #
-   #  #  # #     # #    #  #    ##    #    #    ## #     #
-    ## ##  #     # #     # #     #   ###   #     #  #####
 
-   ### This is an alpha release - use at your own risk! ###
-
-=== Build Gear ===
+=== Build Gear [BETA release] ===
 
 
 1. Introduction
@@ -34,6 +25,7 @@
 
    * Not available yet *
 
+
 4. License
 
    Build Gear is GPLv2. See COPYING file for license details.
@@ -45,12 +37,14 @@
 
    * Not available yet *
 
+
 6. Bugs and feature requests
 
    Please report any bugs or feature requests in the github issue tracker:   
    http://github.com/buildgear/buildgear/issues
 
    * Not available yet *
+
 
 7. Contributing
 
@@ -60,4 +54,5 @@
 8. Authors
 
    See AUTHORS file for list of authors.
+
 
