@@ -20,6 +20,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <errno.h>
+#include <unistd.h>
 #include "buildgear/config.h"
 #include "buildgear/fakeroot.h"
 

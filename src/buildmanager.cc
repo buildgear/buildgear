@@ -30,6 +30,7 @@
 #include <signal.h>
 #include <linux/limits.h>
 #include <semaphore.h>
+#include <unistd.h>
 #include "buildgear/config.h"
 #include "buildgear/options.h"
 #include "buildgear/filesystem.h"
