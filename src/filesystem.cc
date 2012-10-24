@@ -53,34 +53,34 @@ void CFileSystem::FindRoot(string dirname)
    string temp_dirname;
 
    cwd = GetWorkingDir();
-   
+
    temp_dirname = cwd + "/" + dirname;
-   
+
    while ((cwd != "/") && chdir(temp_dirname.c_str()) != 0)
    {
       if (chdir("..") != 0)
          throw std::runtime_error(strerror(errno));
-      
+
       cwd = GetWorkingDir();
-      
+
       temp_dirname = cwd + "/" + dirname;
-      
+
       Debug << "Backstepping to " << cwd << endl;
    }
-   
+
    if (cwd == "/")
    {
       cerr << "Build Gear root directory (.buildgear) is not found!" << endl;
       exit(EXIT_FAILURE);
    }
-   
+
    CFileSystem::root = cwd;
    Config.root = cwd;
-   
+
    // Change to buildgear root dir and stay there
    if (chdir(CFileSystem::root.c_str()) != 0)
       throw std::runtime_error(strerror(errno));
-   
+
    Debug << "Build root: " << CFileSystem::root << endl;
 }
 
@@ -96,7 +96,7 @@ void CFileSystem::FindFile(string dirname, string filename, list<CBuildFile*> *b
 
    if (chdir(dirname.c_str()) != 0)
       throw std::runtime_error(strerror(errno));
-   
+
    while((dir = readdir(d)))
    {
       if(strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0)
@@ -120,15 +120,14 @@ void CFileSystem::FindFile(string dirname, string filename, list<CBuildFile*> *b
          }
       }
    }
-  closedir(d);
+   closedir(d);
 }
 
 void CFileSystem::FindFiles(string dirname, string filename, list<CBuildFile*> *buildfiles)
 {
    if (CFileSystem::DirExists(dirname))
-      CFileSystem::FindFile(dirname,
-                            filename, buildfiles);
-   
+      CFileSystem::FindFile(dirname, filename, buildfiles);
+
    /* Return to buildgear root */
    if (chdir(CFileSystem::root.c_str()) != 0)
       throw std::runtime_error(strerror(errno));
@@ -142,7 +141,7 @@ bool CFileSystem::DirExists(string dirname)
       return false;
    else if (!S_ISDIR(st.st_mode))
       return false;
-      
+
    return true;
 }
 
@@ -154,7 +153,7 @@ bool CFileSystem::FileExist(string filename)
       return false;
    else if (!S_ISREG(st.st_mode))
       return false;
-      
+
    return true;
 }
 
@@ -178,7 +177,7 @@ long CFileSystem::Age(string filename)
 
    if (stat(filename.c_str(), &st) != 0)
       return -1;
-   
+
    return st.st_mtime;
 }
 
@@ -186,9 +185,9 @@ void CFileSystem::CreateDirectory(string dirname)
 {
    int status;
    string command = "mkdir -p " + dirname;
-   
+
    status = system(command.c_str());
-   
+
    if (status != 0)
       throw std::runtime_error(strerror(errno));
 }
@@ -197,9 +196,9 @@ void CFileSystem::Move(string source, string destination)
 {
    int status;
    string command = "mv " + source + " " + destination;
-   
+
    status = system(command.c_str());
-   
+
    if (status != 0)
       throw std::runtime_error(strerror(errno));
 }
