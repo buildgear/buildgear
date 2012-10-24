@@ -27,10 +27,15 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
+#include <sys/inotify.h>
 #include <sys/stat.h>
+#include <signal.h>
 #include "buildgear/config.h"
 #include "buildgear/filesystem.h"
 #include "buildgear/debug.h"
+
+#define IN_EVENT_SIZE  ( sizeof (struct inotify_event) )
+#define IN_BUF_LEN     ( 1024 * ( IN_EVENT_SIZE + 16 ) )
 
 string CFileSystem::GetWorkingDir(void)
 {
@@ -210,12 +215,70 @@ void CFileSystem::Cat(string filename)
       throw std::runtime_error(strerror(errno));
 }
 
-void CFileSystem::Tail(string filename)
+void * tail(void *filename)
 {
    int status;
-   string command = "tail -f " + filename;
+   string file = *((string *) filename);
+   string command = "tail -f " + file;
 
    status = system(command.c_str());
+   if (status != 0)
+      exit(0);
+
+   pthread_exit(&status);
+}
+
+void CFileSystem::Tail(string filename)
+{
+   int length, i = 0;
+   int fd, wd;
+   char buffer[IN_BUF_LEN];
+   pthread_t tail_thread;
+   string file, dir;
+
+   // Parse name and path parts from filename
+   size_t pos = filename.find_last_of('/');
+
+   if (pos == filename.npos )
+   {
+      cout << "Error: " << filename << " is invalid." << endl;
+         exit(EXIT_FAILURE);
+   }
+
+   file=filename.substr(pos+1);
+   dir=filename.substr(0, pos);
+
+   // Tail file if it already exists
+   if (FileExist(filename))
+      pthread_create(&tail_thread, NULL, tail, (void *) &filename);
+
+   fd = inotify_init();
+   wd = inotify_add_watch(fd, dir.c_str(), IN_CREATE);
+
+   // Constantly monitor for file creation event
+   while (1)
+   {
+      length = read(fd, buffer, IN_BUF_LEN);
+
+      while (i < length)
+      {
+         struct inotify_event *event = (struct inotify_event *) &buffer[i];
+         if (event->len)
+         {
+            if ((event->mask & IN_CREATE) && (strcmp(event->name, file.c_str()) == 0))
+            {
+               // New file created -> tail (re)open
+               pthread_cancel(tail_thread);
+               pthread_create(&tail_thread, NULL, tail, (void *) &filename);
+            }
+         }
+         i += IN_EVENT_SIZE + event->len;
+      }
+      i=0;
+   }
+
+   (void) inotify_rm_watch(fd, wd);
+   (void) close(fd);
 }
 
 void CFileSystem::CopyFile(string source, string destination)
