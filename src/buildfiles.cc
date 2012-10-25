@@ -40,100 +40,22 @@ CBuildFiles::CBuildFiles()
 {
 }
 
-void CBuildFiles::ParseAndVerify(void)
+void CBuildFiles::Parse(void)
 {   
    list<CBuildFile*>::iterator it;
    
-   /* Traverse through all buildfiles */
+   /* Parse all buildfiles */
    for (it=buildfiles.begin();
         it!=buildfiles.end();
         it++)
-   {
-      FILE *fp;
-      char line_buffer[PATH_MAX];
-      size_t pos;
-      string command =  "bash -c 'source " + 
-                        (*it)->filename + 
-                        "; echo name=$name \
-                         ; echo version=$version \
-                         ; echo release=$release \
-                         ; echo source=${source[@]} \
-                         ; echo depends=${depends[@]} \
-                         ; type build &> /dev/null && echo build_function=yes || echo build_function=no \
-                         ; type check &> /dev/null && echo check_function=yes || echo check_function=no'"; \
-
-      // Open buildfile for reading
-      fp = popen(command.c_str(), "r");
-      if (fp == NULL)
-         throw std::runtime_error(strerror(errno));
-
-      // Assign name and type based on filename
-      pos = (*it)->filename.rfind("cross/");
-      if (pos != (*it)->filename.npos)
-         (*it)->type = "cross";
-      else
-      {
-         pos = (*it)->filename.rfind("native/");
-         (*it)->type = "native";
-      }
-
-      if (pos == (*it)->filename.npos)
-      {
-         cout << "Error: " << (*it)->filename << " is invalid." << endl;
-         exit(EXIT_FAILURE);
-      }
-
-      (*it)->name = (*it)->filename.substr(pos);
-      pos = (*it)->name.rfind("/Buildfile");
-      if (pos == (*it)->filename.npos)
-      {
-         cout << "Error: " << (*it)->filename << " is invalid." << endl;
-         exit(EXIT_FAILURE);
-      }
-
-      // Parse Buildfile variables
-      while (fgets(line_buffer, PATH_MAX, fp) != NULL)
-      {
-         // Parse key=value pairs
-         string line(line_buffer);
-         string key, value;
-         size_t pos = line.find_first_of('=');
-	
-         key=line.substr(0, pos);
-         value=line.substr(pos+1);
-
-         stripChar(value, '\n');
-
-         // Required keys (FIXME: add check for empty values)
-         if (key == KEY_NAME)
-            (*it)->short_name = value;
-         if (key == KEY_VERSION)
-            (*it)->version = value;
-         if (key == KEY_RELEASE)
-            (*it)->release = value;
-         
-         // Optional keys
-         if (key == KEY_SOURCE)
-            (*it)->source = value;
-         if (key == KEY_DEPENDS)
-            (*it)->depends = value;
-         if (key == "build_function")
-            (*it)->build_function = value;
-         if (key == "check_function")
-            (*it)->check_function = value;
-      }
-      pclose(fp);
-
-      // Assign name based on type and name variable
-      (*it)->name = (*it)->type + "/" + (*it)->short_name;
-   }
+       (*it)->Parse();
 }
 
 void CBuildFiles::AddCrossDependency(void)
 {
    list<CBuildFile*>::iterator it;
    
-   /* Traverse through all buildfiles */
+   /* Add dependencies for all buildfiles */
    for (it=buildfiles.begin(); 
         it!=buildfiles.end();
         it++)

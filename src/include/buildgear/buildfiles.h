@@ -27,12 +27,12 @@
 
 using namespace std;
 
-class CBuildFiles : public CUtility
+class CBuildFiles
 {
    public:
       CBuildFiles();
       list<CBuildFile*> buildfiles;
-      void ParseAndVerify(void);
+      void Parse(void);
       void LoadCrossDependency(void);
       void LoadDependency(void);
       void AddCrossDependency(void);

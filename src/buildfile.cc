@@ -17,8 +17,21 @@
  */
 
 #include "config.h"
+#include <iostream>
+#include <sstream>
 #include <string>
+#include <stdexcept>
+#include <list>
+#include <stdio.h>
+#include <errno.h>
+#include <dirent.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include "buildgear/config.h"
 #include "buildgear/buildfile.h"
+#include "buildgear/filesystem.h"
+#include "buildgear/utility.h"
 
 CBuildFile::CBuildFile(string filename)
 {
@@ -26,4 +39,86 @@ CBuildFile::CBuildFile(string filename)
    CBuildFile::build = false;
    CBuildFile::visited = false;
    CBuildFile::depth = 0;
+}
+
+void CBuildFile::Parse(void)
+{
+   FILE *fp;
+   char line_buffer[PATH_MAX];
+   size_t pos;
+   string command =
+      "bash -c 'source " +
+      filename +
+      "; echo name=$name \
+      ; echo version=$version \
+      ; echo release=$release \
+      ; echo source=${source[@]} \
+      ; echo depends=${depends[@]} \
+      ; type build &> /dev/null && echo build_function=yes || echo build_function=no \
+      ; type check &> /dev/null && echo check_function=yes || echo check_function=no'";
+
+   // Open buildfile for reading
+   fp = popen(command.c_str(), "r");
+   if (fp == NULL)
+      throw std::runtime_error(strerror(errno));
+
+   // Assign name and type based on filename
+   pos = filename.rfind("cross/");
+   if (pos != filename.npos)
+      type = "cross";
+   else
+   {
+      pos = filename.rfind("native/");
+      type = "native";
+   }
+
+   if (pos == filename.npos)
+   {
+      cout << "Error: " << filename << " is invalid." << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   name = filename.substr(pos);
+   pos = name.rfind("/Buildfile");
+   if (pos == filename.npos)
+   {
+      cout << "Error: " << filename << " is invalid." << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   // Parse Buildfile variables
+   while (fgets(line_buffer, PATH_MAX, fp) != NULL)
+   {
+      // Parse key=value pairs
+      string line(line_buffer);
+      string key, value;
+      size_t pos = line.find_first_of('=');
+
+      key=line.substr(0, pos);
+      value=line.substr(pos+1);
+
+      stripChar(value, '\n');
+
+      // Required keys (FIXME: add check for empty values)
+      if (key == KEY_NAME)
+         short_name = value;
+      if (key == KEY_VERSION)
+         version = value;
+      if (key == KEY_RELEASE)
+         release = value;
+
+      // Optional keys
+      if (key == KEY_SOURCE)
+         source = value;
+      if (key == KEY_DEPENDS)
+         depends = value;
+      if (key == "build_function")
+         build_function = value;
+      if (key == "check_function")
+         check_function = value;
+   }
+   pclose(fp);
+
+   // Assign name based on type and name variable
+   name = type + "/" + short_name;
 }

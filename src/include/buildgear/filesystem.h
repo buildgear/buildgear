@@ -39,10 +39,10 @@ class CFileSystem
       void Tail(string filename);
       void CopyFile(string source, string destination);
       void InitRoot(void);
+      string GetWorkingDir(void);
       string root;
    private:
       void FindFile(string dirname, string filename, list<CBuildFile*> *buildfiles);
-      string GetWorkingDir(void);
 };
 
 #endif

@@ -20,6 +20,7 @@
 #define UTILITY_H
 
 #include "buildgear/config.h"
+#include "buildgear/utility.h"
 #include <string>
 
 using namespace std;

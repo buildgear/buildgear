@@ -161,9 +161,9 @@ int main (int argc, char *argv[])
    /* Print number of buildfiles found */
    cout << "Done (" << BuildFiles.buildfiles.size() << " files)\n";
 
-   /* Parse and verify buildfiles */
+   /* Parse buildfiles */
    cout << "Loading build files..           " << flush;
-   BuildFiles.ParseAndVerify();
+   BuildFiles.Parse();
 
    /* Show buildfiles meta info (debug only) */
    BuildFiles.ShowMeta();

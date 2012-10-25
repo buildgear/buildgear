@@ -23,10 +23,11 @@
 
 using namespace std;
 
-class CBuildFile
+class CBuildFile : public CUtility
 {
    public:
       CBuildFile(string filename);
+      void Parse(void);
       string filename;
       string name;
       string short_name;
