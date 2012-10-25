@@ -1,27 +1,11 @@
 
-Build Gear v0.9.4beta Change Log:
+Build Gear v0.9.5beta Change Log:
 
- * Upgraded to beta release status
- * Updated license
- * Updated AUTHORS file
- * Updated template.readme
- * Updated template.buildgearconfig
- * Bumped version
- * Added "init" command support.
+ * Made "show --log-tail" work across build sessions
    
-   The init command creates the basic Build Gear directory structure and
-   installs basic configuration file templates.
-   
-   Specifically it creates the following files:
-   
-   .buildgear/config
-   buildfiles/config
-   buildfiles/readme
-   buildfiles/native/
-   buildfiles/cross/
-   
-   The init command is useful when starting from scratch.
+   Now "show --log-tail" will automatically (re)open the build log when
+   a new build session is started. Implemented using inotify.
 
- * Cleaned up checksum messages.
- * Minor cleanup
+ * Added missing includes
+ * Fixed footprinting error
 
