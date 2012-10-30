@@ -268,6 +268,7 @@ void CFileSystem::Tail(string filename)
             {
                // New file created -> tail (re)open
                pthread_cancel(tail_thread);
+               pthread_join(tail_thread, NULL);
                pthread_create(&tail_thread, NULL, tail, (void *) &filename);
             }
          }
