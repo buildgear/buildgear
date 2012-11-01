@@ -98,7 +98,8 @@ void CBuildSystem::Check(void)
 
    if (result != "bash")
    {
-      cout << "\n\nPlease make sure /bin/sh links to bash.\n\n";
+      cout << "\n\nError: Default shell is not bash.\n\n";
+      cout << "Please make sure that /bin/sh links to bash.\n\n";
       exit(EXIT_FAILURE);
    }
 }
