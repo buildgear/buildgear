@@ -43,3 +43,5 @@ dist_pkgdata_SCRIPTS = config.guess \
                        template.readme \
                        template.buildgearconfig
 AM_CXXFLAGS = -DAM_PKGDATADIR='"$(pkgdatadir)"'
+bashcompletiondir=$(sysconfdir)/bash_completion.d
+dist_bashcompletion_DATA=buildgear-bash-completion.sh
