@@ -1,11 +1,10 @@
 
-Build Gear v0.9.5beta Change Log:
+Build Gear v0.9.6beta Change Log:
 
- * Made "show --log-tail" work across build sessions
-   
-   Now "show --log-tail" will automatically (re)open the build log when
-   a new build session is started. Implemented using inotify.
+ * Added bash autocompletion support
 
- * Added missing includes
- * Fixed footprinting error
+ * Improved missing bash err msg
 
+ * Fixed show --log-tail memory leak
+
+ * Corrected license typo
