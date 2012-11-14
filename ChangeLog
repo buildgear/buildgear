@@ -1,10 +1,9 @@
 
-Build Gear v0.9.6beta Change Log:
+Build Gear v0.9.7beta Change Log:
 
- * Added bash autocompletion support
+ * Made dependency resolution specific for the build
 
- * Improved missing bash err msg
-
- * Fixed show --log-tail memory leak
-
- * Corrected license typo
+   Up until now buildgear always checked that all dependencies were available for
+   all buildfiles found ie. not only for those involved in a specific build.
+   This is now fixed so that dependency checks are only made for those
+   builds involved in the specific build.
