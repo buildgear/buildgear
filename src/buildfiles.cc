@@ -100,7 +100,7 @@ void CBuildFiles::LoadDependency(void)
         it!=buildfiles.end();
         it++)
    {
-      int no_match, no_match_exit=false;
+      int no_match;
       string dep;
       istringstream iss((*it)->depends);
       
@@ -127,18 +127,9 @@ void CBuildFiles::LoadDependency(void)
             }
          }
          
-         // Warn if missing buildfile
+         // Add missing buildfile to list of missing dependencies
          if (no_match)
-         {
-            cout << "Error: " << (*it)->name << " " << dep << " not found" << endl;
-            no_match_exit = true;
-         }
-      }
-      
-      if (no_match_exit)
-      {
-         cout << "Error: " << (*it)->name << " is missing one or more dependencies" << endl;
-         exit(EXIT_FAILURE);
+            (*it)->missing_depends.append(dep+" ");
       }
    }
 }
@@ -147,7 +138,7 @@ void CBuildFiles::LoadCrossDependency(void)
 {
    list<CBuildFile*>::iterator it;
 
-   int no_match, no_match_exit=false;
+   int no_match;
    string dep;
    istringstream iss(Config.cross_depends);
 
@@ -165,28 +156,15 @@ void CBuildFiles::LoadCrossDependency(void)
       for (it=buildfiles.begin();
               it!=buildfiles.end();
               it++)
-         {
-            // If match found add to cross dependency list
-            if (dep == (*it)->name)
-            {
-               cross_dependency.push_back((*it));
-               no_match = false;
-            }
-         }
-
-         // Warn if missing buildfile
-         if (no_match)
-         {
-            cout << "Error: " << (*it)->name << " " << dep << " not found" << endl;
-            no_match_exit = true;
-         }
-      }
-
-      if (no_match_exit)
       {
-         cout << "Error: " << (*it)->name << " is missing one or more dependencies" << endl;
-         exit(EXIT_FAILURE);
+         // If match found add to cross dependency list
+         if (dep == (*it)->name)
+         {
+            cross_dependency.push_back((*it));
+            no_match = false;
+         }
       }
+   }
 }
 
 CBuildFile * CBuildFiles::BuildFile(string name)

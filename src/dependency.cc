@@ -35,8 +35,8 @@
 void CDependency::ResolveSequentialBuildOrder(string name,
                           list<CBuildFile*> *buildfiles)
 {
-   bool found = false;
    list<CBuildFile*>::iterator it, itr;
+   CBuildFile *buildfile = NULL;
    
    // Clear lists
    unresolved.clear();
@@ -47,21 +47,34 @@ void CDependency::ResolveSequentialBuildOrder(string name,
         it!=buildfiles->end();
         it++)
    {
-      // If matching buildfile found
+      // Save matching buildfile
       if (name == (*it)->name)
-      {
-         // Resolve dependency
-         CDependency::ResolveDependency(*it, &resolved, 
-                                      &unresolved);
-         found = true;
-      }
+         buildfile = *it;
    }
 
-   if (!found)
+   // If no buildfile found then exit
+   if (!buildfile)
    {
       cout << "Error: build '" << name << "' is not found" << endl;
       exit(EXIT_FAILURE);
-   }   
+   }
+
+   // Resolve dependency
+   CDependency::ResolveDependency(buildfile, &resolved, &unresolved);
+
+   // Check if any of the resolved builds depends on any missing buildfiles
+   for (it=resolved.begin();
+        it!=resolved.end();
+        it++)
+   {
+      if (!(*it)->missing_depends.empty())
+      {
+         cout << "Error: " << (*it)->name \
+              << " is missing the following dependencies: " \
+              << (*it)->missing_depends << endl;
+         exit(EXIT_FAILURE);
+      }
+   }
 
    /* Add to download order list */
    download_order.insert(download_order.end(), resolved.begin(), resolved.end());
@@ -97,7 +110,8 @@ void CDependency::ShowBuildOrder(void)
 
    for (it=parallel_build_order.begin(), i=1; it!=parallel_build_order.end(); it++, i++)
    {
-      cout << "   [" << max_depth - (*it)->depth + 1 << "] " << std::setw(3) << i << ". " << (*it)->name << endl;
+      cout << "   [" << max_depth - (*it)->depth + 1 << "] " \
+           << std::setw(3) << i << ". " << (*it)->name << endl;
    }
 }
 

@@ -35,6 +35,7 @@ class CBuildFile : public CUtility
       string release;
       string source;
       string depends;
+      string missing_depends;
       string type;
       string build_function;
       string check_function;
