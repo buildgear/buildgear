@@ -333,6 +333,8 @@ parse_options() {
 }
 
 main() {
+   shopt -s extglob
+
    # respawn with output redirected to build log file
    exec &>> $BG_BUILD_LOG
    
@@ -379,7 +381,6 @@ main() {
    export SOURCE_DIR=$BG_SOURCE_DIR
    
    umask 022
-   shopt -s extglob
 
    check_create_directory "$SRC"
    check_create_directory "$PKG"
