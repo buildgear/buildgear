@@ -167,7 +167,7 @@ do_extract() {
 }
 
 do_build() {
-   
+
    log_action "Build    "
    
    cd $SRC
@@ -376,8 +376,10 @@ main() {
    export BUILD="$BG_BUILD"
    export HOST="$BG_HOST"
    export SYSROOT="$BG_BUILD_SYSROOT_DIR"
+   export SOURCE_DIR=$BG_SOURCE_DIR
    
    umask 022
+   shopt -s extglob
 
    check_create_directory "$SRC"
    check_create_directory "$PKG"

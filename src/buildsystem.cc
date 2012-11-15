@@ -115,7 +115,7 @@ void CBuildSystem::CallCheck(list<CBuildFile*> *buildfiles)
    {
       if ((*it)->check_function == "yes")
       {
-         command = "bash -c 'source " BUILD_FILES_CONFIG "; source " + (*it)->filename + "; check '";
+         command = "bash -O extglob -c 'source " BUILD_FILES_CONFIG "; source " + (*it)->filename + "; check '";
          result = system(command.c_str());
          if (result != 0)
          {

@@ -47,7 +47,7 @@ void CBuildFile::Parse(void)
    char line_buffer[PATH_MAX];
    size_t pos;
    string command =
-      "bash -c 'source " +
+      "bash -O extglob -c 'source " +
       filename +
       "; echo name=$name \
       ; echo version=$version \

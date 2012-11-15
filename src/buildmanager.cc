@@ -132,7 +132,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    command = config + " " SCRIPT " " + buildfile->filename;
 
    /* Make sure we are using bash */
-   command = "bash -c '" + command + "'";
+   command = "bash -O extglob -c '" + command + "'";
    
    pthread_mutex_lock(&cout_mutex);
    
