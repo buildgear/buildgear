@@ -1,9 +1,18 @@
 
-Build Gear v0.9.7beta Change Log:
+Build Gear v0.9.8beta Change Log:
 
- * Made dependency resolution specific for the build
+ * Added SOURCE_DIR variable to replace use of BG_SOURCE_DIR
 
-   Up until now buildgear always checked that all dependencies were available for
-   all buildfiles found ie. not only for those involved in a specific build.
-   This is now fixed so that dependency checks are only made for those
-   builds involved in the specific build.
+   Variables prefixed with BG_ are internal to buildgear and should not be
+	used as they are likely to become unavailable in the future.
+
+ * Improved bash autocompletion
+
+   Enabled auto completion for options added both before and after named
+   build.
+
+ * Enabled extglob extension for bash
+
+   Enabling the extglob extension allows for file filters to make shorter eg.
+   delete expressions, eg.: "rm !(file1 file2)"  (deletes all files except
+   file1 and file2).
