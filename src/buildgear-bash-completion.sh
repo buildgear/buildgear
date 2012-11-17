@@ -11,6 +11,7 @@ _buildgear()
    COMPREPLY=()
    cur=${COMP_WORDS[COMP_CWORD]}
    prev=${COMP_WORDS[COMP_CWORD-1]}
+   command=${COMP_WORDS[1]}
 
    commands="download build clean show init"
    options="--help --version"
@@ -21,8 +22,8 @@ _buildgear()
 
    if [ $COMP_CWORD -eq 1 ]; then
      COMPREPLY=( $(compgen -W "$commands $options" -- $cur) )
-   elif [ $COMP_CWORD -eq 2 ]; then
-     case "$prev" in
+   elif [ $COMP_CWORD -gt 1 ]; then
+     case "$command" in
        "download")
          COMPREPLY=( $(compgen -W "$download_options" -- $cur) )
          ;;
