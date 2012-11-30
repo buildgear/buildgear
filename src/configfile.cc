@@ -35,7 +35,7 @@ void CConfigFile::Parse(string filename)
 {
       FILE *fp;
       char line_buffer[PATH_MAX];
-      string command =  "bash -O extglob -c 'source " + filename + " 2> /dev/null";
+      string command =  "bash --norc --noprofile -O extglob -c 'source " + filename + " 2> /dev/null";
       
       if (filename != BUILD_FILES_CONFIG)
          command += "; echo source_dir=$source_dir \
