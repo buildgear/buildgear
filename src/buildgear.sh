@@ -340,6 +340,7 @@ main() {
    
    # Sanitize environment
    unset GREP_OPTIONS
+   unset TAR_OPTIONS
    unalias -a
    
    parse_options "$@"
