@@ -379,7 +379,7 @@ main() {
    export BUILD="$BG_BUILD"
    export HOST="$BG_HOST"
    export SYSROOT="$BG_BUILD_SYSROOT_DIR"
-   export SOURCE_DIR=$BG_SOURCE_DIR
+   export SOURCE=$BG_SOURCE_DIR
    
    umask 022
 
