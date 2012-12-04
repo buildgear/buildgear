@@ -1,18 +1,8 @@
 
-Build Gear v0.9.8beta Change Log:
+Build Gear v0.9.9beta Change Log:
 
- * Added SOURCE_DIR variable to replace use of BG_SOURCE_DIR
+ * Renamed variable SOURCE_DIR -> SOURCE
 
-   Variables prefixed with BG_ are internal to buildgear and should not be
-	used as they are likely to become unavailable in the future.
+ * Speeded up bash sessions
 
- * Improved bash autocompletion
-
-   Enabled auto completion for options added both before and after named
-   build.
-
- * Enabled extglob extension for bash
-
-   Enabling the extglob extension allows for file filters to make shorter eg.
-   delete expressions, eg.: "rm !(file1 file2)"  (deletes all files except
-   file1 and file2).
+ * Sanitized TAR_OPTIONS
