@@ -236,7 +236,9 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
             CDownloadItem *item;
             curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, &item);
             curl_easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &response);
-            if (response >= 400)
+
+            // The easy handle did not return CURLE_OK
+            if (msg->data.result != CURLE_OK)
             {
                char *used_url;
                curl_easy_getinfo(msg->easy_handle, CURLINFO_EFFECTIVE_URL, &used_url);
@@ -262,7 +264,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                   curl_multi_remove_handle(Download.curlm, msg->easy_handle);
                   temp.str("");
-                  temp << "Error (" << response << ") trying alternative URL..";
+                  temp << "Error (" << curl_easy_strerror(msg->data.result) << ") trying alternative URL..";
                   item->status = temp.str();
                   item->downloaded = -1;
 
