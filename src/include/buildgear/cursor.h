@@ -19,6 +19,8 @@
 #ifndef CURSOR_H
 #define CURSOR_H
 
+void cursor_restore();
+
 using namespace std;
 
 class CCursor
@@ -31,7 +33,7 @@ class CCursor
       void clear_below();
       void show();
       void hide();
-      void out();
+      void restore();
       int no_lines;
       int no_cols;
       int xpos;

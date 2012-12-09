@@ -24,6 +24,11 @@
 #include <stdlib.h>
 #include "buildgear/cursor.h"
 
+void cursor_restore()
+{
+   Cursor.restore();
+}
+
 CCursor::CCursor()
 {
    char *term_type;
@@ -119,7 +124,7 @@ void CCursor::hide()
    putp(vi);
 }
 
-void CCursor::out()
+void CCursor::restore()
 {
    line_down(no_lines);
    show();

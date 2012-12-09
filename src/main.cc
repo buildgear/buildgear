@@ -53,11 +53,6 @@ CBuildManager BuildManager;
 CBuildSystem  BuildSystem;
 CCursor       Cursor;
 
-void restore_cursor (void)
-{
-   Cursor.out();
-}
-
 int main (int argc, char *argv[])
 {
    /* Debug stream option */
@@ -70,7 +65,7 @@ int main (int argc, char *argv[])
    Signals.Install();
 
    /* Make sure to reenable cursor on exit */
-   atexit(restore_cursor);
+   atexit(cursor_restore);
 
    /* Disable cursor */
    Cursor.hide();
@@ -313,5 +308,5 @@ int main (int argc, char *argv[])
    Clock.ShowElapsedTime();
    
    /* Enable cursor again */
-   Cursor.out();
+   Cursor.restore();
 }
