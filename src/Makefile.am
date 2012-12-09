@@ -18,6 +18,7 @@ buildgear_SOURCES = \
    source.cc \
    svg.cc \
    thread.cc \
+   cursor.cc \
    include/buildgear/signals.h \
    include/buildgear/fakeroot.h \
    include/buildgear/buildfile.h \

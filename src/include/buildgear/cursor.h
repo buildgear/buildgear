@@ -16,34 +16,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "config.h"
-#include <iostream>
-#include <stdlib.h>
-#include <signal.h>
-#include "buildgear/config.h"
-#include "buildgear/signals.h"
-#include "buildgear/cursor.h"
+#ifndef CURSOR_H
+#define CURSOR_H
 
-struct sigaction new_action, old_action;
+using namespace std;
 
-void CSignals::sigIntHandler(int signum)
+class CCursor
 {
-   cout << "\n\nInterrupt signal received - stopped!\n";
+   public:
+      CCursor();
+      void line_up(int);
+      void line_down(int);
+      void clear_rest_of_line();
+      void clear_below();
+      void show();
+      void hide();
+      void out();
+      int no_lines;
+      int no_cols;
+      int xpos;
+      int ypos;
+   private:
+      char *UP;
+      char *DO;
+      char *ce;
+      char *vi;
+      char *ve;
+      char *ll;
+      char *cd;
+};
 
-   exit(EXIT_SUCCESS);
-}
+extern CCursor Cursor;
 
-void CSignals::Install(void)
-{
-   /* Set up the structure to specify the new action */
-   new_action.sa_handler = sigIntHandler;
-   sigemptyset(&new_action.sa_mask);
-   new_action.sa_flags = 0;
-
-   /* Install new action handler */
-   sigaction (SIGINT, NULL, &old_action);
-   if (old_action.sa_handler != SIG_IGN)
-      sigaction (SIGINT, &new_action, NULL);
-   else
-      cout << "Cannot handle SIGINT!" << endl;
-}
+#endif

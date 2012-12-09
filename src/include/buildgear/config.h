@@ -33,7 +33,8 @@ class CConfig : public CUtility
       bool download;
       int download_timeout;
       int download_retry;
-      
+      long download_connections;
+
       bool build;
       string keep_work;
       string update_checksum;
@@ -104,6 +105,7 @@ class CConfig : public CUtility
 #define CONFIG_KEY_DOWNLOAD_RETRY            "download_retry"
 #define CONFIG_KEY_DOWNLOAD_MIRROR           "download_mirror"
 #define CONFIG_KEY_DOWNLOAD_MIRROR_FIRST     "download_mirror_first"
+#define CONFIG_KEY_DOWNLOAD_CONNECTIONS      "download_connections"
 #define CONFIG_KEY_SOURCE_DIR                "source_dir"
 
 #define CONFIG_KEY_CROSS_DEPENDS             "cross_depends"

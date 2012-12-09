@@ -19,25 +19,62 @@
 #ifndef DOWNLOAD_H
 #define DOWNLOAD_H
 
+#include <curl/multi.h>
+
 #include "buildgear/filesystem.h"
 
+#define DOWNLOAD_LINE_SIZE 3
+
 using namespace std;
+
+struct File
+{
+   char *filename;
+   FILE *stream;
+};
 
 class CDownload : public CFileSystem
 {
    public:
-      int File(string, string);
       void URL(string, string);
-      static int progress(void *v,
+      static int progress(void *obj,
                           double dltotal,
                           double dlnow,
                           double ultotal,
                           double ulnow);
+      void update_progress();
+      CDownload();
+      CURLM *curlm;
+      list<void*> active_downloads;
+      list<void*> pending_downloads;
+      void lock();
+      void unlock();
+   private:
+      pthread_mutex_t mlock;
+};
+
+class CDownloadItem : public CFileSystem
+{
+   public:
+      CDownloadItem(string, string, CDownload*);
+      void File();
       static size_t CurlFileWrite(void *buffer,
                                   size_t size,
                                   size_t nmemb,
                                   void *stream);
-  private:
+      void print_progress();
+      struct File file;
+      string source_dir;
+      string filename;
+      string status;
+      int tries;
+      bool alternative_url;
+      string url;
+      string mirror_url;
+      CURL *curl;
+      CDownload *parent;
+      double downloaded;
+      double total;
 };
 
 #endif

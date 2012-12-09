@@ -31,6 +31,23 @@ then
 	AC_MSG_ERROR([curl-gnutls not found])
 fi
 
+termcap=1
+AC_SEARCH_LIBS([tgetent], termcap, , [termcap=0])
+AC_CHECK_FUNC([tgetnum], , [termcap=0])
+AC_CHECK_FUNC([tgetstr], , [termcap=0])
+AC_CHECK_FUNC([putp], , [termcap=0])
+AC_CHECK_FUNC([tparm], , [termcap=0])
+AC_CHECK_HEADERS([term.h], , [termcap=0])
+AC_CHECK_HEADERS([curses.h], , [termcap=0])
+if test $termcap == 0
+then
+   AC_MSG_ERROR([termcap not found])
+fi
+
+# Check for header files
+AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
+AC_CHECK_HEADERS([curl/curl.h])
+
 # Check for typedefs, structures, and compiler characteristics
 AC_HEADER_STDBOOL
 AC_C_INLINE

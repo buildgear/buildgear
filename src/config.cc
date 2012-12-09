@@ -46,6 +46,7 @@ CConfig::CConfig()
    download_retry = 3;
    download_mirror = "";
    download_mirror_first = "no";
+   download_connections = 10;
 
    // Default build options
    keep_work = "no";
