@@ -27,6 +27,9 @@
 void cursor_restore()
 {
    Cursor.restore();
+
+   // Make sure terminal echo is reenabled
+   system("stty echo");
 }
 
 CCursor::CCursor()

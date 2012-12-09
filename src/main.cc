@@ -270,7 +270,14 @@ int main (int argc, char *argv[])
 
    /* Download */
    cout << "Downloading sources..           " << endl << flush;
+
+   /* Disable terminal echo */
+   system("stty -echo");
+
    Source.Download(&Dependency.download_order, Config.source_dir);
+
+   /* Reenable terminal echo */
+   system("stty echo");
    cout << "Done\n";
 
    /* Quit if download command is used */
