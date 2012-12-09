@@ -38,6 +38,7 @@ class CCursor
       int ypos;
    private:
       char *UP;
+      char PC;
       char *DO;
       char *ce;
       char *vi;

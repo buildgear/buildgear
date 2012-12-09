@@ -24,8 +24,6 @@
 #include <stdlib.h>
 #include "buildgear/cursor.h"
 
-char PC;
-
 CCursor::CCursor()
 {
    char *term_type;
