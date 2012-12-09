@@ -36,41 +36,41 @@ CCursor::CCursor()
       exit(EXIT_FAILURE);
    }
 
-   //Get the termcap descriptions
+   // Get the termcap descriptions
    tgetent(NULL, getenv("TERM"));
 
-   //Get number of lines in terminal
+   // Get number of lines in terminal
    no_lines = tgetnum("li");
 
-   //Get number of cols in terminal
+   // Get number of cols in terminal
    no_cols = tgetnum("co");
 
-   //Request padding character
+   // Request padding character
    temp = tgetstr("pc", NULL);
    PC = temp ? *temp : 0;
 
-   //Get string for moving cursor #1 lines up
+   // Get string for moving cursor #1 lines up
    UP =  tgetstr("UP", NULL);
 
-   //Get string for moving cursor #1 lines down
+   // Get string for moving cursor #1 lines down
    DO =  tgetstr("DO", NULL);
 
-   //Get string to clear from cursor to end of line
+   // Get string to clear from cursor to end of line
    ce =  tgetstr("ce", NULL);
 
-   //Get string to make cursor invisible
+   // Get string to make cursor invisible
    vi =  tgetstr("vi", NULL);
 
-   //Get string to make cursor visible
+   // Get string to make cursor visible
    ve =  tgetstr("ve", NULL);
 
-   //Get string to move cursor to lower left corner
+   // Get string to move cursor to lower left corner
    ll =  tgetstr("ll", NULL);
 
-   //Get string to clear lines below cursor
+   // Get string to clear lines below cursor
    cd =  tgetstr("cd", NULL);
 
-   //Relative cursor placement
+   // Relative cursor placement
    xpos = 0;
    ypos = 0;
 }

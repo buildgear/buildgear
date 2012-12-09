@@ -155,10 +155,10 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
    if (Config.download_connections)
    {
-      //Add download_connections downloads to multi stack
+      // Add download_connections downloads to multi stack
       for (i=0;i<Config.download_connections;i++)
       {
-         //Stop if no more downloads are pending
+         // Stop if no more downloads are pending
          if (Download.pending_downloads.size() == 0)
             break;
 
@@ -242,11 +242,11 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                if (item->tries-- > 0)
                {
-                  //Restart download by readding the easy handle
+                  // Restart download by readding the easy handle
                   curl_multi_remove_handle(Download.curlm, msg->easy_handle);
                   curl_multi_add_handle(Download.curlm, msg->easy_handle);
 
-                  //Make sure loop does not end
+                  // Make sure loop does not end
                   active_downloads++;
                   continue;
                }
@@ -283,7 +283,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                   curl_multi_add_handle(Download.curlm, item->curl);
 
-                  //Prevent while loop from stopping prematurely
+                  // Prevent while loop from stopping prematurely
                   active_downloads++;
                   continue;
                } else
@@ -302,7 +302,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                Move(item->source_dir + "/" + item->filename + ".part",
                      item->source_dir + "/" + item->filename);
 
-               //We force update of downloaded/total
+               // We force update of downloaded/total
                curl_easy_getinfo(item->curl, CURLINFO_SIZE_DOWNLOAD, &item->downloaded);
                curl_easy_getinfo(item->curl, CURLINFO_TOTAL_TIME, &total_time);
 
@@ -313,15 +313,15 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                Download.lock();
 
-               //Move cursor to first active element
+               // Move cursor to first active element
                Cursor.line_up(Cursor.ypos);
 
                item->print_progress();
 
-               //Remove the download
+               // Remove the download
                Download.active_downloads.remove((void*)item);
 
-               //Dont overwrite the last output
+               // Dont overwrite the last output
                Cursor.ypos -= DOWNLOAD_LINE_SIZE;
 
                Download.unlock();
@@ -334,13 +334,13 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
             curl_multi_remove_handle(Download.curlm, msg->easy_handle);
             curl_easy_cleanup(msg->easy_handle);
 
-            //Check if there are more downloads pending
+            // Check if there are more downloads pending
             if (Download.pending_downloads.size() > 0)
             {
                CDownloadItem *item = (CDownloadItem*)Download.pending_downloads.front();
                Download.pending_downloads.pop_front();
 
-               //Print out the new download
+               // Print out the new download
                Download.lock();
 
                item->print_progress();
@@ -350,7 +350,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                Download.active_downloads.push_back((void*)item);
                curl_multi_add_handle(Download.curlm, item->curl);
 
-               //Prevent while loop to end prematurely
+               // Prevent while loop to end prematurely
                active_downloads++;
             }
          } else {

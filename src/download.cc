@@ -73,10 +73,10 @@ void CDownload::update_progress()
 {
    list<void*>::iterator it;
 
-   //Make sure screen output is written coherent
+   // Make sure screen output is written coherent
    lock();
 
-   //Move cursor to first active element
+   // Move cursor to first active element
    Cursor.line_up(Cursor.ypos);
 
    for (it = this->active_downloads.begin(); it != this->active_downloads.end(); it++)
@@ -109,7 +109,7 @@ CDownloadItem::CDownloadItem(string url, string source_dir, CDownload *Download)
 
    filename = url.substr(pos+1);
 
-   //Check if filename already pending downloads
+   // Check if filename already pending downloads
    for (it = parent->pending_downloads.begin();it != parent->pending_downloads.end();it++)
    {
       CDownloadItem *item = (CDownloadItem*)*it;
