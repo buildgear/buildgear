@@ -243,6 +243,32 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                char *used_url;
                curl_easy_getinfo(msg->easy_handle, CURLINFO_EFFECTIVE_URL, &used_url);
 
+               // The server does not support resume
+               if (msg->data.result == CURLE_RANGE_ERROR)
+               {
+                  curl_multi_remove_handle(Download.curlm, msg->easy_handle);
+
+                  // If the temp file exists we delete it
+                  if (FileExist(item->source_dir + "/" + item->filename + ".part"))
+                  {
+                    string command;
+                    command = "rm -f " + item->source_dir + "/"
+                              + item->filename + ".part";
+
+                    if (system(command.c_str()) < 0)
+                       perror("error");
+                  }
+
+                  curl_easy_setopt(item->curl, CURLOPT_RESUME_FROM, 0);
+
+                  // Start transfer again from beginning of file
+                  curl_multi_add_handle(Download.curlm, item->curl);
+
+                  // Make sure loop does not end
+                  active_downloads++;
+                  continue;
+               }
+
                if (item->tries-- > 0)
                {
                   // Restart download by readding the easy handle
@@ -258,7 +284,8 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                {
                   if (item->mirror_url == "")
                   {
-                     cout << "Error: Could not download " << used_url << "(" << response << ")" << endl << flush;
+                     cout << "Error: Could not download " << used_url
+                          << "(" << curl_easy_strerror(msg->data.result) << ")" << endl << flush;
                      exit(EXIT_FAILURE);
                   }
 
@@ -292,7 +319,8 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                } else
                {
                   curl_easy_getinfo(msg->easy_handle, CURLINFO_EFFECTIVE_URL, &used_url);
-                  cout << "Error: Could not download " << used_url << " (" << response << ")" << endl << flush;
+                  cout << "Error: Could not download " << used_url << " ("
+                       << curl_easy_strerror(msg->data.result) << ")" << endl << flush;
                   exit(EXIT_FAILURE);
                }
             }
