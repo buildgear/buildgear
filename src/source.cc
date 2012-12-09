@@ -48,7 +48,7 @@ string bytes2str(double bytes)
       bytes /= 1024;
    }
 
-   result << bytes << unit[i];
+   result << setprecision(2) << fixed << bytes << unit[i];
 
    return result.str();
 }
@@ -84,7 +84,7 @@ string seconds2str(double seconds)
       result << " " << hr << " hr";
    if (min > 0)
       result << " " << min << " min";
-      result << " " << seconds << " sec";
+      result << " " << setprecision(2) << fixed << seconds << " sec";
 
    return result.str();
 }
@@ -124,6 +124,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    struct timeval tv;
    long timeout, response;
    double total_time;
+   double speed;
 
    ostringstream temp;
 
@@ -305,9 +306,11 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                // We force update of downloaded/total
                curl_easy_getinfo(item->curl, CURLINFO_SIZE_DOWNLOAD, &item->downloaded);
                curl_easy_getinfo(item->curl, CURLINFO_TOTAL_TIME, &total_time);
+               curl_easy_getinfo(item->curl, CURLINFO_SPEED_DOWNLOAD, &speed);
 
                temp.str("");
-               temp << "Download OK (" << bytes2str(item->downloaded) << " in" << seconds2str(total_time) << ")";
+               temp << "Download OK (" << bytes2str(item->downloaded) << " in" << seconds2str(total_time)
+                    << " " << bytes2str(speed) << "/s)";
                item->status = temp.str();
                item->downloaded = -1;
 
