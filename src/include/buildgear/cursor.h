@@ -36,8 +36,12 @@ class CCursor
       void restore();
       int get_ypos();
       void ypos_add(int);
-      int no_lines;
-      int no_cols;
+      void update_num_cols();
+      void enable_wrap();
+      void disable_wrap();
+
+      unsigned int no_lines;
+      unsigned int no_cols;
    private:
       char *UP;
       char PC;
@@ -47,6 +51,8 @@ class CCursor
       char *ve;
       char *ll;
       char *cd;
+      char *SA;
+      char *RA;
       int ypos;
       int max_ypos;
 };

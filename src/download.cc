@@ -229,14 +229,20 @@ void CDownloadItem::print_progress()
    curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &url);
    line << "   " << "Downloading '" << url << "'";
 
+   // Update number of columns in terminal
+   Cursor.update_num_cols();
+
    if (line.str().size() > Cursor.no_cols)
    {
       string short_line;
 
-      int offset;
+      unsigned int offset;
 
       offset = line.str().size() - Cursor.no_cols + 4;
-      short_line = "   Downloading '..." + string(url).substr(offset) + "'";
+
+      // Avoid out_of_range exception if terminal is shrinked
+      if (offset > 0 && offset <= string(url).size())
+         short_line = "   Downloading '..." + string(url).substr(offset) + "'";
 
       line.str("");
       line << short_line;

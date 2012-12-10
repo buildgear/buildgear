@@ -22,11 +22,14 @@
 #include <stdio.h>
 #include <iostream>
 #include <stdlib.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 #include "buildgear/cursor.h"
 
 void cursor_restore()
 {
    Cursor.restore();
+   Cursor.enable_wrap();
 
    // Make sure terminal echo is reenabled
    system("stty echo");
@@ -77,6 +80,12 @@ CCursor::CCursor()
 
    // Get string to clear lines below cursor
    cd =  tgetstr("cd", NULL);
+
+   // Get string to disable auto margin
+   RA = tgetstr("RA", NULL);
+
+   // Get string to enable auto margin
+   SA = tgetstr("SA", NULL);
 
    // Relative cursor placement
    ypos = 0;
@@ -148,4 +157,23 @@ void CCursor::ypos_add(int num)
 int CCursor::get_ypos()
 {
    return ypos;
+}
+
+void CCursor::update_num_cols()
+{
+   struct winsize w;
+
+   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+   no_cols = w.ws_col;
+}
+
+void CCursor::enable_wrap()
+{
+   putp(SA);
+}
+
+void CCursor::disable_wrap()
+{
+   putp(RA);
 }

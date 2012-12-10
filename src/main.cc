@@ -273,9 +273,11 @@ int main (int argc, char *argv[])
 
    /* Disable terminal echo */
    system("stty -echo");
+   Cursor.disable_wrap();
 
    Source.Download(&Dependency.download_order, Config.source_dir);
 
+   Cursor.enable_wrap();
    /* Reenable terminal echo */
    system("stty echo");
    cout << "Done\n";
