@@ -154,42 +154,24 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
       }
    }
 
-   if (Config.download_connections)
+   // Add download_connections downloads to multi stack
+   for (i=0;i<Config.download_connections;i++)
    {
-      // Add download_connections downloads to multi stack
-      for (i=0;i<Config.download_connections;i++)
-      {
-         // Stop if no more downloads are pending
-         if (Download.pending_downloads.size() == 0)
-            break;
+      // Stop if no more downloads are pending
+      if (Download.pending_downloads.size() == 0)
+         break;
 
-         CDownloadItem *item = (CDownloadItem*)Download.pending_downloads.front();
-         Download.pending_downloads.pop_front();
+      CDownloadItem *item = (CDownloadItem*)Download.pending_downloads.front();
+      Download.pending_downloads.pop_front();
 
-         Download.lock();
+      Download.lock();
 
-         item->print_progress();
+      item->print_progress();
 
-         Download.unlock();
+      Download.unlock();
 
-         Download.active_downloads.push_back((void*)item);
-         curl_multi_add_handle(Download.curlm, item->curl);
-      }
-   } else
-   {
-      for (iter = Download.pending_downloads.begin();iter != Download.pending_downloads.end(); iter++)
-      {
-         CDownloadItem *item = (CDownloadItem*)*iter;
-
-         Download.lock();
-
-         item->print_progress();
-
-         Download.unlock();
-
-         Download.active_downloads.push_back((void*)item);
-         curl_multi_add_handle(Download.curlm, item->curl);
-      }
+      Download.active_downloads.push_back((void*)item);
+      curl_multi_add_handle(Download.curlm, item->curl);
    }
 
    while (active_downloads)

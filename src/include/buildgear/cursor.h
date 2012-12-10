@@ -36,7 +36,6 @@ class CCursor
       void restore();
       int no_lines;
       int no_cols;
-      int xpos;
       int ypos;
    private:
       char *UP;

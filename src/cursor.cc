@@ -79,7 +79,6 @@ CCursor::CCursor()
    cd =  tgetstr("cd", NULL);
 
    // Relative cursor placement
-   xpos = 0;
    ypos = 0;
 }
 
