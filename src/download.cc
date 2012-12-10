@@ -71,7 +71,7 @@ int CDownload::progress(void *obj,
 
 void CDownload::update_progress()
 {
-   list<void*>::iterator it;
+   list<CDownloadItem*>::iterator it;
 
    // Make sure screen output is written coherent
    lock();
@@ -81,7 +81,7 @@ void CDownload::update_progress()
 
    for (it = this->active_downloads.begin(); it != this->active_downloads.end(); it++)
    {
-      CDownloadItem *item = (CDownloadItem*)*it;
+      CDownloadItem *item = *it;
       item->print_progress();
    }
 
@@ -93,7 +93,7 @@ void CDownload::update_progress()
 
 CDownloadItem::CDownloadItem(string url, string source_dir, CDownload *Download)
 {
-   list<void*>::iterator it;
+   list<CDownloadItem*>::iterator it;
    parent = Download;
 
    status = "Requesting file..";
@@ -112,7 +112,7 @@ CDownloadItem::CDownloadItem(string url, string source_dir, CDownload *Download)
    // Check if filename already pending downloads
    for (it = parent->pending_downloads.begin();it != parent->pending_downloads.end();it++)
    {
-      CDownloadItem *item = (CDownloadItem*)*it;
+      CDownloadItem *item = *it;
 
       if (item->filename == filename)
          return;
@@ -214,7 +214,7 @@ void CDownloadItem::File()
       // Enable curl debug output
       //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
-      parent->pending_downloads.push_back((void*)this);
+      parent->pending_downloads.push_back(this);
    }
 }
 

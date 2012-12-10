@@ -33,6 +33,8 @@ struct File
    FILE *stream;
 };
 
+class CDownloadItem;
+
 class CDownload : public CFileSystem
 {
    public:
@@ -45,8 +47,8 @@ class CDownload : public CFileSystem
       void update_progress();
       CDownload();
       CURLM *curlm;
-      list<void*> active_downloads;
-      list<void*> pending_downloads;
+      list<CDownloadItem*> active_downloads;
+      list<CDownloadItem*> pending_downloads;
       void lock();
       void unlock();
    private:

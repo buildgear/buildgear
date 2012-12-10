@@ -111,7 +111,6 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    CDownload Download;
    
    list<CBuildFile*>::iterator it;
-   list<void*>::iterator iter;
    string command;
    
    int active_downloads = -1;
@@ -161,7 +160,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
       if (Download.pending_downloads.size() == 0)
          break;
 
-      CDownloadItem *item = (CDownloadItem*)Download.pending_downloads.front();
+      CDownloadItem *item = Download.pending_downloads.front();
       Download.pending_downloads.pop_front();
 
       Download.lock();
@@ -170,7 +169,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
       Download.unlock();
 
-      Download.active_downloads.push_back((void*)item);
+      Download.active_downloads.push_back(item);
       curl_multi_add_handle(Download.curlm, item->curl);
    }
 
@@ -334,7 +333,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                item->print_progress();
 
                // Remove the download
-               Download.active_downloads.remove((void*)item);
+               Download.active_downloads.remove(item);
 
                // Dont overwrite the last output
                Cursor.ypos_add(-DOWNLOAD_LINE_SIZE);
@@ -352,7 +351,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
             // Check if there are more downloads pending
             if (Download.pending_downloads.size() > 0)
             {
-               CDownloadItem *item = (CDownloadItem*)Download.pending_downloads.front();
+               CDownloadItem *item = Download.pending_downloads.front();
                Download.pending_downloads.pop_front();
 
                // Print out the new download
@@ -362,7 +361,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                Download.unlock();
 
-               Download.active_downloads.push_back((void*)item);
+               Download.active_downloads.push_back(item);
                curl_multi_add_handle(Download.curlm, item->curl);
 
                // Prevent while loop to end prematurely
