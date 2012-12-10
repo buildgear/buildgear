@@ -92,6 +92,10 @@ void CCursor::line_down(int num)
    down = tparm(DO, num);
    putp(down);
    ypos += num;
+
+   if (ypos > max_ypos)
+      max_ypos = ypos;
+
 }
 
 void CCursor::line_up(int num)
@@ -128,8 +132,20 @@ void CCursor::hide()
 
 void CCursor::restore()
 {
-   line_down(no_lines);
+   line_down(max_ypos - ypos);
    show();
    fflush(stdout);
 }
 
+void CCursor::ypos_add(int num)
+{
+   ypos += num;
+
+   if (ypos > max_ypos)
+      max_ypos = ypos;
+}
+
+int CCursor::get_ypos()
+{
+   return ypos;
+}

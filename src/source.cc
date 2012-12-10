@@ -279,10 +279,10 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                   Download.lock();
 
-                  Cursor.line_up(Cursor.ypos);
+                  Cursor.line_up(Cursor.get_ypos());
                   item->print_progress();
 
-                  Cursor.ypos -= DOWNLOAD_LINE_SIZE;
+                  Cursor.ypos_add(-DOWNLOAD_LINE_SIZE);
 
                   Download.unlock();
 
@@ -329,7 +329,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                Download.lock();
 
                // Move cursor to first active element
-               Cursor.line_up(Cursor.ypos);
+               Cursor.line_up(Cursor.get_ypos());
 
                item->print_progress();
 
@@ -337,7 +337,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                Download.active_downloads.remove((void*)item);
 
                // Dont overwrite the last output
-               Cursor.ypos -= DOWNLOAD_LINE_SIZE;
+               Cursor.ypos_add(-DOWNLOAD_LINE_SIZE);
 
                Download.unlock();
 

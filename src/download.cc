@@ -77,7 +77,7 @@ void CDownload::update_progress()
    lock();
 
    // Move cursor to first active element
-   Cursor.line_up(Cursor.ypos);
+   Cursor.line_up(Cursor.get_ypos());
 
    for (it = this->active_downloads.begin(); it != this->active_downloads.end(); it++)
    {
@@ -243,11 +243,11 @@ void CDownloadItem::print_progress()
    }
 
    cout << endl << line.str();
-   Cursor.ypos++;
+   Cursor.ypos_add(1);
    line.str("");
    Cursor.clear_rest_of_line();
    cout << endl << flush;
-   Cursor.ypos++;
+   Cursor.ypos_add(1);
 
    if (downloaded == -1) {
 
@@ -255,7 +255,7 @@ void CDownloadItem::print_progress()
 
       Cursor.clear_rest_of_line();
       cout << endl << flush;
-      Cursor.ypos++;
+      Cursor.ypos_add(1);
 
    } else
    {
@@ -290,7 +290,7 @@ void CDownloadItem::print_progress()
 
       Cursor.clear_rest_of_line();
       cout << endl << flush;
-      Cursor.ypos++;
+      Cursor.ypos_add(1);
    }
 
 }

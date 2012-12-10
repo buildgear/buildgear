@@ -34,9 +34,10 @@ class CCursor
       void show();
       void hide();
       void restore();
+      int get_ypos();
+      void ypos_add(int);
       int no_lines;
       int no_cols;
-      int ypos;
    private:
       char *UP;
       char PC;
@@ -46,6 +47,8 @@ class CCursor
       char *ve;
       char *ll;
       char *cd;
+      int ypos;
+      int max_ypos;
 };
 
 extern CCursor Cursor;
