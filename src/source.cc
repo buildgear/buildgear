@@ -321,7 +321,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                temp.str("");
                temp << "Download OK (" << bytes2str(item->downloaded) << " in" << seconds2str(total_time)
-                    << " " << bytes2str(speed) << "/s)";
+                    << " at " << bytes2str(speed) << "/s)";
                item->status = temp.str();
                item->downloaded = -1;
 
