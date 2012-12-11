@@ -284,7 +284,7 @@ void CDownloadItem::print_progress()
          line << " " ;
 
       line << right << "]"
-         << setw(4) << (int) percent << setw(2) << "%";
+         << setw(4) << (int) percent << setw(2) << left << "%";
       if (downloaded == -1)
          line << setw(9) << 0;
       else
