@@ -4,8 +4,8 @@
 
 1. Introduction
 
-   Build Gear is a lightweight embedded build system for experienced GNU/Linux
-   users and developers. The primary focus of this build system is to keep it
+   Build Gear is a lightweight embedded build tool for experienced GNU/Linux
+   users and developers. The primary focus of this build tool is to keep it
    simple, which is reflected in a straightforward command line build interface,
    and easy to maintain build files. The secondary focus is build performance
    and build integrity. Build Gear is easy to use and well suited for rapid
