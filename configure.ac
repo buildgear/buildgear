@@ -44,10 +44,6 @@ then
    AC_MSG_ERROR([termcap not found])
 fi
 
-# Check for header files
-AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
-AC_CHECK_HEADERS([curl/curl.h])
-
 # Check for typedefs, structures, and compiler characteristics
 AC_HEADER_STDBOOL
 AC_C_INLINE
