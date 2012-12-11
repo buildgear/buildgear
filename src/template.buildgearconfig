@@ -14,3 +14,6 @@
 
 # Download retry count (default=3)
 #download_retry=3
+
+# Download connections (default=4)
+#download_connections=4
