@@ -2,6 +2,7 @@ Requirements:
 
    g++
    libcurl4-gnutls-dev
+   termcap (usually bundled with ncurses/curses)
 
 Installation:
 
