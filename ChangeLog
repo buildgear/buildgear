@@ -1,8 +1,28 @@
 
-Build Gear v0.9.9beta Change Log:
+=== Build Gear v0.9.10beta ===
 
- * Renamed variable SOURCE_DIR -> SOURCE
+Changes since Build Gear v0.9.9beta:
 
- * Speeded up bash sessions
+ * Added support for multiple parallel downloads.
 
- * Sanitized TAR_OPTIONS
+   Uses the curl multi interface to facilitate parallel downloads.
+   The number of parallel downloads can be set in the config file
+   using the download_connections flag.
+
+   The number of connections is limited by the number of lines in
+   the terminal. If download_connections is too large for the
+   terminal, the number of connections are limited to fit the size
+   of the terminal.
+
+   Contributed by Jesper Larsen
+
+ * Reworked buildgear.sh argument parsing
+
+   Reworked buildgear.sh argument parsing to pass arguments by long options
+   instead of by environment variables. This makes for a more clean
+   environment for each build session (removes BG_* variables from environment).
+
+   NOTE: BG_* variables should not be used in Buildfiles - they are used
+   internally by Build Gear and are subject to change.
+
+ * Various cleanups
