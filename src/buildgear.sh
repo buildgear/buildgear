@@ -5,13 +5,13 @@
 #  Copyright (c) 2011-2012 Martin Lund <martin.lund@keep-it-simple.com>
 #  Copyright (c) 2000-2005 Per Liden
 #
-#  This script was orignally authored by Per Liden for use with pkgutils.
-#  It has been rewritten by Martin Lund for use with Build Gear.
+#  This script is orignally authored by Per Liden for use with pkgutils.
+#  It is rewritten by Martin Lund for use with Build Gear.
 #
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
 #
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,44 +19,53 @@
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-bg_put() {
+bg_put()
+{
    if [ "$BG_VERBOSE" = "yes" ]; then
       echo "$1" > /proc/$BG_PID/fd/2
    fi
 }
 
-info() {
+info()
+{
    echo "$1"
 }
 
-warning() {
+warning()
+{
    echo "WARNING: $1"
    echo "   Warning       '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
-updating() {
+updating()
+{
    echo "$1"
    echo "   Updating      '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
-error() {
+error()
+{
    echo "ERROR: $1"
    echo "   Error         '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
 }
 
-log_action() {
+log_action()
+{
    echo "======> $1 '$BG_BUILD_TYPE/$name'"
    bg_put "    $1    '$BG_BUILD_TYPE/$name'"
 }
 
-function_exist() {
+function_exist()
+{
    type -t $1 | grep -q 'function'
 }
 
-get_filename() {
+get_filename()
+{
    local FILE="`echo $1 | sed 's|^.*://.*/||g'`"
 
    if [ "$FILE" != "$1" ]; then
@@ -68,7 +77,8 @@ get_filename() {
    echo $FILE
 }
 
-check_create_directory() {
+check_create_directory()
+{
    if [ ! -d $1 ]; then
       mkdir -p $1
       elif [ ! -w $1 ]; then
@@ -80,13 +90,15 @@ check_create_directory() {
    fi
 }
 
-make_footprint() {
+make_footprint()
+{
    tar tvf $BG_BUILD_PACKAGE | \
        awk '{printf $1 "\t" $2 "\t"; s = ""; for (i = 6; i <= NF-1; i++) s = s $i " "; printf s; print $NF}' | \
        sort -k 3
 }
 
-make_sha256sum() {
+make_sha256sum()
+{
    local FILE LOCAL_FILENAMES
 
    if [ "$source" ]; then
@@ -98,7 +110,8 @@ make_sha256sum() {
    fi
 }
 
-check_sha256sum() {
+check_sha256sum()
+{
    local FILE="$BG_BUILD_WORK_DIR/.tmp"
    
    if [ "$BG_UPDATE_CHECKSUM" = "yes" ]; then
@@ -130,7 +143,8 @@ check_sha256sum() {
    fi
 }
 
-do_checksum() {
+do_checksum()
+{
    log_action "Checksum "
 
    if [ "$source" ]; then
@@ -138,7 +152,8 @@ do_checksum() {
    fi
 }
 
-do_extract() {
+do_extract()
+{
    local FILE LOCAL_FILENAME COMMAND
 
    log_action "Extract  "
@@ -166,8 +181,8 @@ do_extract() {
    done
 }
 
-do_build() {
-
+do_build()
+{
    log_action "Build    "
    
    cd $SRC
@@ -182,7 +197,8 @@ do_build() {
    cd $BG_ROOT_DIR
 }
 
-do_strip() {
+do_strip()
+{
    local FILE FILTER
 
    if [ -f $BG_BUILD_NOSTRIP ] && [ ! -s $BG_BUILD_NOSTRIP ]; then
@@ -223,8 +239,8 @@ do_strip() {
    cd $BG_ROOT_DIR
 }
 
-do_package() {
-   
+do_package()
+{
    log_action "Package  "
    
    cd $PKG
@@ -245,7 +261,8 @@ do_package() {
    cd $BG_ROOT_DIR
 }
 
-do_footprint() {
+do_footprint()
+{
    local FILE
    
    log_action "Footprint"
@@ -281,8 +298,8 @@ do_footprint() {
    fi
 }
 
-do_clean() {
-   
+do_clean()
+{
    log_action "Clean    "
    
    if [ -d $BG_BUILD_WORK_DIR ]
@@ -296,7 +313,8 @@ do_clean() {
    fi
 }
 
-do_add() {
+do_add()
+{
    log_action "Add      "
    
    if [ -d $BG_BUILD_SYSROOT_DIR ]; then
@@ -309,7 +327,8 @@ do_add() {
    fi
 }
 
-do_remove() {
+do_remove()
+{
    log_action "Remove   "
    
    if [ -d $BG_BUILD_SYSROOT_DIR ]; then
@@ -324,11 +343,13 @@ do_remove() {
    fi
 }
 
-do_buildfile() {
+do_buildfile()
+{
    . $BG_BUILD_FILE
 }
 
-parse_options() {
+parse_options()
+{
    optspec=":-:"
    while getopts "$optspec" optchar; do
       case "${optchar}" in
@@ -348,7 +369,8 @@ parse_options() {
    done
 }
 
-main() {
+main()
+{
    parse_options "$@"
 
    shopt -s extglob
