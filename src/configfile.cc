@@ -43,6 +43,7 @@ void CConfigFile::Parse(string filename)
                      ; echo download_mirror_first=$download_mirror_first \
                      ; echo download_timeout=$download_timeout \
                      ; echo download_retry=$download_retry \
+                     ; echo download_connections=$download_connections \
                      ; echo required_version=$required_version \
                      ; echo default_name_prefix=$default_name_prefix \
                      ; echo parallel_builds=$parallel_builds \
@@ -86,6 +87,8 @@ void CConfigFile::Parse(string filename)
                   Config.download_mirror = value;
                if (key == CONFIG_KEY_DOWNLOAD_MIRROR_FIRST)
                   Config.download_mirror_first = value;
+               if (key == CONFIG_KEY_DOWNLOAD_CONNECTIONS)
+                  Config.download_connections = atoi(value.c_str());
 // Temporarily disabled support for parallel builds
 //               if (key == CONFIG_KEY_PARALLEL_BUILDS)
 //                  Config.parallel_builds = atoi(value.c_str());

@@ -21,6 +21,7 @@
 #include "config.h"
 #include <string>
 #include <cstdlib>
+#include <ncurses.h>
 #include "buildgear/config.h"
 #include "buildgear/signals.h"
 #include "buildgear/fakeroot.h"
@@ -35,6 +36,7 @@
 #include "buildgear/buildmanager.h"
 #include "buildgear/download.h"
 #include "buildgear/buildsystem.h"
+#include "buildgear/cursor.h"
 
 CSignals      Signals;
 CFakeroot     Fakeroot;
@@ -49,6 +51,7 @@ CDependency   Dependency;
 CSource       Source;
 CBuildManager BuildManager;
 CBuildSystem  BuildSystem;
+CCursor       Cursor;
 
 int main (int argc, char *argv[])
 {
@@ -61,8 +64,11 @@ int main (int argc, char *argv[])
    /* Install custom signal handlers */
    Signals.Install();
 
+   /* Make sure to reenable cursor on exit */
+   atexit(cursor_restore);
+
    /* Disable cursor */
-//   cout << TERMINFO_CIVIS;
+   Cursor.hide();
 
    /* Parse command line options */
    Options.Parse(argc, argv);
@@ -133,6 +139,18 @@ int main (int argc, char *argv[])
    /* Parse buildgear configuration file(s) */
    ConfigFile.Parse(GLOBAL_CONFIG_FILE);
    ConfigFile.Parse(LOCAL_CONFIG_FILE);
+
+   /* Check terminal size and set max sim. downloads */
+   if (Cursor.no_lines < 2 * DOWNLOAD_LINE_SIZE) {
+      cout << "Your terminal has " << Cursor.no_lines << ". You need at least "
+           << DOWNLOAD_LINE_SIZE << " to run buildgear." << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   if (Cursor.no_lines - 1 < Config.download_connections * DOWNLOAD_LINE_SIZE) {
+      cout << endl << "Restricting download_connections to " << (Cursor.no_lines - 1) / DOWNLOAD_LINE_SIZE << " due to terminal height." << endl;
+      Config.download_connections = (Cursor.no_lines - 1) / DOWNLOAD_LINE_SIZE;
+   }
 
    /* Parse buildfiles configuration file */
    ConfigFile.Parse(BUILD_FILES_CONFIG);
@@ -236,8 +254,6 @@ int main (int argc, char *argv[])
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
 
-   cout << "Downloading sources..           " << flush;
-
    if (Config.download)
    {
       /* If 'download --all' command then download source of all builds available */
@@ -253,8 +269,18 @@ int main (int argc, char *argv[])
    }
 
    /* Download */
+   cout << "Downloading sources..           " << endl << flush;
+
+   /* Disable terminal echo */
+   system("stty -echo");
+   Cursor.disable_wrap();
+
    Source.Download(&Dependency.download_order, Config.source_dir);
-      cout << "Done\n";
+
+   Cursor.enable_wrap();
+   /* Reenable terminal echo */
+   system("stty echo");
+   cout << "Done\n";
 
    /* Quit if download command is used */
    if (Config.download)
@@ -291,5 +317,5 @@ int main (int argc, char *argv[])
    Clock.ShowElapsedTime();
    
    /* Enable cursor again */
-   cout << TERMINFO_CNORM;
+   Cursor.restore();
 }

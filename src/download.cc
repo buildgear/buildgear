@@ -32,93 +32,91 @@
 #include "buildgear/config.h"
 #include "buildgear/filesystem.h"
 #include "buildgear/download.h"
+#include "buildgear/cursor.h"
 
-static pthread_mutex_t progress_mutex = PTHREAD_MUTEX_INITIALIZER;
 static unsigned int filesize;
-static int old_progress;
 
-struct File
+size_t CDownloadItem::CurlFileWrite(void *buffer, size_t size, size_t nmemb, void *data)
 {
-   const char *filename;
-   FILE *stream;
-};
-
-size_t CDownload::CurlFileWrite(void *buffer, size_t size, size_t nmemb, void *stream)
-{
-   struct File *out=(struct File *)stream;
-   if(out && !out->stream)
+   CDownloadItem *item = (CDownloadItem *)data;
+   if(item && !item->file.stream)
    {
       // open file for writing
-      out->stream=fopen(out->filename, "a");
-      if(!out->stream)
+      item->file.stream=fopen(item->file.filename, "a");
+      if(!item->file.stream)
          return -1; // failure, can't open file to write
    }
-   
-   return fwrite(buffer, size, nmemb, out->stream);
+
+   return fwrite(buffer, size, nmemb, item->file.stream);
 }
 
-int CDownload::progress(void *v,
+int CDownload::progress(void *obj,
                         double dltotal,
                         double dlnow,
                         double ultotal,
                         double ulnow)
 {
-   double percent;
-   int elements;
-   int spaces;
-   ostringstream total;
-   int i;
-   
-   total << (unsigned long) dltotal << " bytes";
-   
+   CDownloadItem *item = (CDownloadItem*)obj;
+
    if (dltotal != 0)
    {
-      percent = dlnow * 100.0 / dltotal;
-      spaces = 20;
-      
-      // Progress bar:
-      // [====================]100%   (= ~ 5%)
-      
-      // Calculate how many bar elements to draw
-      elements = ((int) percent) / 5;
-      
-      if (((int)percent) != old_progress)
-      {
-         for (i=0; i<elements; i++)
-            cout << "=" << flush;
-         for (i=(spaces-elements); i != 0; i--)
-            cout << " " << flush;
-         
-         cout << right <<"]"
-              << setw(4) << (int) percent << "%" 
-              << setw(12) << (unsigned long) dlnow
-              << " / " 
-              << setw(16) << left << total.str()
-              << right << flush;
-         
-         for (i=(spaces+1+4+1+12+3+16); i != 0; i--)
-            cout << "\b" << flush;
-         old_progress = (int) percent;
-      }
+      item->downloaded = dlnow;
+      item->total = dltotal;
+
+      item->parent->update_progress();
    }
 
    return 0;
 }
 
-void CDownload::URL(string url, string source_dir)
+void CDownload::update_progress()
 {
-   string filename;
-      
+   list<CDownloadItem*>::iterator it;
+
+   // Make sure screen output is written coherent
+   lock();
+
+   // Move cursor to first active element
+   Cursor.line_up(Cursor.get_ypos());
+
+   for (it = this->active_downloads.begin(); it != this->active_downloads.end(); it++)
+   {
+      CDownloadItem *item = *it;
+      item->print_progress();
+   }
+
+   Cursor.clear_below();
+
+   unlock();
+}
+
+
+CDownloadItem::CDownloadItem(string url, string source_dir, CDownload *Download)
+{
+   list<CDownloadItem*>::iterator it;
+   parent = Download;
+
+   status = "Requesting file..";
+
    // Parse filename from URL
    size_t pos = url.find_last_of('/');
 
    if (pos == url.npos )
    {
       cout << "Error: " << url << " is invalid." << endl;
-         exit(EXIT_FAILURE);
+      exit(EXIT_FAILURE);
    }
 
-   filename=url.substr(pos+1);
+   filename = url.substr(pos+1);
+
+   // Check if filename already pending downloads
+   for (it = parent->pending_downloads.begin();it != parent->pending_downloads.end();it++)
+   {
+      CDownloadItem *item = *it;
+
+      if (item->filename == filename)
+         return;
+   }
 
    // Check that filename is valid
    if (filename.length() == 0)
@@ -126,110 +124,75 @@ void CDownload::URL(string url, string source_dir)
       cout << "Error: " << url << " is invalid." << endl;
       exit(EXIT_FAILURE);
    }
-   
+
+   this->source_dir = source_dir;
+   this->alternative_url = false;
+
    // Download if file does not exist in source dir
    if (!FileExistSize(source_dir + "/" + filename, filesize))
    {
-      int result = CURLE_OPERATION_TIMEDOUT;
-      int retry = Config.download_retry;
-      string mirror_url = Config.download_mirror + "/" + filename;
-      string part_file = source_dir + "/" + filename + ".part";
-
+      this->tries = Config.download_retry;
       if (Config.download_mirror_first != "yes")
       {
-         // Download from original url
-         cout << endl << "   Downloading '" << url << "'" << endl;
-         while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
-         {
-            result = File(url, part_file);
-            retry--;
-         }
-
-         if (result == CURLE_OK)
-            goto download_success;
+         this->url = url;
 
          if (Config.download_mirror != "")
-         {
-            // Retry download from mirror url
-            retry = Config.download_retry;
-            result = CURLE_OPERATION_TIMEDOUT;
-            cout << endl << "   Downloading '" << mirror_url << "'" << endl;
-	    while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
-            {
-               // Download from mirror url
-               result = File(mirror_url, part_file);
-            }
-         }
+            this->mirror_url = Config.download_mirror + "/" + filename;
+         else
+            this->mirror_url = "";
+
       } else
       {
          if (Config.download_mirror != "")
          {
+            string mirror_url;
+            mirror_url = Config.download_mirror + "/" + filename;
+
             // Download from mirror url
-            cout << endl << "   Downloading '" << mirror_url << "'" << endl;
-            while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
-            {
-               result = File(mirror_url, part_file);
-               retry--;
-            }
-
-            if (result == CURLE_OK)
-               goto download_success;
+            this->url = mirror_url;
+            this->mirror_url = url;
          }
 
-         // Retry download from original url
-         retry = Config.download_retry;
-         result = CURLE_OPERATION_TIMEDOUT;
-         cout << endl << "   Downloading '" << url << "'" << endl;
-	 while ((retry != 0) && (result == CURLE_OPERATION_TIMEDOUT))
-         {
-            // Download from original url
-            result = File(url, part_file);
-         }
       }
-
-      if (result != CURLE_OK)
-         exit(EXIT_FAILURE);
-
-      download_success:
-         // Remove .part extension
-         Move(source_dir + "/" + filename + ".part",
-              source_dir + "/" + filename);
+      File();
    }
 }
 
-int CDownload::File(string url, string filename)
+void CDownloadItem::File()
 {
-   CURL *curl;
-   CURLcode result = CURLE_OK;
-   struct File file = 
-   {
-      filename.c_str(), /* name to store the file as if succesful */
-      NULL
-   };
+   /* name to store the file as if succesful */
+   string dest;
+
+   dest = source_dir + "/" + filename + ".part";
+
+   file.filename = new char [dest.size()+1];
+   strcpy (file.filename, dest.c_str());
+   file.stream = NULL;
 
    // Reset progress bar
-   old_progress = -1;
+   downloaded = -1;
 
    // Initialize Curl
-   curl_global_init(CURL_GLOBAL_DEFAULT);
    curl = curl_easy_init();
    if (curl) 
    {
       curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-  
+
       // Define file write callback
       curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlFileWrite);
-  
+
       // Define write data callback
-      curl_easy_setopt(curl, CURLOPT_WRITEDATA, &file);
-      
+      curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
+
+      curl_easy_setopt(curl, CURLOPT_PRIVATE, this);
+
       // Disable curls builtin progress indicator
       curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
-      
+
       // Set timeouts
       curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, Config.download_timeout);
       curl_easy_setopt(curl, CURLOPT_FTP_RESPONSE_TIMEOUT, Config.download_timeout);
-      
+
       // Fail on http error (400+)
       curl_easy_setopt(curl, CURLOPT_FAILONERROR, true);
 
@@ -237,46 +200,118 @@ int CDownload::File(string url, string filename)
       curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, true);
 
       // Define progress indication callback
-      curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progress);
+      curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, CDownload::progress);
+      curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, this);
 
       // Set resume option if file already exists
-      if (FileExistSize(filename, filesize))
+      if (FileExistSize(file.filename, filesize))
       {
          // Resume
-         cout << "   Partial download detected - resuming..." << endl;
          curl_easy_setopt(curl, CURLOPT_RESUME_FROM, filesize);
+         status = "Partial download detected. Resuming..";
       }
 
       // Enable curl debug output
       //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
-      cout << "   Requesting file..\r" << flush;
-      cout << "   Progress [";
+      parent->pending_downloads.push_back(this);
+   }
+}
 
-      result = curl_easy_perform(curl);
+void CDownloadItem::print_progress()
+{
+   ostringstream line;
+   char *url;
+   double percent;
+   int spaces, elements;
+   int i;
 
-      // Curl cleanup
-      curl_easy_cleanup(curl);
+   curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &url);
+   line << "   " << "Downloading '" << url << "'";
 
-      if(result != CURLE_OK)
-      {
-         // Download failure
-         long response_code = 0;
-         curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &response_code);
+   // Update number of columns in terminal
+   Cursor.update_num_cols();
 
-         cout << setw (80) << "\r   Error: " << curl_easy_strerror(result)
-                           << " (error " << response_code << ")" << endl;
-      }
-      
-      cout << endl;
+   if (line.str().size() > Cursor.no_cols)
+   {
+      string short_line;
+
+      unsigned int offset;
+
+      offset = line.str().size() - Cursor.no_cols + 4;
+
+      // Avoid out_of_range exception if terminal is shrinked
+      if (offset > 0 && offset <= string(url).size())
+         short_line = "   Downloading '..." + string(url).substr(offset) + "'";
+
+      line.str("");
+      line << short_line;
    }
 
-   // close download file
-   if(file.stream)
-      fclose(file.stream);
+   cout << endl << line.str();
+   Cursor.ypos_add(1);
+   line.str("");
+   Cursor.clear_rest_of_line();
+   cout << endl << flush;
+   Cursor.ypos_add(1);
 
-   // Curl cleanup
-   curl_global_cleanup();
-   
-   return result;
+   if (downloaded == -1) {
+
+      cout << "   " << status;
+
+      Cursor.clear_rest_of_line();
+      cout << endl << flush;
+      Cursor.ypos_add(1);
+
+   } else
+   {
+
+      percent = downloaded * 100.0 / total;
+
+      spaces = 20;
+
+      // Progress bar:
+      // [====================]100%   (= ~ 5%)
+
+      // Calculate how many bar elements to draw
+      elements = ((int) percent) * spaces / 100;
+
+      line << "   Progress [";
+
+      for (i=0; i<elements; i++)
+         line << "=" ;
+      for (i=(spaces-elements);i != 0; i--)
+         line << " " ;
+
+      line << right << "]"
+         << setw(4) << (int) percent << setw(2) << left << "%";
+      if (downloaded == -1)
+         line << setw(9) << 0;
+      else
+         line << setw(9) << (unsigned long) downloaded;
+      line << " / ";
+      line << setw(9) << (unsigned long) total << setw(6) << " bytes   ";
+
+      cout << line.str();
+
+      Cursor.clear_rest_of_line();
+      cout << endl << flush;
+      Cursor.ypos_add(1);
+   }
+
+}
+
+void CDownload::lock()
+{
+   pthread_mutex_lock(&mlock);
+}
+
+void CDownload::unlock()
+{
+   pthread_mutex_unlock(&mlock);
+}
+
+CDownload::CDownload()
+{
+   pthread_mutex_init(&mlock, NULL);
 }
