@@ -75,7 +75,7 @@ void* buildThread::run() {
 void CBuildManager::Do(string action, CBuildFile* buildfile)
 {
    int result;
-   string config;
+   string arguments;
    string command;
    stringstream pid;
    string build(buildfile->build ? "yes" : "no");
@@ -83,57 +83,56 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    // Get PID
    pid << (int) getpid();
    
-   // Set script action
-   config  = " BG_ACTION=" + action;
-   
-   // Set required script variables
-   config += " BG_BUILD_FILES_CONFIG=" BUILD_FILES_CONFIG;
-   config += " BG_BUILD_TYPE=" + buildfile->type;
-   config += " BG_WORK_DIR=" WORK_DIR;
-   config += " BG_PACKAGE_DIR=" PACKAGE_DIR;
-   config += " BG_OUTPUT_DIR=" OUTPUT_DIR;
-   config += " BG_SOURCE_DIR=" SOURCE_DIR;
-   config += " BG_SYSROOT_DIR=" SYSROOT_DIR;
-   config += " BG_BUILD_LOG=" BUILD_LOG;
-   config += " BG_PID=" + pid.str();
-   config += " BG_VERBOSE=no";
-   config += " BG_BUILD=" + Config.build_system;
-   config += " BG_HOST=" + Config.host_system;
+   // Set required script arguments
+   arguments += " --BG_BUILD_FILE '" + buildfile->filename + "'";
+   arguments += " --BG_ACTION '" + action + "'";
+   arguments += " --BG_BUILD_FILES_CONFIG '" BUILD_FILES_CONFIG "'";
+   arguments += " --BG_BUILD_TYPE '" + buildfile->type + "'";
+   arguments += " --BG_WORK_DIR '" WORK_DIR "'";
+   arguments += " --BG_PACKAGE_DIR '" PACKAGE_DIR "'";
+   arguments += " --BG_OUTPUT_DIR '" OUTPUT_DIR "'";
+   arguments += " --BG_SOURCE_DIR '" SOURCE_DIR "'";
+   arguments += " --BG_SYSROOT_DIR '" SYSROOT_DIR "'";
+   arguments += " --BG_BUILD_LOG '" BUILD_LOG "'";
+   arguments += " --BG_PID '" + pid.str() + "'";
+   arguments += " --BG_BUILD '" + Config.build_system + "'";
+   arguments += " --BG_HOST '" + Config.host_system + "'";
+   arguments += " --BG_VERBOSE 'no'";
 
    // Apply build settings to all builds if '--all' is used
    if (Config.all)
    {
-      config += " BG_BUILD_BUILD=" + build;
-      config += " BG_UPDATE_CHECKSUM=" + Config.update_checksum;
-      config += " BG_UPDATE_FOOTPRINT=" + Config.update_footprint;
-      config += " BG_NO_STRIP=" + Config.no_strip;
-      config += " BG_KEEP_WORK=" + Config.keep_work;
+      arguments += " --BG_BUILD_BUILD '" + build + "'";
+      arguments += " --BG_UPDATE_CHECKSUM '" + Config.update_checksum + "'";
+      arguments += " --BG_UPDATE_FOOTPRINT '" + Config.update_footprint + "'";
+      arguments += " --BG_NO_STRIP '" + Config.no_strip + "'";
+      arguments += " --BG_KEEP_WORK '" + Config.keep_work + "'";
    } else
    {
       // Apply settings to main build
       if (Config.name == buildfile->name)
       {
-         config += " BG_BUILD_BUILD=" + build;
-         config += " BG_UPDATE_CHECKSUM=" + Config.update_checksum;
-         config += " BG_UPDATE_FOOTPRINT=" + Config.update_footprint;
-         config += " BG_NO_STRIP=" + Config.no_strip;
-         config += " BG_KEEP_WORK=" + Config.keep_work;
+         arguments += " --BG_BUILD_BUILD '" + build + "'";
+         arguments += " --BG_UPDATE_CHECKSUM '" + Config.update_checksum + "'";
+         arguments += " --BG_UPDATE_FOOTPRINT '" + Config.update_footprint + "'";
+         arguments += " --BG_NO_STRIP '" + Config.no_strip + "'";
+         arguments += " --BG_KEEP_WORK '" + Config.keep_work + "'";
       } else
       {
          // Apply default settings to the build dependencies
-         config += " BG_BUILD_BUILD=" + build;
-         config += " BG_UPDATE_CHECKSUM=no";
-         config += " BG_UPDATE_FOOTPRINT=no";
-         config += " BG_NO_STRIP=no";
-         config += " BG_KEEP_WORK=no";
+         arguments += " --BG_BUILD_BUILD '" + build + "'";
+         arguments += " --BG_UPDATE_CHECKSUM 'no'";
+         arguments += " --BG_UPDATE_FOOTPRINT 'no'";
+         arguments += " --BG_NO_STRIP 'no'";
+         arguments += " --BG_KEEP_WORK 'no'";
       }
    }
    
-   command = config + " " SCRIPT " " + buildfile->filename;
+   command = SCRIPT " " + arguments;
 
    /* Make sure we are using bash */
    command = "bash --norc --noprofile -O extglob -c '" + command + "'";
-   
+
    pthread_mutex_lock(&cout_mutex);
    
    if ((action == "build") && (buildfile->build))

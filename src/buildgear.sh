@@ -329,21 +329,37 @@ do_buildfile() {
 }
 
 parse_options() {
-	BG_BUILD_FILE=$1
+   optspec=":-:"
+   while getopts "$optspec" optchar; do
+      case "${optchar}" in
+         -)
+           case "${OPTARG}" in
+              *)
+                 val="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                 eval $OPTARG=\"${val}\"
+                 ;;
+           esac;;
+         *)
+              if [ "$OPTERR" != 1 ] || [ "${optspec:0:1}" = ":" ]; then
+                 echo "Non-option argument: '-${OPTARG}'" >&2
+              fi
+              ;;
+      esac
+   done
 }
 
 main() {
+   parse_options "$@"
+
    shopt -s extglob
 
-   # respawn with output redirected to build log file
+   # Respawn with output redirected to build log file
    exec &>> $BG_BUILD_LOG
    
    # Sanitize environment
    unset GREP_OPTIONS
    unset TAR_OPTIONS
    unalias -a
-   
-   parse_options "$@"
 
    BG_ROOT_DIR="$PWD"
    BG_OUTPUT_DIR="$BG_ROOT_DIR/$BG_OUTPUT_DIR"
@@ -359,11 +375,10 @@ main() {
 
    # Special config and build file variables
    export NATIVE_SYSROOT="$BG_SYSROOT_NATIVE_DIR"
-   export CROSS_SYSROOT="$BG_SYSROOT_CROSS_DIR"
    export BUILD_TYPE="$BG_BUILD_TYPE"
 
    # Include buildfiles configuration
-   if [ -f $1 ]; then
+   if [ -f $BG_BUILD_FILE ]; then
       . $BG_BUILD_FILES_CONFIG
    fi
 
