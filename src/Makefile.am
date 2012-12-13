@@ -17,7 +17,6 @@ buildgear_SOURCES = \
    options.cc \
    source.cc \
    svg.cc \
-   thread.cc \
    cursor.cc \
    include/buildgear/signals.h \
    include/buildgear/fakeroot.h \
@@ -35,8 +34,7 @@ buildgear_SOURCES = \
    include/buildgear/filesystem.h \
    include/buildgear/options.h \
    include/buildgear/source.h \
-   include/buildgear/svg.h \
-   include/buildgear/thread.h
+   include/buildgear/svg.h
 buildgear_CPPFLAGS = -I$(srcdir)/include
 dist_pkgdata_SCRIPTS = config.guess \
                        buildgear.sh \

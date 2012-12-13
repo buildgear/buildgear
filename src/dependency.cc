@@ -102,22 +102,20 @@ void CDependency::ShowDownloadOrder(void)
 void CDependency::ShowBuildOrder(void)
 {
    int i;
-   int max_depth = parallel_build_order.front()->depth;
-
    list<CBuildFile*>::iterator it;
    
    cout <<  "\nBuild order:" << endl;
 
-   for (it=parallel_build_order.begin(), i=1; it!=parallel_build_order.end(); it++, i++)
+   for (it=parallel_build_order.begin(), i=0; it!=parallel_build_order.end(); it++, i++)
    {
-      cout << "   [" << max_depth - (*it)->depth + 1 << "] " \
+      cout << "   [" << (*it)->depth << "] " \
            << std::setw(3) << i << ". " << (*it)->name << endl;
    }
 }
 
-bool compare(CBuildFile *first, CBuildFile *second)
+bool compare_depth(CBuildFile *first, CBuildFile *second)
 {
-   if (first->depth > second->depth)
+   if (first->depth < second->depth)
       return true;
    else
       return false;
@@ -125,65 +123,21 @@ bool compare(CBuildFile *first, CBuildFile *second)
 
 void CDependency::ResolveParallelBuildOrder()
 {
-/* For now, parallel builds is not supported.
-
    list<CBuildFile*>::iterator it;
    list<CBuildFile*>::iterator itr;
-   list<CBuildFile*>::reverse_iterator rit;
-   vector<int> time;
-   
-   typedef ListDigraph::Node Node;
-   typedef ListDigraph::Arc Arc;
 
-   IdMap<ListDigraph,Node> id(graph);
-   InDegMap<ListDigraph> inDegree(graph);
-   
-   // Add nodes to graph
    for (it=build_order.begin(); it!=build_order.end(); it++)
    {
-      (*it)->node = graph.addNode();
-      time.push_back(0);
-   }
-   
-   // Add dependency arcs to nodes
-   for (it=build_order.begin(); it!=build_order.end(); it++)
-   {
+      (*it)->depth = 0;
       for (itr=(*it)->dependency.begin(); itr!=(*it)->dependency.end(); itr++)
-      {
-         Arc arc;
-         arc = graph.addArc((*it)->node,(*itr)->node);
-      }
+         (*it)->depth = max((*it)->depth, (*itr)->depth + 1);
    }
 
-   // Chech that nodes constitute a DAG
-   if (!dag(graph))
-   {
-      cout << "Error: The dependency graph is not a DAG!" << endl;
-      exit(EXIT_FAILURE);
-   }
-   
-   // Find parallel timeslots
-   for (rit=build_order.rbegin(); rit!=build_order.rend(); rit++)
-   {  
-      ListDigraph::Node node = (*rit)->node;
-      if (inDegree[node] > 0)
-      {
-         int maxdist = 0;
-         for (ListDigraph::InArcIt iai(graph, node); iai != INVALID; ++iai)
-            maxdist = max(time[graph.id(graph.source(iai))], maxdist);
-         time[graph.id(node)] = maxdist + 1;
-         
-         // Set depth (timeslot)
-         (*rit)->depth = maxdist + 1;
-      }
-   }
-*/   
    parallel_build_order = build_order;
  
-   // Sort parallel build order by time slots
-//   parallel_build_order.sort(compare);
+   // Sort parallel build order by depths
+   parallel_build_order.sort(compare_depth);
 }
-
 
 void CDependency::ShowDependencyCircleSVG(string filename)
 {

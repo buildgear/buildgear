@@ -17,3 +17,6 @@
 
 # Download connections (default=4)
 #download_connections=4
+
+# Number of parallel builds (default=1)
+# parallel_builds=1
