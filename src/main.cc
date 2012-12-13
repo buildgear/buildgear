@@ -106,7 +106,10 @@ int main (int argc, char *argv[])
    }
 
    /* Display help hint on incorrect show command */
-   if ((Config.show) && (Config.name == "") && (!Config.readme) && (!Config.log) && (!Config.show_version))
+   if ((Config.show) && (Config.name == "")
+                     && (!Config.readme)
+                     && (!Config.log)
+                     && (!Config.show_version))
    {
       cout << "Please specify build name to show\n";
       exit(EXIT_FAILURE);
@@ -148,7 +151,8 @@ int main (int argc, char *argv[])
    }
 
    if (Cursor.no_lines - 1 < Config.download_connections * DOWNLOAD_LINE_SIZE) {
-      cout << endl << "Restricting download_connections to " << (Cursor.no_lines - 1) / DOWNLOAD_LINE_SIZE << " due to terminal height." << endl;
+      cout << endl << "Restricting download_connections to "
+           << (Cursor.no_lines - 1) / DOWNLOAD_LINE_SIZE << " due to terminal height." << endl;
       Config.download_connections = (Cursor.no_lines - 1) / DOWNLOAD_LINE_SIZE;
    }
 
@@ -221,7 +225,7 @@ int main (int argc, char *argv[])
       /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";
       Dependency.ResolveSequentialBuildOrder(Config.name, &BuildFiles.buildfiles);
-      Dependency.ResolveParallelBuildOrder(); // TODO: Fix parallel build support
+      Dependency.ResolveParallelBuildOrder();
       cout << "Done (" << (Dependency.resolved.size()-1) << " dependencies)\n";
    }
 
