@@ -226,6 +226,13 @@ void CDownloadItem::print_progress()
    int spaces, elements;
    int i;
 
+   // Beautify download start output
+   if (parent->first)
+   {
+      cout << endl << flush;
+      parent->first=false;
+   }
+
    curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &url);
    line << "   " << "Downloading '" << url << "'";
 
@@ -318,4 +325,5 @@ void CDownload::unlock()
 CDownload::CDownload()
 {
    pthread_mutex_init(&mlock, NULL);
+   this->first = true;
 }

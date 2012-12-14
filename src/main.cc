@@ -273,7 +273,7 @@ int main (int argc, char *argv[])
    }
 
    /* Download */
-   cout << "Downloading sources..           " << endl << flush;
+   cout << "Downloading sources..           " << flush;
 
    /* Disable terminal echo */
    system("stty -echo");

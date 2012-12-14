@@ -51,6 +51,7 @@ class CDownload : public CFileSystem
       list<CDownloadItem*> pending_downloads;
       void lock();
       void unlock();
+      bool first;
    private:
       pthread_mutex_t mlock;
 };
