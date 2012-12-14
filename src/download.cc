@@ -232,6 +232,9 @@ void CDownloadItem::print_progress()
    // Update number of columns in terminal
    Cursor.update_num_cols();
 
+   cout << "\r";
+   Cursor.clear_rest_of_line();
+
    if (line.str().size() > Cursor.no_cols)
    {
       string short_line;
@@ -296,6 +299,7 @@ void CDownloadItem::print_progress()
 
       Cursor.clear_rest_of_line();
       cout << endl << flush;
+      Cursor.clear_rest_of_line();
       Cursor.ypos_add(1);
    }
 
