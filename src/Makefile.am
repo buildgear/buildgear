@@ -34,7 +34,8 @@ buildgear_SOURCES = \
    include/buildgear/filesystem.h \
    include/buildgear/options.h \
    include/buildgear/source.h \
-   include/buildgear/svg.h
+   include/buildgear/svg.h \
+   include/buildgear/cursor.h
 buildgear_CPPFLAGS = -I$(srcdir)/include
 dist_pkgdata_SCRIPTS = config.guess \
                        buildgear.sh \
