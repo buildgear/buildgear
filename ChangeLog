@@ -1,28 +1,25 @@
 
-=== Build Gear v0.9.10beta ===
+=== Build Gear v0.9.11beta ===
 
-Changes since Build Gear v0.9.9beta:
+Changes since Build Gear v0.9.10beta:
 
- * Added support for multiple parallel downloads.
+ * Added parallel build feature
 
-   Uses the curl multi interface to facilitate parallel downloads.
-   The number of parallel downloads can be set in the config file
-   using the download_connections flag.
+   Added parallel build feature to facilitate faster build times.
 
-   The number of connections is limited by the number of lines in
-   the terminal. If download_connections is too large for the
-   terminal, the number of connections are limited to fit the size
-   of the terminal.
+   By default this feature is disabled. To enable, simply change the
+   "parallel_builds" variable in your Build Gear configuration file to eg. a
+   value of 2. This means that maximum two builds can be building at the same
+   time.
 
-   Contributed by Jesper Larsen
+   Known issue: The build log becomes a mess when building in parallel
+   because it is not protected against simultaneous log writes from the
+   various builds running in parallel (TO BE FIXED).
 
- * Reworked buildgear.sh argument parsing
+   This solution cleans out the old thread implementation in favour of the
+   new c++11 threading library. Consequently, a c++11 enabled C++ compiler
+   is now required. Generally, this results in a much cleaner implementation.
 
-   Reworked buildgear.sh argument parsing to pass arguments by long options
-   instead of by environment variables. This makes for a more clean
-   environment for each build session (removes BG_* variables from environment).
-
-   NOTE: BG_* variables should not be used in Buildfiles - they are used
-   internally by Build Gear and are subject to change.
+ * Added configure check for c++11
 
  * Various cleanups
