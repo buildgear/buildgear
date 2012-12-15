@@ -103,9 +103,14 @@ AC_DEFUN([AC_COMPILE_STDCXX_11], [
   fi
 ])
 
+cpp11=1
 AC_COMPILE_STDCXX_11
 m4_include([m4/ax_check_compile_flag.m4])
-AX_CHECK_COMPILE_FLAG([-std=c++11], [CXXFLAGS="$CXXFLAGS -std=c++11"])
+AX_CHECK_COMPILE_FLAG([-std=c++11], [CXXFLAGS="$CXXFLAGS -std=c++11"], [cpp11=0])
+if test $cpp11 == 0
+then
+	AC_MSG_ERROR([c++11 compiler support not found])
+fi
 
 # Check for libraries and their interfaces
 AC_CHECK_LIB([rt], [clock_gettime], , AC_MSG_ERROR([rt not found]))
