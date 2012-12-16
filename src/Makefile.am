@@ -38,10 +38,10 @@ buildgear_SOURCES = \
    include/buildgear/cursor.h
 buildgear_CPPFLAGS = -I$(srcdir)/include
 dist_pkgdata_SCRIPTS = config.guess \
-                       buildgear.sh \
-                       template.config \
-                       template.readme \
-                       template.buildgearconfig
+                       buildgear.sh
+dist_pkgdata_DATA = template.config \
+                    template.readme \
+                    template.buildgearconfig
 AM_CXXFLAGS = -DAM_PKGDATADIR='"$(pkgdatadir)"'
 bashcompletiondir=$(sysconfdir)/bash_completion.d
 dist_bashcompletion_DATA=buildgear-bash-completion.sh
