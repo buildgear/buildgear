@@ -309,7 +309,6 @@ void CFileSystem::InitRoot(void)
       CopyFile(TEMPLATE_LOCAL_CONFIG, LOCAL_CONFIG_FILE);
 
       cout << "Initialized empty build area in "
-           << GetWorkingDir()
-           << "." << endl;
+           << GetWorkingDir() << endl;
    }
 }
