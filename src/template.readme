@@ -1,5 +1,5 @@
-<This is an example build files readme template - change contents as you please>
-<It is recommended to keep the readme short and precise>
+# This is an example build files readme template - change contents as you please.
+# It is recommended to keep the readme short and precise.
 
 Name:
 
@@ -11,12 +11,12 @@ About:
 
 Main features:
 
-   * <Main feature 1>
-   * <Main feature 2>
-   * <Main feature 3>
-   * <Main feature 4>
-   * <Main feature 5>
-   * <Main feature 6>
+   * <Feature 1>
+   * <Feature 2>
+   * <Feature 3>
+   * <Feature 4>
+   * <Feature 5>
+   * <Feature 6>
    * ...
 
 Main builds:
