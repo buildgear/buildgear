@@ -58,6 +58,17 @@ int CDownload::progress(void *obj,
                         double ulnow)
 {
    CDownloadItem *item = (CDownloadItem*)obj;
+   long response_code;
+
+   curl_easy_getinfo(item->curl, CURLINFO_RESPONSE_CODE, &response_code);
+
+   // Check if we are being redirected
+   if ( (response_code >= 300) && (response_code < 400) )
+   {
+      item->status = "Redirecting...";
+      item->parent->update_progress();
+      return 0;
+   }
 
    if (dltotal != 0)
    {
