@@ -125,8 +125,8 @@ check_sha256sum()
          sed '/^@@/d' | \
          sed '/^+++/d' | \
          sed '/^---/d' | \
-         sed 's/^+/  NEW       /g' | \
-         sed 's/^-/  MISSING   /g' > $FILE.sha256sum.diff
+         sed 's/^+/NEW     /g' | \
+         sed 's/^-/MISSING /g' > $FILE.sha256sum.diff
       if [ -s $FILE.sha256sum.diff ]; then
          warning "Checksum mismatch found"
          cat $FILE.sha256sum.diff
