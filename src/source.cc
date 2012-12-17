@@ -377,6 +377,9 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    curl_multi_cleanup(Download.curlm);
    curl_global_cleanup();
 
+   // Reset to avoid extra newlines on exit
+   Cursor.reset_ymaxpos();
+
    // Beautify download finish output
    if (!Download.first)
       cout << endl;

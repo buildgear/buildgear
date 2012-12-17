@@ -178,3 +178,8 @@ void CCursor::disable_wrap()
 {
    putp(RA);
 }
+
+void CCursor::reset_ymaxpos()
+{
+   max_ypos = 0;
+}
