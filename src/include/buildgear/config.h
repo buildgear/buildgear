@@ -53,6 +53,7 @@ class CConfig : public CUtility
       bool show_version;
       bool log;
       bool log_tail;
+      bool mismatch;
       
       bool init;
 

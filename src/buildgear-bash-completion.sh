@@ -18,7 +18,8 @@ _buildgear()
    download_options="--all"
    build_options="--keep-work --update-checksum --update-footprint --no-strip --no-fakeroot --all"
    clean_options="--all"
-   show_options="--build-order --download-order --dependency --readme --version --log --log-tail"
+   show_options="--build-order --download-order --dependency --readme --version
+                 --log --log-tail --log-mismatch"
 
    if [ $COMP_CWORD -eq 1 ]; then
      COMPREPLY=( $(compgen -W "$commands $options" -- $cur) )

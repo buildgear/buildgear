@@ -161,6 +161,7 @@ void COptions::Parse(int argc, char *argv[])
          {"readme",              no_argument, 0, 'r'},
          {"log",                 no_argument, 0, 'l'},
          {"log-tail",            no_argument, 0, 't'},
+         {"log-mismatch",        no_argument, 0, 'm'},
          {"version",             no_argument, 0, 'v'},
          {0,                     0,           0,  0 }
       };
@@ -188,6 +189,10 @@ void COptions::Parse(int argc, char *argv[])
             case 't':
                Config.log = true;
                Config.log_tail = true;
+               break;
+            case 'm':
+               Config.log = true;
+               Config.mismatch = true;
                break;
             case 'v':
                Config.show_version = true;
@@ -297,6 +302,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --version               Show build version\n";
    cout << "  --log                   Show build log\n";
    cout << "  --log-tail              Show build log (tailed)\n";
+   cout << "  --log-mismatch          Show build log mismatches\n";
    cout << "\n";
    cout << "Options:\n";
    cout << "  --version               Display version\n";

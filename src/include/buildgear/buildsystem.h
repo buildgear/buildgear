@@ -30,6 +30,7 @@ class CBuildSystem : public CFileSystem
       void Check(void);
       void CallCheck(list<CBuildFile*> *buildfiles);
       void ShowLog(void);
+      void ShowLogMismatch(string log_file);
    private:
 };
 
