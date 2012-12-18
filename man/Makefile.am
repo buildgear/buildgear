@@ -1,16 +1,26 @@
-dist_man_MANS = buildgear.1 buildgear-clean.1 buildgear.config.7 \
-                buildgear-download.1 buildgear-show.1
-SUFFIXES = .in
-buildgear.1: buildgear.1.in
-	sed -f version.sed -f date.sed -f author.sed $< > $@
-buildgear-clean.1: buildgear-clean.1.in
-	sed -f version.sed -f date.sed -f author.sed $< > $@
-buildgear.config.7: buildgear.config.7.in
-	sed -f version.sed -f date.sed -f author.sed $< > $@
-buildgear-download.1: buildgear-download.1.in
-	sed -f version.sed -f date.sed -f author.sed $< > $@
-buildgear-show.1: buildgear-show.1.in
-	sed -f version.sed -f date.sed -f author.sed $< > $@
+SUFFIXES = .man1 .1 .man7 .7
 
-clean-local:
-	rm -f $(dist_man_MANS)
+.man1.1:
+	sed -f author.sed \
+            -e "s/<===VERSION===>/$(VERSION)/g" \
+            -e "s/<===DATE===>/`date '+%d %b %Y'`/g" \
+            $< > $@
+
+.man7.7:
+	sed -f author.sed \
+            -e "s/<===VERSION===>/$(VERSION)/g" \
+            -e "s/<===DATE===>/`date '+%d %b %Y'`/g" \
+            $< > $@
+
+man1_sources = buildgear.man1 \
+               buildgear-clean.man1 \
+               buildgear-download.man1 \
+               buildgear-show.man1 \
+               buildgear-build.man1
+
+man7_sources = buildgear.config.man7
+
+dist_man1_MANS = $(man1_sources:.man1=.1)
+dist_man7_MANS = $(man7_sources:.man7=.7)
+
+CLEANFILES = $(dist_man1_MANS) $(dist_man7_MANS)
