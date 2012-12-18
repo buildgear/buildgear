@@ -19,6 +19,8 @@
 
 #include "config.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -134,6 +136,56 @@ void CBuildSystem::ShowLog(void)
 
    if (Config.log_tail)
       FileSystem.Tail(log_file);
+   else if (Config.mismatch)
+      ShowLogMismatch(log_file);
    else
       FileSystem.Cat(log_file);
+}
+
+void CBuildSystem::ShowLogMismatch(string log_file)
+{
+   ifstream inFile(log_file);
+   string current_line, next_line;
+   bool print = false;
+   bool first = true;
+
+   if (!inFile)
+   {
+      cout << "Error: Could not open " << log_file << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   while (getline(inFile, current_line))
+   {
+      if (print)
+      {
+         if (current_line.find("======>") == 0)
+            print = false;
+         else
+            cout << current_line << endl;
+      } else
+      {
+         if ( (current_line.find("======> Footprint") == 0) ||
+               current_line.find("======> Checksum") == 0)
+         {
+            if (!getline(inFile, next_line))
+            {
+               cout << "Error: Log terminated abruptly" << endl;
+               exit(EXIT_FAILURE);
+            }
+
+            if (next_line.find("mismatch found") >= 0)
+            {
+               print = true;
+
+               if (first)
+                  first = false;
+               else
+                  cout << endl;
+
+               cout << current_line << endl << next_line << endl;
+            }
+         }
+      }
+   }
 }
