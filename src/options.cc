@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#include <unistd.h>
 #include "buildgear/config.h"
 #include "buildgear/options.h"
 
@@ -45,6 +46,34 @@ void COptions::Parse(int argc, char *argv[])
    
    // Skip ahead past command
    optind = 2;
+
+   // Help command
+   if (command == "help")
+   {
+      // If a command is specified, show help for that
+      if (argc > 2)
+      {
+         string help_command;
+
+         help_command = argv[2];
+
+         if (help_command == "download")
+            execlp("man", "man", "buildgear-download", NULL);
+         else if (help_command == "build")
+            execlp("man", "man", "buildgear-build", NULL);
+         else if (help_command == "clean")
+            execlp("man", "man", "buildgear-clean", NULL);
+         else if (help_command == "show")
+            execlp("man", "man", "buildgear-show", NULL);
+         else if (help_command == "init")
+            execlp("man", "man", "buildgear-init", NULL);
+         else
+            COptions::ShowHelp(argv);
+      } else
+         COptions::ShowHelp(argv);
+
+      exit(EXIT_SUCCESS);
+   }
    
    // Download command
    if (command == "download")
@@ -308,6 +337,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --version               Display version\n";
    cout << "  --help                  Display help\n";
    cout << "\n";
+   cout << "See buildgear help <command> for help on a specific command\n";
 }
 
 void COptions::ShowVersion(void)
