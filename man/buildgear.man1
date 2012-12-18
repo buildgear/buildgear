@@ -5,9 +5,9 @@ buildgear \- a lightweight embedded firmware build tool.
 
 .SH SYNOPSIS
 .B buildgear
-.I <command>
 .RB [\| \-\-help \|]
 .RB [\| \-\-version \|]
+.I <command>
 .I <args>
 
 .SH DESCRIPTION

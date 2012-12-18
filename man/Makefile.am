@@ -16,7 +16,8 @@ man1_sources = buildgear.man1 \
                buildgear-clean.man1 \
                buildgear-download.man1 \
                buildgear-show.man1 \
-               buildgear-build.man1
+               buildgear-build.man1 \
+               buildgear-init.man1
 
 man5_sources = buildgear.config.man5 \
                buildgear.buildfile.man5 \
