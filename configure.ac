@@ -153,5 +153,5 @@ AC_TYPE_SIZE_T
 
 AC_FUNC_ERROR_AT_LINE
 
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile man/Makefile])
 AC_OUTPUT

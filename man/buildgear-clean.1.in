@@ -1,0 +1,24 @@
+.TH "buildgear clean" 1 "<===DATE===>" "<===VERSION===>" "Buildgear"
+
+.SH NAME
+buildgear clean \- Clean a buildgear package
+
+.SH SYNOPSIS
+\fBbuildgear clean \-\-all \fR| <\fIpackage\fR>
+
+.SH DESCRIPTION
+Command to clean package(s). If the \fB\-\-all\fR option is given, all packages will be cleaned. Alternatively, <\fIpackage\fR> can be specified to clean a specific package.
+
+.SH OPTIONS
+
+.TP
+.B \-\-all
+.RS
+Clean all packages.
+.RE
+
+.SH AUTHOR
+<===AUTHOR===>
+
+.SH SEE ALSO
+.B buildgear(1)

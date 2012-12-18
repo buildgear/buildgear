@@ -1,0 +1,71 @@
+.TH "buildgear download" 1 "<===DATE===>" "<===VERSION===>" "Buildgear"
+
+.SH NAME
+buildgear download - Download source files
+
+.SH SYNOPSIS
+\fBbuildgear download \-\-all\fR | \fI<package>\fR
+
+.SH DESCRIPTION
+This command will download the sources defined in the Buildfile(s).
+.PP
+If
+.I <package>
+is given, the sources for that package will be downloaded.
+.PP
+If the option
+.B \-\-all
+is given, sources for all packages in the current environment will be downloaded.
+
+.SH OPTIONS
+.TP
+.B \-\-all
+.RS
+Download sources for all packages
+.RE
+
+.SH CONFIG
+The download behavior can be configured in the buildgear config file (See 
+.BR "buildgear-config(7)").
+
+.TP
+.B source_dir
+.RS
+The source download directory. Default is \fIbuild/source
+.PP
+One reason to change the source directory is to share source downloads between projects.
+.RE
+
+.TP
+.B download_mirror
+.RS
+The URL of a download mirror containing the source files.
+.RE
+
+.TP
+.B download_mirror_first
+.RS
+Flag that determines if the download should try the mirror before the URL given in the buildfile. Can be set to
+.BR "yes" " or "  "no".
+Default is no.
+.RE
+
+.TP
+.B download_timeout
+.RS
+The download connection timeout in seconds. Default is 20
+.RE
+
+.TP
+.B download_connections
+.RS
+The number of simultaneous download connections allowed. Default is 4.
+.PP
+The setting can be overrided by the tool at runtime, if the terminal does not have enough lines to print the progress of all the connections. Each connection requires 3 lines for printing.
+.RE
+
+.SH AUTHOR
+<===AUTHOR===>
+
+.SH SEE ALSO
+.B buildgear(1), buildgear.config(7)

@@ -1,0 +1,74 @@
+.TH "buildgear show" 1 "<===DATE===>" "<===VERSION===" "Buildgear"
+
+.SH NAME
+buildgear show \- Buildgear command to show various information.
+
+.SH SYNOPSIS
+\fBbuildgear show \fR[\fB\-\-log\fR] [\fB\-\-log-tail\fR] [\fB\-\-log-mismatch\fR]
+               [\fB\-\-readme\fR] [[\fB\-\-build\-order\fR | \fB\-\-download-order\fR 
+                | \fB\-\-version\fR | \fB\-\-dependency\fR] <\fIpackage\fR>]
+
+.SH DESCRIPTION
+The show command is used to show various information.
+.PP
+The options \fB\-\-log\fR, \fB\-\-log-tail\fR, and \fB\-\-log-mismatch\fR displays information from the log in the file \fIbuild/build.log\fR.
+.PP
+The option \fB\-\-readme\fR show the readme of the current buildgear environment.
+.PP
+The other options will display information about the <\fIpackage\fR> specified.
+
+.SH OPTIONS
+
+.TP
+\fB\-\-build-order \fR<\fIpackage\fR>
+.RS
+Shows the build order of the <\fIpackage\fR>, and its dependencies.
+.RE
+
+.TP
+\fB\-\-download-order \fR<\fIpackage\fR>
+.RS
+Shows the download order of the <\fIpackage\fR>, and its dependencies.
+.RE
+
+.TP
+\fB\-\-dependency \fR<\fIpackage\fR>
+.RS
+Generates a SVG dependency graph for the <\fIpackage\fR>. The output will be placed in the \fIbuild/output\fR folder.
+.RE
+
+.TP
+\fB\-\-readme \fR<\fIpackage\fR>
+.RS
+Displays the readme of the current buildgear environment.
+.RE
+
+.TP
+\fB\-\-version \fR<\fIpackage\fR>
+.RS
+Shows the version of the specified <\fIpackage\fR>.
+.RE
+
+.TP
+.B "--log"
+.RS
+Show the build log from the file \fIbuild/build.log\fR
+.RE
+
+.TP
+.B "--log-tail"
+.RS
+Show a tail of the log file \fIbuild/build.log\fR. Use this to monitor the build progress.
+.RE
+
+.TP
+.B "--log-mismatch"
+.RS
+Show mismatches from checksums and footprints in the build log from the file \fIbuild/build.log\fR
+.RE
+
+.SH AUTHOR
+<===AUTHOR===>
+
+.SH SEE ALSO
+.B buildgear(1)

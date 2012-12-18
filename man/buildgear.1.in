@@ -1,0 +1,75 @@
+.TH buildgear 1 "<===DATE===>" "<===VERSION===>" "Buildgear"
+
+.SH NAME
+buildgear \- a lightweight embedded firmware build tool.
+
+.SH SYNOPSIS
+.B buildgear
+.I <command>
+.RB [\| \-\-help \|]
+.RB [\| \-\-version \|]
+.I <args>
+
+.SH DESCRIPTION
+Build Gear is a lightweight embedded firmware build tool for experienced GNU/Linux users and developers.
+.PP
+The primary focus of this build tool is to keep cross building simple which is reflected in a straightforward command line interface and support for easy to maintain build files. The secondary focus is build performance and build integrity. Build Gear is easy to use and well suited for rapid prototyping or product development of GNU/Linux firmware to be deployed in small to medium sized embedded systems.
+
+.SH OPTIONS
+
+.TP
+.B "--help"
+.RS
+Prints the synopsis, commands and options.
+.RE
+
+.TP
+.B "--version"
+.RS
+Prints the current version.
+.RE
+
+.SH COMMANDS
+
+.TP
+.B download
+.RS
+Download source files. See \fBbuildgear-download(1)\fR
+.RE
+
+.TP
+.B build
+.RS
+Build. See
+.B buildgear-build(1)
+.RE
+
+.TP
+.B clean
+.RS
+Clean. See
+.B buildgear-clean(1)
+.RE
+
+.TP
+.B show
+.RS
+Show various information. See
+.B buildgear-show(1)
+.RE
+
+.TP
+.B init
+.RS
+Create an empty build environment. See
+.B buildgear-init(1)
+.RE
+
+.SH CAVEATS
+buildgear does not make good coffee.
+
+.SH AUTHOR
+<===AUTHOR===>
+
+.SH SEE ALSO
+.B buildgear.config(7), buildgear-download(1), buildgear-build(1), buildgear-clean(1), buildgear-show(1), buildgear-init(1)
