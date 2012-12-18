@@ -18,7 +18,8 @@ man1_sources = buildgear.man1 \
                buildgear-show.man1 \
                buildgear-build.man1
 
-man5_sources = buildgear.config.man5
+man5_sources = buildgear.config.man5 \
+               buildgear.buildfile.man5
 
 dist_man1_MANS = $(man1_sources:.man1=.1)
 dist_man5_MANS = $(man5_sources:.man5=.5)

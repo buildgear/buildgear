@@ -1,0 +1,133 @@
+.TH "Buildgear buildfile" 5 "<===VERSION===>" "<===DATE===>" "Buildgear"
+
+.SH NAME
+Buildgear Buildfile \- Buildfile to describe build procedure
+
+.SH DESCRIPTION
+Buildfiles describe how a specific package in Buildgear is built. Buildfiles should be located in a folder that describes the packages. Buildfiles for native packages should be located in the \fIbuildfiles/native\fR path, and the cross packages should be located in the \fIbuildfiles/cross\fR path. The depth of the path can be as deep as you like. An example:
+
+.RS
+\fIbuildfiles/cross/cross-extra/MesaLib/Buildfile\fR
+.RE
+
+The Buildfile contains variables to describe the package, and functions to facilitate building the package.
+
+.SH VARIABLES
+The following variables are used in the Buildfile
+
+.TP
+.B name
+.RS
+The name of the package. This is the identifier used as argument to the buildgear commands. The name is also used in the name of the resulting package tar archive.
+.RE
+
+.TP
+.B version
+.RS
+The version of the package. This is reported by the \fBbuildgear show --version \fR<\fIpackage\fR> command. Furthermore, the version is used in the name of the resulting package tar archive.
+.RE
+
+.TP
+.B release
+.RS
+The release identifier of the Buildgear distribution. This identifier will be used in the name of the resulting package tar archive.
+.RE
+
+.TP
+.B source
+.RS
+List of sources needed in the build procedure. Sources can be remote (ftp://, http://, ftps://, https://), or it can be locale, relative to the location of the Builfile. If the source is an archive, it is automatically extracted.
+.RE
+
+.TP
+.B depends
+.RS
+List of Buildgear packages that is needed by the package. These packages will be added to the sysroot before the building of the current package is started. Both compile-time and run-time dependencies can be specified. If the package dependency is in the native branch, the name of the package must be given as \fInative/<package>\fR.
+.RE
+
+.SH FUNCTIONS
+
+.TP
+.B build()
+.RS
+This function is called by the Buildgear tool, when the building the package. This function will normally contain the usual \fB./configure, make, make install\fR circus. Some environment variables are accessible in this function. The most important are:
+
+.TP
+.B SRC
+.RS
+The path of the directory where the sources are extracted
+.RE
+
+.TP
+.B PKG
+.RS
+The path of the directory where the files that should be included in the resulting tar archive is located.
+.RE
+
+.TP
+.B BUILD
+.RS
+The build system tuple
+.RE
+
+.TP
+.B HOST
+.RS
+The host system tuple
+.RE
+
+.RE
+
+.TP
+.B check()
+.RS
+This function is called by the Buildgear tool to check if the pacakage can be built. This function will normally check if required tools on the build system is present.
+.RE
+
+.SH EXAMPLE
+
+The example is taken from cross-extra/Mesalib
+.PP
+ 
+ # Description: The Mesa 3D Graphics Library
+ # URL: http://www.mesa3d.org
+ 
+ name=MesaLib
+ version=8.0.4
+ release=1
+ source=(ftp://ftp.freedesktop.org/pub/mesa/$version/$name-$version.tar.bz2
+         0001-Don-t-cross-compile-src-glsl-builtin_compiler.patch)
+ depends=(libX11 xextproto libXext)
+ 
+ build() {
+    cd Mesa-$version
+
+    patch -p1 < $SRC/0001-Don-t-cross-compile-src-glsl-builtin_compiler.patch
+    NOCONFIGURE=1 ./autogen.sh
+
+    ./configure --build=$BUILD \\
+                --host=$HOST \\
+                --prefix=/usr \\
+                --with-dri-drivers=swrast
+
+    make -j $JOBS
+    make DESTDIR=$PKG install
+
+    # Fix libtool files
+    fix_la_files $PKG
+ }
+
+ check() {
+    check_tool makedepend
+    check_tool python2
+    check_tool autoreconf
+    check_tool automake
+    check_tool aclocal
+    check_lib /usr/share/pyshared/libxml2.py
+ }
+
+.SH AUTHOR
+<===AUTHOR===>
+
+.SH SEE ALSO
+.B buildgear(1)
