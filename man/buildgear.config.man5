@@ -4,7 +4,9 @@
  .buildgear/config \- A configuration file for buildgear
 
 .SH DESCRIPTION
-A configuration file that is used to configure the behavior of the buildgear tool. The file is located at the path \fI.buildgear/config\fR in the buildgear environment root directory.
+A configuration file that is used to configure the behavior of the buildgear tool. The file is located at the path \fI.buildgear/config\fR in the buildgear environment root directory, or in \fI$HOME/.buildgearconfig\fR.
+.PP
+The configuration file in the home directory superseeds the configuration in the \fI.buildgear\fR directory.
 
 .SH OPTIONS
 .TP
