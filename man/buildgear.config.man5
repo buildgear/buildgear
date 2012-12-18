@@ -1,4 +1,4 @@
-.TH "buildgear config" 7 "<===DATE===>" "<===VERSION===>" "Buildgear"
+.TH "buildgear config" 5 "<===DATE===>" "<===VERSION===>" "Buildgear"
 
 .SH NAME
  .buildgear/config \- A configuration file for buildgear
