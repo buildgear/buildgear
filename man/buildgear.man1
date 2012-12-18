@@ -34,35 +34,35 @@ Prints the current version.
 .TP
 .B download
 .RS
-Download source files. See \fBbuildgear-download(1)\fR
+Download source files. See \fBbuildgear-download\fR(1)
 .RE
 
 .TP
 .B build
 .RS
 Build. See
-.B buildgear-build(1)
+\fBbuildgear-build\fR(1)
 .RE
 
 .TP
 .B clean
 .RS
 Clean. See
-.B buildgear-clean(1)
+\fBbuildgear-clean\fR(1)
 .RE
 
 .TP
 .B show
 .RS
 Show various information. See
-.B buildgear-show(1)
+\fBbuildgear-show\fR(1)
 .RE
 
 .TP
 .B init
 .RS
 Create an empty build environment. See
-.B buildgear-init(1)
+\fBbuildgear-init\fR(1)
 .RE
 
 .SH CAVEATS
@@ -72,4 +72,4 @@ buildgear does not make good coffee.
 <===AUTHOR===>
 
 .SH SEE ALSO
-.B buildgear.config(7), buildgear-download(1), buildgear-build(1), buildgear-clean(1), buildgear-show(1), buildgear-init(1)
+\fBbuildgear.config\fR(7), \fBbuildgear-download\fR(1), \fBbuildgear-build\fR(1), \fBbuildgear-clean\fR(1), \fBbuildgear-show\fR(1), \fBbuildgear-init\fR(1)

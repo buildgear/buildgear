@@ -11,6 +11,9 @@ Buildfiles describe how a specific package in Buildgear is built. Buildfiles sho
 .RE
 
 The Buildfile contains variables to describe the package, and functions to facilitate building the package.
+.PP
+
+A buildfile configuration file is used to provide various variables and functions to the buildfiles. See \fBbuildgear.buildfileconfig\fR(5).
 
 .SH VARIABLES
 The following variables are used in the Buildfile
@@ -130,4 +133,4 @@ The example is taken from cross-extra/Mesalib
 <===AUTHOR===>
 
 .SH SEE ALSO
-.B buildgear(1)
+\fBbuildgear\fR(1)

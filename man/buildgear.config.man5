@@ -79,4 +79,4 @@ The number of build sessions to run in parallel. If your project contains many s
 <===AUTHOR===>
 
 .SH SEE ALSO
-.B buildgear(1), buildgear-download(1), buildgear-build(1)
+\fBbuildgear\fR(1), \fBbuildgear-download\fR(1), \fBbuildgear-build\fR(1)

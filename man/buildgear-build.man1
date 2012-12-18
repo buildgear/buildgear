@@ -53,7 +53,7 @@ Do not use fakeroot in the build process.
 .RE
 
 .SH CONFIG
-The build behavior can be configured in the buildgear config file (See \fBbuildgear.config(7)\fR).
+The build behavior can be configured in the buildgear config file (See \fBbuildgear.config\fR(7)).
 
 .TP
 .B parallel_builds
@@ -65,5 +65,5 @@ The number of parallel building threads. The default is 1.
 <===AUTHOR===>
 
 .SH SEE ALSO
-.B buildgear(1), buildgear.config(7)
+\fBbuildgear\fR(1), \fBbuildgear.config\fR(7)
 

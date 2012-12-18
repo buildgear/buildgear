@@ -71,4 +71,4 @@ Show mismatches from checksums and footprints in the build log from the file \fI
 <===AUTHOR===>
 
 .SH SEE ALSO
-.B buildgear(1)
+\fBbuildgear\fR(1)

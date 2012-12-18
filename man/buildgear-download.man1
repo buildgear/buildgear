@@ -68,4 +68,4 @@ The setting can be overrided by the tool at runtime, if the terminal does not ha
 <===AUTHOR===>
 
 .SH SEE ALSO
-.B buildgear(1), buildgear.config(7)
+\fBbuildgear\fR(1), \fBbuildgear.config\fR(7)

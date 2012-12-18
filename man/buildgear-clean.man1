@@ -21,4 +21,4 @@ Clean all packages.
 <===AUTHOR===>
 
 .SH SEE ALSO
-.B buildgear(1)
+\fBbuildgear\fR(1)
