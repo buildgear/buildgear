@@ -174,7 +174,8 @@ void CBuildSystem::ShowLogMismatch(string log_file)
                exit(EXIT_FAILURE);
             }
 
-            if (next_line.find("mismatch found") >= 0)
+            // If the following line contains mismatch
+            if (next_line.find("mismatch found") != -1)
             {
                print = true;
 
