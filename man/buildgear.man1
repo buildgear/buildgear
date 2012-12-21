@@ -7,8 +7,9 @@ buildgear \- a lightweight embedded firmware build tool.
 .B buildgear
 .RB [\| \-\-help \|]
 .RB [\| \-\-version \|]
-.I <command>
-.I <args>
+.I <COMMAND>
+.I [<OPTIONS>]
+[<BUILD NAME>]
 
 .SH DESCRIPTION
 Build Gear is a lightweight embedded firmware build tool for experienced GNU/Linux users and developers.
@@ -61,12 +62,12 @@ Show various information. See
 .TP
 .B init
 .RS
-Create an empty build environment. See
+Create an empty build space. See
 \fBbuildgear-init\fR(1)
 .RE
 
 .SH CAVEATS
-buildgear does not make good coffee.
+buildgear does not make coffee.
 
 .SH AUTHOR
 <===AUTHOR===>

@@ -1,20 +1,22 @@
 .TH "buildgear clean" 1 "<===DATE===>" "<===VERSION===>" "Buildgear"
 
 .SH NAME
-buildgear clean \- Clean a buildgear package
+buildgear clean \- Clean a build
 
 .SH SYNOPSIS
-\fBbuildgear clean \-\-all \fR| <\fIpackage\fR>
+\fBbuildgear clean \-\-all \fR| <\fIbuild name\fR>
 
 .SH DESCRIPTION
-Command to clean package(s). If the \fB\-\-all\fR option is given, all packages will be cleaned. Alternatively, <\fIpackage\fR> can be specified to clean a specific package.
+Command to clean a build. If the \fB\-\-all\fR option is given, all builds will be cleaned. Alternatively, <\fIbuild name\fR> can be specified to clean a specific build.
+
+Build Gear cleans a build by removing work files and the internal build package (located in build/package).
 
 .SH OPTIONS
 
 .TP
 .B \-\-all
 .RS
-Clean all packages.
+Clean all builds.
 .RE
 
 .SH AUTHOR

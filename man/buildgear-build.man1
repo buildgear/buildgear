@@ -7,12 +7,10 @@ buildgear build \- Start buildgear build process.
 .SH SYNOPSIS
 \fBbuildgear build\fR [\fB\-\-keep-work\fR] [\fB\-\-update-checksum\fR]
                 [\fB\-\-update-footprint\fR] [\fB\-\-no-strip\fR]
-                [\fB\-\-no-fakeroot\fR] [\fB\-\-all\fR] <\fIpackage\fR>
+                [\fB\-\-no-fakeroot\fR] [\fB\-\-all\fR] <\fIbuild name\fR>
 
 .SH DESCRIPTION
-The build command starts a the build process. If the \fB\-\-all\fR option is used, all packages in the current buildgear environment will be builed. If <\fIpackage\fR> is specified, a build of the package and all its dependencies is started.
-
-The build sysroot is located in build/work
+This command starts building a build of name <\fIbuild name>. Dependencies are automatically resolved, downloaded and built.
 
 .SH OPTIONS
 
@@ -20,12 +18,18 @@ The build sysroot is located in build/work
 .B "--all"
 .RS
 Apply options to all build dependencies.
+
+This option affects \fB\-\-update-footprint\fR, \fB\-\-update-checksum\fR, \fB\-\-no-strip\fR, and \fB\-\-keep-work\fR
 .RE
 
 .TP
 .B "--keep-work"
 .RS
-Do not delete the work files after a successfull build.
+Do not delete the temporary work files after a successfull build.
+
+Work files are located in build/work
+
+Whenever a build fails the work files are automatically kept for later debug inspection.
 .RE
 
 .TP
@@ -49,7 +53,7 @@ Do not strip libraries and executables.
 .TP
 .B "--no-fakeroot"
 .RS
-Do not use fakeroot in the build process.
+Do not build in a fakeroot session.
 .RE
 
 .SH CONFIG

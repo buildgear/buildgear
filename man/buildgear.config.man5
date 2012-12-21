@@ -4,27 +4,29 @@
  .buildgear/config \- A configuration file for buildgear
 
 .SH DESCRIPTION
-A configuration file that is used to configure the behavior of the buildgear tool. The file is located at the path \fI.buildgear/config\fR in the buildgear environment root directory, or in \fI$HOME/.buildgearconfig\fR.
+A configuration file that is used to configure the behavior of the buildgear tool. The file is located at the path \fI.buildgear/config\fR in the buildgear build space root directory, or in \fI$HOME/.buildgearconfig\fR.
 .PP
-The configuration file in the home directory superseeds the configuration in the \fI.buildgear\fR directory.
+Any settings in the configuration file located in the local build space overrides the settings in the configuration file located in the home directory.
 
 .SH OPTIONS
 .TP
 \fBsource_dir=\fR<\fIpath\fR>
 .RS
-Set <\fIpath\fR> to the download source directory. This is where all the remote sources will be kept. If you have several projects that share sources, you can specify a common source directory to reduce disk/network usage. The default is \fIbuild/source\fR in the current buildgear environment.
+Set <\fIpath\fR> to the download source directory. This is where all the remote sources will be kept. If you have several projects that share sources, you can specify a common source directory to reduce disk/network usage. The default is \fIbuild/source\fR in the current buildgear build space.
 .RE
 
 .TP
 \fBdownload_mirror=\fR<\fIURL\fR>
 .RS
 Set <\fIURL\fR> as the location of a download mirror. This is an alternative to the URL given in the buildfiles.
+
+The final alternative download URL is constructed as a combination of the download_mirror value appended with the file name of the original source URL.
 .RE
 
 .TP
 \fBdownload_mirror_first=\fR<\fByes\fR|\fBno\fR>
 .RS
-A flag that specifies wheter to try a download from the mirror site first. The default is \fBno\fR
+A flag that specifies whether to try a download from the mirror site first or not. The default is \fBno\fR
 .RE
 
 .TP
@@ -42,13 +44,15 @@ The number of retries to try before a download fails. The default is 3.
 .TP
 \fBdownload_connections=\fR<\fIconnections\fR>
 .RS
-The number of simultaneous connections used for download. This option can be overruled runtime by the tool, if the terminal does not have enough lines to print the progress of all connections. Each connection requires 3 lines to print the progress. The default is 4.
+The number of simultaneous download connections. The default is 4.
+
+This option can be overruled by the tool at runtime, if the terminal does not have enough lines to print the progress of all connections. Each connection requires 3 lines to print the progress.
 .RE
 
 .TP
 \fBparallel_builds=\fR<\fIbuilds\fR>
 .RS
-The number of build sessions to run in parallel. If your project contains many small packages, the build time can be reduced drastically on a multi core system, by allowing parallel build sessions. The default is 1.
+The number of build sessions to run in parallel. If your project contains many small builds, the build time can be reduced drastically on a multi core system, by allowing parallel build sessions. The default is 1.
 .RE
 
 .SH TEMPLATE

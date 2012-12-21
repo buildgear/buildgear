@@ -4,24 +4,24 @@
 buildgear download - Download source files
 
 .SH SYNOPSIS
-\fBbuildgear download \-\-all\fR | \fI<package>\fR
+\fBbuildgear download \-\-all\fR | \fI<build name>\fR
 
 .SH DESCRIPTION
 This command will download the sources defined in the Buildfile(s).
 .PP
 If
-.I <package>
-is given, the sources for that package will be downloaded.
+.I <build name>
+is given, the sources for that build will be downloaded.
 .PP
 If the option
 .B \-\-all
-is given, sources for all packages in the current environment will be downloaded.
+is given, sources for all builds in the current environment will be downloaded.
 
 .SH OPTIONS
 .TP
 .B \-\-all
 .RS
-Download sources for all packages
+Download sources for all builds
 .RE
 
 .SH CONFIG
@@ -33,7 +33,7 @@ The download behavior can be configured in the buildgear config file (See
 .RS
 The source download directory. Default is \fIbuild/source
 .PP
-One reason to change the source directory is to share source downloads between projects.
+By changing the source directory it is possible to share source downloads between projects.
 .RE
 
 .TP
@@ -53,7 +53,7 @@ Default is no.
 .TP
 .B download_timeout
 .RS
-The download connection timeout in seconds. Default is 20
+The download connection timeout in seconds. Default is 20.
 .RE
 
 .TP

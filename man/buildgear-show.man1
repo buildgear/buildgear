@@ -6,7 +6,7 @@ buildgear show \- Buildgear command to show various information.
 .SH SYNOPSIS
 \fBbuildgear show \fR[\fB\-\-log\fR] [\fB\-\-log-tail\fR] [\fB\-\-log-mismatch\fR]
                [\fB\-\-readme\fR] [[\fB\-\-build\-order\fR | \fB\-\-download-order\fR 
-                | \fB\-\-version\fR | \fB\-\-dependency\fR] <\fIpackage\fR>]
+                | \fB\-\-version\fR | \fB\-\-dependency\fR] <\fIbuild name\fR>]
 
 .SH DESCRIPTION
 The show command is used to show various information.
@@ -15,38 +15,38 @@ The options \fB\-\-log\fR, \fB\-\-log-tail\fR, and \fB\-\-log-mismatch\fR displa
 .PP
 The option \fB\-\-readme\fR show the readme of the current buildgear environment.
 .PP
-The other options will display information about the <\fIpackage\fR> specified.
+The other options will display information about the <\fIbuild name\fR> specified.
 
 .SH OPTIONS
 
 .TP
-\fB\-\-build-order \fR<\fIpackage\fR>
+\fB\-\-build-order \fR<\fIbuild name\fR>
 .RS
-Shows the build order of the <\fIpackage\fR>, and its dependencies.
+Shows the build order of the <\fIbuild name\fR>, and its dependencies.
 .RE
 
 .TP
-\fB\-\-download-order \fR<\fIpackage\fR>
+\fB\-\-download-order \fR<\fIbuild name\fR>
 .RS
-Shows the download order of the <\fIpackage\fR>, and its dependencies.
+Shows the download order of the <\fIbuild name\fR>, and its dependencies.
 .RE
 
 .TP
-\fB\-\-dependency \fR<\fIpackage\fR>
+\fB\-\-dependency \fR<\fIbuild name\fR>
 .RS
-Generates a SVG dependency graph for the <\fIpackage\fR>. The output will be placed in the \fIbuild/output\fR folder.
+Generates a SVG dependency graph for the <\fIbuild name\fR>. The output will be placed in the \fIbuild/output\fR folder.
 .RE
 
 .TP
-\fB\-\-readme \fR<\fIpackage\fR>
+\fB\-\-readme \fR<\fIbuild name\fR>
 .RS
-Displays the readme of the current buildgear environment.
+Displays the readme of the current buildgear build space.
 .RE
 
 .TP
-\fB\-\-version \fR<\fIpackage\fR>
+\fB\-\-version \fR<\fIbuild name\fR>
 .RS
-Shows the version of the specified <\fIpackage\fR>.
+Shows the version of the specified <\fIbuild name\fR>.
 .RE
 
 .TP
@@ -58,13 +58,13 @@ Show the build log from the file \fIbuild/build.log\fR
 .TP
 .B "--log-tail"
 .RS
-Show a tail of the log file \fIbuild/build.log\fR. Use this to monitor the build progress.
+Show a tail of the log file \fIbuild/build.log\fR. This feature is convenient for continously monitoring the build log.
 .RE
 
 .TP
 .B "--log-mismatch"
 .RS
-Show mismatches from checksums and footprints in the build log from the file \fIbuild/build.log\fR
+Show mismatches of checksums and footprints in the build log from the file \fIbuild/build.log\fR
 .RE
 
 .SH AUTHOR

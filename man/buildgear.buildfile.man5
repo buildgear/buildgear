@@ -4,13 +4,13 @@
 Buildgear Buildfile \- Buildfile to describe build procedure
 
 .SH DESCRIPTION
-Buildfiles describe how a specific package in Buildgear is built. Buildfiles should be located in a folder that describes the packages. Buildfiles for native packages should be located in the \fIbuildfiles/native\fR path, and the cross packages should be located in the \fIbuildfiles/cross\fR path. The depth of the path can be as deep as you like. An example:
+Buildfiles describe how a specific build in Buildgear is built. Buildfiles should be located in a folder that describes the builds. Buildfiles for native builds should be located in the \fIbuildfiles/native\fR path, and the cross builds should be located in the \fIbuildfiles/cross\fR path. The depth of the path can be as deep as you like. An example:
 
 .RS
 \fIbuildfiles/cross/cross-extra/MesaLib/Buildfile\fR
 .RE
 
-The Buildfile contains variables to describe the package, and functions to facilitate building the package.
+The Buildfile contains variables to describe the build, and functions to facilitate building the build.
 .PP
 
 A buildfile configuration file is used to provide various variables and functions to the buildfiles. See \fBbuildgear.buildfileconfig\fR(5).
@@ -21,13 +21,13 @@ The following variables are used in the Buildfile
 .TP
 .B name
 .RS
-The name of the package. This is the identifier used as argument to the buildgear commands. The name is also used in the name of the resulting package tar archive.
+The name of the build. This is the identifier used as argument to the buildgear commands. The name is also used in the name of the resulting package tar archive. The package tar archives are used internally by buildgear to populate sysroots during builds.
 .RE
 
 .TP
 .B version
 .RS
-The version of the package. This is reported by the \fBbuildgear show --version \fR<\fIpackage\fR> command. Furthermore, the version is used in the name of the resulting package tar archive.
+The version of the build. This is reported by the \fBbuildgear show --version \fR<\fIbuild name\fR> command. Furthermore, the version is used in the name of the resulting package tar archive.
 .RE
 
 .TP
@@ -45,7 +45,7 @@ List of sources needed in the build procedure. Sources can be remote (ftp://, ht
 .TP
 .B depends
 .RS
-List of Buildgear packages that is needed by the package. These packages will be added to the sysroot before the building of the current package is started. Both compile-time and run-time dependencies can be specified. If the package dependency is in the native branch, the name of the package must be given as \fInative/<package>\fR.
+List of Buildgear builds that is needed by the build. These builds will be added to the sysroot before building of the selected build is started. Both compile-time and run-time dependencies can be specified. If the build dependency is in the native branch, the name of the build must be given as \fInative/<build name>\fR.
 .RE
 
 .SH FUNCTIONS
@@ -53,7 +53,7 @@ List of Buildgear packages that is needed by the package. These packages will be
 .TP
 .B build()
 .RS
-This function is called by the Buildgear tool, when the building the package. This function will normally contain the usual \fB./configure, make, make install\fR circus. Some environment variables are accessible in this function. The most important are:
+This function is called by the Buildgear tool, when the building the build. This function will normally contain the usual \fB./configure, make, make install\fR circus. Some environment variables are accessible in this function. The most important are:
 
 .TP
 .B SRC

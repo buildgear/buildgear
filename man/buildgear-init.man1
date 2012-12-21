@@ -1,14 +1,14 @@
 .TH "Buildgear init" 1 "<===DATE===>" "<===VERSION===>" "Buildgear"
 
 .SH NAME
-buildgear init \- Initialize an empty buildgear environment
+buildgear init \- Initialize an empty buildgear build space
 
 .SH SYNOPSIS
 .B buildgear init
 
 .SH DESCRIPTION
-This command initializes an empty buildgear environment in the path where it is run.
-The environment is populated with templates for the buildgear config, and the buildfile config.
+This command initializes an empty buildgear build space in the path where it is run.
+The build space is populated with templates for the buildgear config, and the buildfile config.
 
 .SH FILES
 
@@ -19,7 +19,7 @@ The buildgear config template. See \fBbuildgear.config\fR(5).
 
 .I buildfiles/config
 .RS
-The buildfiles config templatei. See \fBbuildgear.buildfileconfig\fR(5).
+The buildfiles config template. See \fBbuildgear.buildfileconfig\fR(5).
 .RE
 
 .I buildfiles/readme
@@ -29,12 +29,12 @@ A template for a readme describing the distribution.
 
 .I buildfiles/cross
 .RS
-Directory for the cross pacakges.
+Directory for the cross build files.
 .RE
 
 .I buildfiles/native
 .RS
-Directory for the native packages.
+Directory for the native build files.
 .RE
 
 .SH AUTHOR
