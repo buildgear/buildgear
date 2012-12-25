@@ -41,6 +41,8 @@ class CCursor
       void enable_wrap();
       void disable_wrap();
       void reset_ymaxpos();
+      void enable_echo();
+      void disable_echo();
 
       unsigned int no_lines;
       unsigned int no_cols;

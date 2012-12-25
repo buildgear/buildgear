@@ -18,13 +18,16 @@
  */
 
 #include "config.h"
+#include <iostream>
+#include <stdexcept>
 #include <curses.h>
+#include <errno.h>
 #include <term.h>
 #include <stdio.h>
-#include <iostream>
 #include <stdlib.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <string.h>
 #include "buildgear/cursor.h"
 
 void cursor_restore()
@@ -33,7 +36,7 @@ void cursor_restore()
    Cursor.enable_wrap();
 
    // Make sure terminal echo is reenabled
-   system("stty echo");
+   Cursor.enable_echo();
 }
 
 CCursor::CCursor()
@@ -182,4 +185,16 @@ void CCursor::disable_wrap()
 void CCursor::reset_ymaxpos()
 {
    max_ypos = 0;
+}
+
+void CCursor::enable_echo()
+{
+   if (system("stty echo") != 0)
+      throw std::runtime_error(strerror(errno));
+}
+
+void CCursor::disable_echo()
+{
+   if (system("stty -echo") != 0)
+      throw std::runtime_error(strerror(errno));
 }
