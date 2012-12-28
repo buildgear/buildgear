@@ -278,13 +278,13 @@ int main (int argc, char *argv[])
    /* Download */
    cout << "Downloading sources..           " << flush;
 
-   /* Disable cursor echo */
+   /* Disable terminal echo */
    Cursor.disable_echo();
    Cursor.disable_wrap();
 
    Source.Download(&Dependency.download_order, Config.source_dir);
 
-   /* Reenable cursor echo */
+   /* Reenable terminal echo */
    Cursor.enable_wrap();
    Cursor.enable_echo();
    cout << "Done\n";
@@ -294,7 +294,7 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
 
    /* Show system information */
-   cout << "Detected BUILD system type..    " << Config.build_system << endl;
+   cout << "Detecting BUILD system type..   " << Config.build_system << endl;
    cout << "Configured HOST system type..   " << Config.host_system << endl;
    cout << endl;
    
