@@ -100,7 +100,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
 {
    FILE *fp;
    char line_buffer[LINE_MAX];
-   vector<char> buffer;
+   vector<char> log_buffer;
    string arguments;
    string command;
    stringstream pid;
@@ -188,11 +188,11 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    } else
    {
       // For parallel builds, write only finished log buffers to build log
-      buffer.reserve(10000000);
+      log_buffer.reserve(LOG_BUFFER_SIZE);
       while (fgets(line_buffer, LINE_MAX, fp) != NULL)
-         buffer.insert(buffer.end(), line_buffer, line_buffer + strlen(line_buffer));
+         log_buffer.insert(log_buffer.end(), line_buffer, line_buffer + strlen(line_buffer));
       pthread_mutex_lock(&log_mutex);
-      Log.write(buffer.data(), buffer.size());
+      Log.write(log_buffer.data(), log_buffer.size());
       pthread_mutex_unlock(&log_mutex);
    }
 }

@@ -129,6 +129,8 @@ class CConfig : public CUtility
 #define SVG_DASH                 1
 #define SVG_DASH_NO              0
 
+#define LOG_BUFFER_SIZE          10000000
+
 extern CConfig Config;
 
 #endif
