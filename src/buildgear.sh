@@ -374,9 +374,6 @@ main()
    parse_options "$@"
 
    shopt -s extglob
-
-   # Respawn with output redirected to build log file
-   exec &>> $BG_BUILD_LOG
    
    # Sanitize environment
    unset GREP_OPTIONS

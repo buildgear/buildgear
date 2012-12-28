@@ -38,6 +38,7 @@
 #include "buildgear/download.h"
 #include "buildgear/buildsystem.h"
 #include "buildgear/cursor.h"
+#include "buildgear/log.h"
 
 CSignals      Signals;
 CFakeroot     Fakeroot;
@@ -53,6 +54,7 @@ CSource       Source;
 CBuildManager BuildManager;
 CBuildSystem  BuildSystem;
 CCursor       Cursor;
+CLog          Log;
 
 int main (int argc, char *argv[])
 {
@@ -305,12 +307,18 @@ int main (int argc, char *argv[])
    /* Create build output directory */
    FileSystem.CreateDirectory(OUTPUT_DIR);
 
+   /* Open build log file */
+   Log.open(BUILD_LOG);
+
    /* Start building */
    cout << "Building '" << Config.name << "'.. " << flush;
    BuildManager.Build(&Dependency.parallel_build_order);
    if (Config.keep_work == "no")
       BuildManager.CleanWork();
    cout << "Done\n\n";
+
+   /* Close build log */
+   Log.close();
    
    /* Show log location */
    cout << "See " BUILD_LOG " for details.\n\n";

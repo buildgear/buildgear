@@ -42,10 +42,12 @@
 #include "buildgear/source.h"
 #include "buildgear/buildmanager.h"
 #include "buildgear/download.h"
+#include "buildgear/log.h"
 
 sem_t build_semaphore;
 pthread_mutex_t add_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t cout_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t log_mutex = PTHREAD_MUTEX_INITIALIZER;
 CBuildFile *last_build;
 
 class CBuildThread : CBuildManager
@@ -96,7 +98,9 @@ void CBuildThread::Join(void)
 
 void CBuildManager::Do(string action, CBuildFile* buildfile)
 {
-   int result;
+   FILE *fp;
+   char line_buffer[LINE_MAX];
+   vector<char> buffer;
    string arguments;
    string command;
    stringstream pid;
@@ -115,7 +119,6 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    arguments += " --BG_OUTPUT_DIR '" OUTPUT_DIR "'";
    arguments += " --BG_SOURCE_DIR '" SOURCE_DIR "'";
    arguments += " --BG_SYSROOT_DIR '" SYSROOT_DIR "'";
-   arguments += " --BG_BUILD_LOG '" BUILD_LOG "'";
    arguments += " --BG_PID '" + pid.str() + "'";
    arguments += " --BG_BUILD '" + Config.build_system + "'";
    arguments += " --BG_HOST '" + Config.host_system + "'";
@@ -153,14 +156,12 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    command = SCRIPT " " + arguments;
 
    /* Make sure we are using bash */
-   command = "bash --norc --noprofile -O extglob -c '" + command + "'";
+   command = "bash --norc --noprofile -O extglob -c '" + command + "' 2>&1";
 
    pthread_mutex_lock(&cout_mutex);
    
    if ((action == "build") && (buildfile->build))
-   {
       cout << "   Building      '" << buildfile->name << "'" << endl;
-   }
    
    if (action == "add")
       cout << "   Adding        '" << buildfile->name << "'" << endl;
@@ -170,14 +171,29 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    
    pthread_mutex_unlock(&cout_mutex);
 
-   result = system(command.c_str());
-   if (result != 0)
+   /* Execute command */
+   fp = popen(command.c_str(), "r");
+   if (fp == NULL)
    {
-      if (WIFSIGNALED(result) && (WTERMSIG(result) == SIGINT))
-         cout << "\n\nInterrupt signal received - stopped!\n";
-      else
-         cout << "\nsystem() failed\n";
+      cout << "\npopen() failed\n";
       exit(EXIT_FAILURE);
+   }
+
+   /* Log output from build script (buildgear.sh) */
+   if (Config.parallel_builds <= 1)
+   {
+      // For non-parallel builds, write every log line continously to build log
+      while (fgets(line_buffer, LINE_MAX, fp) != NULL)
+         Log.write(line_buffer, strlen(line_buffer));
+   } else
+   {
+      // For parallel builds, write only finished log buffers to build log
+      buffer.reserve(10000000);
+      while (fgets(line_buffer, LINE_MAX, fp) != NULL)
+         buffer.insert(buffer.end(), line_buffer, line_buffer + strlen(line_buffer));
+      pthread_mutex_lock(&log_mutex);
+      Log.write(buffer.data(), buffer.size());
+      pthread_mutex_unlock(&log_mutex);
    }
 }
 
