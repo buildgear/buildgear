@@ -154,6 +154,12 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
       }
    }
 
+   // Print number of files to be downloaded
+   if (Download.pending_downloads.size() > 0)
+   {
+      cout << "     (" << Download.pending_downloads.size() << " files)" << flush;
+   }
+
    // Add download_connections downloads to multi stack
    for (i=0;i<Config.download_connections;i++)
    {
