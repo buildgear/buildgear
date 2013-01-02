@@ -24,8 +24,6 @@
 #include "buildgear/filesystem.h"
 #include "buildgear/options.h"
 
-#define TICK_INTERVAL 1
-
 using namespace std;
 
 class CBuildManager : public CFileSystem, COptions
@@ -40,12 +38,13 @@ class CBuildManager : public CFileSystem, COptions
       void CleanLog(void);
       bool PackageUpToDate(CBuildFile *);
       bool DepBuildNeeded(CBuildFile *buildfile);
-      void BuildOutputAdd(CBuildFile *buildfile);
       void BuildOutputTick(CBuildFile *buildfile);
       void BuildOutputPrint(void);
       list<CBuildFile*> active_builds;
+      list<CBuildFile*> active_adds;
    private:
 };
 
 extern CBuildManager BuildManager;
+extern pthread_mutex_t cout_mutex;
 #endif

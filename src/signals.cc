@@ -24,11 +24,14 @@
 #include "buildgear/config.h"
 #include "buildgear/signals.h"
 #include "buildgear/cursor.h"
+#include "buildgear/buildmanager.h"
 
 struct sigaction new_action, old_action;
 
 void CSignals::sigIntHandler(int signum)
 {
+   pthread_mutex_lock(&cout_mutex);
+   Cursor.clear_below();
    cout << "\n\nInterrupt signal received - stopped!\n";
 
    exit(EXIT_SUCCESS);
