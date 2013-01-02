@@ -81,7 +81,7 @@ void CBuildThread::operator()()
       Do("build", buildfile);
 
       // Remove buildfile from active builds and add it to active adds
-      BuildManager.active_builds.remove_if( [=] (CBuildFile *bf) {return bf == buildfile;} );
+      BuildManager.active_builds.remove(buildfile);
       BuildManager.active_adds.push_back(buildfile);
 
       // Update output
@@ -99,7 +99,7 @@ void CBuildThread::operator()()
       pthread_mutex_lock(&cout_mutex);
 
       // Remove buildfile from active adds
-      BuildManager.active_adds.remove_if( [=] (CBuildFile *bf) {return bf == buildfile;} );
+      BuildManager.active_adds.remove(buildfile);
 
       // Output added and advance cursor
       cout << "   Added         '" << buildfile->name << "'";
@@ -405,6 +405,10 @@ void CBuildManager::BuildOutputPrint()
 
    for (it = BuildManager.active_builds.begin(); it != BuildManager.active_builds.end(); it++)
    {
+      // Do not show output if buildfile is not a build
+      if (!(*it)->build)
+         continue;
+
       switch ((*it)->tick)
       {
          case 0:
