@@ -80,35 +80,38 @@ void CBuildThread::operator()()
       BuildManager.active_builds.push_back(buildfile);
       Do("build", buildfile);
 
-      // Remove buildfile from active builds and add it to active adds
+      // Remove buildfile from active builds
       BuildManager.active_builds.remove(buildfile);
-      BuildManager.active_adds.push_back(buildfile);
+
+      // Add buildfile to active adds, if it is not the last
+      if (buildfile != last_build)
+         BuildManager.active_adds.push_back(buildfile);
 
       // Update output
       pthread_mutex_lock(&cout_mutex);
       BuildOutputPrint();
       pthread_mutex_unlock(&cout_mutex);
 
-      pthread_mutex_lock(&add_mutex);
-
       // Don't add last build
       if (buildfile != last_build)
+      {
+         pthread_mutex_lock(&add_mutex);
          Do("add", buildfile);
-      pthread_mutex_unlock(&add_mutex);
+         pthread_mutex_unlock(&add_mutex);
 
-      pthread_mutex_lock(&cout_mutex);
+         pthread_mutex_lock(&cout_mutex);
 
-      // Remove buildfile from active adds
-      BuildManager.active_adds.remove(buildfile);
+         // Remove buildfile from active adds
+         BuildManager.active_adds.remove(buildfile);
 
-      // Output added and advance cursor
-      cout << "   Added         '" << buildfile->name << "'";
-      Cursor.clear_rest_of_line();
-      cout << endl;
-      Cursor.reset_ymaxpos();
-      BuildOutputPrint();
-      pthread_mutex_unlock(&cout_mutex);
-
+         // Output added and advance cursor
+         cout << "   Added         '" << buildfile->name << "'";
+         Cursor.clear_rest_of_line();
+         cout << endl;
+         Cursor.reset_ymaxpos();
+         BuildOutputPrint();
+         pthread_mutex_unlock(&cout_mutex);
+      }
    }
    sem_post(&build_semaphore);
 };
