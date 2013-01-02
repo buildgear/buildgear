@@ -41,18 +41,15 @@ void cursor_restore()
 
 CCursor::CCursor()
 {
-   char *term_type;
    char *temp;
+   int err;
 
-   term_type = getenv("TERM");
-
-   if (!term_type) {
-      cout << "Error: A terminal type must be specified in TERM environment variable." << endl << flush;
+   // Setup terminfo database based on the TERM environment variable
+   if (setupterm(NULL, 1, &err) == ERR)
+   {
+      cout << "Error: Terminfo setupterm failed (" << err << ")";
       exit(EXIT_FAILURE);
    }
-
-   // Get the termcap descriptions
-   tgetent(NULL, getenv("TERM"));
 
    // Get number of lines in terminal
    no_lines = tgetnum("li");
@@ -103,7 +100,10 @@ void CCursor::line_down(int num)
       return;
 
    down = tparm(DO, num);
+
    putp(down);
+   fflush(stdout);
+
    ypos += num;
 
    if (ypos > max_ypos)
@@ -119,6 +119,8 @@ void CCursor::line_up(int num)
       return;
 
    up = tparm(UP, num);
+   fflush(stdout);
+
    putp(up);
    ypos -= num;
 }
@@ -126,21 +128,25 @@ void CCursor::line_up(int num)
 void CCursor::clear_rest_of_line()
 {
    putp(ce);
+   fflush(stdout);
 }
 
 void CCursor::clear_below()
 {
    putp(cd);
+   fflush(stdout);
 }
 
 void CCursor::show()
 {
    putp(ve);
+   fflush(stdout);
 }
 
 void CCursor::hide()
 {
    putp(vi);
+   fflush(stdout);
 }
 
 void CCursor::restore()
@@ -175,11 +181,13 @@ void CCursor::update_num_cols()
 void CCursor::enable_wrap()
 {
    putp(SA);
+   fflush(stdout);
 }
 
 void CCursor::disable_wrap()
 {
    putp(RA);
+   fflush(stdout);
 }
 
 void CCursor::reset_ymaxpos()
