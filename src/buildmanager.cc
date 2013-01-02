@@ -111,6 +111,12 @@ void CBuildThread::operator()()
          Cursor.reset_ymaxpos();
          BuildOutputPrint();
          pthread_mutex_unlock(&cout_mutex);
+      } else
+      {
+         // Clear line if it is the last build
+         pthread_mutex_lock(&cout_mutex);
+         Cursor.clear_rest_of_line();
+         pthread_mutex_unlock(&cout_mutex);
       }
    }
    sem_post(&build_semaphore);
