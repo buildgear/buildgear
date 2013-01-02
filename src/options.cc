@@ -271,6 +271,7 @@ void COptions::Parse(int argc, char *argv[])
          }
          option = getopt_long (argc, argv, "", long_options, &option_index);
       }
+      COptions::ShowHelp(argv);
       exit(EXIT_SUCCESS);
    }
 
