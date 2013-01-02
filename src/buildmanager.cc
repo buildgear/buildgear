@@ -436,4 +436,5 @@ void CBuildManager::BuildOutputPrint()
 
    Cursor.clear_below();
    Cursor.line_up(lines);
+   cout << "\r" << flush;
 }
