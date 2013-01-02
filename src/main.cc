@@ -148,7 +148,7 @@ int main (int argc, char *argv[])
 
    /* Check terminal size and set max sim. downloads */
    if (Cursor.no_lines < 2 * DOWNLOAD_LINE_SIZE) {
-      cout << "Your terminal has " << Cursor.no_lines << ". You need at least "
+      cout << "Your terminal has " << Cursor.no_lines << " lines. You need at least "
            << DOWNLOAD_LINE_SIZE << " to run buildgear." << endl;
       exit(EXIT_FAILURE);
    }
