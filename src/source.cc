@@ -347,6 +347,8 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                Download.unlock();
 
+               Download.update_progress();
+
             } else {
                cout << "Error: " << item->source_dir + "/" + item->filename + ".part" << " not found" << endl << flush;
                exit(EXIT_FAILURE);
