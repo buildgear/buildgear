@@ -119,9 +119,10 @@ void CCursor::line_up(int num)
       return;
 
    up = tparm(UP, num);
-   fflush(stdout);
 
    putp(up);
+   fflush(stdout);
+
    ypos -= num;
 }
 

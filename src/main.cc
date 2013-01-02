@@ -315,6 +315,7 @@ int main (int argc, char *argv[])
    BuildManager.Build(&Dependency.parallel_build_order);
    if (Config.keep_work == "no")
       BuildManager.CleanWork();
+   Cursor.clear_rest_of_line();
    cout << "Done\n\n";
 
    /* Close build log */

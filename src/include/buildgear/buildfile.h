@@ -46,7 +46,8 @@ class CBuildFile : public CUtility
       float x;
       float y;
       list<CBuildFile*> dependency;
-      private:
+      int tick;
+   private:
 };
 
 #endif

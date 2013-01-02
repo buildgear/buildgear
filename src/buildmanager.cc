@@ -43,6 +43,7 @@
 #include "buildgear/buildmanager.h"
 #include "buildgear/download.h"
 #include "buildgear/log.h"
+#include "buildgear/cursor.h"
 
 sem_t build_semaphore;
 pthread_mutex_t add_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -59,7 +60,7 @@ class CBuildThread : CBuildManager
       void Join(void);
    private:
       thread *buildthread;
-	   CBuildFile *buildfile;
+      CBuildFile *buildfile;
 };
 
 CBuildThread::CBuildThread(CBuildFile *buildfile)
@@ -75,6 +76,7 @@ void CBuildThread::operator()()
    // Only build if build() function is available
    if (buildfile->build_function == "yes")
    {
+      BuildOutputAdd(buildfile);
       Do("build", buildfile);
 
       pthread_mutex_lock(&add_mutex);
@@ -106,6 +108,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    string command;
    stringstream pid;
    string build(buildfile->build ? "yes" : "no");
+   int ticks;
    
    // Get PID
    pid << (int) getpid();
@@ -161,15 +164,21 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
 
    pthread_mutex_lock(&cout_mutex);
    
-   if ((action == "build") && (buildfile->build))
-      cout << "   Building      '" << buildfile->name << "'" << endl;
-   
    if (action == "add")
-      cout << "   Adding        '" << buildfile->name << "'" << endl;
-   
+   {
+      cout << "   Adding        '" << buildfile->name << "'";
+      Cursor.clear_rest_of_line();
+      cout << endl;
+   }
    if (action == "remove")
-      cout << "   Removing      '" << buildfile->name << "'" << endl;
-   
+   {
+      cout << "   Removing      '" << buildfile->name << "'";
+      Cursor.clear_rest_of_line();
+      cout << endl;
+   }
+
+   BuildOutputPrint();
+
    pthread_mutex_unlock(&cout_mutex);
 
    /* Execute command */
@@ -180,12 +189,20 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       exit(EXIT_FAILURE);
    }
 
+
+   if (!buildfile->build && action == "add")
+      sem_post(&build_semaphore);
+
    /* Log output from build script (buildgear.sh) */
    if (Config.parallel_builds <= 1)
    {
       // For non-parallel builds, write every log line continously to build log
-      while (fgets(line_buffer, LINE_MAX, fp) != NULL)
+      for (ticks=0;fgets(line_buffer, LINE_MAX, fp) != NULL;ticks++)
+      {
          Log.write(line_buffer, strlen(line_buffer));
+         if ( (ticks % TICK_INTERVAL) == 0)
+            BuildOutputTick(buildfile);
+      }
 
       /* Release a build semaphore since we only need to write log and add */
       if ((action == "build") && (buildfile->build))
@@ -199,8 +216,12 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       // Write continously to build log if it is not locked
       if (pthread_mutex_trylock(&log_mutex) == 0)
       {
-         while (fgets(line_buffer, LINE_MAX, fp) != NULL)
+         for (ticks=0;fgets(line_buffer, LINE_MAX, fp) != NULL;ticks++)
+         {
             Log.write(line_buffer, strlen(line_buffer));
+            if ( (ticks % TICK_INTERVAL) == 0)
+               BuildOutputTick(buildfile);
+         }
 
          /* Release a build semaphore since we only need to write log and add */
          if (action == "build")
@@ -208,9 +229,12 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
 
       } else
       {
-         while (fgets(line_buffer, LINE_MAX, fp) != NULL)
+         for (ticks=0;fgets(line_buffer, LINE_MAX, fp) != NULL;ticks++)
          {
             log_buffer.insert(log_buffer.end(), line_buffer, line_buffer + strlen(line_buffer));
+
+            if ( (ticks % TICK_INTERVAL) == 0)
+               BuildOutputTick(buildfile);
 
             // If output becomes availible we start to write output
             if (pthread_mutex_trylock(&log_mutex) == 0)
@@ -218,8 +242,13 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
                // Flush what has been captured already
                Log.write(log_buffer.data(), log_buffer.size());
 
-               while (fgets(line_buffer, LINE_MAX, fp) != NULL)
+               for (ticks=0;fgets(line_buffer, LINE_MAX, fp) != NULL;ticks++)
+               {
                   Log.write(line_buffer, strlen(line_buffer));
+
+                  if( (ticks % TICK_INTERVAL) == 0)
+                     BuildOutputTick(buildfile);
+               }
 
                log_buffer.clear();
                pthread_mutex_unlock(&log_mutex);
@@ -239,6 +268,12 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       pthread_mutex_unlock(&log_mutex);
 
    }
+   // Remove the buildfile from active builds
+   BuildManager.active_builds.remove_if( [=] (CBuildFile *bf) {return bf == buildfile;} );
+
+   pthread_mutex_lock(&cout_mutex);
+   BuildOutputPrint();
+   pthread_mutex_unlock(&cout_mutex);
 }
 
 bool CBuildManager::PackageUpToDate(CBuildFile *buildfile)
@@ -363,14 +398,14 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
 void CBuildManager::Clean(CBuildFile *buildfile)
 {
    string command;
-   
+
    command  = "rm -f ";
-   command += string(PACKAGE_DIR) + "/" + 
+   command += string(PACKAGE_DIR) + "/" +
               buildfile->name + "#" +
               buildfile->version + "-" +
-              buildfile->release + 
+              buildfile->release +
               PACKAGE_EXTENSION;
-   
+
    if (system(command.c_str()) < 0)
       perror("error\n");
 }
@@ -398,4 +433,55 @@ void CBuildManager::CleanLog(void)
 {
    if (system("rm -f " BUILD_LOG) < 0)
       perror("error\n");
+}
+
+void CBuildManager::BuildOutputAdd(CBuildFile *buildfile)
+{
+   if (buildfile->build)
+   {
+      cout << "   Starting      '" << buildfile->name << "'" << endl;
+      Cursor.clear_rest_of_line();
+      BuildManager.active_builds.push_back(buildfile);
+   }
+
+}
+
+void CBuildManager::BuildOutputTick(CBuildFile *buildfile)
+{
+   if (++buildfile->tick == 4)
+      buildfile->tick = 0;
+
+   pthread_mutex_lock(&cout_mutex);
+   BuildOutputPrint();
+   pthread_mutex_unlock(&cout_mutex);
+}
+void CBuildManager::BuildOutputPrint()
+{
+   string indicator;
+   list<CBuildFile*>::iterator it;
+
+   for (it = BuildManager.active_builds.begin() ; it != BuildManager.active_builds.end(); it++)
+   {
+
+      switch ((*it)->tick)
+      {
+         case 0:
+            indicator = "|";
+            break;
+         case 1:
+            indicator = "/";
+            break;
+         case 2:
+            indicator = "-";
+            break;
+         case 3:
+            indicator = "\\";
+      }
+
+      cout << " " << indicator << " Building      '" << (*it)->name << "'" << endl << flush;
+
+   }
+
+   Cursor.line_up(BuildManager.active_builds.size());
+
 }
