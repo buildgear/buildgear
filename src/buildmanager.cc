@@ -69,6 +69,7 @@ CBuildThread::CBuildThread(CBuildFile *buildfile)
 
 void CBuildThread::operator()()
 {
+   // Semaphore is released by Do("build")
    sem_wait(&build_semaphore);
 
    // Only build if build() function is available
@@ -81,9 +82,9 @@ void CBuildThread::operator()()
       if (buildfile != last_build)
          Do("add", buildfile);
       pthread_mutex_unlock(&add_mutex);
-   }
- 
-   sem_post(&build_semaphore);
+   } else
+      sem_post(&build_semaphore);
+
 };
 
 void CBuildThread::Start(void)
@@ -105,6 +106,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    string command;
    stringstream pid;
    string build(buildfile->build ? "yes" : "no");
+   struct timespec timeout;
    
    // Get PID
    pid << (int) getpid();
@@ -185,15 +187,45 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       // For non-parallel builds, write every log line continously to build log
       while (fgets(line_buffer, LINE_MAX, fp) != NULL)
          Log.write(line_buffer, strlen(line_buffer));
+
+      /* Release a build semaphore since we only need to write log and add */
+      if ((action == "build") && (buildfile->build))
+         sem_post(&build_semaphore);
+
    } else
    {
       // For parallel builds, write only finished log buffers to build log
       log_buffer.reserve(LOG_BUFFER_SIZE);
-      while (fgets(line_buffer, LINE_MAX, fp) != NULL)
-         log_buffer.insert(log_buffer.end(), line_buffer, line_buffer + strlen(line_buffer));
-      pthread_mutex_lock(&log_mutex);
-      Log.write(log_buffer.data(), log_buffer.size());
+
+      // Set a timeout of 0.5 second for mutex lock
+      clock_gettime(CLOCK_REALTIME, &timeout);
+      timeout.tv_nsec += 500000000;
+
+      // Write continously to build log if it is not locked
+      if (pthread_mutex_timedlock(&log_mutex, &timeout) == 0)
+      {
+         while (fgets(line_buffer, LINE_MAX, fp) != NULL)
+            Log.write(line_buffer, strlen(line_buffer));
+
+         /* Release a build semaphore since we only need to write log and add */
+         if (action == "build")
+            sem_post(&build_semaphore);
+
+      } else
+      {
+         while (fgets(line_buffer, LINE_MAX, fp) != NULL)
+            log_buffer.insert(log_buffer.end(), line_buffer, line_buffer + strlen(line_buffer));
+
+         /* Release a build semaphore since we only need to write log and add */
+         if (action == "build")
+            sem_post(&build_semaphore);
+
+         pthread_mutex_lock(&log_mutex);
+         Log.write(log_buffer.data(), log_buffer.size());
+      }
+
       pthread_mutex_unlock(&log_mutex);
+
    }
 }
 
