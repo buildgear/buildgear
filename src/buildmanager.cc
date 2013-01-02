@@ -106,7 +106,6 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    string command;
    stringstream pid;
    string build(buildfile->build ? "yes" : "no");
-   struct timespec timeout;
    
    // Get PID
    pid << (int) getpid();
@@ -197,12 +196,8 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       // For parallel builds, write only finished log buffers to build log
       log_buffer.reserve(LOG_BUFFER_SIZE);
 
-      // Set a timeout of 0.5 second for mutex lock
-      clock_gettime(CLOCK_REALTIME, &timeout);
-      timeout.tv_nsec += 500000000;
-
       // Write continously to build log if it is not locked
-      if (pthread_mutex_timedlock(&log_mutex, &timeout) == 0)
+      if (pthread_mutex_trylock(&log_mutex) == 0)
       {
          while (fgets(line_buffer, LINE_MAX, fp) != NULL)
             Log.write(line_buffer, strlen(line_buffer));
@@ -214,7 +209,24 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       } else
       {
          while (fgets(line_buffer, LINE_MAX, fp) != NULL)
+         {
             log_buffer.insert(log_buffer.end(), line_buffer, line_buffer + strlen(line_buffer));
+
+            // If output becomes availible we start to write output
+            if (pthread_mutex_trylock(&log_mutex) == 0)
+            {
+               // Flush what has been captured already
+               Log.write(log_buffer.data(), log_buffer.size());
+
+               while (fgets(line_buffer, LINE_MAX, fp) != NULL)
+                  Log.write(line_buffer, strlen(line_buffer));
+
+               log_buffer.clear();
+               pthread_mutex_unlock(&log_mutex);
+
+               break;
+            }
+         }
 
          /* Release a build semaphore since we only need to write log and add */
          if (action == "build")
