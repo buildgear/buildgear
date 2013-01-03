@@ -26,7 +26,7 @@
 bg_put()
 {
    if [ "$BG_VERBOSE" = "yes" ]; then
-      echo "$1" > /proc/$BG_PID/fd/2
+      echo "$1" > /tmp/buildgear.fifo
    fi
 }
 
@@ -38,19 +38,19 @@ info()
 warning()
 {
    echo "WARNING: $1"
-   echo "   Warning       '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
+   echo "   Warning       '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
 }
 
 updating()
 {
    echo "$1"
-   echo "   Updating      '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
+   echo "   Updating      '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
 }
 
 error()
 {
    echo "ERROR: $1"
-   echo "   Error         '$BG_BUILD_TYPE/$name'  ($1)" > /proc/$BG_PID/fd/2
+   echo "   Error         '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
 }
 
 log_action()
