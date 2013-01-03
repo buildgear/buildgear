@@ -441,7 +441,7 @@ void CBuildManager::BuildOutputTick(CBuildFile *buildfile)
 void CBuildManager::BuildOutputPrint()
 {
    string indicator;
-   list<CBuildFile*>::iterator it;
+   list<CBuildFile*>::const_iterator it;
    int lines = 0;
 
    for (it = BuildManager.active_adds.begin(); it != BuildManager.active_adds.end(); it++)
