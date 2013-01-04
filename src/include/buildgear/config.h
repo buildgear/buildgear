@@ -131,6 +131,8 @@ class CConfig : public CUtility
 
 #define LOG_BUFFER_SIZE          10000000
 
+#define SCRIPT_FIFO              "/tmp/buildgear.fifo"
+
 extern CConfig Config;
 
 #endif

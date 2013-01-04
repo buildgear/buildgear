@@ -34,6 +34,9 @@
 #include <linux/limits.h>
 #include <semaphore.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
 #include "buildgear/config.h"
 #include "buildgear/options.h"
 #include "buildgear/filesystem.h"
@@ -95,6 +98,33 @@ void CBuildThread::Start(void)
 void CBuildThread::Join(void)
 {
    buildthread->join();
+}
+
+void script_output(void)
+{
+   int fd, result, count;
+   char line_buffer[LINE_MAX];
+   fd_set rfds;
+
+   while (1)
+   {
+      fd = open(SCRIPT_FIFO, O_RDONLY|O_NONBLOCK);
+
+      FD_ZERO(&rfds);
+      FD_SET(fd, &rfds);
+
+      result = select(fd+1, &rfds, NULL, NULL, NULL);
+      if (result > 0 && FD_ISSET(fd, &rfds))
+      {
+         count = read(fd, line_buffer, LINE_MAX);
+         line_buffer[count]=0;
+         pthread_mutex_lock(&cout_mutex);
+         cout << line_buffer << flush;
+         pthread_mutex_unlock(&cout_mutex);
+      }
+
+      close(fd);
+   }
 }
 
 void CBuildManager::Do(string action, CBuildFile* buildfile)
@@ -280,6 +310,15 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
    list<CBuildFile*>::iterator it;
    list<CBuildFile*>::reverse_iterator rit;
 
+   // Create fifo for build script communication
+   unlink(SCRIPT_FIFO);
+   if (mkfifo(SCRIPT_FIFO, S_IRWXU) != 0)
+      throw std::runtime_error(strerror(errno));
+
+   // Start build script output communication thread
+   thread script_output_thread(script_output);
+   script_output_thread.detach();
+
    // FIXME:
    // Check if buildfiles/config is newer than package or buildfiles
    // If so warn and delete work/packages (force total rebuild)
@@ -358,6 +397,8 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       }
       sem_destroy(&build_semaphore);
    }
+   // Building done - clean up build script fifo
+   unlink(SCRIPT_FIFO);
 }
 
 void CBuildManager::Clean(CBuildFile *buildfile)
