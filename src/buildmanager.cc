@@ -273,6 +273,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    if (pclose(fp) != 0)
    {
       pthread_mutex_lock(&cout_mutex);
+      Cursor.clear_below();
       cout << "\nSee " BUILD_LOG " for details.\n\n" << flush;
       exit(EXIT_FAILURE);
       pthread_mutex_unlock(&cout_mutex); // Never reached
