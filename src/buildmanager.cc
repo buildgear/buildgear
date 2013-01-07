@@ -52,6 +52,8 @@ sem_t build_semaphore;
 pthread_mutex_t add_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t cout_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t log_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t active_builds_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t active_adds_mutex = PTHREAD_MUTEX_INITIALIZER;
 CBuildFile *last_build;
 
 class CBuildThread : CBuildManager
@@ -80,15 +82,23 @@ void CBuildThread::operator()()
    if (buildfile->build_function == "yes")
    {
       // Include buildfile to active builds
+      pthread_mutex_lock(&active_builds_mutex);
       BuildManager.active_builds.push_back(buildfile);
+      pthread_mutex_unlock(&active_builds_mutex);
       Do("build", buildfile);
 
       // Remove buildfile from active builds
+      pthread_mutex_lock(&active_builds_mutex);
       BuildManager.active_builds.remove(buildfile);
+      pthread_mutex_unlock(&active_builds_mutex);
 
       // Add buildfile to active adds, if it is not the last
       if (buildfile != last_build)
+      {
+         pthread_mutex_lock(&active_adds_mutex);
          BuildManager.active_adds.push_back(buildfile);
+         pthread_mutex_unlock(&active_adds_mutex);
+      }
 
       // Update output
       pthread_mutex_lock(&cout_mutex);
@@ -105,7 +115,9 @@ void CBuildThread::operator()()
          pthread_mutex_lock(&cout_mutex);
 
          // Remove buildfile from active adds
+         pthread_mutex_lock(&active_adds_mutex);
          BuildManager.active_adds.remove(buildfile);
+         pthread_mutex_unlock(&active_adds_mutex);
 
          // Output added and advance cursor
          cout << "   Added         '" << buildfile->name << "'";
