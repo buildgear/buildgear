@@ -255,6 +255,15 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       pthread_mutex_lock(&log_mutex);
       Log.write(log_buffer.data(), log_buffer.size());
       pthread_mutex_unlock(&log_mutex);
+
+   }
+
+   if (pclose(fp) != 0)
+   {
+      pthread_mutex_lock(&cout_mutex);
+      cout << "\nSee " BUILD_LOG " for details.\n\n" << flush;
+      exit(EXIT_FAILURE);
+      pthread_mutex_unlock(&cout_mutex); // Never reached
    }
 }
 
