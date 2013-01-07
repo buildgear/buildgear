@@ -1,25 +1,58 @@
 
-=== Build Gear v0.9.11beta ===
+=== Build Gear v0.9.12beta ===
 
-Changes since Build Gear v0.9.10beta:
+Changes since Build Gear v0.9.11beta:
 
- * Added parallel build feature
+ * Added dynamic output when building
 
-   Added parallel build feature to facilitate faster build times.
+   During the build stage each active build now includes a spinning activity
+   indicator and are dynamically updated. Each activity spinner spins one step
+   for each build output line progressed by the related build in progress.
 
-   By default this feature is disabled. To enable, simply change the
-   "parallel_builds" variable in your Build Gear configuration file to eg. a
-   value of 2. This means that maximum two builds can be building at the same
-   time.
+   The end result is a much more beautiful build output and it also gives a
+   much better feeling of the level of build activity.
 
-   Known issue: The build log becomes a mess when building in parallel
-   because it is not protected against simultaneous log writes from the
-   various builds running in parallel (TO BE FIXED).
+   Contributed by Jesper Larsen.
 
-   This solution cleans out the old thread implementation in favour of the
-   new c++11 threading library. Consequently, a c++11 enabled C++ compiler
-   is now required. Generally, this results in a much cleaner implementation.
+ * Fixed build log handling for parallel builds
 
- * Added configure check for c++11
+   Previously, when building in parallel, the build log got messed up
+   because each build process wrote to the build log file at the same time.
+   The end result was a very incoherent build log file.
 
- * Various cleanups
+   This is now fixed so that each build process only dumps its log output
+   to the build log file when it is finished. Also, the build log file is
+   only written to by one build process at a time.
+   The end result is a bursting but coherent log.
+
+ * Added man pages
+
+   Man pages have been added for various commands and configuration files.
+
+   Contributed by Jesper Larsen.
+
+ * Added a show --log-mismatch feature
+
+   Running buildgear show --log-mismatch will print footprint/checksum
+   mismatches from last build.
+
+   Contributed by Jesper Larsen.
+
+ * Added buildgear help command
+
+   Contributed by Jesper Larsen.
+
+ * Print number of files to be downloaded
+
+   Contributed by Jesper Larsen.
+
+ * Show help when bogus command is given
+
+   Contributed by Jesper Larsen.
+
+ * Enabled silent build output
+
+   The automake configuration is now using silent rules which means that
+   building buildgear is much less verbose.
+
+ * Various small fixes and cleanups
