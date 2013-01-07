@@ -466,6 +466,8 @@ void CBuildManager::BuildOutputPrint()
    list<CBuildFile*>::const_iterator it;
    int lines = 0;
 
+   pthread_mutex_lock(&active_adds_mutex);
+
    for (it = BuildManager.active_adds.begin(); it != BuildManager.active_adds.end(); it++)
    {
       cout << "   Adding        '" << (*it)->name << "'";
@@ -474,6 +476,9 @@ void CBuildManager::BuildOutputPrint()
       lines++;
       Cursor.ypos_add(1);
    }
+
+   pthread_mutex_unlock(&active_adds_mutex);
+   pthread_mutex_lock(&active_builds_mutex);
 
    for (it = BuildManager.active_builds.begin(); it != BuildManager.active_builds.end(); it++)
    {
@@ -502,6 +507,8 @@ void CBuildManager::BuildOutputPrint()
       lines++;
       Cursor.ypos_add(1);
    }
+
+   pthread_mutex_unlock(&active_builds_mutex);
 
    Cursor.clear_below();
    Cursor.line_up(lines);
