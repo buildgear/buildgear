@@ -284,9 +284,6 @@ int main (int argc, char *argv[])
 
    Source.Download(&Dependency.download_order, Config.source_dir);
 
-   /* Reenable terminal echo */
-   Cursor.enable_wrap();
-   Cursor.enable_echo();
    cout << "Done\n";
 
    /* Quit if download command is used */
@@ -317,6 +314,10 @@ int main (int argc, char *argv[])
       BuildManager.CleanWork();
    Cursor.clear_rest_of_line();
    cout << "Done\n\n";
+
+   /* Reenable terminal echo */
+   Cursor.enable_wrap();
+   Cursor.enable_echo();
 
    /* Close build log */
    Log.close();
