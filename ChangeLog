@@ -1,58 +1,10 @@
 
-=== Build Gear v0.9.12beta ===
+=== Build Gear v0.9.12.1beta ===
 
-Changes since Build Gear v0.9.11beta:
+Changes since Build Gear v0.9.12beta:
 
- * Added dynamic output when building
+ * Fixed memory corruption
 
-   During the build stage each active build now includes a spinning activity
-   indicator and are dynamically updated. Each activity spinner spins one step
-   for each build output line progressed by the related build in progress.
-
-   The end result is a much more beautiful build output and it also gives a
-   much better feeling of the level of build activity.
-
-   Contributed by Jesper Larsen.
-
- * Fixed build log handling for parallel builds
-
-   Previously, when building in parallel, the build log got messed up
-   because each build process wrote to the build log file at the same time.
-   The end result was a very incoherent build log file.
-
-   This is now fixed so that each build process only dumps its log output
-   to the build log file when it is finished. Also, the build log file is
-   only written to by one build process at a time.
-   The end result is a bursting but coherent log.
-
- * Added man pages
-
-   Man pages have been added for various commands and configuration files.
-
-   Contributed by Jesper Larsen.
-
- * Added a show --log-mismatch feature
-
-   Running buildgear show --log-mismatch will print footprint/checksum
-   mismatches from last build.
-
-   Contributed by Jesper Larsen.
-
- * Added buildgear help command
-
-   Contributed by Jesper Larsen.
-
- * Print number of files to be downloaded
-
-   Contributed by Jesper Larsen.
-
- * Show help when bogus command is given
-
-   Contributed by Jesper Larsen.
-
- * Enabled silent build output
-
-   The automake configuration is now using silent rules which means that
-   building buildgear is much less verbose.
-
- * Various small fixes and cleanups
+   Non thread safe manipulation of internal lists resulted in application
+   instability by memory corruption. Problem solved by introduction of list
+   access mutexes.
