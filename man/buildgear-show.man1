@@ -1,7 +1,7 @@
 .TH "buildgear show" 1 "<===DATE===>" "<===VERSION===" "Buildgear"
 
 .SH NAME
-buildgear show \- Buildgear command to show various information.
+buildgear-show \- Buildgear command to show various information.
 
 .SH SYNOPSIS
 \fBbuildgear show \fR[\fB\-\-log\fR] [\fB\-\-log-tail\fR] [\fB\-\-log-mismatch\fR]
