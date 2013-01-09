@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include "buildgear/config.h"
 #include "buildgear/options.h"
+#include "buildgear/cursor.h"
 
 void COptions::Parse(int argc, char *argv[])
 {
@@ -56,6 +57,9 @@ void COptions::Parse(int argc, char *argv[])
          string help_command;
 
          help_command = argv[2];
+
+         // The execlp function will exit, so we need to restore cursor
+         Cursor.restore();
 
          if (help_command == "download")
             execlp("man", "man", "buildgear-download", NULL);
