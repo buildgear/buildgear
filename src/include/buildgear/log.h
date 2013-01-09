@@ -21,11 +21,16 @@
 #define LOG_H
 
 #include "buildgear/config.h"
+#include "buildgear/buildfile.h"
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <list>
 
 using namespace std;
+
+class CStreamDescriptor;
 
 class CLog
 {
@@ -33,8 +38,26 @@ class CLog
       void open(string filename);
       void write(char *buffer, int length);
       void close();
+      CStreamDescriptor* add_stream(FILE*, CBuildFile*);
+      list<CStreamDescriptor*> log_streams;
+      bool running = false;
    private:
       ofstream log_file;
+};
+
+class CStreamDescriptor: protected CLog
+{
+   public:
+      CStreamDescriptor(FILE *);
+      bool active = false;
+      FILE *fp;
+      int fd;
+      vector<char> log_buffer;
+      CBuildFile *buildfile;
+      bool get_done(void);
+      void set_done(bool);
+   private:
+      bool done;
 };
 
 extern CLog Log;
