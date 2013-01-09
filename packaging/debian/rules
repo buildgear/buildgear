@@ -11,7 +11,3 @@
 
 %:
 	dh $@  --with autotools-dev
-
-#binary: build install
-#	gzip -9 $(CURDIR)/debian/buildgear/usr/share/man/man1/*
-#	gzip -9 $(CURDIR)/debian/buildgear/usr/share/man/man5/*
