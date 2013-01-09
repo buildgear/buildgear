@@ -1,0 +1,5 @@
+buildgear (0.9.12.2beta-1) quantal; urgency=low
+
+  * Initial release
+
+ -- Jesper Larsen <knorr.jesper@gmail.com>  Wed, 09 Jan 2013 20:00:38 +0100
