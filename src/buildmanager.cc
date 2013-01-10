@@ -85,6 +85,11 @@ void CBuildThread::operator()()
       pthread_mutex_lock(&active_builds_mutex);
       BuildManager.active_builds.push_back(buildfile);
       pthread_mutex_unlock(&active_builds_mutex);
+
+      pthread_mutex_lock(&cout_mutex);
+      BuildOutputPrint();
+      pthread_mutex_unlock(&cout_mutex);
+
       Do("build", buildfile);
 
       // Remove buildfile from active builds
@@ -159,7 +164,6 @@ void script_output(void)
 
       FD_ZERO(&rfds);
       FD_SET(fd, &rfds);
-
       result = select(fd+1, &rfds, NULL, NULL, NULL);
       if (result > 0 && FD_ISSET(fd, &rfds))
       {
@@ -248,7 +252,9 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    stream = Log.add_stream(fp, buildfile);
 
    // Wait for the build to be done
-   while (!stream->get_done());
+   unique_lock<mutex> lock(stream->done_mutex);
+   while (!stream->done_flag)
+      stream->done_cond.wait(lock);
 
    if (pclose(fp) != 0)
    {

@@ -28,103 +28,65 @@
 #include "buildgear/log.h"
 #include "buildgear/buildmanager.h"
 
-pthread_mutex_t log_output_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-void log_output(void)
+void log_output(CStreamDescriptor *stream)
 {
-   fd_set rfds;
-   list<CStreamDescriptor*>::iterator it;
-   CStreamDescriptor *stream;
-   int result, fd, max_fd = 0;
-   int count;
+   fd_set rdfs;
    char line_buffer[LINE_MAX];
+   int result;
 
-   /* Log output from build script (buildgear.sh) */
    while (1)
    {
-      pthread_mutex_lock(&log_output_mutex);
+      FD_ZERO(&rdfs);
+      FD_SET(stream->fd, &rdfs);
 
-      // If there are no more log streams we stop the thread
-      if (Log.log_streams.size() < 1)
-         break;
+      result = select(stream->fd + 1, &rdfs, NULL, NULL, NULL);
 
-      // Make the first stream the active output
-      Log.log_streams.front()->active = true;
-
-      // Set up FD set of streams to monitor
-      FD_ZERO(&rfds);
-
-      for (it = Log.log_streams.begin(); it != Log.log_streams.end(); it++)
+      if (fgets(line_buffer, LINE_MAX, stream->fp) == NULL)
       {
-         if ((*it)->get_done())
-         {
-            if (!(*it)->log_buffer.empty() && (*it)->active)
-            {
-               Log.write((*it)->log_buffer.data(), (*it)->log_buffer.size());
-               Log.log_streams.remove((*it));
-               Log.log_streams.front()->active = true;
-            }
-            continue;
-         }
-
-         if ((*it)->fd > max_fd)
-            max_fd = (*it)->fd;
-
-         FD_SET((*it)->fd, &rfds);
+         // DONE notify the build thread
+         stream->done_flag = true;
+         stream->done_cond.notify_all();
+         break;
       }
 
-      pthread_mutex_unlock(&log_output_mutex);
-
-      result = select(max_fd + 1, &rfds, NULL, NULL, NULL);
-
-      if (result > 0)
+      if (result > 0 && FD_ISSET(stream->fd, &rdfs))
       {
-         pthread_mutex_lock(&log_output_mutex);
-
-         // Loop through the streams to find those ready for read
-         for (it = Log.log_streams.begin(); it != Log.log_streams.end(); it++)
+         if (stream->output_mutex.try_lock())
          {
-
-            if (FD_ISSET((*it)->fd, &rfds))
+            if (!stream->log_buffer.empty())
             {
-               // Write contents to log
-               count = read((*it)->fd, line_buffer, LINE_MAX);
-
-               // If read failed the stream is done
-               if (count < 0)
-               {
-                  (*it)->set_done(true);
-                  continue;
-               }
-
-               //NULL terminate the string
-               line_buffer[count] = 0;
-
-               BuildManager.BuildOutputTick((*it)->buildfile);
-
-               // Check if we have the active stream
-               if ((*it)->active)
-               {
-                  if (!(*it)->log_buffer.empty())
-                  {
-                     Log.write((*it)->log_buffer.data(), (*it)->log_buffer.size());
-                     (*it)->log_buffer.clear();
-                  }
-
-                  Log.write(line_buffer, strlen(line_buffer));
-
-               } else
-               {
-                  (*it)->log_buffer.insert((*it)->log_buffer.end(), line_buffer, line_buffer + strlen(line_buffer));
-               }
+               Log.write(stream->log_buffer.data(), stream->log_buffer.size());
+               stream->log_buffer.clear();
             }
-         }
 
-         pthread_mutex_unlock(&log_output_mutex);
+            Log.write(line_buffer, strlen(line_buffer));
+            BuildManager.BuildOutputTick(stream->buildfile);
+            stream->output_mutex.unlock();
+         } else
+         {
+            stream->log_buffer.insert(stream->log_buffer.end(), line_buffer, line_buffer + strlen(line_buffer));
+            BuildManager.BuildOutputTick(stream->buildfile);
+         }
       }
    }
 
-   Log.running = false;
+   // Wait until stream is granted access
+   stream->output_mutex.lock();
+
+   if (!stream->log_buffer.empty())
+   {
+      Log.write(stream->log_buffer.data(), stream->log_buffer.size());
+   }
+
+   Log.log_streams_mutex.lock();
+   Log.log_streams.remove(stream);
+
+   // If there are more streams give output access to the first
+   if (!Log.log_streams.empty())
+      Log.log_streams.front()->output_mutex.unlock();
+
+   Log.log_streams_mutex.unlock();
+
 }
 
 void CLog::open(string filename)
@@ -145,41 +107,30 @@ void CLog::close()
    log_file.close();
 }
 
-bool CStreamDescriptor::get_done()
-{
-   return this->done;
-}
-
-void CStreamDescriptor::set_done(bool done)
-{
-   this->done = done;
-}
-
 CStreamDescriptor* CLog::add_stream(FILE *fp, CBuildFile *buildfile)
 {
-   CStreamDescriptor *stream = new CStreamDescriptor(fp);
-   stream->buildfile = buildfile;
-   stream->set_done(false);
+   CStreamDescriptor *stream = new CStreamDescriptor(fp, buildfile);
 
-   pthread_mutex_lock(&log_output_mutex);
+   log_streams_mutex.lock();
+
+   // If streams are already added, do not allow ouput
+   if (!log_streams.empty())
+      stream->output_mutex.lock();
    log_streams.push_back(stream);
 
-   // Start the log_output thread
-   if (!running)
-   {
-      thread log_output_thread(log_output);
-      log_output_thread.detach();
-      running = true;
-   }
+   log_streams_mutex.unlock();
 
-   pthread_mutex_unlock(&log_output_mutex);
+   thread log_output_thread(log_output, stream);
+   log_output_thread.detach();
 
    return stream;
 }
 
-CStreamDescriptor::CStreamDescriptor(FILE *fp)
+CStreamDescriptor::CStreamDescriptor(FILE *fp, CBuildFile *buildfile)
 {
    this->fp = fp;
    this->fd = fileno(fp);
+   this->buildfile = buildfile;
    this->log_buffer.reserve(LOG_BUFFER_SIZE);
+   this->done_flag = false;
 }

@@ -27,6 +27,9 @@
 #include <fstream>
 #include <vector>
 #include <list>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 using namespace std;
 
@@ -40,24 +43,23 @@ class CLog
       void close();
       CStreamDescriptor* add_stream(FILE*, CBuildFile*);
       list<CStreamDescriptor*> log_streams;
-      bool running = false;
+      mutex log_streams_mutex;
    private:
       ofstream log_file;
 };
 
-class CStreamDescriptor: protected CLog
+class CStreamDescriptor: CLog
 {
    public:
-      CStreamDescriptor(FILE *);
-      bool active = false;
+      CStreamDescriptor(FILE *, CBuildFile *);
+      mutex output_mutex;
       FILE *fp;
       int fd;
       vector<char> log_buffer;
       CBuildFile *buildfile;
-      bool get_done(void);
-      void set_done(bool);
-   private:
-      bool done;
+      condition_variable done_cond;
+      mutex done_mutex;
+      bool done_flag;
 };
 
 extern CLog Log;
