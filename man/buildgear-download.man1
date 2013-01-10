@@ -1,7 +1,7 @@
 .TH "buildgear download" 1 "<===DATE===>" "<===VERSION===>" "Buildgear"
 
 .SH NAME
-buildgear download - Download source files
+buildgear-download - Download source files
 
 .SH SYNOPSIS
 \fBbuildgear download \-\-all\fR | \fI<build name>\fR

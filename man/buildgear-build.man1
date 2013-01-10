@@ -2,7 +2,7 @@
 
 
 .SH NAME
-buildgear build \- Start buildgear build process.
+buildgear-build \- Start buildgear build process.
 
 .SH SYNOPSIS
 \fBbuildgear build\fR [\fB\-\-keep-work\fR] [\fB\-\-update-checksum\fR]

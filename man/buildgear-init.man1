@@ -1,7 +1,7 @@
 .TH "Buildgear init" 1 "<===DATE===>" "<===VERSION===>" "Buildgear"
 
 .SH NAME
-buildgear init \- Initialize an empty buildgear build space
+buildgear-init \- Initialize an empty buildgear build space
 
 .SH SYNOPSIS
 .B buildgear init

@@ -1,7 +1,7 @@
 .TH "buildgear buildfile config" 5 "<===DATE===>" "<===VERSION===>" "Buildgear"
 
 .SH NAME
- buildgear buildfile config \- A configuration file for buildfiles
+ buildgear_buildfile_config \- A configuration file for buildfiles
 
 .SH DESCRIPTION
 Configuration file for the buildfiles. This file will be sourced before the Buildfile is parsed. The configuration can be used to alter the behavior of all Buildfiles.

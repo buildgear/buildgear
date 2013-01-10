@@ -1,10 +1,13 @@
 
-=== Build Gear v0.9.12.1beta ===
+=== Build Gear v0.9.12.2beta ===
 
-Changes since Build Gear v0.9.12beta:
+Changes since Build Gear v0.9.12.1beta:
 
- * Fixed memory corruption
+ * More fixes to memory corruption
 
-   Non thread safe manipulation of internal lists resulted in application
-   instability by memory corruption. Problem solved by introduction of list
-   access mutexes.
+   Added mutex lock for the list iteration loops in build output.
+
+
+ * Terminal output cleanup
+
+   Clear terminal for the "Build Error" message.

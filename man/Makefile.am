@@ -26,4 +26,4 @@ man5_sources = buildgear.config.man5 \
 dist_man1_MANS = $(man1_sources:.man1=.1)
 dist_man5_MANS = $(man5_sources:.man5=.5)
 
-CLEANFILES = $(dist_man1_MANS) $(dist_man5_MANS)
+MAINTAINERCLEANFILES = $(dist_man1_MANS) $(dist_man5_MANS)
