@@ -1,0 +1,84 @@
+Build Gear TODO list
+--------------------
+
+This is a list of features that are planned for Build Gear in the future. Some
+features are just ideas and might never be included.
+
+The Build Gear design principle does not allow for features if they introduce a
+too high level of user interface or maintenance complexity.
+
+In short, advanced features will have to be considered carefully in order to
+keep Build Gear simple.
+
+
+
+Build Gear v1.x (current 0.x beta in development):
+
+ * Build file layer support
+
+   Introduce a .layer file which defines which layer a specific build belongs
+   to.
+
+   This allows for having two build of the same name but belonging to different
+   layers with different priority.
+
+   Add support for layer priority configuration in buildfiles/config, eg. layer
+   priority by order:
+
+      layers=(mylayer0 mylayer2 mylayer1 default)
+
+   Alternatively, this could also be defined like the following:
+
+      layers[0]=mylayer0
+      layers[1]=mylayer2
+      layers[2]=mylayer1
+      layers[3]=default
+
+   0 is highest priority.
+
+   Maybe make 0 the lowest priority.
+
+ * Disable footprinting by default
+
+   The introduction of use/configuration flags in buildfiles/config will result
+   in footprint mismatches.
+
+   It can make sense disable foot printing by default and introduce support for
+   a footprint=yes/no option in Buildfile for those builds which one would like
+   foot printed.  In most cases it would make sense to only have a footprint for
+   the final fs build - and, very importantly, that .footprint will only reside
+   in the board specific repo.
+
+   On the other hand, the footprints for each builds are today just advisiory
+   (warnings, not errors) and they are very useful when updating individual
+   builds.
+
+
+
+Build Gear v2.x:
+
+ * Split output by different package output types
+
+   In addition to $PKG, add support for eg. $PKG-DOC and $PKG-DEV.
+
+   In the Builfile output fill have to be sorted like so:
+
+      $PKG-DOC: man/info pages etc.
+      $PKG-DEV: include files
+      $PKG: binaries
+
+   This will add to maintenance cost so it will have to be considered carefully.
+
+   There is also a performance cost when creating/handling multiple packages.
+
+   Actually, this is very likely to never be supported (too high cost).
+
+ * Menuconfig/Kconfig configuration support
+
+   Introduce a .kconfig file or add support for a kconfig() {} section in the
+   Buildfile.
+
+   Also, add a new command "menuconfig".
+
+   This will add to maintenance cost so it will have to be considered very
+   carefully.
