@@ -1,7 +1,7 @@
 .TH "Buildgear buildfile" 5 "<===VERSION===>" "<===DATE===>" "Buildgear"
 
 .SH NAME
-Buildgear_Buildfile \- Buildfile to describe build procedure
+buildgear_Buildfile \- Buildfile to describe build procedure
 
 .SH DESCRIPTION
 Buildfiles describe how a specific build in Buildgear is built. Buildfiles should be located in a folder that describes the builds. Buildfiles for native builds should be located in the \fIbuildfiles/native\fR path, and the cross builds should be located in the \fIbuildfiles/cross\fR path. The depth of the path can be as deep as you like. An example:
