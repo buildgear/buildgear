@@ -38,6 +38,14 @@ Build Gear v1.x (current 0.x beta in development):
 
    Maybe make 0 the lowest priority.
 
+ * Add config command
+
+   Add config command for manipulating local and global configuration files.
+   Make feature similar to the way git works. Eg.:
+
+   $ buildgear config --global download_mirror "http://test.com"
+   $ buildgear config parallel_builds 4
+
  * Disable footprinting by default
 
    The introduction of use/configuration flags in buildfiles/config will result
