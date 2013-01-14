@@ -307,7 +307,10 @@ void COptions::Parse(int argc, char *argv[])
 
 void COptions::ShowHelp(char *argv[])
 {
-   cout << "Usage: " << argv[0] << " [COMMAND] [OPTIONS] [BUILD NAME]\n";
+   cout << "Usage: " << argv[0] << " [--help] [--version] <command> [<options>] [build name]\n";
+   cout << "\n";
+   cout << "  --version               Display version\n";
+   cout << "  --help                  Display help\n";
    cout << "\n";
    cout << "Commands:\n";
    cout << "  download                Download source files\n";
@@ -340,10 +343,6 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --log-tail              Show build log (tailed)\n";
    cout << "  --log-mismatch          Show build log mismatches\n";
    cout << "\n";
-   cout << "Options:\n";
-   cout << "  --version               Display version\n";
-   cout << "  --help                  Display help\n";
-   cout << "\n";
    cout << "See buildgear help <command> for help on a specific command\n";
 }
 
@@ -355,5 +354,4 @@ void COptions::ShowVersion(void)
    cout << "License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl-2.0.html>.\n";
    cout << "This is free software: you are free to change and redistribute it.\n";
    cout << "There is NO WARRANTY, to the extent permitted by law.\n";
-   cout << "\n";
 }
