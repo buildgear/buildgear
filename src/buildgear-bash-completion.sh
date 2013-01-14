@@ -19,12 +19,12 @@ _find_root()
 
 _native_builds()
 {
-   echo $(grep -nRis -m 1 --include=Buildfile -- 'name=' `_find_root`'/buildfiles/native' | awk -F '=' '{ print $2 }')
+   echo $(grep -Ris -m 1 --include=Buildfile -- 'name=' $1'/buildfiles/native' | awk -F '=' '{ print $2 }')
 }
 
 _cross_builds()
 {
-   echo $(grep -nRis -m 1 --include=Buildfile -- 'name=' `_find_root`'/buildfiles/cross' | awk -F '=' '{ print $2 }')
+   echo $(grep -Ris -m 1 --include=Buildfile -- 'name=' $1'/buildfiles/cross' | awk -F '=' '{ print $2 }')
 }
 
 _buildgear()
@@ -32,8 +32,15 @@ _buildgear()
    local cur prev
 
    COMPREPLY=()
+   ROOTDIR=`_find_root`
+   CROSS=$(_cross_builds $ROOTDIR)
+   NATIVE=`_native_builds $ROOTDIR`
    build_name_in_args=0
-   all_builds=( `_cross_builds` `echo $(_native_builds) | sed 's|[^ 	]\+|native/&|g'` )
+
+   all_builds=( $CROSS )
+   all_builds+=( `echo $NATIVE | sed 's|[^ 	]\+|native/&|g'` )
+   all_builds+=( `echo $CROSS | sed 's|[^ 	]\+|cross/&|g'` )
+
    cur=${COMP_WORDS[COMP_CWORD]}
    prev=${COMP_WORDS[COMP_CWORD-1]}
    command=${COMP_WORDS[1]}
@@ -51,9 +58,17 @@ _buildgear()
    if [ $COMP_CWORD -eq 1 ]; then
      COMPREPLY=( $(compgen -W "$commands $options" -- $cur) )
    elif [ $COMP_CWORD -gt 1 ]; then
-     builds=( $(compgen -W "`_cross_builds`" -- $cur) )
-     builds+=( $(compgen -W "`_native_builds`" -P "native/" -- $cur) )
-     builds+=( $(compgen -W "`echo $(_native_builds) | sed 's|[^ 	]\+|native/&|g'`" -- $cur) )
+
+     if [[ "$cur" == cross/* ]]; then
+       builds=( $(compgen -W "`echo $CROSS | sed 's|[^ 	]\+|cross/&|g'`" -- $cur) )
+     else
+       builds=( $(compgen -W "$CROSS" -- $cur) )
+     fi
+     builds+=( $(compgen -W "$NATIVE" -P "native/" -- $cur) )
+     builds+=( $(compgen -W "`echo $NATIVE | sed 's|[^ 	]\+|native/&|g'`" -- $cur) )
+     builds+=( $(compgen -W "cross/" -- $cur) )
+     [[ $builds = "cross/" ]] && compopt -o nospace
+
      for i in "${COMP_WORDS[@]}"
      do
        for j in "${all_builds[@]}"
