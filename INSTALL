@@ -2,10 +2,14 @@ Requirements:
 
    g++
    libcurl4-gnutls-dev
-   termcap (usually bundled with ncurses/curses)
+   termcap
+
+   Note: termcap is usually bundled with ncurses/curses.
 
 Installation:
 
    ./configure
    make
    make install
+
+   See ./configure --help for more options.
