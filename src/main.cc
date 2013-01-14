@@ -1,7 +1,7 @@
 /*
  * Build Gear - a lightweight embedded firmware build tool
  *
- * Copyright (C) 2011-2012  Martin Lund
+ * Copyright (C) 2011-2013  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
