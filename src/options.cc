@@ -309,8 +309,8 @@ void COptions::ShowHelp(char *argv[])
 {
    cout << "Usage: " << argv[0] << " [--help] [--version] <command> [<options>] [build name]\n";
    cout << "\n";
-   cout << "  --version               Display version\n";
    cout << "  --help                  Display help\n";
+   cout << "  --version               Display version\n";
    cout << "\n";
    cout << "Commands:\n";
    cout << "  download                Download source files\n";
