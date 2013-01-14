@@ -85,6 +85,11 @@ void CBuildThread::operator()()
       pthread_mutex_lock(&active_builds_mutex);
       BuildManager.active_builds.push_back(buildfile);
       pthread_mutex_unlock(&active_builds_mutex);
+
+      pthread_mutex_lock(&cout_mutex);
+      BuildOutputPrint();
+      pthread_mutex_unlock(&cout_mutex);
+
       Do("build", buildfile);
 
       // Remove buildfile from active builds
@@ -159,7 +164,6 @@ void script_output(void)
 
       FD_ZERO(&rfds);
       FD_SET(fd, &rfds);
-
       result = select(fd+1, &rfds, NULL, NULL, NULL);
       if (result > 0 && FD_ISSET(fd, &rfds))
       {
@@ -179,6 +183,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    FILE *fp;
    char line_buffer[LINE_MAX];
    vector<char> log_buffer;
+   CStreamDescriptor *stream;
    string arguments;
    string command;
    stringstream pid;
@@ -244,31 +249,12 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       exit(EXIT_FAILURE);
    }
 
-   /* Log output from build script (buildgear.sh) */
-   if (Config.parallel_builds <= 1)
-   {
-      // For non-parallel builds, write every log line continously to build log
-      while (fgets(line_buffer, LINE_MAX, fp) != NULL)
-      {
-         Log.write(line_buffer, strlen(line_buffer));
-         BuildOutputTick(buildfile);
-      }
+   stream = Log.add_stream(fp, buildfile);
 
-   } else
-   {
-      // For parallel builds, write only finished log buffers to build log
-      log_buffer.reserve(LOG_BUFFER_SIZE);
-      while (fgets(line_buffer, LINE_MAX, fp) != NULL)
-      {
-         log_buffer.insert(log_buffer.end(), line_buffer, line_buffer + strlen(line_buffer));
-         BuildOutputTick(buildfile);
-      }
-
-      pthread_mutex_lock(&log_mutex);
-      Log.write(log_buffer.data(), log_buffer.size());
-      pthread_mutex_unlock(&log_mutex);
-
-   }
+   // Wait for the build to be done
+   unique_lock<mutex> lock(stream->done_mutex);
+   while (!stream->done_flag)
+      stream->done_cond.wait(lock);
 
    if (pclose(fp) != 0)
    {
