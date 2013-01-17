@@ -1,0 +1,8 @@
+<chapter><title>Docbook Examples</title>
+  <section><title>Section</title></section>
+  <para>Example content
+  <code>We are putting some code here</code>
+  <footnote><para>This is the first footnote</para></footnote>
+  <note>This is a note</note>
+  </para>
+</chapter>

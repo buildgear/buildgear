@@ -1,0 +1,28 @@
+<!-- This is a docbook document.
+     For help on docbook see http://www.docbook.org/tdg5/en/html -->
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY intro SYSTEM "introduction.docbook">
+<!ENTITY install SYSTEM "installation.docbook">
+<!ENTITY basics SYSTEM "basics.docbook">
+<!ENTITY example SYSTEM "example.docbook">
+]> 
+
+
+<book>
+   <bookinfo>
+      <title>Build Gear Handbook</title>
+      <titleabbrev>Handbook</titleabbrev>
+      <legalnotice><para>This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of the license, visit <ulink url="http://creativecommons.org/licenses/by-sa/3.0">http://creativecommons.org/licenses/by-sa/3.0</ulink></para></legalnotice>
+      <copyright><year>2013</year><holder>Martin Lund</holder></copyright>
+      <subtitle>Version PACKAGE_VERSION</subtitle>
+      <pubdate><?dbtimestamp format="Y-m-d"?></pubdate>
+   </bookinfo>
+
+   &intro;
+   &install;
+   &basics;
+   &example;
+
+</book>
