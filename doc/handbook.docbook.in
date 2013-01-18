@@ -14,7 +14,9 @@
    <bookinfo>
       <title>Build Gear Handbook</title>
       <titleabbrev>Handbook</titleabbrev>
-      <legalnotice><para>This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of the license, visit <ulink url="http://creativecommons.org/licenses/by-sa/3.0">http://creativecommons.org/licenses/by-sa/3.0</ulink></para></legalnotice>
+      <legalnotice><para>This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of the license, visit <ulink url="http://creativecommons.org/licenses/by-sa/3.0">http://creativecommons.org/licenses/by-sa/3.0</ulink></para>
+      <graphic fileref="images/cc-by-sa.svg" width="88"></graphic>
+      </legalnotice>
       <copyright><year>2013</year><holder>Martin Lund</holder></copyright>
       <subtitle>Version PACKAGE_VERSION</subtitle>
       <pubdate><?dbtimestamp format="Y-m-d"?></pubdate>
