@@ -64,10 +64,14 @@ _buildgear()
      else
        builds=( $(compgen -W "$CROSS" -- $cur) )
      fi
+
+     if [[ ${#CROSS} > 0 ]] && [[ "$cur" != cross/* ]]; then
+       builds+=( $(compgen -W "cross/" -- $cur) )
+       [[ $builds = "cross/" ]] && compopt -o nospace
+     fi
+
      builds+=( $(compgen -W "$NATIVE" -P "native/" -- $cur) )
      builds+=( $(compgen -W "`echo $NATIVE | sed 's|[^ 	]\+|native/&|g'`" -- $cur) )
-     builds+=( $(compgen -W "cross/" -- $cur) )
-     [[ $builds = "cross/" ]] && compopt -o nospace
 
      for i in "${COMP_WORDS[@]}"
      do
