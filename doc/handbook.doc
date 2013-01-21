@@ -7,7 +7,7 @@
 <!ENTITY install SYSTEM "installation.docbook">
 <!ENTITY basics SYSTEM "basics.docbook">
 <!ENTITY example SYSTEM "example.docbook">
-]> 
+]>
 
 
 <book>

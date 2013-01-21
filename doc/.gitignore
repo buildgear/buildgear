@@ -1,4 +1,4 @@
-handbook.fo
-handbook.docbook
+*.fo
+*.docbook
 *.html
 *.pdf
