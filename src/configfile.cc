@@ -42,7 +42,6 @@ void CConfigFile::Parse(string filename)
       
       if (filename != BUILD_FILES_CONFIG)
          command += "; echo source_dir=$source_dir \
-                     ; echo download_mirror=$download_mirror \
                      ; echo download_mirror_first=$download_mirror_first \
                      ; echo download_timeout=$download_timeout \
                      ; echo download_retry=$download_retry \
@@ -55,6 +54,7 @@ void CConfigFile::Parse(string filename)
          command += "; echo cross_depends=${CROSS_DEPENDS[@]} \
                      ; echo build=$BUILD \
                      ; echo host=$HOST \
+                     ; echo download_mirror=$DOWNLOAD_MIRROR \
                      '";
       
       fp = popen(command.c_str(), "r");
@@ -86,8 +86,6 @@ void CConfigFile::Parse(string filename)
                   Config.download_timeout = atoi(value.c_str());
                if (key == CONFIG_KEY_DOWNLOAD_RETRY)
                   Config.download_retry = atoi(value.c_str());
-               if (key == CONFIG_KEY_DOWNLOAD_MIRROR)
-                  Config.download_mirror = value;
                if (key == CONFIG_KEY_DOWNLOAD_MIRROR_FIRST)
                   Config.download_mirror_first = value;
                if (key == CONFIG_KEY_DOWNLOAD_CONNECTIONS)
@@ -104,6 +102,8 @@ void CConfigFile::Parse(string filename)
                   Config.build_system = value;
                if (key == CONFIG_KEY_HOST)
                   Config.host_system = value;
+               if (key == CONFIG_KEY_DOWNLOAD_MIRROR)
+                  Config.download_mirror = value;
             }
          }
       }
