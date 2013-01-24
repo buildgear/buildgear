@@ -49,12 +49,14 @@ class CDownload : public CFileSystem
                           double ulnow);
       void update_progress();
       CDownload();
+      bool activate_download();
       CURLM *curlm;
       list<CDownloadItem*> active_downloads;
       list<CDownloadItem*> pending_downloads;
       void lock();
       void unlock();
       bool first;
+      bool error;
    private:
       pthread_mutex_t mlock;
 };

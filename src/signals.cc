@@ -33,6 +33,7 @@ struct sigaction new_action, old_action;
 void CSignals::sigIntHandler(int signum)
 {
    pthread_mutex_lock(&cout_mutex);
+   Cursor.restore();
    Cursor.clear_below();
    cout << "\n\nInterrupt signal received - stopped!\n";
 

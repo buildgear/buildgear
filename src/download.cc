@@ -340,4 +340,28 @@ CDownload::CDownload()
 {
    pthread_mutex_init(&mlock, NULL);
    this->first = true;
+   this->error = false;
 }
+
+bool CDownload::activate_download()
+{
+   if (pending_downloads.size() > 0)
+   {
+      CDownloadItem *item = pending_downloads.front();
+      pending_downloads.pop_front();
+
+      lock();
+
+      item->print_progress();
+
+      unlock();
+
+      active_downloads.push_back(item);
+      curl_multi_add_handle(curlm, item->curl);
+
+      return true;
+   }
+
+   return false;
+}
+
