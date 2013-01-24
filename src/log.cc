@@ -122,8 +122,7 @@ CStreamDescriptor* CLog::add_stream(FILE *fp, CBuildFile *buildfile)
 
    log_streams_mutex.unlock();
 
-   thread log_output_thread(log_output, stream);
-   log_output_thread.detach();
+   buildfile->log_thread = new thread(log_output, stream);
 
    return stream;
 }

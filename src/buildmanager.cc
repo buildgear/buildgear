@@ -142,6 +142,9 @@ void CBuildThread::operator()()
       }
    }
    sem_post(&build_semaphore);
+
+   if (buildfile->log_thread && buildfile->log_thread->joinable())
+      buildfile->log_thread->join();
 };
 
 void CBuildThread::Start(void)

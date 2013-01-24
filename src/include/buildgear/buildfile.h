@@ -23,6 +23,7 @@
 #define BUILDFILE_H
 
 #include <list>
+#include <thread>
 
 using namespace std;
 
@@ -49,6 +50,7 @@ class CBuildFile : public CUtility
       float y;
       list<CBuildFile*> dependency;
       int tick;
+      thread *log_thread;
    private:
 };
 
