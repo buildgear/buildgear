@@ -51,7 +51,8 @@ void CBuildFile::Parse(void)
    size_t pos;
    string command =
       "bash --norc --noprofile -O extglob -c 'source " +
-      filename +
+      (string) BUILD_FILES_CONFIG +
+      "; source " + filename +
       "; echo name=$name \
       ; echo version=$version \
       ; echo release=$release \
