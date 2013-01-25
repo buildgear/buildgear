@@ -22,6 +22,7 @@
 #include "config.h"
 #include <string>
 #include <cstdlib>
+#include <thread>
 #include <ncurses.h>
 #include "buildgear/config.h"
 #include "buildgear/signals.h"
@@ -282,8 +283,9 @@ int main (int argc, char *argv[])
    Cursor.disable_echo();
    Cursor.disable_wrap();
 
-   Source.Download(&Dependency.download_order, Config.source_dir);
+   thread download_thread([&] (void) {Source.Download(&Dependency.download_order, Config.source_dir);});
 
+   download_thread.join();
    cout << "Done\n";
 
    /* Quit if download command is used */

@@ -58,7 +58,6 @@ class CDownload : public CFileSystem
       bool first;
       bool error;
    private:
-      pthread_mutex_t mlock;
 };
 
 class CDownloadItem : public CFileSystem

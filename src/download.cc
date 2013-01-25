@@ -36,6 +36,7 @@
 #include "buildgear/filesystem.h"
 #include "buildgear/download.h"
 #include "buildgear/cursor.h"
+#include "buildgear/buildmanager.h"
 
 static unsigned int filesize;
 
@@ -328,17 +329,16 @@ void CDownloadItem::print_progress()
 
 void CDownload::lock()
 {
-   pthread_mutex_lock(&mlock);
+   pthread_mutex_lock(&cout_mutex);
 }
 
 void CDownload::unlock()
 {
-   pthread_mutex_unlock(&mlock);
+   pthread_mutex_unlock(&cout_mutex);
 }
 
 CDownload::CDownload()
 {
-   pthread_mutex_init(&mlock, NULL);
    this->first = true;
    this->error = false;
 }
