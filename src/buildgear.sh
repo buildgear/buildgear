@@ -375,7 +375,7 @@ main()
    parse_options "$@"
 
    shopt -s extglob
-   
+
    # Sanitize environment
    unset GREP_OPTIONS
    unset TAR_OPTIONS
@@ -404,6 +404,9 @@ main()
 
    do_buildfile
 
+   # Send PID to buildgear
+   echo $BASHPID > /tmp/buildgear-$BG_BUILD_TYPE-$name.fifo
+
    BG_BUILD_WORK_DIR="$BG_WORK_DIR/$BG_BUILD_TYPE/$name"
    BG_BUILD_PACKAGE="$BG_BUILD_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
 
@@ -415,7 +418,7 @@ main()
    export HOST="$BG_HOST"
    export SYSROOT="$BG_BUILD_SYSROOT_DIR"
    export SOURCE=$BG_SOURCE_DIR
-   
+
    umask 022
 
    check_create_directory "$SRC"

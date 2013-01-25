@@ -99,6 +99,12 @@ void CBuildThread::operator()()
       BuildManager.active_builds.remove(buildfile);
       pthread_mutex_unlock(&active_builds_mutex);
 
+      if (BuildManager.build_error)
+      {
+         sem_post(&build_semaphore);
+         return;
+      }
+
       // Add buildfile to active adds, if it is not the last
       if (buildfile != last_build)
       {
@@ -126,6 +132,12 @@ void CBuildThread::operator()()
          BuildManager.active_adds.remove(buildfile);
          pthread_mutex_unlock(&active_adds_mutex);
 
+         if (BuildManager.build_error)
+         {
+            sem_post(&build_semaphore);
+            return;
+         }
+
          // Output added and advance cursor
          cout << "   Added         '" << buildfile->name << "'";
          Cursor.clear_rest_of_line();
@@ -143,8 +155,6 @@ void CBuildThread::operator()()
    }
    sem_post(&build_semaphore);
 
-   if (buildfile->log_thread && buildfile->log_thread->joinable())
-      buildfile->log_thread->join();
 };
 
 void CBuildThread::Start(void)
@@ -165,7 +175,7 @@ void script_output(void)
 
    while (1)
    {
-      fd = open(SCRIPT_FIFO, O_RDONLY|O_NONBLOCK);
+      fd = open(SCRIPT_OUTPUT_FIFO, O_RDONLY|O_NONBLOCK);
 
       FD_ZERO(&rfds);
       FD_SET(fd, &rfds);
@@ -183,15 +193,37 @@ void script_output(void)
    }
 }
 
+void CBuildManager::KillBuilds()
+{
+   list<CBuildFile*>::iterator it;
+   pthread_mutex_lock(&active_builds_mutex);
+
+   for (it = BuildManager.active_builds.begin(); it != BuildManager.active_builds.end(); it++)
+   {
+      if ((*it)->pid == 0)
+         continue;
+
+      // Stop build script by killing process group
+      if (kill(-(*it)->pid, SIGKILL) != 0)
+      {
+         // We don't care if the process no longer exists
+         if (errno != ESRCH)
+            throw runtime_error(strerror(errno));
+      }
+   }
+   pthread_mutex_unlock(&active_builds_mutex);
+}
+
 void CBuildManager::Do(string action, CBuildFile* buildfile)
 {
-   FILE *fp;
+   FILE *fp, *cFile;
    char line_buffer[LINE_MAX];
    vector<char> log_buffer;
    CStreamDescriptor *stream;
    string arguments;
    string command;
    stringstream pid;
+   char pid_string[PID_MAX_LENGTH];
    string build(buildfile->build ? "yes" : "no");
 
    // Get PID
@@ -244,7 +276,20 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    command = SCRIPT " " + arguments;
 
    /* Make sure we are using bash */
-   command = "bash --norc --noprofile -O extglob -c '" + command + "' 2>&1";
+   command = "bash --norc --noprofile -O extglob -c 'setsid " + command + " 2>&1' 2>&1";
+
+   /* Create fifo for build script PID */
+   unlink(buildfile->control_fifo);
+   if (mkfifo(buildfile->control_fifo, S_IRWXU) != 0)
+      throw runtime_error(strerror(errno));
+
+   pthread_mutex_lock(&active_builds_mutex);
+
+   if (BuildManager.build_error)
+   {
+      pthread_mutex_unlock(&active_builds_mutex);
+      return;
+   }
 
    /* Execute command */
    fp = popen(command.c_str(), "r");
@@ -254,20 +299,51 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       exit(EXIT_FAILURE);
    }
 
-   stream = Log.add_stream(fp, buildfile);
+   /* Get the build script PID */
+   cFile = fopen(buildfile->control_fifo, "r");
+   if (!cFile)
+      throw runtime_error(strerror(errno));
 
-   // Wait for the build to be done
-   unique_lock<mutex> lock(stream->done_mutex);
-   while (!stream->done_flag)
-      stream->done_cond.wait(lock);
+   if (fgets(pid_string, PID_MAX_LENGTH, cFile) != NULL)
+   {
+      buildfile->pid = atoi(pid_string);
+   }
+   else
+      throw runtime_error(strerror(errno));
+
+   pthread_mutex_unlock(&active_builds_mutex);
+
+   // Remove the PID fifo
+   unlink(buildfile->control_fifo);
+
+   if (!BuildManager.build_error)
+   {
+      stream = Log.add_stream(fp, buildfile);
+
+      // Wait for the build to be done
+      unique_lock<mutex> lock(stream->done_mutex);
+      while (!stream->done_flag)
+         stream->done_cond.wait(lock);
+   }
 
    if (pclose(fp) != 0)
    {
-      pthread_mutex_lock(&cout_mutex);
-      Cursor.clear_below();
-      cout << "\nSee " BUILD_LOG " for details.\n\n" << flush;
-      exit(EXIT_FAILURE);
-      pthread_mutex_unlock(&cout_mutex); // Never reached
+      list<CStreamDescriptor*>::iterator log_it;
+
+      if (!BuildManager.build_error)
+      {
+         // Clean the log stream queue for other builds
+         Log.log_streams_mutex.lock();
+
+         Log.log_streams.remove_if([stream] (CStreamDescriptor* val) -> bool { return val != stream;});
+
+         Log.log_streams_mutex.unlock();
+
+         BuildManager.build_error = true;
+      }
+
+      // Stop running builds
+      KillBuilds();
    }
 }
 
@@ -310,9 +386,12 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
    list<CBuildFile*>::iterator it;
    list<CBuildFile*>::reverse_iterator rit;
 
-   // Create fifo for build script communication
-   unlink(SCRIPT_FIFO);
-   if (mkfifo(SCRIPT_FIFO, S_IRWXU) != 0)
+   // Set build error flag
+   BuildManager.build_error = false;
+
+   // Create fifo for build output communication
+   unlink(SCRIPT_OUTPUT_FIFO);
+   if (mkfifo(SCRIPT_OUTPUT_FIFO, S_IRWXU) != 0)
       throw std::runtime_error(strerror(errno));
 
    // Start build script output communication thread
@@ -374,7 +453,8 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       while (it != buildfiles->end())
       {
          int thread_count=0;
-         while ( ((*it)->depth == current_depth) && (it != buildfiles->end()))
+         while ( ((*it)->depth == current_depth) && (it != buildfiles->end())
+                 && !BuildManager.build_error)
          {
             // Start building threads of same depth in parallel
             CBuildThread *bt = new CBuildThread(*it);
@@ -387,10 +467,15 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
          // Wait for thread_count build threads to complete
          for (int i=0; i<thread_count; i++)
          {
+            if (BuildManager.build_error)
+               break;
             builder[i]->Join();
             delete builder[i];
             builder.pop_back();
          }
+
+         if (BuildManager.build_error)
+            break;
 
          // Proceed to next depth level
          current_depth++;
@@ -398,7 +483,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       sem_destroy(&build_semaphore);
    }
    // Building done - clean up build script fifo
-   unlink(SCRIPT_FIFO);
+   unlink(SCRIPT_OUTPUT_FIFO);
 }
 
 void CBuildManager::Clean(CBuildFile *buildfile)
@@ -458,6 +543,8 @@ void CBuildManager::BuildOutputPrint()
    int lines = 0;
 
    pthread_mutex_lock(&active_adds_mutex);
+
+   Cursor.reset_ymaxpos();
 
    for (it = BuildManager.active_adds.begin(); it != BuildManager.active_adds.end(); it++)
    {

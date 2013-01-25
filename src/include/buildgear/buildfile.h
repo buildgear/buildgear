@@ -43,6 +43,7 @@ class CBuildFile : public CUtility
       string type;
       string build_function;
       string check_function;
+      char *control_fifo;
       bool build;
       bool visited;
       int depth;
@@ -51,6 +52,7 @@ class CBuildFile : public CUtility
       list<CBuildFile*> dependency;
       int tick;
       thread *log_thread;
+      pid_t pid;
    private:
 };
 
