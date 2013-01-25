@@ -64,5 +64,6 @@ class CCursor
 };
 
 extern CCursor Cursor;
+extern pthread_mutex_t cout_mutex;
 
 #endif

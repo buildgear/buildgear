@@ -52,7 +52,6 @@
 
 sem_t build_semaphore;
 pthread_mutex_t add_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t cout_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t log_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t active_builds_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t active_adds_mutex = PTHREAD_MUTEX_INITIALIZER;

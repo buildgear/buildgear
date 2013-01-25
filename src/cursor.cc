@@ -32,6 +32,8 @@
 #include <string.h>
 #include "buildgear/cursor.h"
 
+pthread_mutex_t cout_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 void cursor_restore()
 {
    Cursor.restore();

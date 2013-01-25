@@ -48,5 +48,4 @@ class CBuildManager : public CFileSystem, COptions
 };
 
 extern CBuildManager BuildManager;
-extern pthread_mutex_t cout_mutex;
 #endif
