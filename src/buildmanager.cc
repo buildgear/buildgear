@@ -190,9 +190,6 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    stringstream pid;
    string build(buildfile->build ? "yes" : "no");
 
-   // Get PID
-   pid << (int) getpid();
-
    // Set required script arguments
    arguments += " --BG_BUILD_FILE '" + buildfile->filename + "'";
    arguments += " --BG_ACTION '" + action + "'";
@@ -203,7 +200,6 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    arguments += " --BG_OUTPUT_DIR '" OUTPUT_DIR "'";
    arguments += " --BG_SOURCE_DIR '" SOURCE_DIR "'";
    arguments += " --BG_SYSROOT_DIR '" SYSROOT_DIR "'";
-   arguments += " --BG_PID '" + pid.str() + "'";
    arguments += " --BG_BUILD '" + Config.build_system + "'";
    arguments += " --BG_HOST '" + Config.host_system + "'";
    arguments += " --BG_VERBOSE 'no'";

@@ -116,9 +116,6 @@ class CConfig : public CUtility
 #define CONFIG_KEY_BUILD                     "build"
 #define CONFIG_KEY_HOST                      "host"
 
-#define TERMINFO_CIVIS           "\033[?25l"
-#define TERMINFO_CNORM           "\033[?25h"
-
 #define SCRIPT                   AM_PKGDATADIR "/buildgear.sh"
 #define CONFIG_GUESS_SCRIPT      AM_PKGDATADIR "/config.guess"
 #define TEMPLATE_CONFIG          AM_PKGDATADIR "/template.config"
