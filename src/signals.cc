@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2011-2012  Martin Lund
+ * This file is part of Build Gear.
+ *
+ * Copyright (C) 2011-2013  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +33,7 @@ struct sigaction new_action, old_action;
 void CSignals::sigIntHandler(int signum)
 {
    pthread_mutex_lock(&cout_mutex);
+   Cursor.restore();
    Cursor.clear_below();
    cout << "\n\nInterrupt signal received - stopped!\n";
 

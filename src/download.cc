@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2011-2012  Martin Lund
+ * This file is part of Build Gear.
+ *
+ * Copyright (C) 2011-2013  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +36,7 @@
 #include "buildgear/filesystem.h"
 #include "buildgear/download.h"
 #include "buildgear/cursor.h"
+#include "buildgear/buildmanager.h"
 
 static unsigned int filesize;
 
@@ -326,16 +329,39 @@ void CDownloadItem::print_progress()
 
 void CDownload::lock()
 {
-   pthread_mutex_lock(&mlock);
+   pthread_mutex_lock(&cout_mutex);
 }
 
 void CDownload::unlock()
 {
-   pthread_mutex_unlock(&mlock);
+   pthread_mutex_unlock(&cout_mutex);
 }
 
 CDownload::CDownload()
 {
-   pthread_mutex_init(&mlock, NULL);
    this->first = true;
+   this->error = false;
 }
+
+bool CDownload::activate_download()
+{
+   if (pending_downloads.size() > 0)
+   {
+      CDownloadItem *item = pending_downloads.front();
+      pending_downloads.pop_front();
+
+      lock();
+
+      item->print_progress();
+
+      unlock();
+
+      active_downloads.push_back(item);
+      curl_multi_add_handle(curlm, item->curl);
+
+      return true;
+   }
+
+   return false;
+}
+

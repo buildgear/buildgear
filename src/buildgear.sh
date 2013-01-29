@@ -2,7 +2,7 @@
 #
 #  Build Gear helper script
 #
-#  Copyright (c) 2011-2012 Martin Lund <martin.lund@keep-it-simple.com>
+#  Copyright (c) 2011-2013 Martin Lund
 #  Copyright (c) 2000-2005 Per Liden
 #
 #  This script is orignally authored by Per Liden for use with pkgutils.
@@ -20,7 +20,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+#  02110-1301, USA.
 #
 
 bg_put()

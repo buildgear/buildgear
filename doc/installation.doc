@@ -1,0 +1,56 @@
+<chapter><title>Installing Build Gear</title>
+
+  <section><title>Supported GNU/Linux Distributions</title>
+
+  <para>Build Gear is tested using Ubuntu 12.10 64-bit (Minimal). Installation on other GNU/Linux distributions is not supported.</para>
+  </section>
+
+  <section><title>Installing From Source</title>
+
+  <para>Prepare Ubuntu for compilation and installation of Build Gear:</para>
+<screen>$ sudo apt-get install build-essential libcurl4-gnutls-dev libncurses5-dev unzip</screen>
+
+  <para>Build and install Build Gear:</para>
+<screen>$ wget http://www.buildgear.org/release/buildgear-PACKAGE_VERSION.tar.xz
+$ tar xf buildgear-PACKAGE_VERSION.tar.xz
+$ cd buildgear-PACKAGE_VERSION
+$ ./configure --prefix=$HOME/opt/buildgear
+$ make
+$ make install</screen>
+
+  <para>Add Build Gear to your path, eg.:</para>
+<screen>$ echo 'export PATH=$HOME/opt/buildgear/bin:$PATH' >> ~/.bashrc</screen>
+
+  <para>Enable Build Gear bash auto completion, eg.:</para>
+<screen>$ echo 'source $HOME/opt/buildgear/etc/bash_completion.d/buildgear-bash-completion.sh' >> ~/.bashrc</screen>
+  </section>
+
+  <section><title>Installing From Ubuntu PPA</title>
+  <para>Installation via Ubuntu PPA is planned to be available in the future.</para>
+  </section>
+
+  <section><title>Optional VirtualBox Build Image</title>
+  <para>A VirtualBox image with a preinstalled Ubuntu installation is available for those who do not have Ubuntu installed on their build computer.</para>
+
+  <para>The Ubuntu VirtualBox image is available <ulink url="http://buildgear.org/release/Ubuntu-12.10-64bit-Minimal.vdi.tar.xz">here</ulink>.</para>
+
+  <para>Simply extract and install the VDI disk image in a new Virtualbox session. Remember to
+  configure the number of system CPUs according to the CPU count available in your system.
+  Also be generous when configuring available system memory. It is recommended to use
+  a bridged network adapter to make it easy to connect to the virtual machine via ssh.</para>
+
+  <para>The default username/password = ubuntu/ubuntu</para>
+
+  <para>If needed you can do some Ubuntu reconfiguration as described below.</para>
+
+  <para>Reconfigure keyboard language:</para>
+<screen>$ sudo dpkg-reconfigure keyboard-configuration</screen>
+
+  <para>Reconfigure time zone</para>
+<screen>$ sudo dpkg-reconfigure tzdata</screen>
+
+  <para>In case you run into boot delay due to network timeout you might need to do</para>
+<screen>$ sudo rm /etc/udev/rules.d/70-persistent-net.rules</screen>
+
+  </section>
+</chapter>

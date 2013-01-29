@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2011-2012  Martin Lund
+ * This file is part of Build Gear.
+ *
+ * Copyright (C) 2011-2013  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,14 +49,15 @@ class CDownload : public CFileSystem
                           double ulnow);
       void update_progress();
       CDownload();
+      bool activate_download();
       CURLM *curlm;
       list<CDownloadItem*> active_downloads;
       list<CDownloadItem*> pending_downloads;
       void lock();
       void unlock();
       bool first;
+      bool error;
    private:
-      pthread_mutex_t mlock;
 };
 
 class CDownloadItem : public CFileSystem

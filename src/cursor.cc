@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2011-2012  Martin Lund
+ * This file is part of Build Gear.
+ *
+ * Copyright (C) 2011-2013  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +31,8 @@
 #include <unistd.h>
 #include <string.h>
 #include "buildgear/cursor.h"
+
+pthread_mutex_t cout_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void cursor_restore()
 {

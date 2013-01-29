@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2011-2012  Martin Lund
+ * This file is part of Build Gear.
+ *
+ * Copyright (C) 2011-2013  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,9 +115,6 @@ class CConfig : public CUtility
 #define CONFIG_KEY_CROSS_DEPENDS             "cross_depends"
 #define CONFIG_KEY_BUILD                     "build"
 #define CONFIG_KEY_HOST                      "host"
-
-#define TERMINFO_CIVIS           "\033[?25l"
-#define TERMINFO_CNORM           "\033[?25h"
 
 #define SCRIPT                   AM_PKGDATADIR "/buildgear.sh"
 #define CONFIG_GUESS_SCRIPT      AM_PKGDATADIR "/config.guess"

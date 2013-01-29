@@ -1,0 +1,13 @@
+<chapter><title> Introduction </title>
+  <section><title> What is Build Gear? </title>
+    <para> Build Gear is a lightweight build tool for building embedded firmware. It is intended for experienced GNU/Linux users and developers. </para>
+    <para>
+    The primary focus of this build tool is to keep building simple which is reflected in a straightforward command line interface and support for easy to maintain build files. The secondary focus is build performance and build integrity. Build Gear is easy to use and well suited for rapid prototyping and product development of GNU/Linux firmware to be deployed in small to medium sized embedded systems.
+    </para>
+  </section>
+  <section><title> Why use Build Gear? </title></section>
+  <para> In short, use Build Gear because it is simple and because it enables full control of how you build your firmware. </para>
+  <section><title> History </title></section>
+  <para> Build Gear started out as an experimental build tool that I used for rapid prototyping of firmware for various GNU/Linux based systems. </para>
+  <para> For years, I've been putting together customized GNU/Linux distributions either manually (Linux From Scratch kind of way) or by using some of the most popular open source build systems available such as OpenEmbedded and Buildroot. Unfortunately, none of these open source build tools suit my needs. I realized that there is no tool which fits all so I decided to create my own tool. What I need is tool that is less complex. OpenEmbedded is suitable for those who need a large software stack with lots of configurable features. Buildroot is suitable for those who need a small to medium sized distribution with a nice text graphical feature configuration system. At some point I realized that the cost of using these tools are too high in terms of maintenance, lack of control, and ease of use - they are simply too complex. Build Gear is an attempt to do things as simple as possible and with the lowest level of information in order to perform the specific task of building fully tailored firmware images for specific hardware boards. </para>
+</chapter>

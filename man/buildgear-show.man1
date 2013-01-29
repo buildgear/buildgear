@@ -38,15 +38,15 @@ Generates a SVG dependency graph for the <\fIbuild name\fR>. The output will be 
 .RE
 
 .TP
-\fB\-\-readme \fR<\fIbuild name\fR>
-.RS
-Displays the readme of the current buildgear build space.
-.RE
-
-.TP
 \fB\-\-version \fR<\fIbuild name\fR>
 .RS
 Shows the version of the specified <\fIbuild name\fR>.
+.RE
+
+.TP
+\fB\-\-readme
+.RS
+Displays the readme of the current buildgear build space.
 .RE
 
 .TP

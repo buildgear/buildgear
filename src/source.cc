@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2011-2012  Martin Lund
+ * This file is part of Build Gear.
+ *
+ * Copyright (C) 2011-2013  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -272,9 +274,30 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                {
                   if (item->mirror_url == "")
                   {
-                     cout << "Error: Could not download " << used_url
-                          << "(" << curl_easy_strerror(msg->data.result) << ")" << endl << flush;
-                     exit(EXIT_FAILURE);
+                     curl_multi_remove_handle(Download.curlm, msg->easy_handle);
+                     temp.str("");
+                     temp << "Error (" << curl_easy_strerror(msg->data.result) << ")";
+                     item->status = temp.str();
+                     item->downloaded = -1;
+
+                     Download.lock();
+
+                     Cursor.line_up(Cursor.get_ypos());
+                     item->print_progress();
+
+                     Cursor.ypos_add(-DOWNLOAD_LINE_SIZE);
+
+                     Download.error = true;
+                     Download.active_downloads.remove(item);
+
+                     Download.unlock();
+
+                     if (Download.activate_download())
+                     {
+                        // Prevent loop from ending
+                        active_downloads++;
+                     }
+                     continue;
                   }
 
                   curl_multi_remove_handle(Download.curlm, msg->easy_handle);
@@ -306,10 +329,29 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                   continue;
                } else
                {
-                  curl_easy_getinfo(msg->easy_handle, CURLINFO_EFFECTIVE_URL, &used_url);
-                  cout << "Error: Could not download " << used_url << " ("
-                       << curl_easy_strerror(msg->data.result) << ")" << endl << flush;
-                  exit(EXIT_FAILURE);
+                  temp.str("");
+                  temp << "Error (" << curl_easy_strerror(msg->data.result) << ")";
+                  item->status = temp.str();
+                  item->downloaded = -1;
+
+                  Download.lock();
+
+                  Cursor.line_up(Cursor.get_ypos());
+                  item->print_progress();
+
+                  Cursor.ypos_add(-DOWNLOAD_LINE_SIZE);
+
+                  Download.error = true;
+                  Download.active_downloads.remove(item);
+
+                  Download.unlock();
+
+                  if (Download.activate_download())
+                  {
+                     // Prevent loop from ending
+                     active_downloads++;
+                  }
+                  continue;
                }
             }
 
@@ -358,21 +400,8 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
             curl_easy_cleanup(msg->easy_handle);
 
             // Check if there are more downloads pending
-            if (Download.pending_downloads.size() > 0)
+            if (Download.activate_download())
             {
-               CDownloadItem *item = Download.pending_downloads.front();
-               Download.pending_downloads.pop_front();
-
-               // Print out the new download
-               Download.lock();
-
-               item->print_progress();
-
-               Download.unlock();
-
-               Download.active_downloads.push_back(item);
-               curl_multi_add_handle(Download.curlm, item->curl);
-
                // Prevent while loop to end prematurely
                active_downloads++;
             }
@@ -391,4 +420,10 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    // Beautify download finish output
    if (!Download.first)
       cout << endl;
+
+   if (Download.error)
+   {
+      cout << "Error: Could not download all sources. See above." << endl;
+      exit(EXIT_FAILURE);
+   }
 }

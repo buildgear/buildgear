@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2011-2012  Martin Lund
+ * This file is part of Build Gear.
+ *
+ * Copyright (C) 2011-2013  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +23,19 @@
 #define LOG_H
 
 #include "buildgear/config.h"
+#include "buildgear/buildfile.h"
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <list>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 using namespace std;
+
+class CStreamDescriptor;
 
 class CLog
 {
@@ -33,8 +43,25 @@ class CLog
       void open(string filename);
       void write(char *buffer, int length);
       void close();
+      CStreamDescriptor* add_stream(FILE*, CBuildFile*);
+      list<CStreamDescriptor*> log_streams;
+      mutex log_streams_mutex;
    private:
       ofstream log_file;
+};
+
+class CStreamDescriptor: CLog
+{
+   public:
+      CStreamDescriptor(FILE *, CBuildFile *);
+      mutex output_mutex;
+      FILE *fp;
+      int fd;
+      vector<char> log_buffer;
+      CBuildFile *buildfile;
+      condition_variable done_cond;
+      mutex done_mutex;
+      bool done_flag;
 };
 
 extern CLog Log;

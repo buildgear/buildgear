@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2011-2012  Martin Lund
+ * This file is part of Build Gear.
+ *
+ * Copyright (C) 2011-2013  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +51,8 @@ void CBuildFile::Parse(void)
    size_t pos;
    string command =
       "bash --norc --noprofile -O extglob -c 'source " +
-      filename +
+      (string) BUILD_FILES_CONFIG +
+      "; source " + filename +
       "; echo name=$name \
       ; echo version=$version \
       ; echo release=$release \
