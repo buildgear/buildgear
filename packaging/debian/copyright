@@ -1,0 +1,42 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: buildgear
+Source: http://www.buildgear.org
+
+Files: *
+Copyright: 2011-2013 Martin Lund <martin.lund@keep-it-simple.com>
+License: GPL-2
+ buildgear is free software: you can redistribute it and/or modify it under the
+ terms of the GNU General Public License as published by the Free Software
+ Foundation, version 2 of the License.
+ .
+ In addition, as a special exception, the copyright holders give
+ permission to link the code of this application with the
+ OpenSSL library, and distribute linked combinations including the two.
+ .
+ buildgear is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ details.
+ .
+ You should have received a copy of the GNU General Public License version 2
+ along with buildgear, in a file named COPYING.  If not, see
+ <http://www.gnu.org/licenses/>.
+
+Files: debian/*
+Copyright: 2013 Jesper Larsen <knorr.jesper@gmail.com>
+License: GPL-2+
+ This package is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".

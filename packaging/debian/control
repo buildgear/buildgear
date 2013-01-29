@@ -1,0 +1,21 @@
+Source: buildgear
+Section: devel
+Priority: extra
+Maintainer: Jesper Larsen <knorr.jesper@gmail.com>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev, cpp (>= 4.7), libcurl4-gnutls-dev, libncurses5-dev, unzip
+Standards-Version: 3.9.3
+Homepage: http://www.buildgear.org
+
+Package: buildgear
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Lightweight embedded firmware build tool.
+ Build Gear is a lightweight embedded firmware build tool
+ for experienced GNU/Linux users and developers.
+ .
+ The primary focus of this build tool is to keep cross building simple which 
+ is reflected in a straightforward command line interface and support for easy 
+ to maintain build files. The secondary focus is build performance and 
+ build integrity. Build Gear is easy to use and well suited for 
+ rapid prototyping or product development of GNU/Linux firmware to be deployed 
+ in small to medium sized embedded systems.
