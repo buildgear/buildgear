@@ -42,10 +42,14 @@ class CBuildManager : public CFileSystem, COptions
       bool DepBuildNeeded(CBuildFile *buildfile);
       void BuildOutputTick(CBuildFile *buildfile);
       void BuildOutputPrint(void);
+      void KillBuilds(void);
       list<CBuildFile*> active_builds;
       list<CBuildFile*> active_adds;
+      bool build_error;
    private:
 };
+
+#define PID_MAX_LENGTH 10
 
 extern CBuildManager BuildManager;
 #endif

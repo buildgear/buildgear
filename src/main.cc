@@ -314,8 +314,11 @@ int main (int argc, char *argv[])
    BuildManager.Build(&Dependency.parallel_build_order);
    if (Config.keep_work == "no")
       BuildManager.CleanWork();
-   Cursor.clear_rest_of_line();
-   cout << "Done\n\n";
+   Cursor.clear_below();
+   if (BuildManager.build_error)
+      cout << "Error\n\n";
+   else
+      cout << "Done\n\n";
 
    /* Reenable terminal echo */
    Cursor.enable_wrap();

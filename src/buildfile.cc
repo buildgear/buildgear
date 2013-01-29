@@ -49,6 +49,7 @@ void CBuildFile::Parse(void)
    FILE *fp;
    char line_buffer[PATH_MAX];
    size_t pos;
+   string fifo_name;
    string command =
       "bash --norc --noprofile -O extglob -c 'source " +
       (string) BUILD_FILES_CONFIG +
@@ -125,4 +126,9 @@ void CBuildFile::Parse(void)
 
    // Assign name based on type and name variable
    name = type + "/" + short_name;
+
+   // Set control fifo name
+   fifo_name = "/tmp/buildgear-" + type + "-" + short_name + ".fifo";
+   control_fifo = new char [fifo_name.length() + 1];
+   strcpy(control_fifo, fifo_name.c_str());
 }
