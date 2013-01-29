@@ -1,4 +1,10 @@
-<chapter><title>Build Gear Basics</title>
+<chapter><title>Using Build Gear</title>
+  <section><title>Basics</title>
+    <section><title>Build Space</title></section>
+    <section><title>Buildfile</title></section>
+    <section><title>Configuration Files</title></section>
+    <section><title>Temporary Files</title></section>
+  </section>
   <section><title>Building stuff</title></section>
   <section><title>Starting From Scratch</title></section>
 </chapter>
