@@ -52,15 +52,17 @@ void CBuildFile::Parse(void)
    string fifo_name;
    string command =
       "bash --norc --noprofile -O extglob -c 'source " +
-      (string) BUILD_FILES_CONFIG +
-      "; source " + filename +
-      "; echo name=$name \
-      ; echo version=$version \
-      ; echo release=$release \
-      ; echo source=${source[@]} \
-      ; echo depends=${depends[@]} \
-      ; type build &> /dev/null && echo build_function=yes || echo build_function=no \
-      ; type check &> /dev/null && echo check_function=yes || echo check_function=no'";
+       (string) BUILD_FILES_CONFIG + " 2>/dev/null \
+       ; echo config_return=$? \
+       ; source " + filename + " 2>/dev/null \
+       ; echo build_return=$? \
+       ; echo name=$name \
+       ; echo version=$version \
+       ; echo release=$release \
+       ; echo source=${source[@]} \
+       ; echo depends=${depends[@]} \
+       ; type build &> /dev/null && echo build_function=yes || echo build_function=no \
+       ; type check &> /dev/null && echo check_function=yes || echo check_function=no'";
 
    // Open buildfile for reading
    fp = popen(command.c_str(), "r");
@@ -111,6 +113,30 @@ void CBuildFile::Parse(void)
          version = value;
       if (key == KEY_RELEASE)
          release = value;
+      if (key == KEY_CONFIG_RETURN)
+      {
+         if (stoi(value) != 0)
+         {
+            cout << endl << endl << "Error parsing " << BUILD_FILES_CONFIG  << endl;
+
+            // Source the file again without redirecting the error out
+            execlp("bash","source",BUILD_FILES_CONFIG, NULL);
+            cout << endl;
+            exit(EXIT_FAILURE);
+         }
+      }
+      if (key == KEY_BUILD_RETURN)
+      {
+         if (stoi(value) != 0)
+         {
+            cout << endl << endl << "Error parsing " << filename << endl;
+
+            // Source the file again without redirecting the error out
+            execlp("bash","source",filename.c_str(), NULL);
+            cout << endl;
+            exit(EXIT_FAILURE);
+         }
+      }
 
       // Optional keys
       if (key == KEY_SOURCE)

@@ -102,6 +102,8 @@ class CConfig : public CUtility
 #define KEY_RELEASE              "release"
 #define KEY_SOURCE               "source"
 #define KEY_DEPENDS              "depends"
+#define KEY_CONFIG_RETURN        "config_return"
+#define KEY_BUILD_RETURN         "build_return"
 
 #define CONFIG_KEY_DEFAULT_NAME_PREFIX       "default_name_prefix"
 #define CONFIG_KEY_PARALLEL_BUILDS           "parallel_builds"
