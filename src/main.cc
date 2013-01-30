@@ -239,10 +239,10 @@ int main (int argc, char *argv[])
    {
       if (Config.download_order)
          Dependency.ShowDownloadOrder();
-      
+
       if (Config.build_order)
          Dependency.ShowBuildOrder();
-         
+
       if (Config.dependency_circle)
       {
          FileSystem.CreateDirectory(OUTPUT_DIR);
@@ -262,6 +262,12 @@ int main (int argc, char *argv[])
 
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
+
+   /* Create footprint and checksum directories */
+   FileSystem.CreateDirectory(FOOTPRINT_NATIVE_DIR);
+   FileSystem.CreateDirectory(FOOTPRINT_CROSS_DIR);
+   FileSystem.CreateDirectory(CHECKSUM_NATIVE_DIR);
+   FileSystem.CreateDirectory(CHECKSUM_CROSS_DIR);
 
    if (Config.download)
    {

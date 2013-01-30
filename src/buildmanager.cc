@@ -220,10 +220,22 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    vector<char> log_buffer;
    CStreamDescriptor *stream;
    string arguments;
+   string footprint_file;
+   string checksum_file;
    string command;
    stringstream pid;
    char pid_string[PID_MAX_LENGTH];
    string build(buildfile->build ? "yes" : "no");
+
+   if (buildfile->type == "native")
+   {
+      footprint_file = FOOTPRINT_NATIVE_DIR  "/" +  buildfile->short_name + ".footprint";
+      checksum_file  = CHECKSUM_NATIVE_DIR  "/" + buildfile->short_name + ".sha256";
+   } else
+   {
+      footprint_file = FOOTPRINT_CROSS_DIR  "/" + buildfile->short_name + ".footprint";
+      checksum_file  = CHECKSUM_CROSS_DIR  "/" + buildfile->short_name + ".sha256";
+   }
 
    // Set required script arguments
    arguments += " --BG_BUILD_FILE '" + buildfile->filename + "'";
@@ -238,6 +250,8 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    arguments += " --BG_BUILD '" + Config.build_system + "'";
    arguments += " --BG_HOST '" + Config.host_system + "'";
    arguments += " --BG_VERBOSE 'no'";
+   arguments += " --BG_BUILD_FOOTPRINT '" + footprint_file + "'";
+   arguments += " --BG_BUILD_SHA256SUM '" + checksum_file + "'";
 
    // Apply build settings to all builds if '--all' is used
    if (Config.all)

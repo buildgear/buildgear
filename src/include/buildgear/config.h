@@ -89,6 +89,10 @@ class CConfig : public CUtility
 #define PACKAGE_DIR              BUILD_DIR "/package"
 #define SYSROOT_DIR              WORK_DIR  "/sysroot"
 #define BUILD_LOG                BUILD_DIR "/build.log"
+#define FOOTPRINT_NATIVE_DIR     BUILD_FILES_NATIVE_DIR "/.footprints"
+#define FOOTPRINT_CROSS_DIR      BUILD_FILES_CROSS_DIR "/.footprints"
+#define CHECKSUM_NATIVE_DIR      BUILD_FILES_NATIVE_DIR "/.checksums"
+#define CHECKSUM_CROSS_DIR       BUILD_FILES_CROSS_DIR "/.checksums"
 #define BUILD_FILE               "Buildfile"
 #define PACKAGE_EXTENSION        ".pkg.tar.gz"
 
