@@ -18,9 +18,27 @@ Changes since Build Gear v0.9.12beta:
    The html output is to be used directly on the Build Gear website.
    The pdf output is to be distributed freely.
 
+ * Fixed memory corruption
+
+   Non thread safe manipulation of internal lists resulted in application
+   instability by memory corruption. Problem solved by introduction of list
+   access mutexes.
+
  * Various cleanups
 
 Contributed by Jesper Larsen:
+
+ * Include HTTP response codes in output
+
+   Include the HTTP response code in the output if a download fails.
+
+ * Set the user-agent header when downloading
+
+   Download will fail on some sites, if the user-agent header
+   is not set.
+
+   The user-agent header is set to curl/x.x.x
+   The version is requested through the curl API
 
  * Stop on syntax errors in Buildfiles
 
@@ -56,6 +74,18 @@ Contributed by Jesper Larsen:
    Don't suggest cross/ if there are no cross buildfiles in the current tree.
    Don't suggest cross/ if "cross/" is already typed.
 
+ * Add support for buildfiles in bash autocompletion
+
+   The bash autocompletion script finds the root build dir, and makes a
+   list of all names defined in Buildfiles.
+
+   "native/" is automatically prefixed to builds in the native directory. I.e.
+   $ buildgear build cross[TAB]
+   and
+   $ buildgear build native/cross[TAB]
+   will expand to
+   $ buildgear build native/crosstool-ng
+
  * Support cross/ prefix in bash autocompletion
 
    $ buildgear build [TAB]
@@ -63,8 +93,18 @@ Contributed by Jesper Larsen:
    $ buildgear build cross/[TAB]
    Will list all cross builds with prefix
 
- *  Add initial support for deb packaging
+ * Add initial support for deb packaging
 
    Initial debian packaging directory added.
 
- * Start to support constant log ouput in parallel
+ * Constant log output in parallel mode
+
+   Constant output to the log in a first-come-first-served basis.
+
+ * Update man pages for whatis compability
+
+ * More fixes to memory corruption
+
+   Added mutex lock for the list iteration loops in build output.
+
+ * Various fixes
