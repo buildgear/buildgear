@@ -270,13 +270,17 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                   continue;
                }
 
+               long response_code;
+               curl_easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &response_code);
+
                if (!item->alternative_url)
                {
                   if (item->mirror_url == "")
                   {
                      curl_multi_remove_handle(Download.curlm, msg->easy_handle);
                      temp.str("");
-                     temp << "Error (" << curl_easy_strerror(msg->data.result) << ")";
+                     temp << "Error " << response_code <<" (";
+                     temp << curl_easy_strerror(msg->data.result) << ")";
                      item->status = temp.str();
                      item->downloaded = -1;
 
@@ -302,7 +306,8 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                   curl_multi_remove_handle(Download.curlm, msg->easy_handle);
                   temp.str("");
-                  temp << "Error (" << curl_easy_strerror(msg->data.result) << ") trying alternative URL..";
+                  temp << "Error " << response_code << " (";
+                  temp << curl_easy_strerror(msg->data.result) << ") trying alternative URL..";
                   item->status = temp.str();
                   item->downloaded = -1;
 
@@ -330,7 +335,8 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                } else
                {
                   temp.str("");
-                  temp << "Error (" << curl_easy_strerror(msg->data.result) << ")";
+                  temp << "Error " << response_code << " (";
+                  temp << curl_easy_strerror(msg->data.result) << ")";
                   item->status = temp.str();
                   item->downloaded = -1;
 

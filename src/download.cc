@@ -177,6 +177,8 @@ void CDownloadItem::File()
 {
    /* name to store the file as if succesful */
    string dest;
+   curl_version_info_data *version_info;
+   string user_agent;
 
    dest = source_dir + "/" + filename + ".part";
 
@@ -217,6 +219,15 @@ void CDownloadItem::File()
       // Define progress indication callback
       curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, CDownload::progress);
       curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, this);
+
+      // Set User-Agent header
+      version_info = curl_version_info(CURLVERSION_NOW);
+      if (version_info->age >= 0)
+      {
+         user_agent = "curl/";
+         user_agent.append(version_info->version);
+         curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent.c_str());
+      }
 
       // Set resume option if file already exists
       if (FileExistSize(file.filename, filesize))
