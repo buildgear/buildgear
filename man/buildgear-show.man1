@@ -44,6 +44,18 @@ Shows the version of the specified <\fIbuild name\fR>.
 .RE
 
 .TP
+\fB\-\-footprint \fR<\fIbuild name\fR>
+.RS
+Shows the footprint of the specified <\fIbuild name\fR>.
+.RE
+
+.TP
+\fB\-\-checksim \fR<\fIbuild name\fR>
+.RS
+Shows the checksum of the specified <\fIbuild name\fR>.
+.RE
+
+.TP
 \fB\-\-readme
 .RS
 Displays the readme of the current buildgear build space.

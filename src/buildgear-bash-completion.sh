@@ -52,7 +52,7 @@ _buildgear()
                   --no-fakeroot --all"
    clean_options="--all"
    show_options="--build-order --download-order --dependency --readme --version
-                 --log --log-tail --log-mismatch"
+                 --log --log-tail --log-mismatch --footprint --checksum"
    help_options=$commands
 
    if [ $COMP_CWORD -eq 1 ]; then
@@ -106,7 +106,7 @@ _buildgear()
          COMPREPLY=( $(compgen -W "$show_options" -- $cur) )
          for i in "${COMP_WORDS[@]}"
          do
-           if [[ "$i" == "--build-order" || "$i" == "--download-order" || "$i" == "--dependency" || "$i" == "--version" ]]; then
+           if [[ "$i" == "--build-order" || "$i" == "--download-order" || "$i" == "--dependency" || "$i" == "--version" || "$i" == "--footprint" || "$i" == "--checksum" ]]; then
              if [ "$build_name_in_args" == 0 ]; then
                COMPREPLY+=( ${builds[@]} )
              fi

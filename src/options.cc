@@ -186,7 +186,7 @@ void COptions::Parse(int argc, char *argv[])
    else if (command == "show")
    {
       Config.show = true;
-      
+
       // Parse show OPTIONS
       static struct option long_options[] =
       {
@@ -198,13 +198,15 @@ void COptions::Parse(int argc, char *argv[])
          {"log-tail",            no_argument, 0, 't'},
          {"log-mismatch",        no_argument, 0, 'm'},
          {"version",             no_argument, 0, 'v'},
+         {"footprint",           no_argument, 0, 'f'},
+         {"checksum",            no_argument, 0, 's'},
          {0,                     0,           0,  0 }
       };
-      
+
       option = getopt_long (argc, argv, "", long_options, &option_index);
-      while( option != -1 ) 
+      while( option != -1 )
       {
-         switch( option ) 
+         switch( option )
          {
             case 'o':
                Config.build_order = true;
@@ -217,7 +219,7 @@ void COptions::Parse(int argc, char *argv[])
                break;
             case 'r':
                Config.readme = true;
-               break;				
+               break;
             case 'l':
                Config.log = true;
                break;
@@ -231,6 +233,12 @@ void COptions::Parse(int argc, char *argv[])
                break;
             case 'v':
                Config.show_version = true;
+               break;
+            case 'f':
+               Config.footprint = true;
+               break;
+            case 's':
+               Config.checksum = true;
                break;
             default:
                exit(EXIT_FAILURE);
@@ -342,6 +350,8 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --log                   Show build log\n";
    cout << "  --log-tail              Show build log (tailed)\n";
    cout << "  --log-mismatch          Show build log mismatches\n";
+   cout << "  --footprint             Show build name footprint\n";
+   cout << "  --checksum              Show build name checksum\n";
    cout << "\n";
    cout << "See buildgear help <command> for help on a specific command\n";
 }

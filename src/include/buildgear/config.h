@@ -32,7 +32,7 @@ class CConfig : public CUtility
       string name;
       string name_stripped;
       string root;
-      
+
       bool download;
       int download_timeout;
       int download_retry;
@@ -44,7 +44,7 @@ class CConfig : public CUtility
       string update_footprint;
       string no_strip;
       bool no_fakeroot;
-      
+
       bool clean;
 
       bool show;
@@ -56,7 +56,9 @@ class CConfig : public CUtility
       bool log;
       bool log_tail;
       bool mismatch;
-      
+      bool footprint;
+      bool checksum;
+
       bool init;
 
       bool all;

@@ -113,8 +113,7 @@ int main (int argc, char *argv[])
    /* Display help hint on incorrect show command */
    if ((Config.show) && (Config.name == "")
                      && (!Config.readme)
-                     && (!Config.log)
-                     && (!Config.show_version))
+                     && (!Config.log))
    {
       cout << "Please specify build name to show\n";
       exit(EXIT_FAILURE);
@@ -163,12 +162,33 @@ int main (int argc, char *argv[])
 
    /* Parse buildfiles configuration file */
    ConfigFile.Parse(BUILD_FILES_CONFIG);
-   
+
    /* Correct source dir */
    Config.CorrectSourceDir();
 
    /* Correct name - adds default prefix */
    Config.CorrectName();
+
+   /* Show footprint or checksum */
+   if (Config.show && (Config.footprint || Config.checksum))
+   {
+      string build_name;
+      build_name = Config.name.substr( Config.name.find_last_of("/") );
+      if (Config.name.find("native/") == 0)
+      {
+         if (Config.footprint)
+            FileSystem.Cat(FOOTPRINT_NATIVE_DIR + build_name + ".footprint");
+         else
+            FileSystem.Cat(CHECKSUM_NATIVE_DIR + build_name + ".sha256");
+      } else
+      {
+         if (Config.footprint)
+            FileSystem.Cat(FOOTPRINT_CROSS_DIR + build_name + ".footprint");
+         else
+            FileSystem.Cat(CHECKSUM_CROSS_DIR + build_name + ".sha256");
+      }
+      exit(EXIT_SUCCESS);
+   }
 
    /* Handle 'clean --all' command */
    if ((Config.clean) && (Config.all))
