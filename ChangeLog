@@ -1,13 +1,70 @@
 
-=== Build Gear v0.9.12.2beta ===
+=== Build Gear v0.9.13beta ===
 
-Changes since Build Gear v0.9.12.1beta:
+Changes since Build Gear v0.9.12beta:
 
- * More fixes to memory corruption
+ * Moved download mirror configuration to buildfiles/config
 
-   Added mutex lock for the list iteration loops in build output.
+   Moved download mirror configuration to buildfiles/config. The download
+   mirror configuration variable is also renamed from download_mirror to
+   DOWNLOAD_MIRROR to maintain a consistent variable naming scheme for
+   buildfiles/config.
 
+ * Added Build Gear Handbook documentation framework
 
- * Terminal output cleanup
+   Added automake support for pdf and html targets which use docbook to
+   produce pdf and html output documentation from a single source.
 
-   Clear terminal for the "Build Error" message.
+   The html output is to be used directly on the Build Gear website.
+   The pdf output is to be distributed freely.
+
+ * Various cleanups
+
+Contributed by Jesper Larsen:
+
+ * Stop on syntax errors in Buildfiles
+
+ * Gracefully exit if build fails
+
+   buildgear.sh is made leader of a process group when it is called.
+   The script will communicate its PID to buildgear using a named fifo.
+
+   This allows buildgear to kill all build scripts, and their children
+   if a build fails.
+
+   This is done in order to ensure that the log of the failing build
+   will be written to the build log.
+
+ * Run download procedure in a thread
+
+   This should fix issues with very long delays on signals during downloads.
+
+ * Join log thread when build is done
+
+ * Continue downloads on error
+
+   Instead of exiting right away on a download error we download
+   as much as possible. If there are any download errors that could
+   not be amended, exit after downloads are done.
+
+ * Source buildfiles config before sourcing Buildfile
+
+ * Update templates to reflect new DOWNLOAD_MIRROR
+
+ * Autocomplete cross/ changes
+
+   Don't suggest cross/ if there are no cross buildfiles in the current tree.
+   Don't suggest cross/ if "cross/" is already typed.
+
+ * Support cross/ prefix in bash autocompletion
+
+   $ buildgear build [TAB]
+   Will still show cross builds without prefix
+   $ buildgear build cross/[TAB]
+   Will list all cross builds with prefix
+
+ *  Add initial support for deb packaging
+
+   Initial debian packaging directory added.
+
+ * Start to support constant log ouput in parallel
