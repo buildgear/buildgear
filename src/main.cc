@@ -339,7 +339,7 @@ int main (int argc, char *argv[])
    /* Start building */
    cout << "Building '" << Config.name << "'.. " << flush;
    BuildManager.Build(&Dependency.parallel_build_order);
-   if (Config.keep_work == "no")
+   if (Config.keep_work == "no" && !BuildManager.build_error)
       BuildManager.CleanWork();
    Cursor.clear_below();
    if (BuildManager.build_error)
