@@ -523,7 +523,7 @@ void CBuildManager::CleanLog(void)
 
 void CBuildManager::BuildOutputTick(CBuildFile *buildfile)
 {
-   if (++buildfile->tick == 4)
+   if (++buildfile->tick >= 4)
       buildfile->tick = 0;
 
    pthread_mutex_lock(&cout_mutex);
@@ -574,7 +574,7 @@ void CBuildManager::BuildOutputPrint()
             indicator = "/";
       }
 
-      cout << " " << indicator << " Building      '" << (*it)->name << "'";
+      cout << " " << setw(1) << indicator << " Building      '" << (*it)->name << "'";
       Cursor.clear_rest_of_line();
       cout << endl;
       lines++;
