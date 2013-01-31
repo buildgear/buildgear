@@ -139,6 +139,8 @@ void CBuildThread::operator()()
 
          // Output added and advance cursor
          cout << "   Added         '" << buildfile->name << "'";
+         if (buildfile->layer != DEFAULT_LAYER_NAME)
+            cout << " [" << buildfile->layer << "]";
          Cursor.clear_rest_of_line();
          cout << endl;
          Cursor.reset_ymaxpos();
@@ -255,6 +257,9 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    arguments += " --BG_VERBOSE 'no'";
    arguments += " --BG_BUILD_FOOTPRINT '" + footprint_file + "'";
    arguments += " --BG_BUILD_SHA256SUM '" + checksum_file + "'";
+
+   if (buildfile->layer != DEFAULT_LAYER_NAME)
+      arguments +=" --BG_LAYER '" + buildfile->layer + "'";
 
    // Apply build settings to all builds if '--all' is used
    if (Config.all)
@@ -606,6 +611,8 @@ void CBuildManager::BuildOutputPrint()
       }
 
       cout << " " << setw(1) << indicator << " Building      '" << (*it)->name << "'";
+      if ((*it)->layer != DEFAULT_LAYER_NAME)
+         cout << " [" << (*it)->layer << "]";
       Cursor.clear_rest_of_line();
       cout << endl;
       lines++;

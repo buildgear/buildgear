@@ -234,12 +234,21 @@ int main (int argc, char *argv[])
    /* Print number of buildfiles found */
    cout << "Done (" << BuildFiles.buildfiles.size() << " files)\n";
 
+   /* Delete old build log */
+   BuildManager.CleanLog();
+
+   /* Open build log file */
+   Log.open(BUILD_LOG);
+
    /* Parse buildfiles */
    cout << "Loading build files..           " << flush;
    BuildFiles.Parse();
 
    /* Show buildfiles meta info (debug only) */
    BuildFiles.ShowMeta();
+
+   /* Remove duplicate buildfiles according to layer */
+   BuildFiles.RemoveDuplicates();
 
    /* Load dependencies */
    BuildFiles.LoadDependency();
@@ -353,18 +362,12 @@ int main (int argc, char *argv[])
    cout << "Detecting BUILD system type..   " << Config.build_system << endl;
    cout << "Configured HOST system type..   " << Config.host_system << endl;
    cout << endl;
-   
-   /* Delete old build log */
-   BuildManager.CleanLog();
 
    /* Delete old work */
    BuildManager.CleanWork();
    
    /* Create build output directory */
    FileSystem.CreateDirectory(OUTPUT_DIR);
-
-   /* Open build log file */
-   Log.open(BUILD_LOG);
 
    /* Start building */
    cout << "Building '" << Config.name << "'.. " << flush;

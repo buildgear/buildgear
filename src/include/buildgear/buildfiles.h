@@ -23,6 +23,7 @@
 #define BUILDFILES_H
 
 #include <list>
+#include <vector>
 #include "buildgear/config.h"
 #include "buildgear/buildfile.h"
 #include "buildgear/filesystem.h"
@@ -36,6 +37,7 @@ class CBuildFiles
       CBuildFiles();
       list<CBuildFile*> buildfiles;
       void Parse(void);
+      void RemoveDuplicates(void);
       void LoadCrossDependency(void);
       void LoadDependency(void);
       void AddCrossDependency(void);
@@ -45,7 +47,10 @@ class CBuildFiles
       void ShowVersions(list<CBuildFile*> *buildfiles);
       CBuildFile * BuildFile(string name);
       list<CBuildFile*> cross_dependency;
+      vector<string> layers;
    private:
 };
+
+extern CBuildFiles BuildFiles;
 
 #endif

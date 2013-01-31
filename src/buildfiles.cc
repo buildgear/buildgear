@@ -43,15 +43,69 @@ CBuildFiles::CBuildFiles()
 {
 }
 
+bool NameCompare(CBuildFile *first, CBuildFile *second)
+{
+   if (first->name > second->name)
+      return false;
+   else
+      return true;
+}
+
+bool NameUnique(CBuildFile *first, CBuildFile *second)
+{
+   vector<string>::iterator it;
+   if (first->name != second->name)
+      return false;
+   if (first->layer == second->layer)
+   {
+      cout << "\n\nError: Multiple buildfiles for build '";
+      cout << first->name << "' on layer '" << first->layer << "' found." << endl;
+      exit(EXIT_FAILURE);
+   }
+   // If the name is the same, we make sure first points to the lowest priority
+   // If funtion returns true, second is removed from list
+   for (it = BuildFiles.layers.begin();it != BuildFiles.layers.end(); it++)
+   {
+      // first points to the highest priority. Return true to remove second
+      if (first->layer == (*it))
+         return true;
+
+      if (second->layer == (*it))
+      {
+         // Remove the element explicit since second would be removed be returning true
+         BuildFiles.buildfiles.remove(first);
+         return false;
+      }
+   }
+}
+
 void CBuildFiles::Parse(void)
 {   
    list<CBuildFile*>::iterator it;
-   
+
    /* Parse all buildfiles */
    for (it=buildfiles.begin();
         it!=buildfiles.end();
         it++)
        (*it)->Parse();
+
+}
+
+void CBuildFiles::RemoveDuplicates(void)
+{
+   istringstream iss(Config.layers);
+   string layer;
+
+   /* Resolve layer priority */
+   while (getline(iss, layer, ' '))
+   {
+      BuildFiles.layers.push_back(layer);
+   }
+
+   /* Sort by name */
+   buildfiles.sort(NameCompare);
+   /* Find duplicates and remove according to layers */
+   buildfiles.unique(NameUnique);
 }
 
 void CBuildFiles::AddCrossDependency(void)

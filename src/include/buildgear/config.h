@@ -71,6 +71,7 @@ class CConfig : public CUtility
       string build_system;
       string host_system;
       string cross_depends;
+      string layers;
       CConfig();
       void CorrectName(void);
       void CorrectSourceDir(void);
@@ -102,6 +103,8 @@ class CConfig : public CUtility
 #define LOCAL_CONFIG_FILE        ROOT_DIR "/config"
 #define BUILD_FILES_CONFIG       BUILD_FILES_DIR "/config"
 #define BUILD_FILES_README       BUILD_FILES_DIR "/readme"
+#define LAYER_FILE_NAME          ".layer"
+#define DEFAULT_LAYER_NAME       "default"
 
 #define KEY_NAME                 "name"
 #define KEY_VERSION              "version"
@@ -119,6 +122,7 @@ class CConfig : public CUtility
 #define CONFIG_KEY_DOWNLOAD_MIRROR_FIRST     "download_mirror_first"
 #define CONFIG_KEY_DOWNLOAD_CONNECTIONS      "download_connections"
 #define CONFIG_KEY_SOURCE_DIR                "source_dir"
+#define CONFIG_KEY_LAYERS                    "layers"
 
 #define CONFIG_KEY_CROSS_DEPENDS             "cross_depends"
 #define CONFIG_KEY_BUILD                     "build"
@@ -137,6 +141,7 @@ class CConfig : public CUtility
 #define SVG_DASH_NO              0
 
 #define LOG_BUFFER_SIZE          10000000
+#define LAYER_NAME_SIZE      32
 
 #define SCRIPT_OUTPUT_FIFO       "/tmp/buildgear.fifo"
 

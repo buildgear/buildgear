@@ -48,4 +48,6 @@ class CFileSystem
       void FindFile(string dirname, string filename, list<CBuildFile*> *buildfiles);
 };
 
+extern CFileSystem FileSystem;
+
 #endif

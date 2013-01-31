@@ -39,25 +39,42 @@ info()
 warning()
 {
    echo "WARNING: $1"
-   echo "   Warning       '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
+   if [ "$BG_LAYER" == "" ]; then
+      echo "   Warning       '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
+   else
+      echo "   Warning       '$BG_BUILD_TYPE/$name' [$BG_LAYER]  ($1)" > /tmp/buildgear.fifo
+   fi
 }
 
 updating()
 {
    echo "$1"
-   echo "   Updating      '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
+   if [ "$BG_LAYER" == "" ]; then
+      echo "   Updating      '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
+   else
+      echo "   Updating      '$BG_BUILD_TYPE/$name' [$BG_LAYER]  ($1)" > /tmp/buildgear.fifo
+   fi
 }
 
 error()
 {
    echo "ERROR: $1"
-   echo "   Error         '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
+   if [ "$BG_LAYER" == "" ]; then
+      echo "   Error         '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
+   else
+      echo "   Error         '$BG_BUILD_TYPE/$name' [$BG_LAYER]  ($1)" > /tmp/buildgear.fifo
+   fi
 }
 
 log_action()
 {
-   echo "======> $1 '$BG_BUILD_TYPE/$name'"
-   bg_put "    $1    '$BG_BUILD_TYPE/$name'"
+   if [ "$BG_LAYER" == "" ]; then
+      echo "======> $1 '$BG_BUILD_TYPE/$name'"
+      bg_put "    $1    '$BG_BUILD_TYPE/$name'"
+   else
+      echo "======> $1 '$BG_BUILD_TYPE/$name' [$BG_LAYER]"
+      bg_put "    $1    '$BG_BUILD_TYPE/$name' [$BG_LAYER]"
+   fi
 }
 
 function_exist()
@@ -438,6 +455,12 @@ main()
    # Action sequence
    if [ "$BG_ACTION" = "build" ]; then
       if [ "$BG_BUILD_BUILD" = "yes" ]; then
+
+         if [ "$BG_LAYER" != "" ]; then
+            log_action "Overlayed"
+            echo "Build on layer '$BG_LAYER'"
+         fi
+
          do_checksum
          do_extract
          do_build

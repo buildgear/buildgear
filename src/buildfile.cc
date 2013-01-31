@@ -31,10 +31,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <limits.h>
 #include "buildgear/config.h"
 #include "buildgear/buildfile.h"
 #include "buildgear/filesystem.h"
 #include "buildgear/utility.h"
+#include "buildgear/log.h"
 
 CBuildFile::CBuildFile(string filename)
 {
@@ -50,6 +52,7 @@ void CBuildFile::Parse(void)
    char line_buffer[PATH_MAX];
    size_t pos;
    string fifo_name;
+   string layerfile;
    string command =
       "bash --norc --noprofile -O extglob -c 'source " +
        (string) BUILD_FILES_CONFIG + " 2>/dev/null \
@@ -157,4 +160,39 @@ void CBuildFile::Parse(void)
    fifo_name = "/tmp/buildgear-" + type + "-" + short_name + ".fifo";
    control_fifo = new char [fifo_name.length() + 1];
    strcpy(control_fifo, fifo_name.c_str());
+
+   // Check for layer file
+   layerfile = filename.substr(0,filename.find_last_of("/")) + "/" LAYER_FILE_NAME;
+   if (FileSystem.FileExist(layerfile))
+   {
+      char layer_name[LAYER_NAME_SIZE];
+      fp = fopen(layerfile.c_str(), "r");
+
+      if (!fp)
+         perror("error\n");
+
+      if (fscanf(fp, "%s", layer_name) > 0)
+      {
+         // Check if layer is in config file
+         if (Config.layers.find(layer_name) == string::npos
+             && layer_name != DEFAULT_LAYER_NAME)
+         {
+            string line_buffer;
+            layer = DEFAULT_LAYER_NAME;
+            line_buffer = string("======> Reverting '") +
+               layerfile.substr(layerfile.find(BUILD_FILES_DIR "/")) +
+               string("'\n   Layer '") + layer_name +
+               string("' not defined in ") + BUILD_FILES_CONFIG +
+               string(". Reverting to '" DEFAULT_LAYER_NAME "'.\n");
+            Log.write((char *)line_buffer.c_str(), line_buffer.size());
+         } else
+            layer = string(layer_name);
+      }
+      else
+         layer = DEFAULT_LAYER_NAME;
+
+   } else
+   {
+      layer = DEFAULT_LAYER_NAME;
+   }
 }

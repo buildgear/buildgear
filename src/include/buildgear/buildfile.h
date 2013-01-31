@@ -43,6 +43,7 @@ class CBuildFile : public CUtility
       string type;
       string build_function;
       string check_function;
+      string layer;
       char *control_fifo;
       bool build;
       bool visited;

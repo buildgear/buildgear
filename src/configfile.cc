@@ -39,7 +39,7 @@ void CConfigFile::Parse(string filename)
       FILE *fp;
       char line_buffer[PATH_MAX];
       string command =  "bash --norc --noprofile -O extglob -c 'source " + filename + " 2> /dev/null";
-      
+
       if (filename != BUILD_FILES_CONFIG)
          command += "; echo source_dir=$source_dir \
                      ; echo download_mirror_first=$download_mirror_first \
@@ -55,8 +55,9 @@ void CConfigFile::Parse(string filename)
                      ; echo build=$BUILD \
                      ; echo host=$HOST \
                      ; echo download_mirror=$DOWNLOAD_MIRROR \
+                     ; echo layers=${LAYERS[@]} \
                      '";
-      
+
       fp = popen(command.c_str(), "r");
       if (fp == NULL)
          throw std::runtime_error(strerror(errno));
@@ -67,7 +68,7 @@ void CConfigFile::Parse(string filename)
          string line(line_buffer);
          string key, value;
          size_t pos = line.find_first_of('=');
-	
+
          key=line.substr(0, pos);
          value=line.substr(pos+1);
 
@@ -104,6 +105,8 @@ void CConfigFile::Parse(string filename)
                   Config.host_system = value;
                if (key == CONFIG_KEY_DOWNLOAD_MIRROR)
                   Config.download_mirror = value;
+               if (key == CONFIG_KEY_LAYERS)
+                  Config.layers = value;
             }
          }
       }
