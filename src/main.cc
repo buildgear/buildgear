@@ -102,17 +102,31 @@ int main (int argc, char *argv[])
                                     "to download source files of all builds\n";
       exit(EXIT_FAILURE);
    }
-   
+
    /* Display help hint on incorrect build command */
    if ((Config.build) && (Config.name == ""))
    {
       cout << "Please specify build name\n";
       exit(EXIT_FAILURE);
    }
-   
+
    /* Display help hint on incorrect clean command */
    if ((Config.clean) && (Config.name == "") && (Config.all==false))
    {
+      if ((Config.footprint))
+      {
+         cout << "Please specify build name or use 'clean --all ";
+         cout << "--footprint' to clean all footprints\n";
+         exit(EXIT_FAILURE);
+      }
+
+      if ((Config.checksum))
+      {
+         cout << "Please specify build name or use 'clean --all ";
+         cout << "--checksum' to clean all checksums\n";
+         exit(EXIT_FAILURE);
+      }
+
       cout << "Please specify build name or use 'clean --all' to clean all builds\n";
       exit(EXIT_FAILURE);
    }
@@ -176,6 +190,22 @@ int main (int argc, char *argv[])
    /* Handle 'clean --all' command */
    if ((Config.clean) && (Config.all) && (Config.name == ""))
    {
+      if (Config.footprint)
+      {
+         cout << "\nCleaning all footprints.. " << flush;
+         BuildManager.CleanAllFootprint();
+         cout << "Done\n\n";
+         exit(EXIT_SUCCESS);
+      }
+
+      if (Config.checksum)
+      {
+         cout << "\nCleaning all checksums.. " << flush;
+         BuildManager.CleanAllChecksum();
+         cout << "Done\n\n";
+         exit(EXIT_SUCCESS);
+      }
+
       cout << "\nCleaning all builds.. " << flush;
       BuildManager.CleanAll();
       cout << "Done\n\n";
@@ -265,9 +295,40 @@ int main (int argc, char *argv[])
    {
       cout << "Done\n";
       if (Config.all)
+      {
+         if (Config.footprint)
+         {
+            BuildManager.CleanDependenciesFootprint(BuildFiles.BuildFile(Config.name));
+            cout << "\n\nDone\n\n";
+            exit(EXIT_SUCCESS);
+         }
+
+         if (Config.checksum)
+         {
+            BuildManager.CleanDependenciesChecksum(BuildFiles.BuildFile(Config.name));
+            cout << "\n\nDone\n\n";
+            exit(EXIT_SUCCESS);
+         }
+
          BuildManager.CleanDependencies(BuildFiles.BuildFile(Config.name));
-      else
+      } else
+      {
+         if (Config.footprint)
+         {
+            BuildManager.CleanFootprint(BuildFiles.BuildFile(Config.name));
+            cout << "\n\nDone\n\n";
+            exit(EXIT_SUCCESS);
+         }
+
+         if (Config.checksum)
+         {
+            BuildManager.CleanChecksum(BuildFiles.BuildFile(Config.name));
+            cout << "\n\nDone\n\n";
+            exit(EXIT_SUCCESS);
+         }
+
          BuildManager.Clean(BuildFiles.BuildFile(Config.name));
+      }
       cout << "\n\nDone\n\n";
       exit(EXIT_SUCCESS);
    }
@@ -370,9 +431,12 @@ int main (int argc, char *argv[])
    cout << "Configured HOST system type..   " << Config.host_system << endl;
    cout << endl;
 
+   /* Delete old build log */
+   BuildManager.CleanLog();
+
    /* Delete old work */
    BuildManager.CleanWork();
-   
+
    /* Create build output directory */
    FileSystem.CreateDirectory(OUTPUT_DIR);
 
@@ -393,16 +457,16 @@ int main (int argc, char *argv[])
 
    /* Close build log */
    Log.close();
-   
+
    /* Show log location */
    cout << "See " BUILD_LOG " for details.\n\n";
 
    /* Stop counting elapsed time */
    Clock.Stop();
-   
+
    /* Show elapsed time */
    Clock.ShowElapsedTime();
-   
+
    /* Enable cursor again */
    Cursor.restore();
 }

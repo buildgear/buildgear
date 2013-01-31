@@ -536,7 +536,96 @@ void CBuildManager::CleanDependencies(CBuildFile *buildfile)
 
    for (it = resolved.begin(); it != resolved.end(); it++)
       Clean((*it));
+}
 
+void CBuildManager::CleanFootprint(CBuildFile *buildfile)
+{
+   string command;
+
+   cout << "\nCleaning footprint for build '" << buildfile->name << "'..";
+
+   command = "rm -f ";
+   if (buildfile->type == "native")
+      command += FOOTPRINT_NATIVE_DIR "/";
+   else
+      command += FOOTPRINT_CROSS_DIR "/";
+   command += buildfile->short_name + ".footprint";
+
+   if (system(command.c_str()) < 0)
+      perror("error\n");
+}
+
+void CBuildManager::CleanDependenciesFootprint(CBuildFile *buildfile)
+{
+   list<CBuildFile*> resolved, unresolved;
+   list<CBuildFile*>::iterator it;
+
+   Dependency.ResolveDependency(buildfile, &resolved, &unresolved);
+
+   for (it = resolved.begin(); it != resolved.end(); it++)
+      CleanFootprint((*it));
+}
+
+void CBuildManager::CleanAllFootprint(void)
+{
+   string command;
+
+   command = "rm -f ";
+   command += FOOTPRINT_NATIVE_DIR "/*";
+
+   if (system(command.c_str()) < 0)
+      perror("error\n");
+
+   command = "rm -f ";
+   command += FOOTPRINT_CROSS_DIR "/*";
+
+   if (system(command.c_str()) < 0)
+      perror("error\n");
+}
+
+void CBuildManager::CleanChecksum(CBuildFile *buildfile)
+{
+   string command;
+
+   cout << "\nCleaning checksum for build '" << buildfile->name << "'..";
+
+   command = "rm -f ";
+   if (buildfile->type == "native")
+      command += CHECKSUM_NATIVE_DIR "/";
+   else
+      command += CHECKSUM_CROSS_DIR "/";
+   command += buildfile->short_name + ".sha256";
+
+   if (system(command.c_str()) < 0)
+      perror("error\n");
+}
+
+void CBuildManager::CleanDependenciesChecksum(CBuildFile *buildfile)
+{
+   list<CBuildFile*> resolved, unresolved;
+   list<CBuildFile*>::iterator it;
+
+   Dependency.ResolveDependency(buildfile, &resolved, &unresolved);
+
+   for (it = resolved.begin(); it != resolved.end(); it++)
+      CleanChecksum((*it));
+}
+
+void CBuildManager::CleanAllChecksum(void)
+{
+   string command;
+
+   command = "rm -f ";
+   command += CHECKSUM_NATIVE_DIR "/*";
+
+   if (system(command.c_str()) < 0)
+      perror("error\n");
+
+   command = "rm -f ";
+   command += CHECKSUM_CROSS_DIR "/*";
+
+   if (system(command.c_str()) < 0)
+      perror("error\n");
 }
 
 void CBuildManager::CleanPackages(void)

@@ -4,19 +4,34 @@
 buildgear-clean \- Clean a build
 
 .SH SYNOPSIS
-\fBbuildgear clean \-\-all \fR| <\fIbuild name\fR>
+\fBbuildgear clean \fR[\fB\-\-all\fR] [\fB\-\-footprint \fR|\fB \-\-checksum\fR] [<\fIbuild name\fR>]
 
 .SH DESCRIPTION
-Command to clean a build. If the \fB\-\-all\fR option is given, all builds will be cleaned. Alternatively, <\fIbuild name\fR> can be specified to clean a specific build.
+Command to clean a build. If the \fB\-\-all\fR option is given alone, all builds will be cleaned. If <\fIbuild name\fR> is specified, only a specific build is cleaned. A combination of <\fIbuild name\fR> and \fB\-\-all\fR will clean <\fIbuild name\fR>, and all its dependencies.
 
 Build Gear cleans a build by removing work files and the internal build package (located in build/package).
+
+If \fB\-\-footprint\fR or \fB\-\-checksum\fR is set, the command will only clean the footprints or the checksums respectively.
 
 .SH OPTIONS
 
 .TP
 .B \-\-all
 .RS
-Clean all builds.
+Apply to all builds if <\fIbuild name\fR> is empty.
+If <\fIbuild name\fR> is given, the command is applied to <\fIbuild name\fR> and all its dependencies.
+.RE
+
+.TP
+.B \-\-footprint
+.RS
+Restrict the clean command to only clean footprints.
+.RE
+
+.TP
+.B \-\-checksum
+.RS
+Restrict the clean command to only clean checksums.
 .RE
 
 .SH AUTHOR

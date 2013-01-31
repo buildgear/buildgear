@@ -159,21 +159,29 @@ void COptions::Parse(int argc, char *argv[])
    else if (command == "clean")
    {
       Config.clean = true;
-      
+
       // Parse clean OPTIONS
       static struct option long_options[] =
       {
-         {"all", no_argument, 0, 'a'},
-         {0,     0,           0,  0 }
+         {"all",        no_argument, 0, 'a'},
+         {"footprint",  no_argument, 0, 'f'},
+         {"checksum",   no_argument, 0, 'c'},
+         {0,            0,           0,  0 }
       };
-      
+
       option = getopt_long (argc, argv, "", long_options, &option_index);
-      while( option != -1 ) 
+      while( option != -1 )
       {
-         switch( option ) 
+         switch( option )
          {
             case 'a':
                Config.all = true;
+               break;
+            case 'f':
+               Config.footprint = true;
+               break;
+            case 'c':
+               Config.checksum = true;
                break;
             default:
                exit(EXIT_FAILURE);
@@ -394,7 +402,9 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --all                   Apply to all build dependencies\n";
    cout << "\n";
    cout << "Clean options:\n";
-   cout << "  --all                   Clean all builds or build dependencies\n";
+   cout << "  --footprint             Only clean footprint\n";
+   cout << "  --checksum              Only clean checksum\n";
+   cout << "  --all                   Apply for all builds or for build dependencies\n";
    cout << "\n";
    cout << "Show options:\n";
    cout << "  --build-order           Show build order\n";
