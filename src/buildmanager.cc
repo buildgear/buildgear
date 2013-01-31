@@ -203,11 +203,14 @@ void CBuildManager::KillBuilds()
          continue;
 
       // Stop build script by killing process group
-      if (kill(-(*it)->pid, SIGKILL) != 0)
+      if (kill(-(*it)->pid, SIGINT) != 0)
       {
          // We don't care if the process no longer exists
          if (errno != ESRCH)
             throw runtime_error(strerror(errno));
+         // Clean if build was building to avoid corrupt packages
+         if ((*it)->build)
+            Clean((*it));
       }
    }
    pthread_mutex_unlock(&active_builds_mutex);
