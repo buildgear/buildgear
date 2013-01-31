@@ -70,6 +70,7 @@ int main (int argc, char *argv[])
 
    /* Make sure to reenable cursor on exit */
    atexit(cursor_restore);
+   set_terminate(cursor_restore);
 
    /* Disable cursor */
    Cursor.hide();
