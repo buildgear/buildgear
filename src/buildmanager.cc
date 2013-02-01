@@ -502,6 +502,8 @@ void CBuildManager::Clean(CBuildFile *buildfile)
 {
    string command;
 
+   cout << "\nCleaning build '" << buildfile->name << "'.. ";
+
    command  = "rm -f ";
    command += string(PACKAGE_DIR) + "/" +
               buildfile->name + "#" +
@@ -518,6 +520,18 @@ void CBuildManager::CleanAll(void)
    CleanPackages();
    CleanWork();
    CleanLog();
+}
+
+void CBuildManager::CleanDependencies(CBuildFile *buildfile)
+{
+   list<CBuildFile*> resolved, unresolved;
+   list<CBuildFile*>::iterator it;
+
+   Dependency.ResolveDependency(buildfile, &resolved, &unresolved);
+
+   for (it = resolved.begin(); it != resolved.end(); it++)
+      Clean((*it));
+
 }
 
 void CBuildManager::CleanPackages(void)

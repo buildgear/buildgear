@@ -29,7 +29,7 @@ using namespace std;
 
 class CDependency
 {
-	public:
+   public:
       void ShowDownloadOrder(void);
       void ShowBuildOrder(void);
       void ResolveSequentialBuildOrder(string name,
@@ -41,11 +41,13 @@ class CDependency
       list<CBuildFile*> build_order;
       list<CBuildFile*> parallel_build_order;
       list<CBuildFile*> download_order;
-   private:
       void ResolveDependency(CBuildFile *buildfile,
                    list<CBuildFile*> *resolved,
                    list<CBuildFile*> *unresolved);
+   private:
       int setDepth(CBuildFile *buildfile, int depth);
 };
+
+extern CDependency Dependency;
 
 #endif

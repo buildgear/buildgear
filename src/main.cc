@@ -166,6 +166,15 @@ int main (int argc, char *argv[])
    /* Correct source dir */
    Config.CorrectSourceDir();
 
+   /* Handle 'clean --all' command */
+   if ((Config.clean) && (Config.all) && (Config.name == ""))
+   {
+      cout << "\nCleaning all builds.. " << flush;
+      BuildManager.CleanAll();
+      cout << "Done\n\n";
+      exit(EXIT_SUCCESS);
+   }
+
    /* Correct name - adds default prefix */
    Config.CorrectName();
 
@@ -190,15 +199,6 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
-   /* Handle 'clean --all' command */
-   if ((Config.clean) && (Config.all))
-   {
-      cout << "\nCleaning all builds.. " << flush;
-      BuildManager.CleanAll();
-      cout << "Done\n\n";
-      exit(EXIT_SUCCESS);
-   }
-
    /* Find all build files */
    cout << "\nSearching for build files..     " << flush;
    FileSystem.FindFiles(BUILD_FILES_DIR,
@@ -214,9 +214,21 @@ int main (int argc, char *argv[])
 
    /* Show buildfiles meta info (debug only) */
    BuildFiles.ShowMeta();
-   
+
    /* Load dependencies */
    BuildFiles.LoadDependency();
+
+   /* Handle clean command */
+   if (Config.clean)
+   {
+      cout << "Done\n";
+      if (Config.all)
+         BuildManager.CleanDependencies(BuildFiles.BuildFile(Config.name));
+      else
+         BuildManager.Clean(BuildFiles.BuildFile(Config.name));
+      cout << "\n\nDone\n\n";
+      exit(EXIT_SUCCESS);
+   }
 
    if (Config.cross_depends != "")
    {
@@ -226,21 +238,13 @@ int main (int argc, char *argv[])
       /* Add cross dependency to all cross buildfiles */
       BuildFiles.AddCrossDependency();
    }
+
    cout << "Done\n";
 
    /* Show version of build */
    if (Config.show_version)
    {
       BuildFiles.ShowVersion(BuildFiles.BuildFile(Config.name));
-      exit(EXIT_SUCCESS);
-   }
-
-   /* Handle clean command */
-   if (Config.clean)
-   {
-      cout << "\nCleaning build '" << Config.name << "'.. ";
-      BuildManager.Clean(BuildFiles.BuildFile(Config.name));
-      cout << "Done\n\n";
       exit(EXIT_SUCCESS);
    }
 

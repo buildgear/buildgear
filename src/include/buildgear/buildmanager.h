@@ -35,6 +35,7 @@ class CBuildManager : public CFileSystem, COptions
       void Do(string, CBuildFile*);
       void Clean(CBuildFile *);
       void CleanAll(void);
+      void CleanDependencies(CBuildFile *);
       void CleanPackages(void);
       void CleanWork(void);
       void CleanLog(void);
