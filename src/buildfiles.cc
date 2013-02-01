@@ -188,5 +188,9 @@ CBuildFile * CBuildFiles::BuildFile(string name)
 void CBuildFiles::ShowReadme(void)
 {
    string readme_file = Config.root + "/" + string(BUILD_FILES_README);
-   FileSystem.Cat(readme_file);
+   if (!FileSystem.Cat(readme_file))
+   {
+      cout << endl << "Error: Could not show " << readme_file << endl;
+      exit(EXIT_FAILURE);
+   }
 }

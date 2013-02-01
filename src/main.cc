@@ -186,15 +186,41 @@ int main (int argc, char *argv[])
       if (Config.name.find("native/") == 0)
       {
          if (Config.footprint)
-            FileSystem.Cat(FOOTPRINT_NATIVE_DIR + build_name + ".footprint");
-         else
-            FileSystem.Cat(CHECKSUM_NATIVE_DIR + build_name + ".sha256");
+         {
+            if (!FileSystem.Cat(FOOTPRINT_NATIVE_DIR + build_name + ".footprint"))
+            {
+               cout << endl << "Error: Could not show footprint for build '" << Config.name;
+               cout << "'" << endl;
+               exit(EXIT_FAILURE);
+            }
+         } else
+         {
+            if (!FileSystem.Cat(CHECKSUM_NATIVE_DIR + build_name + ".sha256"))
+            {
+               cout << endl << "Error: Could not show checksum for build '" << Config.name;
+               cout << "'" << endl;
+               exit(EXIT_FAILURE);
+            }
+         }
       } else
       {
          if (Config.footprint)
-            FileSystem.Cat(FOOTPRINT_CROSS_DIR + build_name + ".footprint");
-         else
-            FileSystem.Cat(CHECKSUM_CROSS_DIR + build_name + ".sha256");
+         {
+            if (!FileSystem.Cat(FOOTPRINT_CROSS_DIR + build_name + ".footprint"))
+            {
+               cout << endl << "Error: Could not show footprint for build '" << Config.name;
+               cout << "'" << endl;
+               exit(EXIT_FAILURE);
+            }
+         } else
+         {
+            if (!FileSystem.Cat(CHECKSUM_CROSS_DIR + build_name + ".sha256"))
+            {
+               cout << endl << "Error: Could not show checksum for build '" << Config.name;
+               cout << "'" << endl;
+               exit(EXIT_FAILURE);
+            }
+         }
       }
       exit(EXIT_SUCCESS);
    }

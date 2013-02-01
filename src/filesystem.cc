@@ -206,15 +206,17 @@ void CFileSystem::Move(string source, string destination)
       throw std::runtime_error(strerror(errno));
 }
 
-void CFileSystem::Cat(string filename)
+bool CFileSystem::Cat(string filename)
 {
    int status;
-   string command = "cat " + filename;
+   string command = "cat " + filename + " 2>/dev/null";
 
    status = system(command.c_str());
 
    if (status != 0)
-      throw std::runtime_error(strerror(errno));
+      return false;
+   else
+      return true;
 }
 
 void * tail(void *filename)

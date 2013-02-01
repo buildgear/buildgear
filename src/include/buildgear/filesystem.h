@@ -38,7 +38,7 @@ class CFileSystem
       bool FileExistSize(string filename, unsigned int &filesize);
       long Age(string filename);
       void Move(string source, string destination);
-      void Cat(string filename);
+      bool Cat(string filename);
       void Tail(string filename);
       void CopyFile(string source, string destination);
       void InitRoot(void);

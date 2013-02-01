@@ -141,7 +141,13 @@ void CBuildSystem::ShowLog(void)
    else if (Config.mismatch)
       ShowLogMismatch(log_file);
    else
-      FileSystem.Cat(log_file);
+   {
+      if (!FileSystem.Cat(log_file))
+      {
+         cout << endl << "Error: Could not show log from " << log_file << endl;
+         exit(EXIT_FAILURE);
+      }
+   }
 }
 
 void CBuildSystem::ShowLogMismatch(string log_file)
