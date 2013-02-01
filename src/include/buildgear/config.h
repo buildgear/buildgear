@@ -61,6 +61,12 @@ class CConfig : public CUtility
 
       bool init;
 
+      bool config;
+      bool global;
+      bool unset;
+      string key;
+      string value;
+
       bool all;
 
       string default_name_prefix;
@@ -72,10 +78,12 @@ class CConfig : public CUtility
       string host_system;
       string cross_depends;
       string layers;
+      string home_dir;
       CConfig();
       void CorrectName(void);
       void CorrectSourceDir(void);
       void GuessBuildSystem(void);
+      void SetConfig(void);
    private:
 };
 
@@ -99,7 +107,7 @@ class CConfig : public CUtility
 #define BUILD_FILE               "Buildfile"
 #define PACKAGE_EXTENSION        ".pkg.tar.gz"
 
-#define GLOBAL_CONFIG_FILE       "~/.buildgearconfig"
+#define GLOBAL_CONFIG_FILE       "/.buildgearconfig"
 #define LOCAL_CONFIG_FILE        ROOT_DIR "/config"
 #define BUILD_FILES_CONFIG       BUILD_FILES_DIR "/config"
 #define BUILD_FILES_README       BUILD_FILES_DIR "/readme"
@@ -114,14 +122,17 @@ class CConfig : public CUtility
 #define KEY_CONFIG_RETURN        "config_return"
 #define KEY_BUILD_RETURN         "build_return"
 
-#define CONFIG_KEY_DEFAULT_NAME_PREFIX       "default_name_prefix"
-#define CONFIG_KEY_PARALLEL_BUILDS           "parallel_builds"
+// Buildgear config
+#define CONFIG_KEY_SOURCE_DIR                "source_dir"
+#define CONFIG_KEY_DOWNLOAD_MIRROR_FIRST     "download_mirror_first"
 #define CONFIG_KEY_DOWNLOAD_TIMEOUT          "download_timeout"
 #define CONFIG_KEY_DOWNLOAD_RETRY            "download_retry"
-#define CONFIG_KEY_DOWNLOAD_MIRROR           "download_mirror"
-#define CONFIG_KEY_DOWNLOAD_MIRROR_FIRST     "download_mirror_first"
 #define CONFIG_KEY_DOWNLOAD_CONNECTIONS      "download_connections"
-#define CONFIG_KEY_SOURCE_DIR                "source_dir"
+#define CONFIG_KEY_PARALLEL_BUILDS           "parallel_builds"
+
+// Buildfiles config
+#define CONFIG_KEY_DEFAULT_NAME_PREFIX       "default_name_prefix"
+#define CONFIG_KEY_DOWNLOAD_MIRROR           "download_mirror"
 #define CONFIG_KEY_LAYERS                    "layers"
 
 #define CONFIG_KEY_CROSS_DEPENDS             "cross_depends"

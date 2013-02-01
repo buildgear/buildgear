@@ -22,6 +22,7 @@
 #include "config.h"
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <string>
 #include <stdexcept>
 #include <list>
@@ -31,8 +32,48 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <limits.h>
 #include "buildgear/config.h"
 #include "buildgear/configfile.h"
+
+bool ValidBool(string value)
+{
+   try {
+      if (value == "yes" || value == "no")
+         return true;
+   } catch(...)
+   {
+      return false;
+   }
+   return false;
+}
+
+bool ValidInt(string value)
+{
+   try {
+      stoi(value);
+      return true;
+   } catch(...)
+   {
+      return false;
+   }
+   return false;
+}
+
+CConfigOption::CConfigOption(string key, sanity_function check)
+{
+   this->key = key;
+   this->check = check;
+}
+
+CConfigFile::CConfigFile(void)
+{
+   options.push_back(new CConfigOption(CONFIG_KEY_SOURCE_DIR,              NULL));
+   options.push_back(new CConfigOption(CONFIG_KEY_DOWNLOAD_MIRROR_FIRST,   ValidBool));
+   options.push_back(new CConfigOption(CONFIG_KEY_DOWNLOAD_RETRY,          ValidInt));
+   options.push_back(new CConfigOption(CONFIG_KEY_DOWNLOAD_CONNECTIONS,    ValidInt));
+   options.push_back(new CConfigOption(CONFIG_KEY_PARALLEL_BUILDS,         ValidInt));
+}
 
 void CConfigFile::Parse(string filename)
 {
@@ -111,4 +152,100 @@ void CConfigFile::Parse(string filename)
          }
       }
       pclose(fp);
+}
+
+void CConfigFile::Update(string filename)
+{
+   FILE *in_file, *out_file;
+   char line_buffer[LINE_MAX];
+   string new_line;
+   bool updated = false;
+   char *tmpfile;
+
+   if (!FileSystem.FileExist(filename))
+      Init(filename);
+
+   in_file = fopen(filename.c_str(), "r");
+
+   if (!in_file)
+   {
+      cout << "Could not open " << filename << " for reading.\n";
+      exit(EXIT_FAILURE);
+   }
+
+   // Open a temporary file to keep the new configuration
+   tmpfile = tmpnam(NULL);
+   out_file = fopen(tmpfile, "w");
+
+   if (!out_file)
+   {
+      cout << "Could not open temporary file for writing.\n";
+      exit(EXIT_FAILURE);
+   }
+
+   while (fgets(line_buffer, LINE_MAX, in_file) != NULL)
+   {
+      // Line does not contain a key=value pair
+      if ( strchr(line_buffer, '=') == NULL)
+      {
+         fputs(line_buffer, out_file);
+         continue;
+      }
+
+      if (Config.unset)
+      {
+         // Key is alreadu unset so we just rewrite the line
+         if (line_buffer[0] == '#')
+         {
+            fputs(line_buffer, out_file);
+            continue;
+         }
+
+         // Put a # tag infront of the line to unset it
+         new_line = "#" + string(line_buffer);
+         fputs(new_line.c_str(), out_file);
+      } else
+      {
+         // Check if the line contains the key= we are looking for
+         if (string(line_buffer).find(Config.key + "=") == string::npos)
+            fputs(line_buffer, out_file);
+         else
+         {
+            new_line = Config.key + "=" + Config.value + "\n";
+            fputs(new_line.c_str(), out_file);
+            updated = true;
+         }
+      }
+   }
+
+   // Key was not found in file, adding it to the end
+   if (!updated && !Config.unset)
+   {
+      new_line = "\n" + Config.key + "=" + Config.value + "\n";
+      fputs(new_line.c_str(), out_file);
+   }
+
+   fclose(in_file);
+   fclose(out_file);
+
+   // Move the temporary file to the config file
+   rename(tmpfile, filename.c_str());
+
+   // Delete the temporary file
+   unlink(tmpfile);
+
+}
+
+void CConfigFile::Init(string filename)
+{
+   FILE *fp;
+
+   fp = fopen(filename.c_str(), "w");
+   if (!fp)
+   {
+      cout << endl << "Error: Could not create '" << filename << "'." << endl;
+      cout << strerror(errno) << endl;
+      exit(EXIT_FAILURE);
+   }
+   fclose(fp);
 }

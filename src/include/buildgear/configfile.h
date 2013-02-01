@@ -28,11 +28,28 @@
 
 using namespace std;
 
+typedef bool (*sanity_function)(string);
+
+class CConfigOption
+{
+   public:
+      CConfigOption(string, sanity_function);
+      string key;
+      sanity_function check;
+};
+
 class CConfigFile : public CFileSystem, CUtility
 {
    public:
+      CConfigFile();
       void Parse(string);
+      void Update(string);
+      void Init(string);
+      list<CConfigOption*> options;
    private:
+
 };
+
+extern CConfigFile ConfigFile;
 
 #endif

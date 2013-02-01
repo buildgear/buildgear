@@ -45,7 +45,7 @@ _buildgear()
    prev=${COMP_WORDS[COMP_CWORD-1]}
    command=${COMP_WORDS[1]}
 
-   commands="download build clean show init help"
+   commands="download build clean show init help config"
    options="--help --version"
    download_options="--all"
    build_options="--keep-work --update-checksum --update-footprint --no-strip
@@ -53,6 +53,9 @@ _buildgear()
    clean_options="--all"
    show_options="--build-order --download-order --dependency --readme --version
                  --log --log-tail --log-mismatch --footprint --checksum"
+   config_options="--global --unset"
+   config_keys="source_dir download_mirror_first download_timeout
+                download_retry download_connections parallel_builds"
    help_options=$commands
 
    if [ $COMP_CWORD -eq 1 ]; then
@@ -100,6 +103,28 @@ _buildgear()
          COMPREPLY=( $(compgen -W "$clean_options" -- $cur) )
          if [ "$build_name_in_args" == 0 ]; then
            COMPREPLY+=( ${builds[@]} )
+         fi
+         ;;
+       "config")
+         config_key_in_args=0
+         config_key_in_prev=0
+         for i in "${COMP_WORDS[@]}"
+         do
+            for j in "${config_keys[@]}"
+            do
+               if [ "$j" == "$i" ]; then
+                  config_key_in_args=1
+               fi
+               if [ "$prev" == "$j" ]; then
+                  config_key_in_prev=1
+               fi
+            done
+         done
+         if [ "$config_key_in_prev" == 0 ]; then
+            COMPREPLY=( $(compgen -W "$config_options" -- $cur) )
+         fi
+         if [ "$config_key_in_args" == 0 ]; then
+            COMPREPLY+=( $(compgen -W "$config_keys" -- $cur) )
          fi
          ;;
        "show")

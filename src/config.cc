@@ -32,6 +32,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "buildgear/config.h"
+#include "buildgear/configfile.h"
 
 CConfig::CConfig()
 {
@@ -74,6 +75,8 @@ CConfig::CConfig()
    source_dir = SOURCE_DIR;
 
    parallel_builds = 1;
+
+   home_dir = getenv("HOME");
 }
 
 void CConfig::CorrectName()
@@ -130,4 +133,42 @@ void CConfig::GuessBuildSystem(void)
       }
       
       pclose(fp);
+}
+
+void CConfig::SetConfig(void)
+{
+   list<CConfigOption*>::iterator it;
+   bool key_valid = false;
+   bool value_valid = false;
+
+   for (it = ConfigFile.options.begin(); it != ConfigFile.options.end(); it++)
+   {
+      if ((*it)->key == Config.key)
+      {
+         key_valid = true;
+         if ((*it)->check == NULL || (*it)->check(Config.value) || Config.unset)
+         {
+            value_valid = true;
+         }
+      }
+   }
+
+   if (!key_valid)
+   {
+      cout << endl << "Error: The key '" << Config.key << "' is not a valid option.\n";
+      exit(EXIT_FAILURE);
+   }
+
+   if (!value_valid)
+   {
+      cout << endl << "Error: The value '" << Config.value << "' is not valid for option '";
+      cout << Config.key << "'.\n";
+      exit(EXIT_FAILURE);
+   }
+
+   if (Config.global)
+      ConfigFile.Update(Config.home_dir + GLOBAL_CONFIG_FILE);
+   else
+      ConfigFile.Update(LOCAL_CONFIG_FILE);
+
 }

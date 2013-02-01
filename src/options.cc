@@ -252,6 +252,61 @@ void COptions::Parse(int argc, char *argv[])
    {
       Config.init = true;
    }
+   else if (command == "config")
+   {
+      Config.config = true;
+
+      // Parse config OPTIONS
+      static struct option long_options[] =
+      {
+         {"global",  no_argument, 0, 'g'},
+         {"unset",   no_argument, 0, 'u'},
+         {0,         0,           0,  0 }
+      };
+
+      option = getopt_long (argc, argv, "", long_options, &option_index);
+      while( option != -1 )
+      {
+         switch( option )
+         {
+            case 'g':
+               Config.global = true;
+               break;
+            case 'u':
+               Config.unset = true;
+               break;
+            default:
+               exit(EXIT_FAILURE);
+               break;
+         }
+
+         option = getopt_long (argc, argv, "", long_options, &option_index);
+      }
+
+      if (optind < argc)
+      {
+         string option;
+         size_t pos;
+
+         option = argv[optind++];
+
+         // Detect if the option is given as key=value
+         pos = option.find("=");
+         if (pos != string::npos)
+         {
+            Config.key = option.substr(0,pos);
+            Config.value = option.substr(pos + 1);
+         } else
+         {
+            Config.key = option;
+            if (optind < argc)
+               Config.value = argv[optind++];
+         }
+      } else {
+         cout << "\nError: Please specify an option and a value\n";
+         exit(EXIT_FAILURE);
+      }
+   }
    // No-command
    else
    {

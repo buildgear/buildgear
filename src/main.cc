@@ -85,6 +85,13 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
+   /* Handle config command */
+   if (Config.config)
+   {
+      Config.SetConfig();
+      exit(EXIT_SUCCESS);
+   }
+
    /* Make sure basic tools are installed */
    BuildSystem.Check();
 
@@ -144,7 +151,7 @@ int main (int argc, char *argv[])
    Config.GuessBuildSystem();
 
    /* Parse buildgear configuration file(s) */
-   ConfigFile.Parse(GLOBAL_CONFIG_FILE);
+   ConfigFile.Parse(Config.home_dir + GLOBAL_CONFIG_FILE);
    ConfigFile.Parse(LOCAL_CONFIG_FILE);
 
    /* Check terminal size and set max sim. downloads */
