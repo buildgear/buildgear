@@ -1,1 +1,1 @@
-autoreconf --install
+autoreconf --force -v --install
