@@ -73,7 +73,7 @@ void CFileSystem::FindRoot(string dirname)
 
    if (cwd == "/")
    {
-      cerr << "Build Gear root directory (.buildgear) is not found!" << endl;
+      cerr << "Error: Build Gear root directory (.buildgear) is not found!" << endl;
       exit(EXIT_FAILURE);
    }
 
