@@ -70,6 +70,7 @@ CConfigFile::CConfigFile(void)
 {
    options.push_back(new CConfigOption(CONFIG_KEY_SOURCE_DIR,              NULL));
    options.push_back(new CConfigOption(CONFIG_KEY_DOWNLOAD_MIRROR_FIRST,   ValidBool));
+   options.push_back(new CConfigOption(CONFIG_KEY_DOWNLOAD_TIMEOUT,        ValidInt));
    options.push_back(new CConfigOption(CONFIG_KEY_DOWNLOAD_RETRY,          ValidInt));
    options.push_back(new CConfigOption(CONFIG_KEY_DOWNLOAD_CONNECTIONS,    ValidInt));
    options.push_back(new CConfigOption(CONFIG_KEY_PARALLEL_BUILDS,         ValidInt));
