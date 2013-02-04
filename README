@@ -1,16 +1,16 @@
 
-=== Build Gear [BETA release] ===
+=== Build Gear [BETA] ===
 
 
 1. Introduction
 
    Build Gear is a lightweight embedded build tool for experienced GNU/Linux
    users and developers. The primary focus of this build tool is to keep it
-   simple, which is reflected in a straightforward command line build interface,
-   and easy to maintain build files. The secondary focus is build performance
-   and build integrity. Build Gear is easy to use and well suited for rapid
-   product and prototype development of firmware to deploy in small to medium 
-   sized systems.
+   simple, which is reflected in a straightforward command line build
+   interface, and easy to maintain build files. The secondary focus is build
+   performance and build integrity. Build Gear is easy to use and well suited
+   for rapid product and prototype development of firmware to deploy in small
+   to medium sized systems.
 
 
 2. Installation
@@ -20,8 +20,8 @@
 
 3. Documentation
 
-   Visit http://www.buildgear.org for detailed documentation on how to
-   use the Build Gear tool and also on how to create build files.
+   Visit http://www.buildgear.org for detailed documentation on how to use the
+   Build Gear tool and also on how to create build files.
 
    * Not available yet *
 
@@ -40,7 +40,7 @@
 
 6. Bugs and feature requests
 
-   Please report any bugs or feature requests in the github issue tracker:   
+   Please report any bugs or feature requests in the github issue tracker:
    http://github.com/buildgear/buildgear/issues
 
    * Not available yet *
@@ -48,7 +48,12 @@
 
 7. Contributing
 
-   To be done...
+   All types of contributions (code, documentation, etc.) are welcomed.
+
+   Feel free to introduce yourself on the mailing list if you want to help out
+   with Build Gear.
+
+   Git patches or pull requests should also be sent to the mailing list.
 
 
 8. Authors
