@@ -389,7 +389,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  clean                   Clean\n";
    cout << "  show                    Show various information\n";
    cout << "  init                    Create empty build area\n";
-   cout << "  config                  Change tool configuration\n";
+   cout << "  config                  Set repository or global tool options\n";
    cout << "\n";
    cout << "Download options:\n";
    cout << "  --all                   Download source files of all builds or build dependencies\n";
@@ -405,7 +405,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "Clean options:\n";
    cout << "  --footprint             Only clean footprint\n";
    cout << "  --checksum              Only clean checksum\n";
-   cout << "  --all                   Apply for all builds or for build dependencies\n";
+   cout << "  --all                   Apply for all builds or build dependencies\n";
    cout << "\n";
    cout << "Show options:\n";
    cout << "  --build-order           Show build order\n";
@@ -420,8 +420,8 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --checksum              Show build checksum\n";
    cout << "\n";
    cout << "Config options:\n";
-   cout << "  --global                Apply the change to global configuration\n";
-   cout << "  --unset                 Revert option to default\n";
+   cout << "  --global                Apply to global configuration\n";
+   cout << "  --unset                 Unset option (revert to default)\n\n";
    cout << "See buildgear help <command> for help on a specific command\n";
 }
 
