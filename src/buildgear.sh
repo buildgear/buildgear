@@ -50,9 +50,9 @@ updating()
 {
    echo "$1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "   Updating      '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
+      echo "   Updated       '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
    else
-      echo "   Updating      '$BG_BUILD_TYPE/$name' [$BG_LAYER]  ($1)" > /tmp/buildgear.fifo
+      echo "   Updated       '$BG_BUILD_TYPE/$name' [$BG_LAYER]  ($1)" > /tmp/buildgear.fifo
    fi
 }
 
@@ -155,7 +155,7 @@ check_sha256sum()
       if [ "$BG_UPDATE_CHECKSUM" = "yes" ]; then
          updating "Updated checksum"
       else
-         updating "Checksum not found, creating new"
+         updating "Checksum not found, created new"
       fi
    make_sha256sum > $BG_BUILD_SHA256SUM
    fi
@@ -309,7 +309,7 @@ do_footprint()
          if [ "$BG_UPDATE_FOOTPRINT" = "yes" ]; then
             updating "Updated footprint"
          else
-            updating "Footprint not found, creating new"
+            updating "Footprint not found, created new"
          fi
          mv $FILE.footprint $BG_BUILD_FOOTPRINT
       fi
