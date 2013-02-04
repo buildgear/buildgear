@@ -37,6 +37,7 @@
 #include "buildgear/filesystem.h"
 #include "buildgear/utility.h"
 #include "buildgear/log.h"
+#include "buildgear/cursor.h"
 
 CBuildFile::CBuildFile(string filename)
 {
@@ -120,10 +121,14 @@ void CBuildFile::Parse(void)
       {
          if (stoi(value) != 0)
          {
+            string command;
+            int dummy;
+
+            command = "source " BUILD_FILES_CONFIG;
             cout << endl << endl << "Error parsing " << BUILD_FILES_CONFIG  << endl;
 
             // Source the file again without redirecting the error out
-            execlp("bash","source",BUILD_FILES_CONFIG, NULL);
+            dummy = system(command.c_str());
             cout << endl;
             exit(EXIT_FAILURE);
          }
@@ -132,10 +137,14 @@ void CBuildFile::Parse(void)
       {
          if (stoi(value) != 0)
          {
+            string command;
+            int dummy;
+
+            command = "source " + filename;
             cout << endl << endl << "Error parsing " << filename << endl;
 
             // Source the file again without redirecting the error out
-            execlp("bash","source",filename.c_str(), NULL);
+            dummy = system(command.c_str());
             cout << endl;
             exit(EXIT_FAILURE);
          }
