@@ -239,13 +239,39 @@ void CConfigFile::Update(string filename)
 void CConfigFile::Init(string filename)
 {
    FILE *fp;
+   string command;
+   string destination;
 
-   fp = fopen(filename.c_str(), "w");
-   if (!fp)
+   if (FileSystem.FileExist(string(TEMPLATE_LOCAL_CONFIG)))
    {
-      cout << endl << "Error: Could not create '" << filename << "'." << endl;
-      cout << strerror(errno) << endl;
-      exit(EXIT_FAILURE);
+      // Install the template if it exists
+      command = "cp " + string(TEMPLATE_LOCAL_CONFIG) + " ";
+      if (Config.global)
+         destination = Config.home_dir + GLOBAL_CONFIG_FILE;
+      else
+         destination = LOCAL_CONFIG_FILE;
+
+      command += destination + " 2>/dev/null";
+
+      if (system(command.c_str()) != 0)
+      {
+         cout << "\nError: Could not install config template";
+         cout << " in '" << destination;
+         cout << "'.\n";
+         cout << strerror(errno) << endl << endl;
+         exit(EXIT_FAILURE);
+      }
+
+   } else
+   {
+      // Otherwise just create an empty file
+      fp = fopen(filename.c_str(), "w");
+      if (!fp)
+      {
+         cout << endl << "Error: Could not create '" << filename << "'." << endl;
+         cout << strerror(errno) << endl;
+         exit(EXIT_FAILURE);
+      }
+      fclose(fp);
    }
-   fclose(fp);
 }

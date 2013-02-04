@@ -1,4 +1,4 @@
-# Local Build Gear tool configuration
+# Build Gear tool configuration
 
 # Default source download dir (default="build/source")
 #source_dir="$HOME/source"
