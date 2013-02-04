@@ -232,7 +232,7 @@ int main (int argc, char *argv[])
             }
          } else
          {
-            if (!FileSystem.Cat(CHECKSUM_NATIVE_DIR + build_name + ".sha256"))
+            if (!FileSystem.Cat(CHECKSUM_NATIVE_DIR + build_name + ".sha256sum"))
             {
                cout << endl << "Error: Could not show checksum for build '" << Config.name;
                cout << "'" << endl;
@@ -251,7 +251,7 @@ int main (int argc, char *argv[])
             }
          } else
          {
-            if (!FileSystem.Cat(CHECKSUM_CROSS_DIR + build_name + ".sha256"))
+            if (!FileSystem.Cat(CHECKSUM_CROSS_DIR + build_name + ".sha256sum"))
             {
                cout << endl << "Error: Could not show checksum for build '" << Config.name;
                cout << "'" << endl;

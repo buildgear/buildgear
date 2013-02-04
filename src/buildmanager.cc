@@ -235,11 +235,11 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    if (buildfile->type == "native")
    {
       footprint_file = FOOTPRINT_NATIVE_DIR  "/" +  buildfile->short_name + ".footprint";
-      checksum_file  = CHECKSUM_NATIVE_DIR  "/" + buildfile->short_name + ".sha256";
+      checksum_file  = CHECKSUM_NATIVE_DIR  "/" + buildfile->short_name + ".sha256sum";
    } else
    {
       footprint_file = FOOTPRINT_CROSS_DIR  "/" + buildfile->short_name + ".footprint";
-      checksum_file  = CHECKSUM_CROSS_DIR  "/" + buildfile->short_name + ".sha256";
+      checksum_file  = CHECKSUM_CROSS_DIR  "/" + buildfile->short_name + ".sha256sum";
    }
 
    // Set required script arguments
