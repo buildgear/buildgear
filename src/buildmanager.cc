@@ -507,7 +507,8 @@ void CBuildManager::Clean(CBuildFile *buildfile)
 {
    string command;
 
-   cout << "\nCleaning build '" << buildfile->name << "'.. ";
+   if (!BuildManager.build_error)
+      cout << "\nCleaning build '" << buildfile->name << "'.. ";
 
    command  = "rm -f ";
    command += string(PACKAGE_DIR) + "/" +
