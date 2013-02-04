@@ -73,4 +73,4 @@ buildgear does not make coffee.
 <===AUTHOR===>
 
 .SH SEE ALSO
-\fBbuildgear.config\fR(7), \fBbuildgear-download\fR(1), \fBbuildgear-build\fR(1), \fBbuildgear-clean\fR(1), \fBbuildgear-show\fR(1), \fBbuildgear-init\fR(1)
+\fBbuildgear-config\fR(5), \fBbuildgear-download\fR(1), \fBbuildgear-build\fR(1), \fBbuildgear-clean\fR(1), \fBbuildgear-show\fR(1), \fBbuildgear-init\fR(1)

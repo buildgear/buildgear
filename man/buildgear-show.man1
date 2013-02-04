@@ -5,8 +5,9 @@ buildgear-show \- Buildgear command to show various information.
 
 .SH SYNOPSIS
 \fBbuildgear show \fR[\fB\-\-log\fR] [\fB\-\-log-tail\fR] [\fB\-\-log-mismatch\fR]
-               [\fB\-\-readme\fR] [[\fB\-\-build\-order\fR | \fB\-\-download-order\fR 
-                | \fB\-\-version\fR | \fB\-\-dependency\fR] <\fIbuild name\fR>]
+               [\fB\-\-readme\fR] [[\fB\-\-build\-order\fR | \fB\-\-download-order\fR
+                | \fB\-\-version\fR | \fB\-\-dependency\fR | \fB\-\-footprint\fR
+                 | \fB\-\-checksum\fR] <\fIbuild name\fR>]
 
 .SH DESCRIPTION
 The show command is used to show various information.

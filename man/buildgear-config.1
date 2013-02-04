@@ -1,0 +1,40 @@
+.TH "buildgear clean" 1 "04 Feb 2013" "0.9.14beta" "Buildgear"
+
+.SH NAME
+buildgear-config \- Change buildgear configuration
+
+.SH SYNOPSIS
+\fBbuildgear config \fR[\fB\-\-global\fR] [\fB\-\-unset fR] <\fIoption\fR> [<\fI<value\fR>]
+
+.SH DESCRIPTION
+Command to change the \fBbuildgear\fR configuration files. If the \fB\-\-global\fR flag is given, the changes will be applied to the global configuration file in \fB~/.buildgearconfig\fR. Otherwise, the changes are applied to the local config file in the current build tree.
+
+The flag \fB\-\-unset\fR can be used to revert an option to its default.
+
+.SH OPTIONS
+
+.TP
+.B \-\-global
+.RS
+Apply changes to <\fIoption\fR> in the global configuration file.
+.RE
+
+.TP
+.B \-\-unset
+.RS
+Revert the <\fIoption\fR> to the default value.
+.RE
+
+.TP
+<\fIoption\fR>
+.RS
+The configuration parameter to change. See \fBbuildgear-config\fR(5) for info on the availible options.
+.RE
+
+.SH AUTHOR
+
+.RB "Martin Lund " "<martin.lund@keep-it-simple.com>"
+
+
+.SH SEE ALSO
+\fBbuildgear\fR(1), \fbbuildgear-config\fR(5)

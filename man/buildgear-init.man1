@@ -14,12 +14,12 @@ The build space is populated with templates for the buildgear config, and the bu
 
 .I .buildgear/config
 .RS
-The buildgear config template. See \fBbuildgear.config\fR(5).
+The buildgear config template. See \fBbuildgear-config\fR(5).
 .RE
 
-.I buildfiles/config
+.I config/config
 .RS
-The buildfiles config template. See \fBbuildgear.buildfileconfig\fR(5).
+The buildfiles config template. See \fBbuildgear-buildfileconfig\fR(5).
 .RE
 
 .I buildfiles/readme
@@ -41,4 +41,4 @@ Directory for the native build files.
 <===AUTHOR===>
 
 .SH SEE ALSO
-\fBbuildgear\fR(1), \fBbuildgear.config\fR(5), \fBbuildgear.buildfileconfig\fR(5).
+\fBbuildgear\fR(1), \fBbuildgear-config\fR(5), \fBbuildgear-buildfileconfig\fR(5).

@@ -1,0 +1,19 @@
+.TH "buildgear buildfile config" 5 "<===DATE===>" "<===VERSION===>" "Buildgear"
+
+.SH NAME
+ buildgear_buildfile_config \- A configuration file for buildfiles
+
+.SH DESCRIPTION
+Configuration file for the buildfiles. This file will be sourced before the Buildfile is parsed. The configuration can be used to alter the behavior of all Buildfiles.
+.PP
+The configutation file does not contain any strictly mandatory settings. A template configuration file is installed when \fBbuildgear init\fR is run.
+
+.SH TEMPLATE
+.nf
+<===BUILDFILE_CONFIG_TEMPLATE===>
+
+.SH AUTHOR
+<===AUTHOR===>
+
+.SH SEE ALSO
+\fBbuildgear\fR(1)
