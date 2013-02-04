@@ -1,7 +1,11 @@
 # Build Gear tool configuration
+#
+# Warning: This file is automatically managed by Build Gear and should not be
+#          edited manually. Please use the "buildgear config" command to change
+#          settings.
 
 # Default source download dir (default="build/source")
-#source_dir="$HOME/source"
+#source_dir="build/source"
 
 # Download from mirror first? (yes/no, default=no)
 #download_mirror_first=no
