@@ -299,6 +299,9 @@ void CFileSystem::CopyFile(string source, string destination)
 
 void CFileSystem::InitRoot(void)
 {
+   int status;
+   string command;
+
    if (DirExists(ROOT_DIR))
       cout << "Build Gear area already exists." << endl;
    else
@@ -316,6 +319,14 @@ void CFileSystem::InitRoot(void)
       CopyFile(TEMPLATE_CONFIG, BUILD_FILES_CONFIG);
       CopyFile(TEMPLATE_README, BUILD_FILES_README);
       CopyFile(TEMPLATE_LOCAL_CONFIG, LOCAL_CONFIG_FILE);
+
+      // Play nice, create git ignore files
+      command  = "echo 'build/*' > .gitignore ; ";
+      command += "echo 'config' > " ROOT_DIR "/.gitignore";
+
+      status = system(command.c_str());
+      if (status != 0)
+         throw std::runtime_error(strerror(errno));
 
       cout << "Initialized empty build area in "
            << GetWorkingDir() << endl;
