@@ -109,7 +109,8 @@ class CConfig : public CUtility
 
 #define GLOBAL_CONFIG_FILE       "/.buildgearconfig"
 #define LOCAL_CONFIG_FILE        ROOT_DIR "/config"
-#define BUILD_FILES_CONFIG       BUILD_FILES_DIR "/config"
+#define BUILD_FILES_CONFIG_DIR   "config"
+#define BUILD_FILES_CONFIG       BUILD_FILES_CONFIG_DIR "/config"
 #define BUILD_FILES_README       "README"
 #define LAYER_FILE_NAME          ".layer"
 #define DEFAULT_LAYER_NAME       "default"

@@ -307,6 +307,7 @@ void CFileSystem::InitRoot(void)
       CreateDirectory(BUILD_FILES_DIR);
       CreateDirectory(BUILD_FILES_NATIVE_DIR);
       CreateDirectory(BUILD_FILES_CROSS_DIR);
+      CreateDirectory(BUILD_FILES_CONFIG_DIR);
       CreateDirectory(FOOTPRINT_NATIVE_DIR);
       CreateDirectory(FOOTPRINT_CROSS_DIR);
       CreateDirectory(CHECKSUM_NATIVE_DIR);
