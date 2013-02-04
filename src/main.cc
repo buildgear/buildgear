@@ -431,9 +431,6 @@ int main (int argc, char *argv[])
    cout << "Configured HOST system type..   " << Config.host_system << endl;
    cout << endl;
 
-   /* Delete old build log */
-   BuildManager.CleanLog();
-
    /* Delete old work */
    BuildManager.CleanWork();
 
