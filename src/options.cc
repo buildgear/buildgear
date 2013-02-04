@@ -392,7 +392,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  config                  Set repository or global tool options\n";
    cout << "\n";
    cout << "Download options:\n";
-   cout << "  --all                   Download source files of all builds or build dependencies\n";
+   cout << "  --all                   Download source of all builds or build dependencies\n";
    cout << "\n";
    cout << "Build options:\n";
    cout << "  --keep-work             Do not delete work files\n";
