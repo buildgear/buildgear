@@ -27,7 +27,7 @@
 bg_put()
 {
    if [ "$BG_VERBOSE" = "yes" ]; then
-      echo "$1" > /tmp/buildgear.fifo
+      echo "$1" > /tmp/buildgear.${BG_PID}.fifo
    fi
 }
 
@@ -57,9 +57,9 @@ warning()
 {
    echo "WARNING: $1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "   Warning    '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
+      echo "   Warning    '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" > /tmp/buildgear.${BG_PID}.fifo
    else
-      echo "   Warning    '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
+      echo "   Warning    '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" > /tmp/buildgear.${BG_PID}.fifo
    fi
 }
 
@@ -67,9 +67,9 @@ updating()
 {
    echo "$1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "   Updated    '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
+      echo "   Updated    '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" > /tmp/buildgear.${BG_PID}.fifo
    else
-      echo "   Updated    '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
+      echo "   Updated    '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" > /tmp/buildgear.${BG_PID}.fifo
    fi
 }
 
@@ -77,9 +77,9 @@ error()
 {
    echo "ERROR: $1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "   Error      '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
+      echo "   Error      '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" > /tmp/buildgear.${BG_PID}.fifo
    else
-      echo "   Error      '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
+      echo "   Error      '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" > /tmp/buildgear.${BG_PID}.fifo
    fi
 }
 
@@ -437,7 +437,7 @@ main()
    do_buildfile
 
    # Send PID to buildgear
-   echo $BASHPID > /tmp/buildgear-$BG_BUILD_TYPE-$name.fifo
+   echo $BASHPID > /tmp/buildgear-$BG_BUILD_TYPE-$name.${BG_PID}.fifo
 
    BG_BUILD_WORK_DIR="$BG_WORK_DIR/$BG_BUILD_TYPE/$name"
    BG_BUILD_PACKAGE="$BG_BUILD_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"

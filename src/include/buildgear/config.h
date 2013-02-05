@@ -32,6 +32,8 @@ class CConfig : public CUtility
       string name;
       string name_stripped;
       string root;
+      string output_fifo;
+      pid_t pid;
 
       bool download;
       int download_timeout;
@@ -157,8 +159,6 @@ class CConfig : public CUtility
 #define LOG_BUFFER_SIZE          10000000
 #define LAYER_NAME_SIZE          32
 #define OUTPUT_PREFIX_SIZE       14
-
-#define SCRIPT_OUTPUT_FIFO       "/tmp/buildgear.fifo"
 
 extern CConfig Config;
 

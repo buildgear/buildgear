@@ -166,7 +166,8 @@ void CBuildFile::Parse(void)
    name = type + "/" + short_name;
 
    // Set control fifo name
-   fifo_name = "/tmp/buildgear-" + type + "-" + short_name + ".fifo";
+   fifo_name = "/tmp/buildgear-" + type + "-" + short_name;
+   fifo_name += "." + to_string(Config.pid) + ".fifo";
    control_fifo = new char [fifo_name.length() + 1];
    strcpy(control_fifo, fifo_name.c_str());
 

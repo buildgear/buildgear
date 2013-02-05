@@ -78,6 +78,9 @@ CConfig::CConfig()
    parallel_builds = 1;
 
    home_dir = getenv("HOME");
+
+   pid = getpid();
+   output_fifo = "/tmp/buildgear." + to_string(pid) + ".fifo";
 }
 
 void CConfig::CorrectName()
