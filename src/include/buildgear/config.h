@@ -155,7 +155,8 @@ class CConfig : public CUtility
 #define SVG_DASH_NO              0
 
 #define LOG_BUFFER_SIZE          10000000
-#define LAYER_NAME_SIZE      32
+#define LAYER_NAME_SIZE          32
+#define OUTPUT_PREFIX_SIZE       14
 
 #define SCRIPT_OUTPUT_FIFO       "/tmp/buildgear.fifo"
 

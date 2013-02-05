@@ -53,6 +53,7 @@ class CBuildManager : public CFileSystem, COptions
       list<CBuildFile*> active_builds;
       list<CBuildFile*> active_adds;
       bool build_error;
+      int name_len;
    private:
 };
 

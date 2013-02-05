@@ -36,13 +36,30 @@ info()
    echo "$1"
 }
 
+build_name_spaces()
+{
+   out=""
+
+   if [[ ${#BG_LAYER} > 0 ]]; then
+      layer_size=$((${#BG_LAYER}+3))
+   else
+      layer_size=0
+   fi
+
+   for (( i=0; i<($BG_MAX_NAME_LEN - ${#BG_BUILD_TYPE} - 1 - ${#name} - ${layer_size}); i++ ))
+   do
+      out+=" "
+   done
+   echo "${out}"
+}
+
 warning()
 {
    echo "WARNING: $1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "   Warning       '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
+      echo "   Warning    '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
    else
-      echo "   Warning       '$BG_BUILD_TYPE/$name' [$BG_LAYER]  ($1)" > /tmp/buildgear.fifo
+      echo "   Warning    '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
    fi
 }
 
@@ -50,9 +67,9 @@ updating()
 {
    echo "$1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "   Updated       '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
+      echo "   Updated    '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
    else
-      echo "   Updated       '$BG_BUILD_TYPE/$name' [$BG_LAYER]  ($1)" > /tmp/buildgear.fifo
+      echo "   Updated    '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
    fi
 }
 
@@ -60,9 +77,9 @@ error()
 {
    echo "ERROR: $1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "   Error         '$BG_BUILD_TYPE/$name'  ($1)" > /tmp/buildgear.fifo
+      echo "   Error      '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
    else
-      echo "   Error         '$BG_BUILD_TYPE/$name' [$BG_LAYER]  ($1)" > /tmp/buildgear.fifo
+      echo "   Error      '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" > /tmp/buildgear.fifo
    fi
 }
 

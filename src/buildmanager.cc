@@ -135,7 +135,8 @@ void CBuildThread::operator()()
          }
 
          // Output added and advance cursor
-         cout << "   Added         '" << buildfile->name << "'";
+         cout << left << setw(OUTPUT_PREFIX_SIZE) << "   Added";
+         cout << "'" << buildfile->name << "'";
          if (buildfile->layer != DEFAULT_LAYER_NAME)
             cout << " [" << buildfile->layer << "]";
          Cursor.clear_rest_of_line();
@@ -254,6 +255,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    arguments += " --BG_VERBOSE 'no'";
    arguments += " --BG_BUILD_FOOTPRINT '" + footprint_file + "'";
    arguments += " --BG_BUILD_SHA256SUM '" + checksum_file + "'";
+   arguments += " --BG_MAX_NAME_LEN '" + to_string(BuildManager.name_len) + "'";
 
    if (buildfile->layer != DEFAULT_LAYER_NAME)
       arguments +=" --BG_LAYER '" + buildfile->layer + "'";
@@ -399,6 +401,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
 {
    list<CBuildFile*>::iterator it;
    list<CBuildFile*>::reverse_iterator rit;
+   int len;
 
    // Set build error flag
    BuildManager.build_error = false;
@@ -417,10 +420,17 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
    // If so warn and delete work/packages (force total rebuild)
 
    // Set build action of all builds (based on package vs. Buildfile age)
+   // Find the maximum build name
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
       if (!PackageUpToDate((*it)))
          (*it)->build = true;
+
+      len = (*it)->name.size();
+      if ((*it)->layer != DEFAULT_LAYER_NAME)
+         len += (*it)->layer.size() + 3;
+      if (len > BuildManager.name_len)
+         BuildManager.name_len = len;
    }
 
    // Set build action of all builds (based on dependencies build status)
@@ -666,7 +676,9 @@ void CBuildManager::BuildOutputPrint()
 
    for (it = BuildManager.active_adds.begin(); it != BuildManager.active_adds.end(); it++)
    {
-      cout << "   Adding        '" << (*it)->name << "'";
+      cout << left << setw(OUTPUT_PREFIX_SIZE) << "   Adding" << "'" << (*it)->name << "'";
+      if ((*it)->layer != DEFAULT_LAYER_NAME)
+         cout << " [" << (*it)->layer << "]";
       Cursor.clear_rest_of_line();
       cout << endl;
       lines++;
@@ -697,7 +709,8 @@ void CBuildManager::BuildOutputPrint()
             indicator = "/";
       }
 
-      cout << " " << setw(1) << indicator << " Building      '" << (*it)->name << "'";
+      cout << " " << setw(1) << indicator << left << setw(OUTPUT_PREFIX_SIZE - 2) << " Building";
+      cout <<"'" << (*it)->name << "'";
       if ((*it)->layer != DEFAULT_LAYER_NAME)
          cout << " [" << (*it)->layer << "]";
       Cursor.clear_rest_of_line();
