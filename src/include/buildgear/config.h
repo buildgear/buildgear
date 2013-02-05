@@ -64,6 +64,7 @@ class CConfig : public CUtility
       bool config;
       bool global;
       bool unset;
+      bool blist;
       string key;
       string value;
 
@@ -84,6 +85,7 @@ class CConfig : public CUtility
       void CorrectSourceDir(void);
       void GuessBuildSystem(void);
       void SetConfig(void);
+      void List(void);
    private:
 };
 

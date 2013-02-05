@@ -53,7 +53,7 @@ _buildgear()
    clean_options="--all --footprint --checksum"
    show_options="--build-order --download-order --dependency --readme --version
                  --log --log-tail --log-mismatch --footprint --checksum"
-   config_options="--global --unset"
+   config_options="--global --unset --list"
    config_keys="source_dir download_mirror_first download_timeout
                 download_retry download_connections parallel_builds"
    help_options=$commands

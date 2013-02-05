@@ -269,6 +269,7 @@ void COptions::Parse(int argc, char *argv[])
       {
          {"global",  no_argument, 0, 'g'},
          {"unset",   no_argument, 0, 'u'},
+         {"list",    no_argument, 0, 'l'},
          {0,         0,           0,  0 }
       };
 
@@ -282,6 +283,9 @@ void COptions::Parse(int argc, char *argv[])
                break;
             case 'u':
                Config.unset = true;
+               break;
+            case 'l':
+               Config.blist = true;
                break;
             default:
                exit(EXIT_FAILURE);
@@ -311,8 +315,11 @@ void COptions::Parse(int argc, char *argv[])
                Config.value = argv[optind++];
          }
       } else {
-         cout << "\nError: Please specify an option and a value\n";
-         exit(EXIT_FAILURE);
+         if (!Config.blist)
+         {
+            cout << "\nError: Please specify an option and a value\n";
+            exit(EXIT_FAILURE);
+         }
       }
    }
    // No-command
@@ -421,7 +428,9 @@ void COptions::ShowHelp(char *argv[])
    cout << "\n";
    cout << "Config options:\n";
    cout << "  --global                Apply to global configuration\n";
-   cout << "  --unset                 Unset option (revert to default)\n\n";
+   cout << "  --unset                 Unset option (revert to default)\n";
+   cout << "  --list                  List current options\n";
+   cout << "\n";
    cout << "See buildgear help <command> for help on a specific command\n";
 }
 

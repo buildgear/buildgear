@@ -85,10 +85,16 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
+   /* Search for build root directory */
+   FileSystem.FindRoot(ROOT_DIR);
+
    /* Handle config command */
    if (Config.config)
    {
-      Config.SetConfig();
+      if ((Config.blist))
+         Config.List();
+      else
+         Config.SetConfig();
       exit(EXIT_SUCCESS);
    }
 
@@ -143,9 +149,6 @@ int main (int argc, char *argv[])
    /* Respawn into fakeroot session if building */
    if ((!Config.no_fakeroot) && (Config.build))
       Fakeroot.Respawn(argc, argv);
-
-   /* Search for build root directory */
-   FileSystem.FindRoot(ROOT_DIR);
 
    /* Show buildfiles readme */
    if ((Config.show) && (Config.readme))

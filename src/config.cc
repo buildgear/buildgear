@@ -172,3 +172,86 @@ void CConfig::SetConfig(void)
       ConfigFile.Update(LOCAL_CONFIG_FILE);
 
 }
+
+void CConfig::List(void)
+{
+   CConfig defaults, global, local;
+   list<CConfigOption*>::iterator it;
+
+   defaults = Config;
+
+   ConfigFile.Parse(Config.home_dir + GLOBAL_CONFIG_FILE);
+
+   global = Config;
+
+   ConfigFile.Parse(LOCAL_CONFIG_FILE);
+
+   local = Config;
+
+   cout << endl;
+
+   cout << CONFIG_KEY_DEFAULT_NAME_PREFIX << "=";
+   cout << Config.default_name_prefix;
+   if (local.default_name_prefix == defaults.default_name_prefix)
+      cout << " [default]" << endl;
+   else if (local.default_name_prefix == global.default_name_prefix)
+      cout << " [global]" << endl;
+   else
+      cout << " [local]" << endl;
+
+   cout << CONFIG_KEY_SOURCE_DIR << "=";
+   cout << Config.source_dir;
+   if (local.source_dir == defaults.source_dir)
+      cout << " [default]" << endl;
+   else if (local.source_dir == global.source_dir)
+      cout << " [global]" << endl;
+   else
+      cout << " [local]" << endl;
+
+   cout << CONFIG_KEY_DOWNLOAD_TIMEOUT << "=";
+   cout << Config.download_timeout;
+   if (local.download_timeout == defaults.download_timeout)
+      cout << " [default]" << endl;
+   else if (local.download_timeout == global.download_timeout)
+      cout << " [global]" << endl;
+   else
+      cout << " [local]" << endl;
+
+   cout << CONFIG_KEY_DOWNLOAD_RETRY << "=";
+   cout << Config.download_retry;
+   if (local.download_retry == defaults.download_retry)
+      cout << " [default]" << endl;
+   else if (local.download_retry == global.download_retry)
+      cout << " [global]" << endl;
+   else
+      cout << " [local]" << endl;
+
+   cout << CONFIG_KEY_DOWNLOAD_MIRROR_FIRST << "=";
+   cout << Config.download_mirror_first;
+   if (local.download_mirror_first == defaults.download_mirror_first)
+      cout << " [default]" << endl;
+   else if (local.download_mirror_first == global.download_mirror_first)
+      cout << " [global]" << endl;
+   else
+      cout << " [local]" << endl;
+
+   cout << CONFIG_KEY_DOWNLOAD_CONNECTIONS << "=";
+   cout << Config.download_connections;
+   if (local.download_connections == defaults.download_connections)
+      cout << " [default]" << endl;
+   else if (local.download_connections == global.download_connections)
+      cout << " [global]" << endl;
+   else
+      cout << " [local]" << endl;
+
+   cout << CONFIG_KEY_PARALLEL_BUILDS << "=";
+   cout << Config.parallel_builds;
+   if (local.parallel_builds == defaults.parallel_builds)
+      cout << " [default]" << endl;
+   else if (local.parallel_builds == global.parallel_builds)
+      cout << " [global]" << endl;
+   else
+      cout << " [local]" << endl;
+
+   cout << endl;
+}
