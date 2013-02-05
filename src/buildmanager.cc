@@ -104,14 +104,6 @@ void CBuildThread::operator()()
          return;
       }
 
-      // Add buildfile to active adds, if it is not the last
-      if (buildfile != last_build)
-      {
-         pthread_mutex_lock(&active_adds_mutex);
-         BuildManager.active_adds.push_back(buildfile);
-         pthread_mutex_unlock(&active_adds_mutex);
-      }
-
       // Update output
       pthread_mutex_lock(&cout_mutex);
       BuildOutputPrint();
@@ -121,6 +113,11 @@ void CBuildThread::operator()()
       if (buildfile != last_build)
       {
          pthread_mutex_lock(&add_mutex);
+
+         pthread_mutex_lock(&active_adds_mutex);
+         BuildManager.active_adds.push_back(buildfile);
+         pthread_mutex_unlock(&active_adds_mutex);
+
          Do("add", buildfile);
          pthread_mutex_unlock(&add_mutex);
 
