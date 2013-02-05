@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <string>
 #include <stdexcept>
@@ -177,6 +178,9 @@ void CConfig::List(void)
 {
    CConfig defaults, global, local;
    list<CConfigOption*>::iterator it;
+   int max_len;
+   string line;
+   ostringstream out;
 
    defaults = Config;
 
@@ -190,17 +194,39 @@ void CConfig::List(void)
 
    cout << endl;
 
-   cout << CONFIG_KEY_DEFAULT_NAME_PREFIX << "=";
-   cout << Config.default_name_prefix;
-   if (local.default_name_prefix == defaults.default_name_prefix)
-      cout << " [default]" << endl;
-   else if (local.default_name_prefix == global.default_name_prefix)
-      cout << " [global]" << endl;
-   else
-      cout << " [local]" << endl;
+   line = CONFIG_KEY_SOURCE_DIR  "=";
+   line += Config.source_dir;
+   if (line.size() > max_len)
+      max_len = line.size();
 
-   cout << CONFIG_KEY_SOURCE_DIR << "=";
-   cout << Config.source_dir;
+   line = CONFIG_KEY_DOWNLOAD_TIMEOUT  "=";
+   line += Config.download_timeout;
+   if (line.size() > max_len)
+      max_len = line.size();
+
+   line = CONFIG_KEY_DOWNLOAD_RETRY  "=";
+   line += Config.download_retry;
+   if (line.size() > max_len)
+      max_len = line.size();
+
+   line = CONFIG_KEY_DOWNLOAD_MIRROR_FIRST  "=";
+   line += Config.download_mirror_first;
+   if (line.size() > max_len)
+      max_len = line.size();
+
+   line = CONFIG_KEY_DOWNLOAD_CONNECTIONS  "=";
+   line += Config.download_connections;
+   if (line.size() > max_len)
+      max_len = line.size();
+
+   line = CONFIG_KEY_PARALLEL_BUILDS  "=";
+   line += Config.parallel_builds;
+   if (line.size() > max_len)
+      max_len = line.size();
+
+   out << CONFIG_KEY_SOURCE_DIR << "=";
+   out << Config.source_dir;
+   cout << out.str() << setw(max_len - out.tellp()) << "";
    if (local.source_dir == defaults.source_dir)
       cout << " [default]" << endl;
    else if (local.source_dir == global.source_dir)
@@ -208,8 +234,10 @@ void CConfig::List(void)
    else
       cout << " [local]" << endl;
 
-   cout << CONFIG_KEY_DOWNLOAD_TIMEOUT << "=";
-   cout << Config.download_timeout;
+   out.str("");
+   out << CONFIG_KEY_DOWNLOAD_TIMEOUT << "=";
+   out << Config.download_timeout;
+   cout << out.str() << setw(max_len - out.tellp()) << "";
    if (local.download_timeout == defaults.download_timeout)
       cout << " [default]" << endl;
    else if (local.download_timeout == global.download_timeout)
@@ -217,8 +245,10 @@ void CConfig::List(void)
    else
       cout << " [local]" << endl;
 
-   cout << CONFIG_KEY_DOWNLOAD_RETRY << "=";
-   cout << Config.download_retry;
+   out.str("");
+   out << CONFIG_KEY_DOWNLOAD_RETRY << "=";
+   out << Config.download_retry;
+   cout << out.str() << setw(max_len - out.tellp()) << "";
    if (local.download_retry == defaults.download_retry)
       cout << " [default]" << endl;
    else if (local.download_retry == global.download_retry)
@@ -226,8 +256,10 @@ void CConfig::List(void)
    else
       cout << " [local]" << endl;
 
-   cout << CONFIG_KEY_DOWNLOAD_MIRROR_FIRST << "=";
-   cout << Config.download_mirror_first;
+   out.str("");
+   out << CONFIG_KEY_DOWNLOAD_MIRROR_FIRST << "=";
+   out << Config.download_mirror_first;
+   cout << out.str() << setw(max_len - out.tellp()) << "";
    if (local.download_mirror_first == defaults.download_mirror_first)
       cout << " [default]" << endl;
    else if (local.download_mirror_first == global.download_mirror_first)
@@ -235,8 +267,10 @@ void CConfig::List(void)
    else
       cout << " [local]" << endl;
 
-   cout << CONFIG_KEY_DOWNLOAD_CONNECTIONS << "=";
-   cout << Config.download_connections;
+   out.str("");
+   out << CONFIG_KEY_DOWNLOAD_CONNECTIONS << "=";
+   out << Config.download_connections;
+   cout << out.str() << setw(max_len - out.tellp()) << "";
    if (local.download_connections == defaults.download_connections)
       cout << " [default]" << endl;
    else if (local.download_connections == global.download_connections)
@@ -244,8 +278,10 @@ void CConfig::List(void)
    else
       cout << " [local]" << endl;
 
-   cout << CONFIG_KEY_PARALLEL_BUILDS << "=";
-   cout << Config.parallel_builds;
+   out.str("");
+   out << CONFIG_KEY_PARALLEL_BUILDS << "=";
+   out << Config.parallel_builds;
+   cout << out.str() << setw(max_len - out.tellp()) << "";
    if (local.parallel_builds == defaults.parallel_builds)
       cout << " [default]" << endl;
    else if (local.parallel_builds == global.parallel_builds)
