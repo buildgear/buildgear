@@ -121,34 +121,12 @@ void CConfigFile::Parse(string filename)
             if (filename != BUILD_FILES_CONFIG)
             {
                // ~/.buildgearconfig, .buildgear/config :
-               if (key == CONFIG_KEY_DEFAULT_NAME_PREFIX)
-                  Config.default_name_prefix = value;
-               if (key == CONFIG_KEY_SOURCE_DIR)
-                  Config.source_dir = value;
-               if (key == CONFIG_KEY_DOWNLOAD_TIMEOUT)
-                  Config.download_timeout = atoi(value.c_str());
-               if (key == CONFIG_KEY_DOWNLOAD_RETRY)
-                  Config.download_retry = atoi(value.c_str());
-               if (key == CONFIG_KEY_DOWNLOAD_MIRROR_FIRST)
-                  Config.download_mirror_first = value;
-               if (key == CONFIG_KEY_DOWNLOAD_CONNECTIONS)
-                  Config.download_connections = atoi(value.c_str());
-               if (key == CONFIG_KEY_PARALLEL_BUILDS)
-                  Config.parallel_builds = atoi(value.c_str());
+               Config.bg_config[key] = value;
             }
             else
             {
                // buildfiles/config :
-               if (key == CONFIG_KEY_CROSS_DEPENDS)
-                  Config.cross_depends = value;
-               if (key == CONFIG_KEY_BUILD)
-                  Config.build_system = value;
-               if (key == CONFIG_KEY_HOST)
-                  Config.host_system = value;
-               if (key == CONFIG_KEY_DOWNLOAD_MIRROR)
-                  Config.download_mirror = value;
-               if (key == CONFIG_KEY_LAYERS)
-                  Config.layers = value;
+               Config.bf_config[key] = value;
             }
          }
       }
@@ -157,122 +135,91 @@ void CConfigFile::Parse(string filename)
 
 void CConfigFile::Update(string filename)
 {
-   FILE *in_file, *out_file;
+   FILE *in_file;
    char line_buffer[LINE_MAX];
    string new_line;
    bool updated = false;
-   char *tmpfile;
+   ostringstream outbuffer;
+   ofstream config_file;
+   string key;
+   size_t pos;
 
-   if (!FileSystem.FileExist(filename))
-      Init(filename);
+   // Parse the current file to store non-default settings
+   Parse(filename);
 
-   in_file = fopen(filename.c_str(), "r");
-
-   if (!in_file)
+   if (!FileSystem.FileExist(TEMPLATE_LOCAL_CONFIG))
    {
-      cout << "Could not open " << filename << " for reading.\n";
+      cout << "\nError: Could not find template file. " << TEMPLATE_LOCAL_CONFIG;
+      cout << "\n       Please reinstall buildgear.\n";
       exit(EXIT_FAILURE);
    }
 
-   // Open a temporary file to keep the new configuration
-   tmpfile = tmpnam(NULL);
-   out_file = fopen(tmpfile, "w");
+   in_file = fopen(TEMPLATE_LOCAL_CONFIG, "r");
 
-   if (!out_file)
+   if (!in_file)
    {
-      cout << "Could not open temporary file for writing.\n";
+      cout << "\nError: Could not open " << filename << " for reading.\n";
       exit(EXIT_FAILURE);
    }
 
    while (fgets(line_buffer, LINE_MAX, in_file) != NULL)
    {
-      // Line does not contain a key=value pair
-      if ( strchr(line_buffer, '=') == NULL)
+      pos = string(line_buffer).find("=");
+      if (pos != string::npos)
       {
-         fputs(line_buffer, out_file);
-         continue;
-      }
+         // The line contains a setting, get the key
+         key = string(line_buffer).substr(1,pos - 1);
 
-      if (Config.unset)
-      {
-         // Key is alreadu unset so we just rewrite the line
-         if (line_buffer[0] == '#')
+         if (key != Config.key)
          {
-            fputs(line_buffer, out_file);
-            continue;
-         }
-
-         // Put a # tag infront of the line to unset it
-         new_line = "#" + string(line_buffer);
-         fputs(new_line.c_str(), out_file);
-      } else
-      {
-         // Check if the line contains the key= we are looking for
-         if (string(line_buffer).find(Config.key + "=") == string::npos)
-            fputs(line_buffer, out_file);
-         else
+            // The line did not contain the option we want to change.
+            // If the value differs from the default we keep the new value
+            if (Config.bg_config[key] != Config.bg_config_default[key])
+            {
+               new_line = key + "=" + Config.bg_config[key] + "\n";
+               outbuffer << new_line;
+            } else
+               outbuffer << line_buffer;
+         } else
          {
-            new_line = Config.key + "=" + Config.value + "\n";
-            fputs(new_line.c_str(), out_file);
+            // This is key we want to change
+            if (Config.unset)
+               outbuffer << line_buffer;
+            else
+            {
+               new_line = Config.key + "=" + Config.value + "\n";
+               outbuffer << new_line;
+            }
             updated = true;
          }
+      } else
+      {
+         // Line does not contain =
+         outbuffer << line_buffer;
       }
    }
 
-   // Key was not found in file, adding it to the end
+   // Key was not found in template
    if (!updated && !Config.unset)
    {
-      new_line = "\n" + Config.key + "=" + Config.value + "\n";
-      fputs(new_line.c_str(), out_file);
+      cout << "\nError: Installed template is not compliant with current buildgear version.";
+      cout << "\n       Please make sure buildgear is correctly installed.\n";
+      exit(EXIT_FAILURE);
    }
 
    fclose(in_file);
-   fclose(out_file);
 
-   // Move the temporary file to the config file
-   rename(tmpfile, filename.c_str());
-
-   // Delete the temporary file
-   unlink(tmpfile);
-
-}
-
-void CConfigFile::Init(string filename)
-{
-   FILE *fp;
-   string command;
-   string destination;
-
-   if (FileSystem.FileExist(string(TEMPLATE_LOCAL_CONFIG)))
+   // Open the config file for writing
+   try
    {
-      // Install the template if it exists
-      command = "cp " + string(TEMPLATE_LOCAL_CONFIG) + " ";
-      if (Config.global)
-         destination = Config.home_dir + GLOBAL_CONFIG_FILE;
-      else
-         destination = LOCAL_CONFIG_FILE;
-
-      command += destination + " 2>/dev/null";
-
-      if (system(command.c_str()) != 0)
-      {
-         cout << "\nError: Could not install config template";
-         cout << " in '" << destination;
-         cout << "'.\n";
-         cout << strerror(errno) << endl << endl;
-         exit(EXIT_FAILURE);
-      }
-
-   } else
+      config_file.exceptions(ofstream::failbit | ofstream::badbit);
+      config_file.open(filename.c_str());
+      config_file << outbuffer.str();
+   } catch (ifstream::failure e)
    {
-      // Otherwise just create an empty file
-      fp = fopen(filename.c_str(), "w");
-      if (!fp)
-      {
-         cout << endl << "Error: Could not create '" << filename << "'." << endl;
-         cout << strerror(errno) << endl;
-         exit(EXIT_FAILURE);
-      }
-      fclose(fp);
+      cout << "\nError: Could not write to config file " << filename;
+      cout << "\n       " << strerror(errno) << endl;
+      exit(EXIT_FAILURE);
    }
+
 }

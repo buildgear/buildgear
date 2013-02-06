@@ -178,10 +178,10 @@ int main (int argc, char *argv[])
       exit(EXIT_FAILURE);
    }
 
-   if ( (Cursor.no_lines - 1) < ((uint)stoi(Config.bg_config["download_connections"]) * DOWNLOAD_LINE_SIZE)) {
+   if (Cursor.no_lines - 1 < (uint)stoi(Config.bg_config[CONFIG_KEY_DOWNLOAD_CONNECTIONS]) * DOWNLOAD_LINE_SIZE) {
       cout << endl << "Restricting download_connections to "
            << (Cursor.no_lines - 1) / DOWNLOAD_LINE_SIZE << " due to terminal height." << endl;
-      Config.download_connections = (Cursor.no_lines - 1) / DOWNLOAD_LINE_SIZE;
+      Config.bg_config[CONFIG_KEY_DOWNLOAD_CONNECTIONS] = to_string((Cursor.no_lines - 1) / DOWNLOAD_LINE_SIZE);
    }
 
    /* Parse buildfiles configuration file */
@@ -336,7 +336,7 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
-   if (Config.cross_depends != "")
+   if (Config.bf_config[CONFIG_KEY_CROSS_DEPENDS] != "")
    {
       /* Load dependencies defined in "CROSS_DEPENDS" */
       BuildFiles.LoadCrossDependency();
@@ -355,7 +355,8 @@ int main (int argc, char *argv[])
    }
 
    /* Only resolve dependencies if we are not downloading all sources or not downloading  */
-   if ( ((Config.download) && (Config.name != Config.bg_config["default_name_prefix"])) || !Config.download)
+   if ( ((Config.download) && (Config.name != Config.bg_config[CONFIG_KEY_DEFAULT_NAME_PREFIX]))
+         || !Config.download)
    {
       /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";
@@ -405,11 +406,11 @@ int main (int argc, char *argv[])
    if (Config.download)
    {
       /* If 'download --all' command then download source of all builds available */
-      if ((Config.all) && (Config.name == Config.default_name_prefix))
+      if ((Config.all) && (Config.name == Config.bg_config[CONFIG_KEY_DEFAULT_NAME_PREFIX]))
          Dependency.download_order=BuildFiles.buildfiles;
 
       /* If 'download <name>' command then only download source of named build  */
-      if ((!Config.all) && (Config.name != Config.default_name_prefix))
+      if ((!Config.all) && (Config.name != Config.bg_config[CONFIG_KEY_DEFAULT_NAME_PREFIX]))
       {
          Dependency.download_order.clear();
          Dependency.download_order.push_back(Dependency.build_order.back());
@@ -423,7 +424,8 @@ int main (int argc, char *argv[])
    Cursor.disable_echo();
    Cursor.disable_wrap();
 
-   thread download_thread([&] (void) {Source.Download(&Dependency.download_order, Config.source_dir);});
+   thread download_thread([&] (void) {Source.Download(&Dependency.download_order,
+                                      Config.bg_config[CONFIG_KEY_SOURCE_DIR]);});
 
    download_thread.join();
    cout << "Done\n";
@@ -433,8 +435,8 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
 
    /* Show system information */
-   cout << "Detecting BUILD system type..   " << Config.build_system << endl;
-   cout << "Configured HOST system type..   " << Config.host_system << endl;
+   cout << "Detecting BUILD system type..   " << Config.bf_config[CONFIG_KEY_BUILD] << endl;
+   cout << "Configured HOST system type..   " << Config.bf_config[CONFIG_KEY_HOST] << endl;
    cout << endl;
 
    /* Delete old work */

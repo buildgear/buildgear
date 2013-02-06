@@ -47,12 +47,17 @@ CConfig::CConfig()
    init = false;
    config = false;
 
-   // Default download options
-   download_timeout = 20;
-   download_retry = 3;
-   download_mirror = "";
-   download_mirror_first = "no";
-   download_connections = 4;
+   // Default buildgear options
+   bg_config_default[CONFIG_KEY_DOWNLOAD_TIMEOUT] = "20";
+   bg_config_default[CONFIG_KEY_DOWNLOAD_RETRY] = "3";
+   bg_config_default[CONFIG_KEY_DOWNLOAD_MIRROR_FIRST] = "no";
+   bg_config_default[CONFIG_KEY_DOWNLOAD_CONNECTIONS] = "4";
+   bg_config_default[CONFIG_KEY_DEFAULT_NAME_PREFIX] = "cross/";
+   bg_config_default[CONFIG_KEY_SOURCE_DIR] = SOURCE_DIR;
+   bg_config_default[CONFIG_KEY_PARALLEL_BUILDS] = "1";
+
+   // Default buildfiles options
+   bf_config[CONFIG_KEY_DOWNLOAD_MIRROR] = "";
 
    // Default build options
    keep_work = "no";
@@ -83,15 +88,11 @@ CConfig::CConfig()
    // Misc defaults
    all = false;
 
-   default_name_prefix = "cross/";
-   source_dir = SOURCE_DIR;
-
-   parallel_builds = 1;
-
    home_dir = getenv("HOME");
-
    pid = getpid();
    output_fifo = "/tmp/buildgear." + to_string(pid) + ".fifo";
+
+   bg_config = bg_config_default;
 }
 
 void CConfig::CorrectName()
@@ -99,13 +100,13 @@ void CConfig::CorrectName()
    // Prepend default name prefix if none is provided
    if ((CConfig::name.find("cross/") != 0) &&
       (CConfig::name.find("native/") != 0))
-      CConfig::name = CConfig::default_name_prefix + CConfig::name;
+      CConfig::name = CConfig::bg_config[CONFIG_KEY_DEFAULT_NAME_PREFIX] + CConfig::name;
 }
 
 void CConfig::CorrectSourceDir(void)
 {
    // Replace "~" with $HOME value
-   if (CConfig::source_dir.find("~/") == 0)
+   if (CConfig::bg_config[CONFIG_KEY_SOURCE_DIR].find("~/") == 0)
    {
       FILE *fp;
       char line_buffer[PATH_MAX];
@@ -126,8 +127,8 @@ void CConfig::CorrectSourceDir(void)
 
       if (home != "")
       {
-         CConfig::source_dir.erase(0,1);
-         CConfig::source_dir = home + CConfig::source_dir;
+         CConfig::bg_config[CONFIG_KEY_SOURCE_DIR].erase(0,1);
+         CConfig::bg_config[CONFIG_KEY_SOURCE_DIR] = home + CConfig::bg_config[CONFIG_KEY_SOURCE_DIR];
       }
    }
 }
@@ -143,8 +144,8 @@ void CConfig::GuessBuildSystem(void)
 
       while (fgets(line_buffer, PATH_MAX, fp) != NULL)
       {
-         build_system = line_buffer;
-         stripChar(build_system, '\n');
+         bf_config[CONFIG_KEY_BUILD] = line_buffer;
+         stripChar(bf_config[CONFIG_KEY_BUILD], '\n');
       }
 
       pclose(fp);
@@ -197,110 +198,39 @@ void CConfig::List(void)
    ostringstream out;
    defaults = Config;
 
-   ConfigFile.Parse(Config.home_dir + GLOBAL_CONFIG_FILE);
-
-   global = Config;
-
    ConfigFile.Parse(LOCAL_CONFIG_FILE);
 
    local = Config;
 
+   ConfigFile.Parse(Config.home_dir + GLOBAL_CONFIG_FILE);
+
+   global = Config;
+
    cout << endl;
 
-   line = CONFIG_KEY_SOURCE_DIR  "=";
-   line += Config.source_dir;
-   if (line.size() > max_len)
-      max_len = line.size();
+   for (it = ConfigFile.options.begin(); it != ConfigFile.options.end(); it++)
+   {
+      line = (*it)->key + "=";
+      line += Config.bg_config[(*it)->key];
+      if (line.size() > max_len)
+         max_len = line.size();
+   }
 
-   line = CONFIG_KEY_DOWNLOAD_TIMEOUT  "=";
-   line += Config.download_timeout;
-   if (line.size() > max_len)
-      max_len = line.size();
-
-   line = CONFIG_KEY_DOWNLOAD_RETRY  "=";
-   line += Config.download_retry;
-   if (line.size() > max_len)
-      max_len = line.size();
-
-   line = CONFIG_KEY_DOWNLOAD_MIRROR_FIRST  "=";
-   line += Config.download_mirror_first;
-   if (line.size() > max_len)
-      max_len = line.size();
-
-   line = CONFIG_KEY_DOWNLOAD_CONNECTIONS  "=";
-   line += Config.download_connections;
-   if (line.size() > max_len)
-      max_len = line.size();
-
-   line = CONFIG_KEY_PARALLEL_BUILDS  "=";
-   line += Config.parallel_builds;
-   if (line.size() > max_len)
-      max_len = line.size();
-
-   out << CONFIG_KEY_SOURCE_DIR << "=";
-   out << Config.source_dir;
-   cout << out.str() << setw(max_len - out.tellp()) << "";
-   if (local.source_dir == defaults.source_dir)
-      cout << " [default]" << endl;
-   else if (local.source_dir == global.source_dir)
-      cout << " [global]" << endl;
-   else
-      cout << " [local]" << endl;
-
-   out.str("");
-   out << CONFIG_KEY_DOWNLOAD_TIMEOUT << "=";
-   out << Config.download_timeout;
-   cout << out.str() << setw(max_len - out.tellp()) << "";
-   if (local.download_timeout == defaults.download_timeout)
-      cout << " [default]" << endl;
-   else if (local.download_timeout == global.download_timeout)
-      cout << " [global]" << endl;
-   else
-      cout << " [local]" << endl;
-
-   out.str("");
-   out << CONFIG_KEY_DOWNLOAD_RETRY << "=";
-   out << Config.download_retry;
-   cout << out.str() << setw(max_len - out.tellp()) << "";
-   if (local.download_retry == defaults.download_retry)
-      cout << " [default]" << endl;
-   else if (local.download_retry == global.download_retry)
-      cout << " [global]" << endl;
-   else
-      cout << " [local]" << endl;
-
-   out.str("");
-   out << CONFIG_KEY_DOWNLOAD_MIRROR_FIRST << "=";
-   out << Config.download_mirror_first;
-   cout << out.str() << setw(max_len - out.tellp()) << "";
-   if (local.download_mirror_first == defaults.download_mirror_first)
-      cout << " [default]" << endl;
-   else if (local.download_mirror_first == global.download_mirror_first)
-      cout << " [global]" << endl;
-   else
-      cout << " [local]" << endl;
-
-   out.str("");
-   out << CONFIG_KEY_DOWNLOAD_CONNECTIONS << "=";
-   out << Config.download_connections;
-   cout << out.str() << setw(max_len - out.tellp()) << "";
-   if (local.download_connections == defaults.download_connections)
-      cout << " [default]" << endl;
-   else if (local.download_connections == global.download_connections)
-      cout << " [global]" << endl;
-   else
-      cout << " [local]" << endl;
-
-   out.str("");
-   out << CONFIG_KEY_PARALLEL_BUILDS << "=";
-   out << Config.parallel_builds;
-   cout << out.str() << setw(max_len - out.tellp()) << "";
-   if (local.parallel_builds == defaults.parallel_builds)
-      cout << " [default]" << endl;
-   else if (local.parallel_builds == global.parallel_builds)
-      cout << " [global]" << endl;
-   else
-      cout << " [local]" << endl;
+   for (it = ConfigFile.options.begin(); it != ConfigFile.options.end(); it++)
+   {
+      out.str("");
+      out << (*it)->key << "=";
+      out << Config.bg_config[(*it)->key];
+      cout << out.str() << setw(max_len - out.tellp()) << "";
+      if (local.bg_config[(*it)->key] == defaults.bg_config[(*it)->key])
+      {
+         if (global.bg_config[(*it)->key] == defaults.bg_config[(*it)->key])
+            cout << " [default]" << endl;
+         else
+            cout << " [global]" << endl;
+      } else
+         cout << " [local]" << endl;
+   }
 
    cout << endl;
 }

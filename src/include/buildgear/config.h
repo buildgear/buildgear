@@ -22,6 +22,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <unordered_map>
 #include "buildgear/utility.h"
 
 using namespace std;
@@ -35,10 +36,11 @@ class CConfig : public CUtility
       string output_fifo;
       pid_t pid;
 
+      unordered_map <string, string> bg_config;
+      unordered_map <string, string> bg_config_default;
+      unordered_map <string, string> bf_config;
+
       bool download;
-      int download_timeout;
-      int download_retry;
-      long download_connections;
 
       bool build;
       string keep_work;
@@ -72,15 +74,6 @@ class CConfig : public CUtility
 
       bool all;
 
-      string default_name_prefix;
-      string source_dir;
-      string download_mirror;
-      string download_mirror_first;
-      unsigned int parallel_builds;
-      string build_system;
-      string host_system;
-      string cross_depends;
-      string layers;
       string home_dir;
       CConfig();
       void CorrectName(void);

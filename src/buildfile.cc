@@ -184,7 +184,7 @@ void CBuildFile::Parse(void)
       if (fscanf(fp, "%s", layer_name) > 0)
       {
          // Check if layer is in config file
-         if (Config.bf_config["layers"].find(layer_name) == string::npos
+         if (Config.bf_config[CONFIG_KEY_LAYERS].find(layer_name) == string::npos
              && layer_name != string(DEFAULT_LAYER_NAME))
          {
             string line_buffer;

@@ -94,7 +94,7 @@ void CBuildFiles::Parse(void)
 
 void CBuildFiles::RemoveDuplicates(void)
 {
-   istringstream iss(Config.layers);
+   istringstream iss(Config.bf_config[CONFIG_KEY_LAYERS]);
    string layer;
 
    /* Resolve layer priority */
@@ -197,7 +197,7 @@ void CBuildFiles::LoadCrossDependency(void)
    list<CBuildFile*>::iterator it;
 
    string dep;
-   istringstream iss(Config.cross_depends);
+   istringstream iss(Config.bf_config[CONFIG_KEY_CROSS_DEPENDS]);
 
    // For each cross dependency element
    while ( getline(iss, dep, ' ') )

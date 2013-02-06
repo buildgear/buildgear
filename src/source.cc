@@ -137,8 +137,9 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    curl_global_init(CURL_GLOBAL_ALL);
    Download.curlm = curl_multi_init();
 
-   if (Config.download_connections) {
-      curl_multi_setopt(Download.curlm, CURLMOPT_MAXCONNECTS, Config.download_connections);
+   if (stoi(Config.bg_config[CONFIG_KEY_DOWNLOAD_CONNECTIONS])) {
+      curl_multi_setopt(Download.curlm, CURLMOPT_MAXCONNECTS,
+            stoi(Config.bg_config[CONFIG_KEY_DOWNLOAD_CONNECTIONS]));
    }
 
    /* Traverse buildfiles download list */
@@ -163,7 +164,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    }
 
    // Add download_connections downloads to multi stack
-   for (i=0;i<Config.download_connections;i++)
+   for (i=0;i<stoi(Config.bg_config[CONFIG_KEY_DOWNLOAD_CONNECTIONS]);i++)
    {
       // Stop if no more downloads are pending
       if (Download.pending_downloads.size() == 0)
@@ -323,7 +324,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                   item->alternative_url = true;
                   item->status = "Requesting file (Alternative)..";
 
-                  item->tries = Config.download_retry;
+                  item->tries = stoi(Config.bg_config[CONFIG_KEY_DOWNLOAD_RETRY]);
 
                   curl_easy_setopt(item->curl, CURLOPT_URL, item->mirror_url.c_str());
 

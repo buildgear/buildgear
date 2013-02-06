@@ -249,8 +249,8 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    arguments += " --BG_OUTPUT_DIR '" OUTPUT_DIR "'";
    arguments += " --BG_SOURCE_DIR '" SOURCE_DIR "'";
    arguments += " --BG_SYSROOT_DIR '" SYSROOT_DIR "'";
-   arguments += " --BG_BUILD '" + Config.build_system + "'";
-   arguments += " --BG_HOST '" + Config.host_system + "'";
+   arguments += " --BG_BUILD '" + Config.bf_config[CONFIG_KEY_BUILD] + "'";
+   arguments += " --BG_HOST '" + Config.bf_config[CONFIG_KEY_HOST] + "'";
    arguments += " --BG_VERBOSE 'no'";
    arguments += " --BG_BUILD_FOOTPRINT '" + footprint_file + "'";
    arguments += " --BG_BUILD_SHA256SUM '" + checksum_file + "'";
@@ -455,7 +455,8 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       vector<CBuildThread *> builder;
 
       // Initialize build semaphore
-      if (sem_init(&build_semaphore, 0, Config.parallel_builds) == -1)
+      if (sem_init(&build_semaphore, 0,
+                   stoi(Config.bg_config[CONFIG_KEY_PARALLEL_BUILDS])) == -1)
       {
          cerr << "Error: Semaphore init failed" << endl;
          exit(EXIT_FAILURE);

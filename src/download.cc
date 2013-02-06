@@ -146,22 +146,22 @@ CDownloadItem::CDownloadItem(string url, string source_dir, CDownload *Download)
    // Download if file does not exist in source dir
    if (!FileExistSize(source_dir + "/" + filename, filesize))
    {
-      this->tries = Config.download_retry;
-      if (Config.download_mirror_first != "yes")
+      this->tries = stoi(Config.bg_config[CONFIG_KEY_DOWNLOAD_RETRY]);
+      if (Config.bg_config[CONFIG_KEY_DOWNLOAD_MIRROR_FIRST] != "yes")
       {
          this->url = url;
 
-         if (Config.download_mirror != "")
-            this->mirror_url = Config.download_mirror + "/" + filename;
+         if (Config.bf_config[CONFIG_KEY_DOWNLOAD_MIRROR] != "")
+            this->mirror_url = Config.bf_config[CONFIG_KEY_DOWNLOAD_MIRROR] + "/" + filename;
          else
             this->mirror_url = "";
 
       } else
       {
-         if (Config.download_mirror != "")
+         if (Config.bf_config[CONFIG_KEY_DOWNLOAD_MIRROR] != "")
          {
             string mirror_url;
-            mirror_url = Config.download_mirror + "/" + filename;
+            mirror_url = Config.bf_config[CONFIG_KEY_DOWNLOAD_MIRROR] + "/" + filename;
 
             // Download from mirror url
             this->url = mirror_url;
@@ -207,8 +207,8 @@ void CDownloadItem::File()
       curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
 
       // Set timeouts
-      curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, Config.download_timeout);
-      curl_easy_setopt(curl, CURLOPT_FTP_RESPONSE_TIMEOUT, Config.download_timeout);
+      curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, stoi(Config.bg_config[CONFIG_KEY_DOWNLOAD_TIMEOUT]));
+      curl_easy_setopt(curl, CURLOPT_FTP_RESPONSE_TIMEOUT, stoi(Config.bg_config[CONFIG_KEY_DOWNLOAD_TIMEOUT]));
 
       // Fail on http error (400+)
       curl_easy_setopt(curl, CURLOPT_FAILONERROR, true);
