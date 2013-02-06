@@ -1,110 +1,168 @@
 
-=== Build Gear v0.9.13beta ===
+=== Build Gear v0.9.14beta ===
 
-Changes since Build Gear v0.9.12beta:
+Changes since Build Gear v0.9.13beta:
 
- * Moved download mirror configuration to buildfiles/config
+ * Moved README location
 
-   Moved download mirror configuration to buildfiles/config. The download
-   mirror configuration variable is also renamed from download_mirror to
-   DOWNLOAD_MIRROR to maintain a consistent variable naming scheme for
-   buildfiles/config.
+	buildfiles/readme is moved and renamed to README in the top level
+	directory.
 
- * Added Build Gear Handbook documentation framework
+	The purpose of this is to make it more visible to the user. Also, git
+	repository managers such as github automatically presents the content of
+	the file README.
 
-   Added automake support for pdf and html targets which use docbook to
-   produce pdf and html output documentation from a single source.
+ * Let init command create git ignore files
 
-   The html output is to be used directly on the Build Gear website.
-   The pdf output is to be distributed freely.
+	For convenience, the buildgear init command now automatically creates the
+	following git ignore files:
 
- * Fixed memory corruption
+	.gitignore:
+	build/*
 
-   Non thread safe manipulation of internal lists resulted in application
-   instability by memory corruption. Problem solved by introduction of list
-   access mutexes.
+	.buildgear/.gitignore:
+	config
 
- * Various cleanups
+	Also, the .buildgear directory must exist. To make git add this directory
+	we have to put something in it so we simply put the .gitignore file there.
+
+ * Renamed checksum files from .sha256 to .sha256sum
+
+	Using the .sha256sum file extention is the preferred choice for checksum
+	files containing a list of sha256 checksums.
+
+ * Updated template.config
+
+	Fixed native pkg-config configuration
+
+ * Made autogen.sh verbose and forced
+
+ * Various cleanups and bug fixes
 
 Contributed by Jesper Larsen:
 
- * Include HTTP response codes in output
+ * Include PID in named pipes
 
-   Include the HTTP response code in the output if a download fails.
+	Named pipes are used to communicate from the buildgear.sh script to the
+	application. The PID of the application is included to allow several
+	instances of buildgear to run at the same time.
 
- * Set the user-agent header when downloading
+ * Only show one build as "Adding"
 
-   Download will fail on some sites, if the user-agent header
-   is not set.
+ * Added a config --list command
 
-   The user-agent header is set to curl/x.x.x
-   The version is requested through the curl API
+	The list command will show the current option=value pairs.  For each option
+	it is indicated if the option is default, local, or global determined.
 
- * Stop on syntax errors in Buildfiles
+ * Added help for config command
 
- * Gracefully exit if build fails
+ * Updated man pages
 
-   buildgear.sh is made leader of a process group when it is called.
-   The script will communicate its PID to buildgear using a named fifo.
+ * Move buildfiles config file to config/config
 
-   This allows buildgear to kill all build scripts, and their children
-   if a build fails.
+ * Reduce output on build error
 
-   This is done in order to ensure that the log of the failing build
-   will be written to the build log.
+ * Make config command install template on init
 
- * Run download procedure in a thread
+ * Add options to clean footprint and checksum
 
-   This should fix issues with very long delays on signals during downloads.
+	Two new options are introduced to the clean command --footprint will
+	restrict the cleaning to footprints --checksum will restrict the cleaning
+	to checksums
 
- * Join log thread when build is done
+ * Use readlink to expand symlinks in fix_la_files (template update)
 
- * Continue downloads on error
+	libtool does not cope well with symlinks. We use readlink -f to resolve all
+	symlinks in the $SYSROOT variable.
 
-   Instead of exiting right away on a download error we download
-   as much as possible. If there are any download errors that could
-   not be amended, exit after downloads are done.
+ * Added config command
 
- * Source buildfiles config before sourcing Buildfile
+	A new config command has been added. The config command can be used to
+	change the buildgear tool configuration file through the commandline.
 
- * Update templates to reflect new DOWNLOAD_MIRROR
+	A --global flag can be used to change the tool configuration in the global
+	buildgear configuration file.
 
- * Autocomplete cross/ changes
+	A --unset flag can be used to revert the configuration to default
 
-   Don't suggest cross/ if there are no cross buildfiles in the current tree.
-   Don't suggest cross/ if "cross/" is already typed.
+	For example, the following will set the parallel_builds in the local
+	buildgear configuration file to 4:
 
- * Add support for buildfiles in bash autocompletion
+	$ buildgear config parallel_builds 4
 
-   The bash autocompletion script finds the root build dir, and makes a
-   list of all names defined in Buildfiles.
+	Similarily, to set the configuration globally:
 
-   "native/" is automatically prefixed to builds in the native directory. I.e.
-   $ buildgear build cross[TAB]
-   and
-   $ buildgear build native/cross[TAB]
-   will expand to
-   $ buildgear build native/crosstool-ng
+	$ buildgear config --global parallel_builds 4
 
- * Support cross/ prefix in bash autocompletion
+	Local configuration variables override globals configuration variables.
 
-   $ buildgear build [TAB]
-   Will still show cross builds without prefix
-   $ buildgear build cross/[TAB]
-   Will list all cross builds with prefix
+ * Added layer support
 
- * Add initial support for deb packaging
+	A concept of layers is introduced to buildgear. This will help in
+	situations where a specific board needs a different configuration in the
+	buildfile of a build, that is already in the mini distribution.
 
-   Initial debian packaging directory added.
+	A prioritized array of layer names are given in the buildfiles/config file
+	i.e.  LAYERS=(myLayer1 default) In this example, myLayer1 overrides the
+	default layer.
 
- * Constant log output in parallel mode
+	To make a particular Buildfile override any other build of same name,
+	simply include a .layer file in the Buildfile directory.
 
-   Constant output to the log in a first-come-first-served basis.
+	The .layer file should contain the name of the layer that the build should
+	belong to. i.e.  myLayer1
 
- * Update man pages for whatis compability
+	If no .layer file is present, or a layer name, that is not given in the
+	LAYERS array, a layer called 'default' is used.
 
- * More fixes to memory corruption
+	The terminal output during build, and the build log, will show the layer
+	name of a build, if it is not on the default layer.
 
-   Added mutex lock for the list iteration loops in build output.
+ * Added error handling for Cat function
 
- * Various fixes
+ * Implement clean <build name> --all
+
+	Running clean <build name> --all will clean <build name> and all its
+	dependencies, except those defined in the CROSS_DEPENDS variable (i.e.
+	toolchain).
+
+ * Use SIGTERM for killing builds
+
+ * Change in kill on build error handling
+
+	Send SIGINT instead of SIGKILL to the running builds.
+
+	Clean the running builds that are in the build state. This removes the risk
+	of having corrupt package tar balls.
+
+ * Do not clean work directory if build fails (regression fix)
+
+ *	Add --footprint and --checksum to show command
+
+	Added --footprint and --checksum options to the show command.  These
+	options requires a buildname, and will show the footprint and checksum of
+	the build name respectively.
+
+	Example:
+
+	$ buildgear show --footprint native/crosstool-ng
+
+ * Moved footprint and checksum locations
+
+	Having footprints in the shared repositories like cross-core gives reason
+	for footprint and checksum mismatches across different board specific build
+	repositories.
+
+	The footprints and checksums are now placed in the following directories
+	.footprint/{native,cross}
+	.checksum/{native,cross}
+
+	This enables us to keep footprints and checksums in the board specific git
+	repositories.
+
+ * Set terminate to call cursor_restore
+
+	terminate is called when a runtime_error is thrown. This ensures that the
+	cursor is reenabled on a runtime_error.
+
+ * Various cleanups and bug fixes
