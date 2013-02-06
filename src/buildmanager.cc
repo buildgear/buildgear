@@ -255,7 +255,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    arguments += " --BG_VERBOSE 'no'";
    arguments += " --BG_BUILD_FOOTPRINT '" + footprint_file + "'";
    arguments += " --BG_BUILD_SHA256SUM '" + checksum_file + "'";
-   arguments += " --BG_MAX_NAME_LEN '" + to_string(BuildManager.name_len) + "'";
+   arguments += " --BG_MAX_NAME_LEN '" + to_string(Dependency.name_length) + "'";
    arguments += " --BG_PID '" + to_string(Config.pid) + "'";
 
    if (buildfile->layer != DEFAULT_LAYER_NAME)
@@ -402,7 +402,6 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
 {
    list<CBuildFile*>::iterator it;
    list<CBuildFile*>::reverse_iterator rit;
-   int len;
 
    // Set build error flag
    BuildManager.build_error = false;
@@ -426,12 +425,6 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
    {
       if (!PackageUpToDate((*it)))
          (*it)->build = true;
-
-      len = (*it)->name.size();
-      if ((*it)->layer != DEFAULT_LAYER_NAME)
-         len += (*it)->layer.size() + 3;
-      if (len > BuildManager.name_len)
-         BuildManager.name_len = len;
    }
 
    // Set build action of all builds (based on dependencies build status)

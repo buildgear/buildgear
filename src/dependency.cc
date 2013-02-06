@@ -34,6 +34,7 @@
 #include "buildgear/buildfiles.h"
 #include "buildgear/dependency.h"
 #include "buildgear/svg.h"
+#include "buildgear/buildmanager.h"
 
 void CDependency::ResolveSequentialBuildOrder(string name,
                           list<CBuildFile*> *buildfiles)
@@ -93,12 +94,18 @@ void CDependency::ShowDownloadOrder(void)
    int i;
 
    list<CBuildFile*>::iterator it;
-   
+
    cout <<  "\nDownload order:" << endl;
 
    for (it=download_order.begin(), i=1; it!=download_order.end(); it++, i++)
    {
-      cout << "   " << setw(3) << i << ". " << (*it)->name << endl;
+      cout << "   " << setw(3) << i << ". " << (*it)->name;
+      if ((*it)->layer != DEFAULT_LAYER_NAME)
+      {
+         cout << setw(name_length - (*it)->name.size()) << "";
+         cout << " [" << (*it)->layer << "]";
+      }
+      cout << endl;
    }
 }
 
@@ -106,13 +113,19 @@ void CDependency::ShowBuildOrder(void)
 {
    int i;
    list<CBuildFile*>::iterator it;
-   
+
    cout <<  "\nBuild order:" << endl;
 
    for (it=parallel_build_order.begin(), i=0; it!=parallel_build_order.end(); it++, i++)
    {
       cout << "   [" << (*it)->depth << "] " \
-           << std::setw(3) << i << ". " << (*it)->name << endl;
+           << std::setw(3) << i << ". " << (*it)->name;
+      if ((*it)->layer != DEFAULT_LAYER_NAME)
+      {
+         cout << setw(name_length - (*it)->name.size()) << "";
+         cout << " [" << (*it)->layer << "]";
+      }
+      cout << endl;
    }
 }
 
@@ -219,4 +232,19 @@ void CDependency::ResolveDependency(CBuildFile *buildfile,
 	
    resolved->push_back(buildfile);
    unresolved->remove(buildfile);
+}
+
+void CDependency::SetNameLength(void)
+{
+   list<CBuildFile*>::iterator it;
+   int len;
+
+   for (it = parallel_build_order.begin(); it != parallel_build_order.end(); it++)
+   {
+      len = (*it)->name.size();
+      if ((*it)->layer != DEFAULT_LAYER_NAME)
+         len += (*it)->layer.size() + 3;
+      if (len > name_length)
+         name_length = len;
+   }
 }

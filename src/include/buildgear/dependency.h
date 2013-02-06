@@ -44,6 +44,8 @@ class CDependency
       void ResolveDependency(CBuildFile *buildfile,
                    list<CBuildFile*> *resolved,
                    list<CBuildFile*> *unresolved);
+      void SetNameLength(void);
+      int name_length;
    private:
       int setDepth(CBuildFile *buildfile, int depth);
 };
