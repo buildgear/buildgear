@@ -108,27 +108,10 @@ void CConfig::CorrectSourceDir(void)
    // Replace "~" with $HOME value
    if (CConfig::bg_config[CONFIG_KEY_SOURCE_DIR].find("~/") == 0)
    {
-      FILE *fp;
-      char line_buffer[PATH_MAX];
-      string command = "echo $HOME";
-      string home;
-
-      fp = popen(command.c_str(), "r");
-      if (fp == NULL)
-         throw std::runtime_error(strerror(errno));
-
-      while (fgets(line_buffer, PATH_MAX, fp) != NULL)
-      {
-         home = line_buffer;
-         stripChar(home, '\n');
-      }
-
-      pclose(fp);
-
-      if (home != "")
+      if (home_dir != "")
       {
          CConfig::bg_config[CONFIG_KEY_SOURCE_DIR].erase(0,1);
-         CConfig::bg_config[CONFIG_KEY_SOURCE_DIR] = home + CConfig::bg_config[CONFIG_KEY_SOURCE_DIR];
+         CConfig::bg_config[CONFIG_KEY_SOURCE_DIR] = home_dir + CConfig::bg_config[CONFIG_KEY_SOURCE_DIR];
       }
    }
 }
