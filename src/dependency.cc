@@ -41,13 +41,13 @@ void CDependency::ResolveSequentialBuildOrder(string name,
 {
    list<CBuildFile*>::iterator it, itr;
    CBuildFile *buildfile = NULL;
-   
+
    // Clear lists
    unresolved.clear();
    resolved.clear();
-   
+
    /* Traverse buildfiles */
-   for (it=buildfiles->begin(); 
+   for (it=buildfiles->begin();
         it!=buildfiles->end();
         it++)
    {
@@ -150,7 +150,7 @@ void CDependency::ResolveParallelBuildOrder()
    }
 
    parallel_build_order = build_order;
- 
+
    // Sort parallel build order by depths
    parallel_build_order.sort(compare_depth);
 }
@@ -207,21 +207,21 @@ void CDependency::ShowDependencyCircleSVG(string filename)
 void CDependency::ResolveDependency(CBuildFile *buildfile,
                              list<CBuildFile*> *resolved,
                              list<CBuildFile*> *unresolved)
-{	
+{
 	list<CBuildFile*>::iterator it;
-	
+
    Debug << buildfile->filename << endl;
-   
+
    unresolved->push_back(buildfile);
 
-	for (it=buildfile->dependency.begin(); 
+	for (it=buildfile->dependency.begin();
         it!=buildfile->dependency.end(); it++)
    {
       if(find(resolved->begin(), resolved->end(), *it) == resolved->end())
       {
          if(find(unresolved->begin(), unresolved->end(), *it) != unresolved->end())
          {
-            cout << "Error: Circular dependency detected (" 
+            cout << "Error: Circular dependency detected ("
                  << buildfile->name << " <-> "
                  << (*it)->name << ")" << endl;
             exit(EXIT_FAILURE);
@@ -229,7 +229,7 @@ void CDependency::ResolveDependency(CBuildFile *buildfile,
          CDependency::ResolveDependency(*it, resolved, unresolved);
       }
    }
-	
+
    resolved->push_back(buildfile);
    unresolved->remove(buildfile);
 }

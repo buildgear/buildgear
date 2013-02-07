@@ -87,7 +87,7 @@ void CFileSystem::FindRoot(string dirname)
    Debug << "Build root: " << CFileSystem::root << endl;
 }
 
-void CFileSystem::FindFile(string dirname, string filename, list<CBuildFile*> *buildfiles) 
+void CFileSystem::FindFile(string dirname, string filename, list<CBuildFile*> *buildfiles)
 {
    DIR           *d;
    struct dirent *dir;
@@ -111,7 +111,7 @@ void CFileSystem::FindFile(string dirname, string filename, list<CBuildFile*> *b
          CFileSystem::FindFile(".", filename, buildfiles);
          if (chdir("..") != 0)
             throw std::runtime_error(strerror(errno));
-      } else 
+      } else
       {
          if(strcmp(dir->d_name, filename.c_str()) == 0 )
          {

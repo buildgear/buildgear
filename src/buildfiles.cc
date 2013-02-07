@@ -81,7 +81,7 @@ bool NameUnique(CBuildFile *first, CBuildFile *second)
 }
 
 void CBuildFiles::Parse(void)
-{   
+{
    list<CBuildFile*>::iterator it;
 
    /* Parse all buildfiles */
@@ -112,9 +112,9 @@ void CBuildFiles::RemoveDuplicates(void)
 void CBuildFiles::AddCrossDependency(void)
 {
    list<CBuildFile*>::iterator it;
-   
+
    /* Add dependencies for all buildfiles */
-   for (it=buildfiles.begin(); 
+   for (it=buildfiles.begin();
         it!=buildfiles.end();
         it++)
    {
@@ -126,13 +126,13 @@ void CBuildFiles::AddCrossDependency(void)
 }
 
 void CBuildFiles::ShowMeta(void)
-{   
+{
    list<CBuildFile*>::iterator it;
 
    Debug << endl << "Buildfiles:" << endl << endl;
-   
+
    /* Traverse through all buildfiles */
-   for (it=buildfiles.begin(); 
+   for (it=buildfiles.begin();
         it!=buildfiles.end();
         it++)
    {
@@ -152,7 +152,7 @@ void CBuildFiles::ShowVersion(CBuildFile *buildfile)
 void CBuildFiles::LoadDependency(void)
 {
    list<CBuildFile*>::iterator it, itr;
-   
+
    /* Traverse buildfiles */
    for (it=buildfiles.begin();
         it!=buildfiles.end();
@@ -161,8 +161,8 @@ void CBuildFiles::LoadDependency(void)
       int no_match;
       string dep;
       istringstream iss((*it)->depends);
-      
-      // For each dependency element      
+
+      // For each dependency element
       while ( getline(iss, dep, ' ') )
       {
          // Reset match state
@@ -173,7 +173,7 @@ void CBuildFiles::LoadDependency(void)
             dep = "cross/" + dep;
 
          // Find matching buildfile
-         for (itr=buildfiles.begin(); 
+         for (itr=buildfiles.begin();
               itr!=buildfiles.end();
               itr++)
          {
@@ -184,7 +184,7 @@ void CBuildFiles::LoadDependency(void)
                no_match = false;
             }
          }
-         
+
          // Add missing buildfile to list of missing dependencies
          if (no_match)
             (*it)->missing_depends.append(dep+" ");
@@ -219,16 +219,16 @@ void CBuildFiles::LoadCrossDependency(void)
 }
 
 CBuildFile * CBuildFiles::BuildFile(string name)
-{   
+{
    list<CBuildFile*>::iterator it;
-   
+
    /* Traverse through all buildfiles */
-   for (it=buildfiles.begin(); 
+   for (it=buildfiles.begin();
         it!=buildfiles.end();
         it++)
       if ((*it)->name == name)
          return (*it);
-   
+
    cout << "Error: build '" << name << " is not found" << endl;
    exit(EXIT_FAILURE);
 }

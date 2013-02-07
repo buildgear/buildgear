@@ -33,20 +33,20 @@ void COptions::Parse(int argc, char *argv[])
 {
    int option;
    string command;
-   
+
    /* Print usage help if no arguments are provided */
    if (argc == 1)
    {
       COptions::ShowHelp(argv);
       exit(EXIT_SUCCESS);
    }
-   
+
    // Save second argument (assumed to be COMMAND)
    command = argv[1];
-   
+
    // getopt_long stores the option index here
    int option_index = 0;
-   
+
    // Skip ahead past command
    optind = 2;
 
@@ -80,23 +80,23 @@ void COptions::Parse(int argc, char *argv[])
 
       exit(EXIT_SUCCESS);
    }
-   
+
    // Download command
    if (command == "download")
    {
       Config.download = true;
-      
+
       // Parse download OPTIONS
       static struct option long_options[] =
       {
          {"all", no_argument, 0, 'a'},
          {0,     0,           0,  0 }
       };
-      
+
       option = getopt_long (argc, argv, "", long_options, &option_index);
-      while( option != -1 ) 
+      while( option != -1 )
       {
-         switch( option ) 
+         switch( option )
          {
             case 'a':
                Config.all = true;
@@ -112,7 +112,7 @@ void COptions::Parse(int argc, char *argv[])
    else if (command == "build")
    {
       Config.build = true;
-      
+
       // Parse build OPTIONS
       static struct option long_options[] =
 		{
@@ -124,11 +124,11 @@ void COptions::Parse(int argc, char *argv[])
          {"no-fakeroot",      no_argument, 0, 'n'},
          {0,                  0,           0,  0 }
 		};
-      
+
       option = getopt_long (argc, argv, "", long_options, &option_index);
-      while( option != -1 ) 
+      while( option != -1 )
       {
-         switch( option ) 
+         switch( option )
          {
             case 'w':
                Config.keep_work = true;
@@ -327,7 +327,7 @@ void COptions::Parse(int argc, char *argv[])
    {
       // No command provided so we don't skip ahead
       optind = 1;
-      
+
       // Parse OPTIONS
       static struct option long_options[] =
          {
@@ -335,11 +335,11 @@ void COptions::Parse(int argc, char *argv[])
             {"help",    no_argument, 0, 'h'},
             {0,         0,           0,  0 }
          };
-      
+
       option = getopt_long (argc, argv, "", long_options, &option_index);
-      while( option != -1 ) 
+      while( option != -1 )
       {
-         switch( option ) 
+         switch( option )
          {
             case 'v':
                COptions::ShowVersion();
@@ -370,7 +370,7 @@ void COptions::Parse(int argc, char *argv[])
       size_t pos = Config.name_stripped.rfind("/");
       if (pos != string::npos)
          Config.name_stripped.erase(0,++pos);
-      
+
       if (optind < argc)
       {
          // Warn if too many arguments

@@ -62,11 +62,11 @@ Filesystem layout:
    /usr/etc/<prog>/     Configuration files for user programs
    /etc/                Configuration files for system programs
 
-   The filesystem directory hierachy is arranged according to the FHS 2.3 
+   The filesystem directory hierachy is arranged according to the FHS 2.3
    standard with the exceptions that /bin and /sbin are unused. Instead all
    software make use of /usr/bin and /usr/sbin. For backwards compatibility
    /bin and /sbin remain links to /usr/bin and /usr/sbin respectively.
-   
+
    See http://www.pathname.com/fhs/pub/fhs-2.3.html for more details.
 
 Maintainer:

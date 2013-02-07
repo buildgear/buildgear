@@ -111,17 +111,17 @@ void CConfig::CorrectSourceDir(void)
       char line_buffer[PATH_MAX];
       string command = "echo $HOME";
       string home;
-      
+
       fp = popen(command.c_str(), "r");
       if (fp == NULL)
          throw std::runtime_error(strerror(errno));
-      
+
       while (fgets(line_buffer, PATH_MAX, fp) != NULL)
       {
          home = line_buffer;
          stripChar(home, '\n');
       }
-      
+
       pclose(fp);
 
       if (home != "")
@@ -136,17 +136,17 @@ void CConfig::GuessBuildSystem(void)
 {
       FILE *fp;
       char line_buffer[PATH_MAX];
-      
+
       fp = popen(CONFIG_GUESS_SCRIPT, "r");
       if (fp == NULL)
          throw std::runtime_error(strerror(errno));
-      
+
       while (fgets(line_buffer, PATH_MAX, fp) != NULL)
       {
          build_system = line_buffer;
          stripChar(build_system, '\n');
       }
-      
+
       pclose(fp);
 }
 

@@ -191,7 +191,7 @@ void CDownloadItem::File()
 
    // Initialize Curl
    curl = curl_easy_init();
-   if (curl) 
+   if (curl)
    {
       curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 

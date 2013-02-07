@@ -71,16 +71,16 @@ void CBuildSystem::Check(void)
    while (tool[i] != "")
    {
       string command = "type " + tool[i] + " &> /dev/null";
-      
+
       status = system(command.c_str());
-      
+
       if (status != 0)
       {
          cout << "Failed ('" << tool[i] << "' is not found)\n";
          cout << "\nPlease install missing tool.\n\n";
          exit(EXIT_FAILURE);
       }
-      
+
       i++;
    }
 
@@ -114,7 +114,7 @@ void CBuildSystem::CallCheck(list<CBuildFile*> *buildfiles)
    int result;
    string command;
    list<CBuildFile*>::iterator it;
-   
+
    /* Traverse through all buildfiles */
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {

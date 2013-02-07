@@ -99,23 +99,23 @@ int CSource::Remote(string item)
                            "ftp://",
                          "https://",
                           "ftps://"  };
-   
+
    for (i=0; i<4; i++)
    {
       if (item.find(protocol[i]) != item.npos)
          return true;
    }
-   
+
    return false;
 }
 
 void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 {
    CDownload Download;
-   
+
    list<CBuildFile*>::iterator it;
    string command;
-   
+
    int active_downloads = -1;
    CURLMsg *msg;
    int nMsg;
@@ -146,8 +146,8 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    {
       istringstream iss((*it)->source);
       string item;
-      
-      // For each source item      
+
+      // For each source item
       while ( getline(iss, item, ' ') )
       {
          // Download item if it is a remote URL

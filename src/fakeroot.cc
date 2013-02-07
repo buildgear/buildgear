@@ -54,7 +54,7 @@ void CFakeroot::Respawn(int argc, char *argv[])
       cout << "fgets error" << endl;
       exit(EXIT_FAILURE);
    }
-   
+
    pclose(fp);
    string result(cmd_result);
 

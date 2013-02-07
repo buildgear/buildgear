@@ -148,11 +148,11 @@ make_sha256sum()
 check_sha256sum()
 {
    local FILE="$BG_BUILD_WORK_DIR/.tmp"
-   
+
    if [ "$BG_UPDATE_CHECKSUM" = "yes" ]; then
       rm -f $BG_BUILD_SHA256SUM
    fi
-   
+
    if [ -f $BG_BUILD_SHA256SUM ]; then
       make_sha256sum > $FILE.sha256sum
       sort -k 2 $BG_BUILD_SHA256SUM > $FILE.sha256sum.orig
@@ -196,7 +196,7 @@ do_extract()
    check_create_directory "$BG_BUILD_WORK_DIR"
    check_create_directory "$PKG"
    check_create_directory "$SRC"
-	
+
    for FILE in ${source[@]}; do
       LOCAL_FILENAME=`get_filename $FILE`
       case $LOCAL_FILENAME in
@@ -219,16 +219,16 @@ do_extract()
 do_build()
 {
    log_action "Build    "
-   
+
    cd $SRC
-   
+
    (set -e -x ; build)
 
    if [ "$?" != "0" ]; then
       error "build() failed"
       exit 1
    fi
-   
+
    cd $BG_ROOT_DIR
 }
 
@@ -277,13 +277,13 @@ do_strip()
 do_package()
 {
    log_action "Package  "
-   
+
    cd $PKG
-   
+
    if [ -d "$PKG/$NATIVE_SYSROOT" ]; then
       cd "$PKG/$NATIVE_SYSROOT"
    fi
-   
+
    if [ "`ls -A`" != "" ]; then
       tar czvvf $BG_BUILD_PACKAGE *
    fi
@@ -292,22 +292,22 @@ do_package()
       error "Package failed"
       exit 1
    fi
-   
+
    cd $BG_ROOT_DIR
 }
 
 do_footprint()
 {
    local FILE
-   
+
    log_action "Footprint"
-   
+
    if [ "$BG_UPDATE_FOOTPRINT" = "yes" ]; then
       rm -f $BG_BUILD_FOOTPRINT
    fi
-   
+
    FILE="$BG_BUILD_WORK_DIR/.tmp"
-   
+
    if [ -f $BG_BUILD_PACKAGE ]; then
       make_footprint > $FILE.footprint
       if [ -f $BG_BUILD_FOOTPRINT ]; then
@@ -336,12 +336,12 @@ do_footprint()
 do_clean()
 {
    log_action "Clean    "
-   
+
    if [ -d $BG_BUILD_WORK_DIR ]
    then
       rm -rf $BG_BUILD_WORK_DIR
    fi
-   
+
    if [ "$?" != "0" ]; then
       error "Clean failed"
       exit 1
@@ -351,11 +351,11 @@ do_clean()
 do_add()
 {
    log_action "Add      "
-   
+
    if [ -d $BG_BUILD_SYSROOT_DIR ]; then
       tar -C $BG_BUILD_SYSROOT_DIR -xf $BG_BUILD_PACKAGE
    fi
-   
+
    if [ "$?" != "0" ]; then
       error "Add failed"
       exit 1
@@ -365,7 +365,7 @@ do_add()
 do_remove()
 {
    log_action "Remove   "
-   
+
    if [ -d $BG_BUILD_SYSROOT_DIR ]; then
       cd $BG_BUILD_SYSROOT_DIR
       tar -tvf $BG_BUILD_PACKAGE | awk '{print $6}' | xargs rm -rf
@@ -466,7 +466,7 @@ main()
          cd $BG_ROOT_DIR
       fi
    fi
-   
+
    check_create_directory "$BG_BUILD_SYSROOT_DIR"
 
    # Action sequence
