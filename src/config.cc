@@ -45,6 +45,7 @@ CConfig::CConfig()
    clean = false;
    show = false;
    init = false;
+   config = false;
 
    // Default download options
    download_timeout = 20;
@@ -68,6 +69,16 @@ CConfig::CConfig()
    show_version = false;
    log = false;
    log_tail = false;
+   mismatch = false;
+   footprint = false;
+   checksum = false;
+
+   // Default config options
+   global = false;
+   unset = false;
+   blist = false;
+   key = "";
+   value = "";
 
    // Misc defaults
    all = false;
