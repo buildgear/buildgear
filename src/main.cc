@@ -178,7 +178,7 @@ int main (int argc, char *argv[])
       exit(EXIT_FAILURE);
    }
 
-   if (Cursor.no_lines - 1 < Config.download_connections * DOWNLOAD_LINE_SIZE) {
+   if ( (Cursor.no_lines - 1) < ((uint)stoi(Config.bg_config["download_connections"]) * DOWNLOAD_LINE_SIZE)) {
       cout << endl << "Restricting download_connections to "
            << (Cursor.no_lines - 1) / DOWNLOAD_LINE_SIZE << " due to terminal height." << endl;
       Config.download_connections = (Cursor.no_lines - 1) / DOWNLOAD_LINE_SIZE;
@@ -355,7 +355,7 @@ int main (int argc, char *argv[])
    }
 
    /* Only resolve dependencies if we are not downloading all sources or not downloading  */
-   if ((Config.download) && (Config.name != Config.default_name_prefix) || !Config.download)
+   if ( ((Config.download) && (Config.name != Config.bg_config["default_name_prefix"])) || !Config.download)
    {
       /* Resolve build dependencies */
       cout << "Resolving dependencies..        ";

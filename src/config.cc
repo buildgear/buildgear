@@ -192,10 +192,9 @@ void CConfig::List(void)
 {
    CConfig defaults, global, local;
    list<CConfigOption*>::iterator it;
-   int max_len;
+   uint max_len = 0;
    string line;
    ostringstream out;
-
    defaults = Config;
 
    ConfigFile.Parse(Config.home_dir + GLOBAL_CONFIG_FILE);

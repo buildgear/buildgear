@@ -219,7 +219,6 @@ void CBuildManager::KillBuilds()
 void CBuildManager::Do(string action, CBuildFile* buildfile)
 {
    FILE *fp, *cFile;
-   char line_buffer[LINE_MAX];
    vector<char> log_buffer;
    CStreamDescriptor *stream;
    string arguments;

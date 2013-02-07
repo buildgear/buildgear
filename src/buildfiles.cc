@@ -77,6 +77,7 @@ bool NameUnique(CBuildFile *first, CBuildFile *second)
          return false;
       }
    }
+   return false;
 }
 
 void CBuildFiles::Parse(void)
@@ -195,16 +196,12 @@ void CBuildFiles::LoadCrossDependency(void)
 {
    list<CBuildFile*>::iterator it;
 
-   int no_match;
    string dep;
    istringstream iss(Config.cross_depends);
 
    // For each cross dependency element
    while ( getline(iss, dep, ' ') )
    {
-      // Reset match state
-      no_match = true;
-
       // Prepend "native/" if missing (default for CROSS_DEPENDS)
       if (dep.find("native/") != 0)
          dep = "native/" + dep;
@@ -216,10 +213,7 @@ void CBuildFiles::LoadCrossDependency(void)
       {
          // If match found add to cross dependency list
          if (dep == (*it)->name)
-         {
             cross_dependency.push_back((*it));
-            no_match = false;
-         }
       }
    }
 }

@@ -183,7 +183,7 @@ void CBuildSystem::ShowLogMismatch(string log_file)
             }
 
             // If the following line contains mismatch
-            if (next_line.find("mismatch found") != -1)
+            if (next_line.find("mismatch found") != string::npos)
             {
                print = true;
 
