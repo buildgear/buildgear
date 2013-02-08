@@ -277,6 +277,9 @@ int main (int argc, char *argv[])
    /* Delete old build log */
    BuildManager.CleanLog();
 
+   /* Create build directory */
+   FileSystem.CreateDirectory(BUILD_DIR);
+
    /* Open build log file */
    Log.open(BUILD_LOG);
 
@@ -393,9 +396,6 @@ int main (int argc, char *argv[])
       BuildSystem.CallCheck(&Dependency.build_order);
       cout << "Done\n";
    }
-
-   /* Create build directory */
-   FileSystem.CreateDirectory(BUILD_DIR);
 
    /* Create footprint and checksum directories */
    FileSystem.CreateDirectory(FOOTPRINT_NATIVE_DIR);
