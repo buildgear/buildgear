@@ -1,168 +1,20 @@
 
-=== Build Gear v0.9.14beta ===
+=== Build Gear v0.9.15beta ===
 
-Changes since Build Gear v0.9.13beta:
-
- * Moved README location
-
-	buildfiles/readme is moved and renamed to README in the top level
-	directory.
-
-	The purpose of this is to make it more visible to the user. Also, git
-	repository managers such as github automatically presents the content of
-	the file README.
-
- * Let init command create git ignore files
-
-	For convenience, the buildgear init command now automatically creates the
-	following git ignore files:
-
-	.gitignore:
-	build/*
-
-	.buildgear/.gitignore:
-	config
-
-	Also, the .buildgear directory must exist. To make git add this directory
-	we have to put something in it so we simply put the .gitignore file there.
-
- * Renamed checksum files from .sha256 to .sha256sum
-
-	Using the .sha256sum file extention is the preferred choice for checksum
-	files containing a list of sha256 checksums.
-
- * Updated template.config
-
-	Fixed native pkg-config configuration
-
- * Made autogen.sh verbose and forced
-
- * Various cleanups and bug fixes
+Changes since Build Gear v0.9.14beta:
 
 Contributed by Jesper Larsen:
 
- * Include PID in named pipes
+ * Create build directory before we open log file (bugfix)
 
-	Named pipes are used to communicate from the buildgear.sh script to the
-	application. The PID of the application is included to allow several
-	instances of buildgear to run at the same time.
+ * Improved configfile handling
 
- * Only show one build as "Adding"
+   The config part has been rewritten a bit. Options that are defined in
+   the buildgear config files are stored un an unordered_map i.e.
+   bg_config["parallel_builds"]. This allows for a more compact code base.
 
- * Added a config --list command
+   The config command will now update the config files with the installed
+   templates when a option is changed. This will make sure that the config
+   files are up-to-date if more options are introduced in the future.
 
-	The list command will show the current option=value pairs.  For each option
-	it is indicated if the option is default, local, or global determined.
-
- * Added help for config command
-
- * Updated man pages
-
- * Move buildfiles config file to config/config
-
- * Reduce output on build error
-
- * Make config command install template on init
-
- * Add options to clean footprint and checksum
-
-	Two new options are introduced to the clean command --footprint will
-	restrict the cleaning to footprints --checksum will restrict the cleaning
-	to checksums
-
- * Use readlink to expand symlinks in fix_la_files (template update)
-
-	libtool does not cope well with symlinks. We use readlink -f to resolve all
-	symlinks in the $SYSROOT variable.
-
- * Added config command
-
-	A new config command has been added. The config command can be used to
-	change the buildgear tool configuration file through the commandline.
-
-	A --global flag can be used to change the tool configuration in the global
-	buildgear configuration file.
-
-	A --unset flag can be used to revert the configuration to default
-
-	For example, the following will set the parallel_builds in the local
-	buildgear configuration file to 4:
-
-	$ buildgear config parallel_builds 4
-
-	Similarily, to set the configuration globally:
-
-	$ buildgear config --global parallel_builds 4
-
-	Local configuration variables override globals configuration variables.
-
- * Added layer support
-
-	A concept of layers is introduced to buildgear. This will help in
-	situations where a specific board needs a different configuration in the
-	buildfile of a build, that is already in the mini distribution.
-
-	A prioritized array of layer names are given in the buildfiles/config file
-	i.e.  LAYERS=(myLayer1 default) In this example, myLayer1 overrides the
-	default layer.
-
-	To make a particular Buildfile override any other build of same name,
-	simply include a .layer file in the Buildfile directory.
-
-	The .layer file should contain the name of the layer that the build should
-	belong to. i.e.  myLayer1
-
-	If no .layer file is present, or a layer name, that is not given in the
-	LAYERS array, a layer called 'default' is used.
-
-	The terminal output during build, and the build log, will show the layer
-	name of a build, if it is not on the default layer.
-
- * Added error handling for Cat function
-
- * Implement clean <build name> --all
-
-	Running clean <build name> --all will clean <build name> and all its
-	dependencies, except those defined in the CROSS_DEPENDS variable (i.e.
-	toolchain).
-
- * Use SIGTERM for killing builds
-
- * Change in kill on build error handling
-
-	Send SIGINT instead of SIGKILL to the running builds.
-
-	Clean the running builds that are in the build state. This removes the risk
-	of having corrupt package tar balls.
-
- * Do not clean work directory if build fails (regression fix)
-
- *	Add --footprint and --checksum to show command
-
-	Added --footprint and --checksum options to the show command.  These
-	options requires a buildname, and will show the footprint and checksum of
-	the build name respectively.
-
-	Example:
-
-	$ buildgear show --footprint native/crosstool-ng
-
- * Moved footprint and checksum locations
-
-	Having footprints in the shared repositories like cross-core gives reason
-	for footprint and checksum mismatches across different board specific build
-	repositories.
-
-	The footprints and checksums are now placed in the following directories
-	.footprint/{native,cross}
-	.checksum/{native,cross}
-
-	This enables us to keep footprints and checksums in the board specific git
-	repositories.
-
- * Set terminate to call cursor_restore
-
-	terminate is called when a runtime_error is thrown. This ensures that the
-	cursor is reenabled on a runtime_error.
-
- * Various cleanups and bug fixes
+ * Various cleanups
