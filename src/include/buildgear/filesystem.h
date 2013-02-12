@@ -43,6 +43,7 @@ class CFileSystem
       void CopyFile(string source, string destination);
       void InitRoot(void);
       string GetWorkingDir(void);
+      void LockRoot(void);
       string root;
    private:
       void FindFile(string dirname, string filename, list<CBuildFile*> *buildfiles);

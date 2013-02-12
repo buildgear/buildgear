@@ -164,6 +164,9 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
+   /* Lock the build root */
+   FileSystem.LockRoot();
+
    /* Guess build system type */
    Config.GuessBuildSystem();
 

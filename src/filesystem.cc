@@ -32,6 +32,7 @@
 #include <sys/types.h>
 #include <sys/inotify.h>
 #include <sys/stat.h>
+#include <sys/file.h>
 #include <signal.h>
 #include "buildgear/config.h"
 #include "buildgear/filesystem.h"
@@ -330,5 +331,36 @@ void CFileSystem::InitRoot(void)
 
       cout << "Initialized empty build area in "
            << GetWorkingDir() << endl;
+   }
+}
+
+void CFileSystem::LockRoot()
+{
+   int fd, fl;
+
+   /* Create or open a lock file for the current root dir */
+   fd = open(LOCK_FILE, O_RDWR | O_CREAT, 0644);
+
+   if (fd == -1)
+   {
+      cout << "\nError: Could not open lock file\n";
+      cout << strerror(errno) << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   /* Obtain a lock on the file */
+   fl = flock(fd, LOCK_EX | LOCK_NB);
+
+   if (fl == -1)
+   {
+      if (errno == EWOULDBLOCK)
+      {
+         cout << "\nError: Only one instance of buildgear running in the same root dir is allowed.\n";
+      } else
+      {
+         cout << "\nError: Could not obtain build root lock\n";
+         cout << strerror(errno) << endl;
+      }
+      exit(EXIT_FAILURE);
    }
 }

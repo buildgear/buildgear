@@ -39,6 +39,8 @@ void clean_up(void)
       cout << "\nError: Could not remove temporary directory '" << Config.tmp_dir << endl;
       cout << strerror(errno) << endl;
    }
+
+   remove(LOCK_FILE);
 }
 
 void CSignals::sigIntHandler(int signum)
