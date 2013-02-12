@@ -52,7 +52,7 @@ _buildgear()
                   --no-fakeroot --all"
    clean_options="--all --footprint --checksum"
    show_options="--build-order --download-order --dependency --readme --version
-                 --log --log-tail --log-mismatch --footprint --checksum"
+                 --log --log-tail --log-mismatch --footprint --checksum --buildfile"
    config_options="--global --unset --list"
    config_keys="source_dir download_mirror_first download_timeout
                 download_retry download_connections parallel_builds"
@@ -131,7 +131,7 @@ _buildgear()
          COMPREPLY=( $(compgen -W "$show_options" -- $cur) )
          for i in "${COMP_WORDS[@]}"
          do
-           if [[ "$i" == "--build-order" || "$i" == "--download-order" || "$i" == "--dependency" || "$i" == "--version" || "$i" == "--footprint" || "$i" == "--checksum" ]]; then
+           if [[ "$i" == "--build-order" || "$i" == "--download-order" || "$i" == "--dependency" || "$i" == "--version" || "$i" == "--footprint" || "$i" == "--checksum" || "$i" == "--buildfile" ]]; then
              if [ "$build_name_in_args" == 0 ]; then
                COMPREPLY+=( ${builds[@]} )
              fi

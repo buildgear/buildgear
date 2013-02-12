@@ -357,6 +357,13 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
+   if (Config.show && Config.buildfile)
+   {
+      cout << "\nShowing expanded buildfile for '" << Config.name << "'..\n";
+      BuildFiles.BuildFile(Config.name)->Show();
+      exit(EXIT_SUCCESS);
+   }
+
    /* Only resolve dependencies if we are not downloading all sources or not downloading  */
    if ( ((Config.download) && (Config.name != Config.bg_config[CONFIG_KEY_DEFAULT_NAME_PREFIX]))
          || !Config.download)

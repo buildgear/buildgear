@@ -31,6 +31,7 @@ class CBuildFile : public CUtility
 {
    public:
       CBuildFile(string filename);
+      void Show(void);
       void Parse(void);
       string filename;
       string name;

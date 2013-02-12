@@ -47,6 +47,31 @@ CBuildFile::CBuildFile(string filename)
    CBuildFile::depth = 0;
 }
 
+void CBuildFile::Show(void)
+{
+   string qoute = "\"";
+   string command =
+      "bash --norc --noprofile -O extglob -c 'source " +
+      (string) BUILD_FILES_CONFIG +
+      "; source " + filename +
+      "; BG_TEMP=$(cat " + filename + ") \
+       ; BG_TEMP=$(echo \"$BG_TEMP\" | sed -e \"s|\\\\\\|\\\\\\\\\\\\\\|g\") \
+       ; BG_TEMP=${BG_TEMP//\\" + qoute + "/\\\\\\" + qoute + "} \
+       ; echo \"echo -E \\" + qoute + "\" > /tmp/buildgear.bftmp \
+       ; echo \"$BG_TEMP\" >> /tmp/buildgear.bftmp \
+       ; echo \"\\" + qoute + "\" >> /tmp/buildgear.bftmp \
+       ; BG_TEMP=$(source /tmp/buildgear.bftmp) \
+       ; echo \"$BG_TEMP\" \
+       ; rm -f /tmp/buildgear.bftmp'";
+
+   if (system(command.c_str()) != 0)
+   {
+      cout << "\nError: Could not show buildfile for '" << name << "'\n";
+      cout << strerror(errno) << endl;
+      exit(EXIT_FAILURE);
+   }
+}
+
 void CBuildFile::Parse(void)
 {
    FILE *fp;

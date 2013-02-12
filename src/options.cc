@@ -208,6 +208,7 @@ void COptions::Parse(int argc, char *argv[])
          {"version",             no_argument, 0, 'v'},
          {"footprint",           no_argument, 0, 'f'},
          {"checksum",            no_argument, 0, 's'},
+         {"buildfile",           no_argument, 0, 'b'},
          {0,                     0,           0,  0 }
       };
 
@@ -247,6 +248,9 @@ void COptions::Parse(int argc, char *argv[])
                break;
             case 's':
                Config.checksum = true;
+               break;
+            case 'b':
+               Config.buildfile = true;
                break;
             default:
                exit(EXIT_FAILURE);

@@ -62,6 +62,7 @@ class CConfig : public CUtility
       bool mismatch;
       bool footprint;
       bool checksum;
+      bool buildfile;
 
       bool init;
 
