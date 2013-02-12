@@ -263,6 +263,27 @@ void COptions::Parse(int argc, char *argv[])
    else if (command == "init")
    {
       Config.init = true;
+
+      // Parse init OPTIONS
+      static struct option long_options[] =
+      {
+         {"buildfile",  no_argument, 0, 'b'},
+         {0,            0,           0,  0 }
+      };
+
+      option = getopt_long (argc, argv, "", long_options, &option_index);
+      while( option != -1 )
+      {
+         switch( option )
+         {
+            case 'b':
+               Config.buildfile = true;
+               break;
+            default:
+               exit(EXIT_FAILURE);
+         }
+         option = getopt_long (argc, argv, "", long_options, &option_index);
+      }
    }
    else if (command == "config")
    {

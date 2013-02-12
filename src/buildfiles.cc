@@ -22,6 +22,7 @@
 #include "config.h"
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <string>
 #include <stdexcept>
 #include <list>
@@ -242,3 +243,66 @@ void CBuildFiles::ShowReadme(void)
       exit(EXIT_FAILURE);
    }
 }
+
+void CBuildFiles::Init(string build_name)
+{
+   ostringstream buffer;
+   string line_buffer;
+   ofstream out_file;
+   ifstream in_file;
+   if (!FileSystem.FileExist(TEMPLATE_BUILDFILE))
+   {
+      cout << "\nError: Buildfile template file not found.";
+      cout << " Please make sure buildgear is installed correctly.\n";
+      exit(EXIT_FAILURE);
+   }
+
+   if (FileSystem.FileExist(BUILD_FILE))
+   {
+      cout << "\nError: A Buildfile in this directory already exists.\n";
+      exit(EXIT_FAILURE);
+   }
+
+   in_file.open(TEMPLATE_BUILDFILE);
+
+   if (!in_file)
+   {
+      cout << "\nError: Could not read template file " << TEMPLATE_BUILDFILE;
+      cout << "\n       " << strerror(errno) << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   while (getline(in_file, line_buffer))
+   {
+      // Read the template line by line, removing the first # char
+      // If a name was given in the init command we write it
+      if ( (line_buffer.find("#name=") != string::npos) && Config.name != "")
+         buffer << "name=" << Config.name << endl;
+      else
+      {
+         try
+         {
+            buffer << line_buffer.substr(1) << endl;
+         } catch (out_of_range& oor)
+         {
+            buffer << endl;
+         }
+      }
+   }
+
+   in_file.close();
+
+   // Create the buildfile
+   try
+   {
+      out_file.exceptions(ofstream::failbit | ofstream::badbit);
+      out_file.open(BUILD_FILE);
+      out_file << buffer.str();
+   } catch (ofstream::failure e)
+   {
+      cout << "\nError: Could not create Buildfile";
+      cout << "\n       " << strerror(errno) << endl;
+      exit(EXIT_FAILURE);
+   }
+}
+

@@ -47,6 +47,7 @@ _buildgear()
 
    commands="download build clean show init help config"
    options="--help --version"
+   init_options="--buildfile"
    download_options="--all"
    build_options="--keep-work --update-checksum --update-footprint --no-strip
                   --no-fakeroot --all"
@@ -139,6 +140,7 @@ _buildgear()
          done
          ;;
        "init")
+        COMPREPLY=( $(compgen -W "$init_options" -- $cur) )
          ;;
        "help")
          COMPREPLY=( $(compgen -W "$help_options" -- $cur) )

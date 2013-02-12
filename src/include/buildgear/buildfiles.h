@@ -45,6 +45,7 @@ class CBuildFiles
       void ShowReadme(void);
       void ShowVersion(CBuildFile *buildfile);
       void ShowVersions(list<CBuildFile*> *buildfiles);
+      void Init(string);
       CBuildFile * BuildFile(string name);
       list<CBuildFile*> cross_dependency;
       vector<string> layers;

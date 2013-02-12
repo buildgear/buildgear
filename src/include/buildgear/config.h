@@ -148,6 +148,7 @@ class CConfig : public CUtility
 #define TEMPLATE_CONFIG          AM_PKGDATADIR "/template.config"
 #define TEMPLATE_README          AM_PKGDATADIR "/template.readme"
 #define TEMPLATE_LOCAL_CONFIG    AM_PKGDATADIR "/template.buildgearconfig"
+#define TEMPLATE_BUILDFILE       AM_PKGDATADIR "/template.buildfile"
 
 #define SVG_DEPENDENCY_FILE      BUILD_DIR "/dependency.svg"
 #define SVG_COLOR_NATIVE         "#ffff7f"

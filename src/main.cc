@@ -81,7 +81,10 @@ int main (int argc, char *argv[])
    /* Handle init command */
    if (Config.init)
    {
-      FileSystem.InitRoot();
+      if (Config.buildfile)
+         BuildFiles.Init(Config.name);
+      else
+         FileSystem.InitRoot();
       exit(EXIT_SUCCESS);
    }
 
