@@ -57,12 +57,12 @@ void CBuildFile::Show(void)
       "; BG_TEMP=$(cat " + filename + ") \
        ; BG_TEMP=$(echo \"$BG_TEMP\" | sed -e \"s|\\\\\\|\\\\\\\\\\\\\\|g\") \
        ; BG_TEMP=${BG_TEMP//\\" + qoute + "/\\\\\\" + qoute + "} \
-       ; echo \"echo -E \\" + qoute + "\" > /tmp/buildgear.bftmp \
-       ; echo \"$BG_TEMP\" >> /tmp/buildgear.bftmp \
-       ; echo \"\\" + qoute + "\" >> /tmp/buildgear.bftmp \
-       ; BG_TEMP=$(source /tmp/buildgear.bftmp) \
+       ; echo \"echo -E \\" + qoute + "\" > " + SHOW_BUILD_FILE +
+      "; echo \"$BG_TEMP\" >> " + SHOW_BUILD_FILE +
+      "; echo \"\\" + qoute + "\" >> " + SHOW_BUILD_FILE +
+      "; BG_TEMP=$(source " + SHOW_BUILD_FILE + ") \
        ; echo \"$BG_TEMP\" \
-       ; rm -f /tmp/buildgear.bftmp'";
+       ; rm -f " + SHOW_BUILD_FILE + "'";
 
    if (system(command.c_str()) != 0)
    {
@@ -191,8 +191,7 @@ void CBuildFile::Parse(void)
    name = type + "/" + short_name;
 
    // Set control fifo name
-   fifo_name = "/tmp/buildgear-" + type + "-" + short_name;
-   fifo_name += "." + to_string(Config.pid) + ".fifo";
+   fifo_name = TEMP(type + "-" + short_name + ".fifo");
    control_fifo = new char [fifo_name.length() + 1];
    strcpy(control_fifo, fifo_name.c_str());
 

@@ -69,8 +69,8 @@ int main (int argc, char *argv[])
    Signals.Install();
 
    /* Make sure to reenable cursor on exit */
-   atexit(cursor_restore);
-   set_terminate(cursor_restore);
+   atexit(clean_up);
+   set_terminate(clean_up);
 
    /* Disable cursor */
    Cursor.hide();
@@ -356,6 +356,9 @@ int main (int argc, char *argv[])
       BuildFiles.ShowVersion(BuildFiles.BuildFile(Config.name));
       exit(EXIT_SUCCESS);
    }
+
+   /* Create temp directory */
+   FileSystem.CreateDirectory(Config.tmp_dir);
 
    if (Config.show && Config.buildfile)
    {

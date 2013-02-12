@@ -174,7 +174,7 @@ void script_output(void)
 
    while (1)
    {
-      fd = open(Config.output_fifo.c_str(), O_RDONLY|O_NONBLOCK);
+      fd = open(SCRIPT_OUTPUT_FIFO.c_str(), O_RDONLY|O_NONBLOCK);
 
       FD_ZERO(&rfds);
       FD_SET(fd, &rfds);
@@ -255,7 +255,8 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    arguments += " --BG_BUILD_FOOTPRINT '" + footprint_file + "'";
    arguments += " --BG_BUILD_SHA256SUM '" + checksum_file + "'";
    arguments += " --BG_MAX_NAME_LEN '" + to_string(Dependency.name_length) + "'";
-   arguments += " --BG_PID '" + to_string(Config.pid) + "'";
+   arguments += " --BG_SCRIPT_OUTPUT_FIFO '" + SCRIPT_OUTPUT_FIFO + "'";
+   arguments += " --BG_TEMP_DIR '" + Config.tmp_dir + "'";
 
    if (buildfile->layer != DEFAULT_LAYER_NAME)
       arguments +=" --BG_LAYER '" + buildfile->layer + "'";
@@ -406,8 +407,8 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
    BuildManager.build_error = false;
 
    // Create fifo for build output communication
-   unlink(Config.output_fifo.c_str());
-   if (mkfifo(Config.output_fifo.c_str(), S_IRWXU) != 0)
+   unlink(SCRIPT_OUTPUT_FIFO.c_str());
+   if (mkfifo(SCRIPT_OUTPUT_FIFO.c_str(), S_IRWXU) != 0)
       throw std::runtime_error(strerror(errno));
 
    // Start build script output communication thread
@@ -501,7 +502,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       sem_destroy(&build_semaphore);
    }
    // Building done - clean up build script fifo
-   unlink(Config.output_fifo.c_str());
+   unlink(SCRIPT_OUTPUT_FIFO.c_str());
 }
 
 void CBuildManager::Clean(CBuildFile *buildfile)

@@ -90,7 +90,7 @@ CConfig::CConfig()
 
    home_dir = getenv("HOME");
    pid = getpid();
-   output_fifo = "/tmp/buildgear." + to_string(pid) + ".fifo";
+   tmp_dir = "/tmp/buildgear." + to_string(pid) + "/";
 
    bg_config = bg_config_default;
 }

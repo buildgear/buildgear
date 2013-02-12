@@ -23,12 +23,23 @@
 #include <iostream>
 #include <stdlib.h>
 #include <signal.h>
+#include <string.h>
 #include "buildgear/config.h"
 #include "buildgear/signals.h"
 #include "buildgear/cursor.h"
 #include "buildgear/buildmanager.h"
 
 struct sigaction new_action, old_action;
+
+void clean_up(void)
+{
+   cursor_restore();
+   if (system(string("rm -rf " + Config.tmp_dir).c_str()) != 0)
+   {
+      cout << "\nError: Could not remove temporary directory '" << Config.tmp_dir << endl;
+      cout << strerror(errno) << endl;
+   }
+}
 
 void CSignals::sigIntHandler(int signum)
 {

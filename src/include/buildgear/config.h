@@ -33,8 +33,8 @@ class CConfig : public CUtility
       string name;
       string name_stripped;
       string root;
-      string output_fifo;
       pid_t pid;
+      string tmp_dir;
 
       unordered_map <string, string> bg_config;
       unordered_map <string, string> bg_config_default;
@@ -112,6 +112,10 @@ class CConfig : public CUtility
 #define BUILD_FILES_README       "README"
 #define LAYER_FILE_NAME          ".layer"
 #define DEFAULT_LAYER_NAME       "default"
+
+#define TEMP(a)                  (Config.tmp_dir + string(a))
+#define SCRIPT_OUTPUT_FIFO       TEMP("script_output.fifo")
+#define SHOW_BUILD_FILE          TEMP("show_buildfile.tmp")
 
 #define KEY_NAME                 "name"
 #define KEY_VERSION              "version"

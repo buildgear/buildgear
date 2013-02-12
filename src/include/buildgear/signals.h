@@ -35,4 +35,5 @@ class CSignals
    private:
 };
 
+void clean_up(void);
 #endif
