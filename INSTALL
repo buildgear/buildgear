@@ -1,15 +1,45 @@
-Requirements:
 
-   g++
-   libcurl4-gnutls-dev
-   termcap
+=== Build Gear Installation ===
+
+1. Requirements
+
+   To compile Build Gear the following dependencies must be installed on your
+   build system:
+
+    * g++ (C++11 enabled)
+    * libcurl4-gnutls-dev
+    * termcap
 
    Note: termcap is usually bundled with ncurses/curses.
 
-Installation:
+
+2. Install steps (general)
 
    ./configure
    make
    make install
 
    See ./configure --help for more options.
+
+
+3. Install steps (Ubuntu)
+
+   Tested using Ubuntu 12.10 64-bit (Minimal)
+
+   Prepare Ubuntu for compilation and installation of Build Gear
+   $ sudo apt-get install build-essential libcurl4-gnutls-dev libncurses5-dev unzip
+
+   Build and install Build Gear:
+   $ wget http://www.buildgear.org/release/buildgear-0.9.15beta.tar.xz
+   $ tar xf buildgear-0.9.15beta.tar.xz
+   $ cd buildgear-0.9.15beta
+   $ ./configure --prefix=$HOME/opt/buildgear
+   $ make
+   $ make install
+
+   Add Build Gear to your path, eg.:
+   $ echo 'export PATH=$HOME/opt/buildgear/bin:$PATH' >> ~/.bashrc
+
+   Enable Build Gear bash auto completion, eg.:
+   $ echo 'source $HOME/opt/buildgear/etc/bash_completion.d/buildgear-bash-completion.sh' >> ~/.bashrc
+
