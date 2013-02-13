@@ -247,7 +247,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    arguments += " --BG_WORK_DIR '" WORK_DIR "'";
    arguments += " --BG_PACKAGE_DIR '" PACKAGE_DIR "'";
    arguments += " --BG_OUTPUT_DIR '" OUTPUT_DIR "'";
-   arguments += " --BG_SOURCE_DIR '" SOURCE_DIR "'";
+   arguments += " --BG_SOURCE_DIR '" + Config.bg_config[CONFIG_KEY_SOURCE_DIR] + "'";
    arguments += " --BG_SYSROOT_DIR '" SYSROOT_DIR "'";
    arguments += " --BG_BUILD '" + Config.bf_config[CONFIG_KEY_BUILD] + "'";
    arguments += " --BG_HOST '" + Config.bf_config[CONFIG_KEY_HOST] + "'";
