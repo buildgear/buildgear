@@ -453,10 +453,11 @@ int main (int argc, char *argv[])
    /* Show system information */
    cout << "Detecting BUILD system type..   " << Config.bf_config[CONFIG_KEY_BUILD] << endl;
    cout << "Configured HOST system type..   " << Config.bf_config[CONFIG_KEY_HOST] << endl;
-   cout << endl;
 
    /* Delete old work */
+   cout << "Cleaning old work directory..   " << flush;
    BuildManager.CleanWork();
+   cout << "Done" << endl << endl;
 
    /* Create build output directory */
    FileSystem.CreateDirectory(OUTPUT_DIR);

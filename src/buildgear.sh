@@ -206,14 +206,10 @@ do_extract()
    for FILE in ${source[@]}; do
       LOCAL_FILENAME=`get_filename $FILE`
       case $LOCAL_FILENAME in
-         *.tar.gz|*.tar.Z|*.tgz)
-            COMMAND="tar -C $SRC --use-compress-program=gzip -xf $LOCAL_FILENAME" ;;
-         *.tar.bz2)
-            COMMAND="tar -C $SRC --use-compress-program=bzip2 -xf $LOCAL_FILENAME" ;;
+         *.tar*)
+            COMMAND="tar -C $SRC -xf $LOCAL_FILENAME" ;;
          *.zip)
             COMMAND="unzip -qq -o -d $SRC $LOCAL_FILENAME" ;;
-         *.tar.xz| *.txz | *.tar.lzma)
-            COMMAND="tar -C $SRC --use-compress-program=xz -xf $LOCAL_FILENAME" ;;
          *)
             COMMAND="cp $LOCAL_FILENAME $SRC" ;;
       esac
