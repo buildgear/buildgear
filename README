@@ -4,26 +4,31 @@
 
 1. Introduction
 
-   Build Gear is a lightweight embedded build tool for experienced GNU/Linux
-   users and developers. The primary focus of this build tool is to keep it
-   simple, which is reflected in a straightforward command line build
-   interface, and easy to maintain build files. The secondary focus is build
-   performance and build integrity. Build Gear is easy to use and well suited
-   for rapid product and prototype development of firmware to deploy in small
-   to medium sized systems.
+   Build Gear is a lightweight embedded firmware build tool for experienced
+   GNU/Linux users and developers.
 
+   The primary focus of this build tool is to make it easy to create and
+   maintain fully customized embedded GNU/Linux firmware. This is reflected in
+   a straightforward command line interface and support for easy to understand
+   build files. The secondary focus is build performance and build integrity.
+   Build Gear is easy to use and well suited for rapid prototyping or product
+   development of GNU/Linux firmware to be deployed in small to medium sized
+   embedded systems.
+
+   NOTE: Build Gear is currently considered beta so things are subject to
+         change.  However, the basics are in place and now there are mostly
+         fine tuning and bug fixing going on before the planned stable 1.x 
+         release series.
 
 2. Installation
 
-   See INSTALL file for details on how to build and install Build Gear.
+   Please see INSTALL file for details on how to install Build Gear.
 
 
 3. Documentation
 
    Visit http://www.buildgear.org for detailed documentation on how to use the
    Build Gear tool and also on how to create build files.
-
-   * Not available yet *
 
 
 4. License
@@ -35,29 +40,22 @@
 
    Go visit http://www.buildgear.org
 
-   * Not available yet *
 
+6. Mailing List
 
-6. Bugs and feature requests
+   Please use the following mailing list for general development, discussions,
+   bug reports etc.:
 
-   Please report any bugs or feature requests in the github issue tracker:
-   http://github.com/buildgear/buildgear/issues
-
-   * Not available yet *
+   http://buildgear.org/mailman/listinfo/buildgear-devel_buildgear.org
 
 
 7. Contributing
 
-   All types of contributions (code, documentation, etc.) are welcomed.
-
-   Feel free to introduce yourself on the mailing list if you want to help out
-   with Build Gear.
-
-   Git patches or pull requests should also be sent to the mailing list.
+   Feel free to contribute - Build Gear is fully open source and open for ideas
+   and patches which improve the build tool itself or any of the available
+   build files. Go ahead, introduce yourself on the mailing list.
 
 
 8. Authors
 
    See AUTHORS file for list of authors.
-
-
