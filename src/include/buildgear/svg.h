@@ -30,8 +30,17 @@ class CSvg
       void open(string filename);
       void close(void);
       void addHeader(float distance);
+      void addNaked(string content);
       void addArrow(float x1, float y1, float x2, float y2);
       void addCircle(float x, float y, string name, string version, string color, int stroke_dash);
+      void addRectangle(string x, string y, string width, string height, string color);
+      void addRectangle(float x, float y, float width, float height, string color);
+      void addText(string text, string x, string y, string color, string params);
+      void addText(string text, float x, float y, string color, string params);
+      void addText(string text, string x, string y, string color);
+      void addText(string text, float x, float y, string color);
+      void addLine(string x1, string y1, string x2, string y2, string style);
+      void addLine(float x1, float y1, float x2, float y2, string style);
       void addFooter(void);
 
    private:
