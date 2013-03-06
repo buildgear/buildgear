@@ -8,7 +8,7 @@ Homepage: http://www.buildgear.org
 
 Package: buildgear
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, unzip
 Description: Lightweight embedded firmware build tool.
  Build Gear is a lightweight embedded firmware build tool
  for experienced GNU/Linux users and developers.

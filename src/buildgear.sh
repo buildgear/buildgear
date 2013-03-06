@@ -206,7 +206,7 @@ do_extract()
    for FILE in ${source[@]}; do
       LOCAL_FILENAME=`get_filename $FILE`
       case $LOCAL_FILENAME in
-         *.tar*)
+         *.tar* | *.tgz | *.txz)
             COMMAND="tar -C $SRC -xf $LOCAL_FILENAME" ;;
          *.zip)
             COMMAND="unzip -qq -o -d $SRC $LOCAL_FILENAME" ;;
