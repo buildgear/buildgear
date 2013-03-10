@@ -456,6 +456,9 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --footprint             Show build footprint\n";
    cout << "  --checksum              Show build checksum\n";
    cout << "\n";
+   cout << "Init options:\n";
+   cout << "  --buildfile             Create a buildfile from template\n";
+   cout << "\n";
    cout << "Config options:\n";
    cout << "  --global                Apply to global configuration\n";
    cout << "  --unset                 Unset option (revert to default)\n";
