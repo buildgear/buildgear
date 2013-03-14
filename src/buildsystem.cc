@@ -39,7 +39,7 @@ extern CFileSystem FileSystem;
 void CBuildSystem::Check(void)
 {
    FILE *fp;
-   char cmd_result[5];
+   char cmd_result[10];
    int status, i=0;
    string tool[] = {      "bash",
                      "sha256sum",
@@ -92,7 +92,7 @@ void CBuildSystem::Check(void)
       exit(EXIT_FAILURE);
    }
 
-   if (fgets(cmd_result, 5, fp) == NULL)
+   if (fgets(cmd_result, 10, fp) == NULL)
    {
       cout << "fgets error" << endl;
       exit(EXIT_FAILURE);
@@ -101,7 +101,7 @@ void CBuildSystem::Check(void)
    pclose(fp);
    string result(cmd_result);
 
-   if (result != "bash")
+   if (result.find("bash") == string::npos)
    {
       cout << "\n\nError: Default shell is not bash.\n\n";
       cout << "Please make sure that /bin/sh links to bash.\n\n";
