@@ -122,6 +122,7 @@ void COptions::Parse(int argc, char *argv[])
          {"no-strip",         no_argument, 0, 's'},
          {"all",              no_argument, 0, 'a'},
          {"no-fakeroot",      no_argument, 0, 'n'},
+         {"load-chart",       no_argument, 0, 'l'},
          {0,                  0,           0,  0 }
 		};
 
@@ -147,6 +148,9 @@ void COptions::Parse(int argc, char *argv[])
                break;
             case 'n':
                Config.no_fakeroot = true;
+               break;
+            case 'l':
+               Config.load_chart = true;
                break;
             default:
                exit(EXIT_FAILURE);
@@ -433,6 +437,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --no-strip              Do not strip libraries and executables\n";
    cout << "  --no-fakeroot           Do not use fakeroot\n";
    cout << "  --all                   Apply to all build dependencies\n";
+   cout << "  --load-chart            Generate load chart of the build\n";
    cout << "\n";
    cout << "Clean options:\n";
    cout << "  --footprint             Only clean footprint\n";

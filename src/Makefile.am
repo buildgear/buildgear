@@ -16,6 +16,7 @@ buildgear_SOURCES = \
    main.cc \
    options.cc \
    source.cc \
+   stats.cc \
    svg.cc \
    cursor.cc \
    log.cc \
@@ -35,6 +36,7 @@ buildgear_SOURCES = \
    include/buildgear/filesystem.h \
    include/buildgear/options.h \
    include/buildgear/source.h \
+   include/buildgear/stats.h \
    include/buildgear/svg.h \
    include/buildgear/cursor.h \
    include/buildgear/log.h

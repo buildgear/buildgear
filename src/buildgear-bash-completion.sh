@@ -50,7 +50,7 @@ _buildgear()
    init_options="--buildfile"
    download_options="--all"
    build_options="--keep-work --update-checksum --update-footprint --no-strip
-                  --no-fakeroot --all"
+                  --no-fakeroot --all --load-chart"
    clean_options="--all --footprint --checksum"
    show_options="--build-order --download-order --dependency --readme --version
                  --log --log-tail --log-mismatch --footprint --checksum --buildfile"

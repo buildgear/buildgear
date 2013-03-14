@@ -23,6 +23,7 @@
 #include <iostream>
 #include <iomanip>
 #include <time.h>
+#include <string.h>
 #include "buildgear/config.h"
 #include "buildgear/svg.h"
 #include <stdio.h>
@@ -32,11 +33,46 @@
 void CSvg::open(string filename)
 {
    file = fopen(filename.c_str(), "w");
+   if (!file)
+   {
+      cout << "\nError: Could not open file " << filename << endl;
+      cout << strerror(errno) << endl;
+      exit(EXIT_SUCCESS);
+   }
 }
 
 void CSvg::close(void)
 {
    fclose(file);
+}
+
+void CSvg::addNaked(string content)
+{
+   fprintf (file, "%s\n", content.c_str());
+}
+
+void CSvg::addText(string text, float x, float y, string color, string params)
+{
+   addText(text, to_string(x), to_string(y), color, params);
+}
+
+void CSvg::addText(string text, string x, string y, string color, string params)
+{
+   fprintf (file,
+   "<text x='%s' y='%s' font-family='Verdana' font-weight='bold' fill='%s' %s>%s</text>\n",
+   x.c_str(), y.c_str(), color.c_str(), params.c_str(), text.c_str());
+}
+
+void CSvg::addText(string text, float x, float y, string color)
+{
+   addText(text, to_string(x), to_string(y), color);
+}
+
+void CSvg::addText(string text, string x, string y, string color)
+{
+   fprintf (file,
+   "<text x='%s' y='%s' font-family='Verdana' font-size='7' font-weight='bold' fill='%s'>%s</text>\n",
+   x.c_str(), y.c_str(), color.c_str(), text.c_str());
 }
 
 void CSvg::addHeader(float distance)
@@ -90,6 +126,32 @@ void CSvg::addCircle(float x, float y, string name, string version, string color
    , x, y, stroke_dash, color.c_str()
    , x, y, name.c_str()
    , x, y+3.5, version.c_str()
+   );
+}
+
+void CSvg::addRectangle(float x, float y, float width, float height, string style)
+{
+   addRectangle(to_string(x), to_string(y), to_string(width), to_string(height), style);
+}
+
+void CSvg::addRectangle(string x, string y, string width, string height, string style)
+{
+   fprintf (file,
+   "  <rect x='%s' y='%s' width='%s' height='%s' style='%s'/>\n"
+   , x.c_str(), y.c_str(), width.c_str(), height.c_str(), style.c_str()
+   );
+}
+
+void CSvg::addLine(float x1, float y1, float x2, float y2, string style)
+{
+   addLine(to_string(x1), to_string(y1), to_string(x2), to_string(y2), style);
+}
+
+void CSvg::addLine(string x1, string y1, string x2, string y2, string style)
+{
+   fprintf (file,
+   "<line x1='%s' y1='%s' x2='%s' y2='%s' style='%s'/>\n",
+   x1.c_str(), y1.c_str(), x2.c_str(), y2.c_str(), style.c_str()
    );
 }
 

@@ -48,6 +48,7 @@ class CConfig : public CUtility
       string update_footprint;
       string no_strip;
       bool no_fakeroot;
+      bool load_chart;
 
       bool clean;
 
@@ -150,11 +151,19 @@ class CConfig : public CUtility
 #define TEMPLATE_LOCAL_CONFIG    AM_PKGDATADIR "/template.buildgearconfig"
 #define TEMPLATE_BUILDFILE       AM_PKGDATADIR "/template.buildfile"
 
-#define SVG_DEPENDENCY_FILE      BUILD_DIR "/dependency.svg"
+#define SVG_DEPENDENCY_PREFIX    OUTPUT_DIR "/dependency."
 #define SVG_COLOR_NATIVE         "#ffff7f"
 #define SVG_COLOR_CROSS          "#7fff7f"
 #define SVG_DASH                 1
 #define SVG_DASH_NO              0
+
+#define LOAD_CHART_PREFIX        OUTPUT_DIR "/load-chart."
+#define LOAD_CHART_WIDTH         500.0
+#define LOAD_CHART_HEIGHT        100.0
+#define LOAD_CHART_XLINES        14
+#define LOAD_CHART_RESOLUTION    1
+#define LOAD_CHART_MARGIN        10
+#define LOAD_CHART_LINE_HEIGHT   8
 
 #define LOG_BUFFER_SIZE          10000000
 #define LAYER_NAME_SIZE          32

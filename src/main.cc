@@ -40,6 +40,7 @@
 #include "buildgear/buildsystem.h"
 #include "buildgear/cursor.h"
 #include "buildgear/log.h"
+#include "buildgear/stats.h"
 
 CSignals      Signals;
 CFakeroot     Fakeroot;
@@ -56,6 +57,7 @@ CBuildManager BuildManager;
 CBuildSystem  BuildSystem;
 CCursor       Cursor;
 CLog          Log;
+CStats        Stats;
 
 int main (int argc, char *argv[])
 {
@@ -399,7 +401,7 @@ int main (int argc, char *argv[])
       if (Config.dependency_circle)
       {
          FileSystem.CreateDirectory(OUTPUT_DIR);
-         Dependency.ShowDependencyCircleSVG(OUTPUT_DIR "/dependency." + Config.name_stripped + ".svg");
+         Dependency.ShowDependencyCircleSVG(SVG_DEPENDENCY_PREFIX + Config.name_stripped + ".svg");
       }
       cout << endl;
       exit(EXIT_SUCCESS);
@@ -462,6 +464,9 @@ int main (int argc, char *argv[])
    /* Create build output directory */
    FileSystem.CreateDirectory(OUTPUT_DIR);
 
+   if (Config.load_chart)
+      Stats.enableCapture();
+
    /* Start building */
    cout << "Building '" << Config.name << "'.. " << flush;
    BuildManager.Build(&Dependency.parallel_build_order);
@@ -472,6 +477,12 @@ int main (int argc, char *argv[])
       cout << "Error\n\n";
    else
       cout << "Done\n\n";
+
+   if (Config.load_chart)
+   {
+      Stats.disableCapture();
+      Stats.saveCapture(LOAD_CHART_PREFIX + Config.name_stripped + ".svg");
+   }
 
    /* Reenable terminal echo */
    Cursor.enable_wrap();
