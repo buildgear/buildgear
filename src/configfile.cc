@@ -74,6 +74,7 @@ CConfigFile::CConfigFile(void)
    options.push_back(new CConfigOption(CONFIG_KEY_DOWNLOAD_RETRY,          ValidInt));
    options.push_back(new CConfigOption(CONFIG_KEY_DOWNLOAD_CONNECTIONS,    ValidInt));
    options.push_back(new CConfigOption(CONFIG_KEY_PARALLEL_BUILDS,         ValidInt));
+   options.push_back(new CConfigOption(CONFIG_KEY_CERTIFICATE_DIR,         NULL));
 }
 
 void CConfigFile::Parse(string filename)
@@ -91,6 +92,7 @@ void CConfigFile::Parse(string filename)
                      ; echo required_version=$required_version \
                      ; echo default_name_prefix=$default_name_prefix \
                      ; echo parallel_builds=$parallel_builds \
+                     ; echo certificate_dir=$certificate_dir \
                      '";
       else
          command += "; echo cross_depends=${CROSS_DEPENDS[@]} \

@@ -55,7 +55,7 @@ _buildgear()
    show_options="--build-order --download-order --dependency --readme --version
                  --log --log-tail --log-mismatch --footprint --checksum --buildfile"
    config_options="--global --unset --list"
-   config_keys="source_dir download_mirror_first download_timeout
+   config_keys="source_dir download_mirror_first download_timeout certificate_dir
                 download_retry download_connections parallel_builds"
    help_options=$commands
 

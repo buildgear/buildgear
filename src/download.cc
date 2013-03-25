@@ -216,6 +216,11 @@ void CDownloadItem::File()
       // Follow URL redirections
       curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, true);
 
+      // Set custom certificate dir
+      if (Config.bg_config[CONFIG_KEY_CERTIFICATE_DIR] != "") {
+         curl_easy_setopt(curl, CURLOPT_CAPATH, Config.bg_config[CONFIG_KEY_CERTIFICATE_DIR].c_str());
+      }
+
       // Define progress indication callback
       curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, CDownload::progress);
       curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, this);

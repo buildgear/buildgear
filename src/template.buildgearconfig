@@ -21,3 +21,6 @@
 
 # Number of parallel builds (default=1)
 #parallel_builds=1
+
+# Directory containing SSL certificates
+#certificate_dir=

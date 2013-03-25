@@ -55,6 +55,7 @@ CConfig::CConfig()
    bg_config_default[CONFIG_KEY_DEFAULT_NAME_PREFIX] = "cross/";
    bg_config_default[CONFIG_KEY_SOURCE_DIR] = SOURCE_DIR;
    bg_config_default[CONFIG_KEY_PARALLEL_BUILDS] = "1";
+   bg_config_default[CONFIG_KEY_CERTIFICATE_DIR] = "";
 
    // Default buildfiles options
    bf_config[CONFIG_KEY_DOWNLOAD_MIRROR] = "";
