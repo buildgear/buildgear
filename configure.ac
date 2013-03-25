@@ -118,19 +118,18 @@ AC_CHECK_LIB([rt], [clock_gettime], , AC_MSG_ERROR([rt not found]))
 AC_CHECK_FUNCS([clock_gettime getcwd strerror])
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
 
-curl_gnutls=1
-AC_SEARCH_LIBS([curl_global_init], [curl-gnutls], , [curl_gnutls=0])
-AC_CHECK_FUNC([curl_easy_init], , [curl_gnutls=0])
-AC_CHECK_FUNC([curl_easy_setopt], , [curl_gnutls=0])
-AC_CHECK_FUNC([curl_easy_perform], , [curl_gnutls=0])
-AC_CHECK_FUNC([curl_easy_cleanup], , [curl_gnutls=0])
-AC_CHECK_FUNC([curl_global_cleanup], , [curl_gnutls=0])
-AC_CHECK_FUNC([curl_easy_strerror], , [curl_gnutls=0])
-AC_CHECK_HEADERS([curl/curl.h], , [curl_gnutls=0])
-
-if test $curl_gnutls == 0
+curl=1
+AC_SEARCH_LIBS([curl_global_init], [curl curl-gnutls], , [curl=0])
+AC_CHECK_FUNC([curl_easy_init], , [curl=0])
+AC_CHECK_FUNC([curl_easy_setopt], , [curl=0])
+AC_CHECK_FUNC([curl_easy_perform], , [curl=0])
+AC_CHECK_FUNC([curl_easy_cleanup], , [curl=0])
+AC_CHECK_FUNC([curl_global_cleanup], , [curl=0])
+AC_CHECK_FUNC([curl_easy_strerror], , [curl=0])
+AC_CHECK_HEADERS([curl/curl.h], , [curl=0])
+if test $curl == 0
 then
-	AC_MSG_ERROR([curl-gnutls not found])
+       AC_MSG_ERROR([libcurl not found])
 fi
 
 termcap=1
