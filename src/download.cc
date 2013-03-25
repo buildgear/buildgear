@@ -216,6 +216,9 @@ void CDownloadItem::File()
       // Follow URL redirections
       curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, true);
 
+      // Avoid a bug in libcurl
+      curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
+
       // Set custom certificate dir
       if (Config.bg_config[CONFIG_KEY_CERTIFICATE_DIR] != "") {
          curl_easy_setopt(curl, CURLOPT_CAPATH, Config.bg_config[CONFIG_KEY_CERTIFICATE_DIR].c_str());
