@@ -425,7 +425,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  clean                   Clean\n";
    cout << "  show                    Show various information\n";
    cout << "  init                    Create empty build area\n";
-   cout << "  config                  Set repository or global tool options\n";
+   cout << "  config                  Configure tool options\n";
    cout << "\n";
    cout << "Download options:\n";
    cout << "  --all                   Download source of all builds or build dependencies\n";
@@ -437,7 +437,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --no-strip              Do not strip libraries and executables\n";
    cout << "  --no-fakeroot           Do not use fakeroot\n";
    cout << "  --all                   Apply to all build dependencies\n";
-   cout << "  --load-chart            Generate load chart of the build\n";
+   cout << "  --load-chart            Generate load chart\n";
    cout << "\n";
    cout << "Clean options:\n";
    cout << "  --footprint             Only clean footprint\n";
@@ -457,12 +457,12 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --checksum              Show build checksum\n";
    cout << "\n";
    cout << "Init options:\n";
-   cout << "  --buildfile             Create a buildfile from template\n";
+   cout << "  --buildfile             Create a Buildfile from template\n";
    cout << "\n";
    cout << "Config options:\n";
    cout << "  --global                Apply to global configuration\n";
-   cout << "  --unset                 Unset option (revert to default)\n";
-   cout << "  --list                  List current options\n";
+   cout << "  --unset                 Unset setting (revert to default)\n";
+   cout << "  --list                  List current settings\n";
    cout << "\n";
    cout << "See buildgear help <command> for help on a specific command\n";
 }
