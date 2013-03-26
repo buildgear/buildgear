@@ -1,0 +1,71 @@
+<chapter>
+   <title>FAQ</title>
+
+
+
+   <section>
+      <title> Common Build Issues </title>
+
+      <para>
+         Here is a list of common build issues and related solutions.
+      </para>
+
+      <para>
+         To be done..
+      </para>
+
+   </section>
+
+
+
+   <section>
+      <title> General Questions </title>
+
+      <qandaset defaultlabel='qanda'>
+      <qandaentry>
+
+      <question>
+         <para>
+            Why is Build Gear not written in Python or Make like other popular
+            build tools?
+         </para>
+      </question>
+      <answer>
+         <para>
+            Most of the core functionality of the tool is written in C/C++ to
+            achieve best build performance. Some of the tool functionality is
+            written in a bash helper script. Also, all build files are written
+            in bash. This makes perfect sense since most install descriptions
+            are bash centric.
+         </para>
+      </answer>
+
+      <question>
+         <para>
+            Why does the Mini Distribution rely on so many Ubuntu packages to
+            be installed to do a successful build?
+         </para>
+      </question>
+      <answer>
+         <para>
+            By choice, the Mini Distribution relies on many preinstalled Ubuntu
+            packages in order to reduce the total build time. The alternative
+            is to build virtually every single native build that your cross
+            builds need. This will add significantly to the total build time
+            and in most cases not worth the effort. That being said, anyone can
+            create their own distribution which include all required native
+            builds. Such a distribution will be likely to work with just about
+            any build system different from Ubuntu.
+         </para>
+      </answer>
+
+
+
+      </qandaentry>
+      </qandaset>
+
+   </section>
+
+
+
+</chapter>
