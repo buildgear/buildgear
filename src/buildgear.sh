@@ -437,9 +437,6 @@ main()
 
    do_buildfile
 
-   # Send PID to buildgear
-   echo $BASHPID > $BG_TEMP_DIR$BG_BUILD_TYPE-$name.fifo
-
    BG_BUILD_WORK_DIR="$BG_WORK_DIR/$BG_BUILD_TYPE/$name"
    BG_BUILD_PACKAGE="$BG_BUILD_PACKAGE_DIR/$name#$version-$release.pkg.tar.gz"
 
@@ -451,6 +448,23 @@ main()
    export HOST="$BG_HOST"
    export SYSROOT="$BG_BUILD_SYSROOT_DIR"
    export SOURCE=$BG_SOURCE_DIR
+
+   # Present variables to show command
+   if [ "$BG_ACTION" = "read" ]; then
+      echo "PKG=$PKG"
+      echo "SRC=$SRC"
+      echo "OUTPUT=$OUTPUT"
+      echo "BUILD=$BUILD"
+      echo "HOST=$HOST"
+      echo "SYSROOT=$SYSROOT"
+      echo "SOURCE=$SOURCE"
+      echo "NATIVE_SYSROOT=$NATIVE_SYSROOT"
+      echo "BUILD_TYPE=$BUILD_TYPE"
+      exit 0
+   fi
+
+   # Send PID to buildgear
+   echo $BASHPID > $BG_TEMP_DIR$BG_BUILD_TYPE-$name.fifo
 
    umask 022
 

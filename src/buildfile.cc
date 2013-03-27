@@ -50,9 +50,25 @@ CBuildFile::CBuildFile(string filename)
 void CBuildFile::Show(void)
 {
    string qoute = "\"";
-   string command =
-      "bash --norc --noprofile -O extglob -c 'source " +
-      (string) BUILD_FILES_CONFIG +
+   string arguments;
+   string command;
+
+   arguments =  " --BG_BUILD_FILE '" + filename + "'";
+   arguments += " --BG_ACTION 'read'";
+   arguments += " --BG_BUILD_FILES_CONFIG '" BUILD_FILES_CONFIG "'";
+   arguments += " --BG_OUTPUT_DIR '" OUTPUT_DIR "'";
+   arguments += " --BG_PACKAGE_DIR '" PACKAGE_DIR "'";
+   arguments += " --BG_BUILD_TYPE '" + type + "'";
+   arguments += " --BG_SYSROOT_DIR '" SYSROOT_DIR "'";
+   arguments += " --BG_WORK_DIR '" WORK_DIR "'";
+   arguments += " --BG_BUILD '" + Config.bf_config[CONFIG_KEY_BUILD] + "'";
+   arguments += " --BG_HOST '" + Config.bf_config[CONFIG_KEY_HOST] + "'";
+   arguments += " --BG_SOURCE_DIR '" + Config.bg_config[CONFIG_KEY_SOURCE_DIR] + "'";
+
+   command =
+      "bash --norc --noprofile -O extglob -c '"
+      "source " BUILD_FILES_CONFIG
+      "; eval `" SCRIPT " " + arguments + "`"
       "; source " + filename +
       "; BG_TEMP=$(cat " + filename + ") \
        ; BG_TEMP=$(echo \"$BG_TEMP\" | sed -e \"s|\\\\\\|\\\\\\\\\\\\\\|g\") \
