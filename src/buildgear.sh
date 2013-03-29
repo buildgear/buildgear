@@ -287,7 +287,8 @@ do_package()
    fi
 
    if [ "`ls -A`" != "" ]; then
-      tar czvvf $BG_BUILD_PACKAGE *
+      tar czvvf $BG_BUILD_PACKAGE.tmp * && \
+      mv $BG_BUILD_PACKAGE.tmp $BG_BUILD_PACKAGE
    fi
 
    if [ "$?" != "0" ]; then
