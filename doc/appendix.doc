@@ -1,0 +1,47 @@
+<appendix><title></title>
+
+  <section><title>VirtualBox Build Image Installation</title>
+    <para id="vbox"  xreflabel="VirtualBox Build Image Installation">
+      A VirtualBox image with a preinstalled Ubuntu installation is available
+      for those who do not have Ubuntu installed on their build computer.
+    </para>
+
+    <para>
+      The Ubuntu VirtualBox image is available <ulink
+      url="http://buildgear.org/release/virtual-build-image">here</ulink>.
+    </para>
+
+    <para>
+      Simply extract and install the VDI disk image in a new Virtualbox
+      session. Remember to configure the number of system CPUs according to the
+      CPU count available in your system.  Also be generous when configuring
+      available system memory. It is recommended to use a bridged network
+      adapter to make it easy to connect to the virtual machine via ssh.
+    </para>
+
+    <para>
+      The default username/password = ubuntu/ubuntu
+    </para>
+
+    <para>
+      If needed you can do some Ubuntu reconfiguration as described below.
+    </para>
+
+    <para>
+      Reconfigure keyboard language:
+    </para>
+<screen>$ sudo dpkg-reconfigure keyboard-configuration</screen>
+
+    <para>
+      Reconfigure time zone
+    </para>
+<screen>$ sudo dpkg-reconfigure tzdata</screen>
+
+    <para>
+      In case you run into boot delay due to network timeout you might need to do:
+    </para>
+<screen>$ sudo rm /etc/udev/rules.d/70-persistent-net.rules</screen>
+
+  </section>
+
+</appendix>

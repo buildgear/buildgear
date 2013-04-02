@@ -1,10 +1,823 @@
-<chapter><title>Using Build Gear</title>
-  <section><title>Basics</title>
-    <section><title>Build Space</title></section>
-    <section><title>Buildfile</title></section>
-    <section><title>Configuration Files</title></section>
-    <section><title>Temporary Files</title></section>
-  </section>
-  <section><title>Building stuff</title></section>
-  <section><title>Starting From Scratch</title></section>
+<chapter>
+   <title> Build Gear Basics </title>
+
+
+
+   <section>
+      <title> Getting Started </title>
+
+      <para>
+         To get started, one will typically start by downloading an existing build
+         repository. For example, to get started with the Mini Distribution for
+         the Pandaboard simply do:
+      </para>
+
+<screen>$ git clone --recursive git://github.com/mini-distribution/pandaboard.git</screen>
+
+      <note>
+          The <code>--recursive</code> option makes git recursively checkout
+          the submodules of the git repository. Most Build Gear build
+          repositories make use of submodules. If one forgets to use this
+          option it is possible to force an update of the submodules by running
+          the command <code>git submodule update --init</code>.
+      </note>
+
+      <para>
+         Next, enter the repository build space:
+      </para>
+
+<screen>$ cd pandaboard</screen>
+
+      <para>
+         Please take a careful look at the included README information. It
+         describes what build system dependencies are needed to be installed in
+         order to build successfully:
+      </para>
+
+<screen>$ buildgear show --readme</screen>
+
+      <para>
+         In case of the Pandaboard, you will find the following important section
+         in the README:
+      </para>
+
+<screen>
+Build system requirements:
+
+   Tested on Ubuntu 12.10 Minimal (64-bit x86) with the following additional
+   packages installed:
+
+   $ sudo apt-get install unzip groff bison flex gperf texinfo xsltproc \
+                          libtool libncurses5-dev gawk libexpat1-dev \
+                          gettext u-boot-tools libglib2.0-dev intltool \
+                          libxml2-utils docbook-xml cmake g++
+
+
+   Also requires reconfiguring "/bin/sh" to use bash:
+
+   $ sudo dpkg-reconfigure dash
+
+   Fact: many software distributions fail to build using the dash shell.
+</screen>
+
+      <para>
+         After installing the described dependencies and reconfiguring your
+         default shell to use bash, then you are ready to start building stuff.
+         Also found in the README is a short description of the main builds:
+      </para>
+
+<screen>
+Main builds:
+
+   fs      - Filesystem
+   linux   - Linux kernel
+   u-boot  - Bootloader
+</screen>
+
+      <para>
+         Now, you can build the filesystem by simply doing:
+      </para>
+
+<screen>
+   $ buildgear build fs
+</screen>
+
+      <note>
+         In case of the Pandaboard, the <code>fs</code> build automatically
+         builds the linux kernel because the kernel depends on the Linux kernel
+         modules to be installed in the filesystem.
+      </note>
+
+      <para>
+         Next, build the bootloader:
+      </para>
+
+<screen>
+   $ buildgear build u-boot
+</screen>
+
+      <para>
+         The resulting output files from these commands are found in the
+         <code>build/output</code> directory:
+      </para>
+
+<screen>
+   fs.tar.gz  MLO  u-boot.img  uImage
+</screen>
+
+      <para>
+         Finish by installing the output files on a SD card and you are ready
+         to boot the Mini Distribution on the Pandaboard. See Appendix (TODO)
+         for details on how to create and format the partitions on the SD Card
+         and how to install the files.
+      </para>
+
+   </section>
+
+
+
+   <section>
+      <title> Build Space Layout </title>
+
+      <para>
+         When you enter a build repository directory you also enter the
+         repository build space. All Build Gear commands relate to the build
+         space you are currently in. A typical build space layout looks like
+         this (Pandaboard example):
+      </para>
+
+<screen>
+pandaboard
+├── build
+│   ├── build.log
+│   ├── output
+│   ├── package
+│   └── source
+├── buildfiles
+│   ├── cross
+│   │   ├── cross-core
+│   │   ├── cross-extra
+│   │   ├── cross-opt
+│   │   └── cross-pandaboard
+│   └── native
+│       └── native-pandaboard
+├── config
+│   └── config
+└── README
+</screen>
+
+      <para>
+         The <code>buildfiles</code> directory contains the build files which
+         is split into cross and native type build file directories. Each of
+         these directories contains various build files submodules.
+         <code>cross-core</code>, <code>cross-opt</code>, and
+         <code>cross-opt</code> are all submodules containing generic
+         buildfiles from the Mini Distribution.  In this case, the directories
+         <code>native-pandaboard</code> and <code>cross-pandaboard</code> are
+         actually not submodules but are simply directories belonging to the
+         top level repository - they contain board specific build files.
+      </para>
+
+      <note>
+         The Mini Distribution is a reference distribution. You can decide to
+         use its build files as they are or fork and modify the repositories as
+         you like.
+      </note>
+
+      <para>
+         The build files are located in eg. <code>cross-core</code> like so:
+      </para>
+
+<screen>
+cross-core
+├── acl
+├── attr
+├── bash
+├── core
+├── coreutils
+├── dbus
+├── expat
+├── findutils
+├── fs-skeleton
+...
+├── shadow
+├── sysfsutils
+├── systemd
+├── sysvinit
+├── tcp_wrappers
+├── usbutils
+├── util-linux
+├── wget
+└── zlib
+</screen>
+
+      <para>
+         In case of the Mini Distribution, the <code>cross-core</code> build file
+         directory contains the the builds which represent the "core"
+         functionality.  Likewise, the <code>cross-opt</code> and
+         <code>cross-extra</code> directories contains the builds with "optional"
+         and "extra" functionality respectively.
+      </para>
+
+      <para>
+         The <code>config</code> directory contains the global build configuration
+         file <code>config</code>.
+      </para>
+
+      <para>
+         The <code>build</code> directory is a temporary directory which is
+         created when building - it contains build log, build output, internal
+         packages, and downloaded build source. The build log file is
+         <code>build/build.log</code>. The build output files are located in
+         <code>build/output</code>. The internal build package files are
+         located in <code>build/package</code>. The downloaded build source is
+         located in <code>build/source</code>.
+      </para>
+
+   </section>
+
+
+   <section>
+   <title> Buildfile </title>
+
+      <para>
+         Each build directory contains a <code>Buildfile</code>. A typical
+         <code>Buildfile</code> is structured like so
+         (<code>buildfiles/cross/cross-core/attr/Buildfile</code> example):
+      </para>
+
+<screen>
+# Description: Commands for Manipulating Filesystem Extended Attributes
+# URL: http://savannah.nongnu.org/projects/attr
+
+name=attr
+version=2.4.46
+release=1
+source=(http://mirrors.zerg.biz/nongnu/attr/$name-$version.src.tar.gz)
+
+build() {
+   cd $name-$version
+
+   ./configure --build=$BUILD \
+               --host=$HOST \
+               --prefix=/usr
+
+   make -j $JOBS
+   make DIST_ROOT=$PKG install install-lib install-dev
+
+   # Fix libtool files
+   fix_la_files $PKG
+}
+
+check() {
+   # Test for preinstalled msgfmt tool
+   check_tool msgfmt
+}
+</screen>
+
+      <para>
+         A <code>Buildfile</code> contains the following variables and functions:
+      </para>
+
+      <informaltable>
+         <tgroup cols="3">
+         <thead>
+         <row>
+            <entry>
+               Variable
+            </entry>
+            <entry>
+               Description
+            </entry>
+            <entry>
+               Type
+            </entry>
+         </row>
+         </thead>
+
+         <tbody>
+
+         <row>
+            <entry>
+               <userinput>name</userinput>
+            </entry>
+            <entry>
+               Build name.
+            </entry>
+            <entry>
+               Mandatory
+            </entry>
+         </row>
+
+         <row>
+            <entry>
+               <userinput>version</userinput>
+            </entry>
+            <entry>
+               Build version.
+            </entry>
+            <entry>
+               Mandatory
+            </entry>
+         </row>
+
+         <row>
+            <entry>
+               <userinput>release</userinput>
+            </entry>
+            <entry>
+               Package release number.
+            </entry>
+            <entry>
+               Optional
+            </entry>
+         </row>
+
+         <row>
+            <entry>
+               <userinput>source</userinput>
+            </entry>
+            <entry>
+               A list of sources - these sources can be local files or remote
+               files, ie. URLs beginning with http(s):// or ftp(s)://.
+            </entry>
+            <entry>
+               Optional
+            </entry>
+         </row>
+
+         <row>
+            <entry>
+               <userinput>depends</userinput>
+            </entry>
+            <entry>
+               A list of build dependencies. To keep things simple, notice that there is no distinction between build time and run time dependencies.
+            </entry>
+            <entry>
+               Optional
+            </entry>
+         </row>
+
+         <row>
+            <entry>
+               <userinput>build()</userinput>
+            </entry>
+            <entry>
+               Build function.
+            </entry>
+            <entry>
+               Optional
+            </entry>
+         </row>
+
+         <row>
+            <entry>
+               <userinput>check()</userinput>
+            </entry>
+            <entry>
+               Check function.
+            </entry>
+            <entry>
+               Optional
+            </entry>
+         </row>
+
+         <row>
+            <entry>
+               <userinput>SRC</userinput>
+            </entry>
+            <entry>
+               Source directory - this variable refers to the location of the files
+               defined in the <userinput>source</userinput> array. Compressed source
+               files are automatically extracted to this location. The following
+               types of compressed files are supported: .tar.gz, .tar.xz, .tgz,
+               .txz, .zip.
+            </entry>
+            <entry>
+               Provided
+            </entry>
+         </row>
+
+         <row>
+            <entry>
+               <userinput>PKG</userinput>
+            </entry>
+            <entry>
+               Package directory - files copied to this location will end up in an
+               internal package file.
+            </entry>
+            <entry>
+               Provided
+            </entry>
+         </row>
+
+         <row>
+            <entry>
+               <userinput>OUTPUT</userinput>
+            </entry>
+            <entry>
+               Output directory - files copied to this location will end up in the
+               output directory (<code>build/output</code>).
+            </entry>
+            <entry>
+               Provided
+            </entry>
+         </row>
+
+      </tbody>
+      </tgroup>
+      </informaltable>
+
+      <para>
+         Some variables are "mandatory" and must be defined while others are
+         "provided" by Build Gear and some are simply "optional".
+      </para>
+
+      <note>
+         By convention, the directory containing the Buildfile must have the
+         exact same name as the build name defined in the same Buildfile.
+      </note>
+
+   </section>
+
+
+   <section>
+      <title> Build Mechanism </title>
+
+      <para>
+         The build mechanism in Build Gear is quite simple. Whenever the build
+         command is used such as <code>buildgear build fs</code> or
+         <code>buildgear build zlib</code> etc., the following steps are
+         performed by the Build Gear tool:
+      </para>
+
+      <procedure>
+         <step>
+            Searches for available build files in the current build space
+         </step>
+         <step>
+            Loads the build files
+         </step>
+         <step>
+            Resolves all dependencies (resolves build order)
+         </step>
+         <step>
+            Runs the build system checks (calls <code>check()</code> function
+            in build file(s))
+         </step>
+         <step>
+            Downloads any missing source files
+         </step>
+         <step>
+            Detects build system type
+         </step>
+         <step>
+            Verifies configured host system type
+         </step>
+         <step>
+            Cleans out old work directory (if any)
+         </step>
+         <step>
+            Starts building in resolved build order (calls <code>build()</code>
+            function in build file(s))
+         </step>
+      </procedure>
+
+      <para>
+         The steps above a directly reflected in the terminal output when running
+         the tool, eg. running <code>buildgear build fs</code> outputs the
+         following:
+      </para>
+
+<screen>
+$ buildgear build fs
+
+Searching for build files..     Done (183 files)
+Loading build files..           Done
+Resolving dependencies..        Done (61 dependencies)
+Running build system checks..   Done
+Downloading sources..           Done
+Detecting BUILD system type..   x86_64-unknown-linux-gnu
+Configured HOST system type..   arm-cortex_a8-linux-gnueabi
+Cleaning old work directory..   Done
+
+Building 'cross/fs'..
+ / Building   'native/linux-source'
+   ...
+</screen>
+
+   </section>
+
+
+
+   <section>
+      <title> Build Environment / Configuration </title>
+
+      <para>
+         The bash environment that the <code>build()</code> function is
+         executed in is constituted by the following environments added in the
+         following way:
+      </para>
+
+      <para role="environment">
+         Existing user environment + Global build configuration + Buildfile
+      </para>
+
+      <para>
+         This means that variables and functions defined in the Buildfile
+         override the ones defined in the global configuration file which in
+         turn overrides the existing user environment.
+      </para>
+
+      <note>
+         All build actions are performed in a fakeroot session. Using fakeroot
+         allow builds to create special device files and also makes it possible
+         to create files with custom ownership which in turn makes it possible
+         to maintain generic footprints. It is possible to disable the use of
+         fakeroot by using the <code>--no-fakeroot</code> option but its use is
+         ill advised.
+      </note>
+<!--
+         <procedure>
+
+            <step>
+               Existing user environment
+            </step>
+
+            <step>
+               Global build configuration file (config/config)
+            </step>
+
+            <step>
+               Buildfile
+            </step>
+
+         </procedure>
+-->
+
+   <section>
+      <title> Global Build Configuration </title>
+
+      <para>
+         The global build configuration file is located in the
+         <code>config/config</code> file. It defines the global configuration
+         for the particular set of build files located in the build space. It
+         is global because it can be used to define bash variables and
+         functions which are available for all builds. It also contains a
+         few configuration variables required by the build tool.
+      </para>
+      <para>
+         With the global configuration file you can create a fully configurable
+         software distribution if needed.  Meaning, you can introduce all sorts
+         of configuration variables that the build files will react on. Though,
+         it is recommended to carefully keep the amount of this type of
+         configuration variables to a minimum to keep the sample configuration
+         space low and thus minimize maintenance.
+      </para>
+      <para>
+         A minimal global build configuration file would typically look
+         something like this (Pandaboard example):
+      </para>
+
+<screen>
+# Build files configuration
+
+# Set host system name
+HOST="arm-cortex_a9-linux-gnueabi"
+
+# Make all cross builds depend on cross toolchain
+CROSS_DEPENDS=native/crosstool-ng
+
+# Set cross sysroot path
+CROSS_SYSROOT="$NATIVE_SYSROOT/$HOST/sysroot"
+
+# Set download mirror
+DOWNLOAD_MIRROR="http://www.buildgear.org/mirror"
+
+# Add cross toolchain to build environment
+PATH="$NATIVE_SYSROOT/bin:$PATH"
+PATH="$NATIVE_SYSROOT/usr/bin:$PATH"
+
+# Set number of parallel make jobs
+JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
+
+# Pkg-config cross configuration
+if [ "$BUILD_TYPE" = "cross" ]; then
+   export PKG_CONFIG_DIR=
+   export PKG_CONFIG_PATH=
+   export PKG_CONFIG_LIBDIR="$CROSS_SYSROOT/usr/lib/pkgconfig"
+   export PKG_CONFIG_LIBDIR+=":$CROSS_SYSROOT/usr/share/pkgconfig"
+   export PKG_CONFIG_SYSROOT_DIR="$CROSS_SYSROOT"
+fi
+
+# Pkg-config native configuration
+if [ "$BUILD_TYPE" = "native" ]; then
+   export PKG_CONFIG_LIBDIR="$NATIVE_SYSROOT/usr/lib/pkgconfig"
+   export PKG_CONFIG_LIBDIR+=":`pkg-config --variable pc_path pkg-config`"
+fi
+
+# Helper functions
+
+fix_la_files()
+{
+   find $1 -name "*.la" \
+           -exec sed -i -e "/dependency_libs/s; /usr; `readlink -f $SYSROOT`/usr;g" {} \; \
+           -exec sed -i -e "/libdir/s;'/usr;'`readlink -f $SYSROOT`/usr;g" {} \;
+}
+
+check_tool()
+{
+   type $1 &amp;&gt; /dev/null
+   if [ $? != 0 ]; then
+      echo -e "\n"
+      echo "Failed ($1 is not found)"
+      echo "$2"
+      exit 1
+   fi
+}
+
+check_exist()
+{
+   test -e $1 &amp;&gt; /dev/null
+   if [ $? != 0 ]; then
+      echo -e "\n"
+      echo "Failed ($1 is not found)"
+      echo "$2"
+      exit 1
+   fi
+}
+</screen>
+
+      <para>
+         To understand the global configuration, lets go through the individual
+         parts.
+      </para>
+      <para>
+         The configuration above starts by defining the <code>HOST</code>
+         variable which expresses the host system type. This variable is used
+         in the configure line (eg. <code>configure --host=$HOST</code> of
+         virtually all cross build files.
+      </para>
+      <para>
+         Secondly, the <code>CROSS_DEPENDS</code> variable is defined - this
+         variable tells the build tool that all cross builds should depend on
+         this build. This will typically be the Crosstool-NG toolchain build
+         which is native type.
+      </para>
+      <para>
+         Next, the build tool needs the <code>CROSS_SYSROOT</code> which
+         defines where the cross sysroot is located. This will typically be
+         inside the toolchain space added to the native sysroot. Both the
+         native sysroot and cross sysroot act as staging areas - builds are
+         added here accordingly during the build process.
+      </para>
+      <para>
+         The download super mirror for your specific set of build files is
+         defined by the <code>DOWNLOAD_MIRROR</code> variable.
+      </para>
+      <para>
+         The toolchain is added to the environment by the well known
+         <code>PATH</code> variable.
+      </para>
+      <para>
+         The <code>JOBS</code> is typically used by the build files to define
+         how many concurreny jobs that make should support (eg. <code>make -j
+         $JOBS</code>).
+      </para>
+      <para>
+         Next, the pkgconfig tool needs two configurations, one for native
+         building, and a second for cross building. The two are distinguised
+         using the <code>BUILD_TYPE</code> variable.
+      </para>
+      <para>
+         This simple <code>fix_la_files()</code> bash function is a necessary
+         evil to bypass a long standing problem with libtool - namely it's
+         inability to support cross building.
+      </para>
+      <para>
+         The <code>check_tool()</code> and <code>check_exist</code> are helper
+         functions which are used in the <code>check()</code> function of build
+         files which rely on certain tools or libraries to be preinstalled on
+         the build system.
+      </para>
+
+      <para>
+         All of the bash functions are custom and can be defined and used for
+         your specific needs. The following variables are special and have
+         specific meaning:
+      </para>
+
+      <informaltable>
+      <tgroup cols="3">
+      <thead>
+      <row>
+         <entry>
+            Variable
+         </entry>
+         <entry>
+            Description
+         </entry>
+         <entry>
+            Type
+         </entry>
+      </row>
+      </thead>
+
+      <tbody>
+
+      <row>
+         <entry>
+            <userinput>BUILD</userinput>
+         </entry>
+         <entry>
+            Build system triplet (eg. "x86_64-unknown-linux-gnu").
+         </entry>
+         <entry>
+            Provided
+         </entry>
+      </row>
+
+      <row>
+         <entry>
+            <userinput>HOST</userinput>
+         </entry>
+         <entry>
+            Host system triplet (eg. "arm-cortex_a8-linux-gnueabi").
+         </entry>
+         <entry>
+            Mandatory
+         </entry>
+      </row>
+
+      <row>
+         <entry>
+            <userinput>CROSS_DEPENDS</userinput>
+         </entry>
+         <entry>
+            A list of builds that all cross builds depends on. This variable
+            typically contains a single element, namely the name of the
+            toolchain build (eg. native/crosstool-ng) which of course every
+            cross build should depend on.  </entry>
+         <entry>
+            Mandatory
+         </entry>
+      </row>
+
+      <row>
+         <entry>
+            <userinput>CROSS_SYSROOT</userinput>
+         </entry>
+         <entry>
+            Defines the sysroot for cross builds.
+         </entry>
+         <entry>
+            Mandatory
+         </entry>
+      </row>
+
+      <row>
+         <entry>
+            <userinput>SYSROOT</userinput>
+         </entry>
+         <entry>
+            Defines the sysroot. In case of cross building it points to the cross
+            sysroot. In case of native building it points to the native
+            sysroot.
+         </entry>
+         <entry>
+            Provided
+         </entry>
+      </row>
+
+      <row>
+         <entry>
+            <userinput>NATIVE_SYSROOT</userinput>
+         </entry>
+         <entry>
+            Defines the sysroot for native builds.
+         </entry>
+         <entry>
+            Provided
+         </entry>
+      </row>
+
+      <row>
+         <entry>
+            <userinput>BUILD_TYPE</userinput>
+         </entry>
+         <entry>
+            Defines the build type. Value is either "cross" or "native".
+         </entry>
+         <entry>
+            Provided
+         </entry>
+      </row>
+
+      <row>
+         <entry>
+            <userinput>DOWNLOAD_MIRROR</userinput>
+         </entry>
+         <entry>
+            Defines the download super mirror. If a source file fails
+            downloading from the source URL then Build Gear will attempt to
+            download the same file from the super mirror.
+         </entry>
+         <entry>
+            Optional
+         </entry>
+      </row>
+
+      </tbody>
+      </tgroup>
+      </informaltable>
+
+   </section>
+
+   <para>
+      Some variables are "mandatory" and must be defined while others are
+      "provided" by Build Gear and some are simply "optional".
+   </para>
+   </section>
+
+
 </chapter>

@@ -1,27 +1,31 @@
-<!-- This is a docbook document.
+<!-- This is the Build Gear Handbook written in docbook.
      For help on docbook see http://www.docbook.org/tdg5/en/html -->
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
                "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+
 <!ENTITY intro SYSTEM "introduction.docbook">
 <!ENTITY install SYSTEM "installation.docbook">
 <!ENTITY basics SYSTEM "basics.docbook">
+<!ENTITY usage SYSTEM "usage.docbook">
+<!ENTITY faq SYSTEM "faq.docbook">
+<!ENTITY appendix SYSTEM "appendix.docbook">
 <!ENTITY example SYSTEM "example.docbook">
-]>
 
+]>
 
 <book>
    <bookinfo>
-      <title>Build Gear Handbook</title>
+      <title>Build Gear Handbook ***DRAFT***</title>
       <titleabbrev>Handbook</titleabbrev>
 
       <legalnotice>
-        <para>
-          This work is licensed under the Creative Commons
-          Attribution-ShareAlike 3.0 License. To view a copy of the license,
-          visit <ulink url="http://creativecommons.org/licenses/by-sa/3.0">http://creativecommons.org/licenses/by-sa/3.0</ulink>
-        </para>
-        <graphic fileref="images/cc-by-sa.svg" width="88"></graphic>
+         <para>
+            This work is licensed under the Creative Commons
+            Attribution-ShareAlike 3.0 License. To view a copy of the license,
+            visit <ulink url="http://creativecommons.org/licenses/by-sa/3.0">http://creativecommons.org/licenses/by-sa/3.0</ulink>
+            <graphic fileref="images/cc-by-sa.svg" width="88"></graphic>
+         </para>
       </legalnotice>
 
       <copyright><year>2013</year><holder>Martin Lund</holder></copyright>
@@ -32,6 +36,9 @@
    &intro;
    &install;
    &basics;
-   &example;
+   &usage;
+   &faq;
+<!-- &appendix; -->
+<!-- &example; -->
 
 </book>

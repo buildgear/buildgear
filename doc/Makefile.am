@@ -10,6 +10,9 @@ DOCBOOKS = handbook.docbook \
            introduction.docbook \
            installation.docbook \
            basics.docbook \
+           usage.docbook \
+           faq.docbook \
+			  appendix.docbook \
            example.docbook
 
 html-local: $(PACKAGE_TARNAME)-v$(PACKAGE_VERSION)-handbook.html

@@ -1,0 +1,329 @@
+<chapter>
+   <title>Build Gear Usage</title>
+
+   <para>
+      The following chapter describes the mostly used Build Gear features by
+      command line examples.
+   </para>
+
+   <section>
+      <title> Help </title>
+
+      <para>
+         To list all available Build Gear commands and options simply do:
+      </para>
+
+<screen>
+$ buildgear --help
+</screen>
+
+      <para>
+         To ask for help on a specific command do:
+      </para>
+
+<screen>
+$ buildgear help build
+</screen>
+
+   </section>
+
+
+   <section>
+      <title> Building </title>
+
+      <para>
+         To build for example the "fs" build simply do eg.:
+      </para>
+
+<screen>
+$ buildgear build fs
+</screen>
+
+      <para>
+         This will automatically download all sources, resolve all dependencies
+         and build the "fs" build.
+      </para>
+
+   </section>
+
+   <section>
+      <title> Building With Load Chart Enabled</title>
+
+      <para>
+         During building Build Gear can monitor and log the system CPU and
+         memory usage and summarize these metrics in a load chart. To build a
+         build and have Build Gear produce a load chart containing CPU and
+         memory usage during the build process simply do eg.:
+      </para>
+
+<screen>
+$ buildgear build fs --load-chart
+</screen>
+
+      <para>
+         After a successful "fs" build the load chart will be available in
+         <code>build/output/load-chart.fs.svg</code>.
+      </para>
+
+   </section>
+
+
+
+   <section>
+      <title> Show Log </title>
+
+      <para>
+         To have Build Gear show the log after a build has finished simply do:
+      </para>
+
+<screen>
+$ buildgear show --log
+</screen>
+
+      <para>
+         Alternatively, when Build Gear is building you can follow (tail) the
+         build log live by simply doing:
+      </para>
+
+<screen>
+$ buildgear show --log-tail
+</screen>
+
+      <para>
+         This features is quite useful - it enables you to have eg. one
+         terminal window open where you launch the actual build commands while in
+         another window you follow the log as it progresses during the build.
+      </para>
+
+   </section>
+
+
+
+   <section>
+      <title> Show Build Order </title>
+
+      <para>
+         To have Build Gear show the build order of a particular build, simply
+         do eg.:
+      </para>
+
+<screen>
+$ buildgear show --build-order fs
+</screen>
+
+      <para>
+         This will produce a build order list.
+      </para>
+
+   </section>
+
+
+
+   <section>
+      <title> Show Build Dependency </title>
+
+      <para>
+         Build Gear can produce a graphical overview of the dependencies in a
+         build. Simply do eg.:
+      </para>
+
+<screen>
+$ buildgear show --dependency fs
+</screen>
+
+      <para>
+         After resolving the dependencies successfully for the "fs" build the
+         dependency chart will be available in
+         <code>build/output/dependency.fs.svg</code>.
+      </para>
+
+   </section>
+
+
+
+   <section>
+      <title> Update Footprint </title>
+
+      <para>
+         To update the footprint for a particular build simply do eg.:
+      </para>
+
+<screen>
+$ buildgear build zlib --update-footprint
+</screen>
+
+      <para>
+         Likewise, to update the footprints for the build and all its
+         dependecies simply do eg.:
+      </para>
+
+<screen>
+$ buildgear build fs --update-footprint --all
+</screen>
+
+   </section>
+
+
+
+   <section>
+      <title> Update Checksum </title>
+
+      <para>
+         To update the checksum for a particular build simply do eg.:
+      </para>
+
+<screen>
+$ buildgear build zlib --update-checksum
+</screen>
+
+      <para>
+         Likewise, to update the checksums for the build and all its
+         dependecies simply do eg.:
+      </para>
+
+<screen>
+$ buildgear build fs --update-checksum --all
+</screen>
+
+   </section>
+
+
+
+   <section>
+      <title> Show Footprint </title>
+
+      <para>
+         To show the footprint for a particular build simply do eg.:
+      </para>
+
+<screen>
+$ buildgear show --footprint zlib
+</screen>
+
+   </section>
+
+
+
+   <section>
+      <title> Show Checksum </title>
+
+      <para>
+         To show the checksum for a particular build simply do eg.:
+      </para>
+
+<screen>
+$ buildgear show --checksum zlib
+</screen>
+
+   </section>
+
+
+
+   <section>
+      <title> Download Source </title>
+
+      <para>
+         To download the source of a particular build simply do eg.:
+      </para>
+
+<screen>
+$ buildgear download zlib
+</screen>
+
+      <para>
+         Likewise, to download the source of a particular build including the
+         source of all its dependencies simply do eg.:
+      </para>
+
+<screen>
+$ buildgear download --all zlib
+</screen>
+
+      <para>
+         To download the source of all available builds simply do:
+      </para>
+
+<screen>
+$ buildgear download --all
+</screen>
+
+   </section>
+
+   <section>
+      <title> Cleaning </title>
+
+      <para>
+         To clean the internal build package of a particular build simply do:
+      </para>
+
+<screen>
+$ buildgear clean zlib
+</screen>
+
+      <para>
+         This will of course force a rebuild the next time you build zlib.
+      </para>
+
+      <para>
+         To also clean the build and its dependencies simply do:
+      </para>
+
+<screen>
+$ buildgear clean --all fs
+</screen>
+
+      <para>
+         To clean all builds simply do:
+      </para>
+
+<screen>
+$ buildgear clean --all
+</screen>
+
+      <para>
+         Please be careful, the above command will remove everything in
+         <code>build/package</code>. Meaning you will have to rebuild
+         everything.
+      </para>
+
+   </section>
+
+   <section>
+      <title> Tool Configuration </title>
+
+      <para>
+         You can use the Build Gear tool configuration command to set eg. the
+         number of parallel builds in your current build space:
+      </para>
+
+<screen>
+$ buildgear config parallel_builds 4
+</screen>
+
+      <para>
+         Likewise, to set the same configuration globally simply do:
+      </para>
+
+<screen>
+$ buildgear config --global parallel_builds 4
+</screen>
+
+      <para>
+         To list the available tool configuration settings simple do:
+      </para>
+
+<screen>
+$ buildgear config --list
+</screen>
+
+    <note>
+       Tool configuration settings can be applied to either a specific build
+       space (local) or to all build spaces (global). Local settings always
+       override global settings. If settings are not set they simply retain
+       their default value.
+    </note>
+
+   </section>
+
+
+</chapter>

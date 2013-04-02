@@ -1,23 +1,36 @@
-<chapter><title>Installing Build Gear</title>
+<chapter>
+   <title> Installing Build Gear </title>
 
-  <section><title> Supported GNU/Linux Distributions </title>
 
-    <para>
-      Build Gear is tested using Ubuntu 12.10 64-bit (Minimal). Installation on
-      other GNU/Linux distributions is not supported.
-    </para>
 
-  </section>
+   <section>
+      <title> Supported GNU/Linux Distributions </title>
 
-  <section><title> Installing From Source </title>
-    <para>
-      Prepare Ubuntu for compilation and installation of Build Gear:
-    </para>
+      <para>
+         Build Gear is tested with Ubuntu 12.10 64-bit (Minimal). Installation
+         on other GNU/Linux distributions is not officially supported. That
+         being said, installation and building on other modern GNU/Linux
+         distributions might work, especially if they are based on the Debian
+         package system.
+      </para>
+
+   </section>
+
+
+
+   <section>
+      <title> Installing From Source </title>
+
+      <para>
+         Prepare Ubuntu for compilation and installation of Build Gear:
+      </para>
+
 <screen>$ sudo apt-get install build-essential libcurl4-gnutls-dev libncurses5-dev unzip</screen>
 
-    <para>
-      Build and install Build Gear:
-    </para>
+      <para>
+         Build and install Build Gear:
+      </para>
+
 <screen>$ wget http://www.buildgear.org/release/buildgear-PACKAGE_VERSION.tar.xz
 $ tar xf buildgear-PACKAGE_VERSION.tar.xz
 $ cd buildgear-PACKAGE_VERSION
@@ -25,64 +38,51 @@ $ ./configure --prefix=$HOME/opt/buildgear
 $ make
 $ make install</screen>
 
-    <para>
-      Add Build Gear to your path, eg.:
-    </para>
+      <para>
+         To add Build Gear to your path, do eg.:
+      </para>
+
 <screen>$ echo 'export PATH=$HOME/opt/buildgear/bin:$PATH' >> ~/.bashrc</screen>
 
-    <para>
-      Enable Build Gear bash auto completion, eg.:
-    </para>
-<screen>$ echo 'source $HOME/opt/buildgear/etc/bash_completion.d/buildgear-bash-completion.sh' >> ~/.bashrc</screen>
-  </section>
+      <para>
+         To enable Build Gear bash auto completion, do eg.:
+      </para>
+<screen>$ echo 'source $HOME/opt/buildgear/etc/bash_completion.d/buildgear-bash-completion.sh' >>~/.bashrc</screen>
 
-  <section><title>Installing From Ubuntu PPA</title>
-    <para>
-      Installation via Ubuntu PPA is planned to be available in the future.
-    </para>
-  </section>
+   </section>
 
-  <section><title>Optional VirtualBox Build Image</title>
-    <para>
-      A VirtualBox image with a preinstalled Ubuntu installation is available
-      for those who do not have Ubuntu installed on their build computer.
+
+
+   <section><title>Installing From Ubuntu PPA</title>
+
+      <para>
+         Build Gear can be installed via Ubuntu PPA. Simply do:
+      </para>
+
+<screen>
+$ sudo apt-add-repository ppa:team-buildgear/buildgear
+$ sudo apt-get update
+$ sudo apt-get install buildgear
+</screen>
+
+   </section>
+
+
+
+   <section>
+      <title>VirtualBox Build Image</title></section>
+   <para>
+      In case you do not have Ubuntu installed or do not wish to install Ubuntu
+      on your main system, then you can use the available VirtualBox build
+      image instead. Currently, this image comes with Ubuntu 12.10
+      preinstalled.
+   </para>
+   <para>
+      The VirtualBox build image and install instructions are available <ulink
+      url="http://buildgear.org/release/virtual-build-image">here</ulink>.
     </para>
 
-    <para>
-      The Ubuntu VirtualBox image is available <ulink
-      url="http://buildgear.org/release/Ubuntu-12.10-64bit-Minimal.vdi.tar.xz">here</ulink>.
-    </para>
 
-    <para>
-      Simply extract and install the VDI disk image in a new Virtualbox
-      session. Remember to configure the number of system CPUs according to the
-      CPU count available in your system.  Also be generous when configuring
-      available system memory. It is recommended to use a bridged network
-      adapter to make it easy to connect to the virtual machine via ssh.
-    </para>
 
-    <para>
-      The default username/password = ubuntu/ubuntu
-    </para>
 
-    <para>
-      If needed you can do some Ubuntu reconfiguration as described below.
-    </para>
-
-    <para>
-      Reconfigure keyboard language:
-    </para>
-<screen>$ sudo dpkg-reconfigure keyboard-configuration</screen>
-
-    <para>
-      Reconfigure time zone
-    </para>
-<screen>$ sudo dpkg-reconfigure tzdata</screen>
-
-    <para>
-      In case you run into boot delay due to network timeout you might need to do:
-    </para>
-<screen>$ sudo rm /etc/udev/rules.d/70-persistent-net.rules</screen>
-
-  </section>
 </chapter>

@@ -1,66 +1,123 @@
 <chapter>
-  <title> Introduction </title>
+   <title> Introduction </title>
 
-  <section>
-    <title> What is Build Gear? </title>
+   <para role="notice">
+      Please notice that the handbook documentation is currently considered
+      incomplete and work in progress. The documentation will steadily improve
+      in the upcoming releases.
+   </para>
 
-    <para>
-      Build Gear is a lightweight build tool for building embedded firmware. It
-      is intended for experienced GNU/Linux users and developers.
-    </para>
+   <section>
+      <title> What is Build Gear? </title>
 
-    <para>
-      The primary focus of this build tool is to keep building simple which is
-      reflected in a straightforward command line interface and support for
-      easy to maintain build files. The secondary focus is build performance
-      and build integrity. Build Gear is easy to use and well suited for rapid
-      prototyping and product development of GNU/Linux firmware to be deployed
-      in small to medium sized embedded systems.
-    </para>
+      <para>
+         Build Gear is a lightweight build tool for building embedded firmware.
+         It is intended for experienced GNU/Linux users and developers.
+      </para>
 
-  </section>
+      <para>
+         The primary focus of this build tool is to keep building simple which
+         is reflected in a straightforward command line interface and support
+         for easy to maintain build files. The secondary focus is build
+         performance and build integrity. Build Gear is easy to use and well
+         suited for rapid prototyping and product development of GNU/Linux
+         firmware to be deployed in small to medium sized embedded systems.
+      </para>
 
-  <section>
-    <title> Why use Build Gear? </title>
+   </section>
 
-    <para>
-      In short, use Build Gear because it is simple and because it enables full
-      control of how you build your firmware. By design, it offers a high level
-      of transparency in regards to how things are built.
-    </para>
 
-  </section>
 
-  <section><title> History </title>
+   <section>
+      <title> Why use Build Gear? </title>
 
-    <para>
-      Build Gear started out as an experimental build tool that I used for
-      rapid prototyping of firmware for various GNU/Linux based systems.
-    </para>
+      <para>
+         In short, use Build Gear because it is simple and because it enables
+         full control of how you build your firmware. By design, it operates in
+         simple ways and offers a high level of transparency in regards to how
+         things are built. This way it becomes easy to create and customize
+         build descriptions which in turn helps ensure a high level of software
+         quality.
+      </para>
 
-    <para>
-      For years, I've been putting together customized GNU/Linux distributions
-      either manually (Linux From Scratch kind of way) or by using some of the
-      most popular open source build systems available such as OpenEmbedded and
-      Buildroot. Unfortunately, none of these open source build tools suit my
-      needs. Both these tools are excellent in each their ways and they both
-      offer quite featureful and configurable software distributions but it
-      generally comes at the expense of very complex build descriptions (build
-      meta data) and also very high levels of abstractions. To be fair,
-      OpenEmbedded is certainly the most complex while Buildroot is much less
-      complex but still too complex for my taste. In short, what I need is a
-      buil tool that is less complex than currently available build tools yet
-      still powerful enough to build featureful and fully customized embedded
-      firmware.
-    </para>
+   </section>
 
-    <para>
-      Build Gear is an attempt to create a build tool which does things as
-      simple as possible and with the lowest level of information possible in
-      order to perform the specific job of building fully tailored embedded
-      firmware images for prototype or product hardware.
-    </para>
 
-  </section>
+
+   <section>
+      <title> History </title>
+
+      <para>
+         Build Gear started out as an experimental build tool used for rapid
+         prototyping of firmware for various GNU/Linux based systems.
+      </para>
+
+      <para>
+         The more complexity introduced in the build meta data the more prone
+         the firmware build becomes to build errors and increased maintenance.
+         Also, with high complexity it becomes hard to maintain a high level of
+         software quality. This simple fact is overlooked by many existing
+         build tools.
+      </para>
+
+      <para>
+         In response to this fact, Build Gear is an attempt to create a build
+         tool which does things as simple as possible and with the lowest level
+         of information possible in order to perform the specific job of
+         building fully tailored embedded firmware images for prototypes or
+         products.
+      </para>
+
+   </section>
+
+
+   <section>
+      <title> License </title>
+            This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or (at your option)
+any later version. This program is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+License for more details.
+   </section>
+
+   <section>
+      <title> Terminology </title>
+
+      <variablelist><title></title>
+
+         <varlistentry>
+            <term><filename>Build system</filename></term>
+            <listitem>
+               <para>
+                  The machince you are building on (typically x86).
+               </para>
+            </listitem>
+         </varlistentry>
+
+         <varlistentry>
+            <term><filename>Host system</filename></term>
+            <listitem>
+               <para>
+                  The machine you are building for (eg. arm, powerpc, etc.).
+               </para>
+            </listitem>
+         </varlistentry>
+
+         <varlistentry>
+            <term><filename>Build</filename></term>
+            <listitem>
+               <para>
+                  The buildable unit represented by a Buildfile.
+               </para>
+            </listitem>
+         </varlistentry>
+
+      </variablelist>
+
+   </section>
+
+
 
 </chapter>
