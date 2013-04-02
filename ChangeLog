@@ -1,20 +1,95 @@
 
-=== Build Gear v0.9.15beta ===
+=== Build Gear v0.9.16beta ===
 
-Changes since Build Gear v0.9.14beta:
+Changes since Build Gear v0.9.15beta:
 
-Contributed by Jesper Larsen:
+  * Added handbook documentation (draft)
 
- * Create build directory before we open log file (bugfix)
+    This is the first draft of the Handbook documenation. It is currently
+    considered incomplete and draft quality. It will steadily improve in the
+    upcoming releases.
 
- * Improved configfile handling
+  * Fixed package creation error
 
-   The config part has been rewritten a bit. Options that are defined in
-   the buildgear config files are stored un an unordered_map i.e.
-   bg_config["parallel_builds"]. This allows for a more compact code base.
+    Interupting the package creation step would lead to an incomplete and
+    corrupt package file. To avoid this the package is now written to a
+    temporary package file and then in the last step this file is moved to
+    the final package file.
 
-   The config command will now update the config files with the installed
-   templates when a option is changed. This will make sure that the config
-   files are up-to-date if more options are introduced in the future.
+  * Updated config.guess
 
- * Various cleanups
+  * Various updates and cleanups
+
+Contributions by Jesper Larsen:
+
+  * Support for internal variables in buildfile show
+
+    Variables that are provided by the buildgear.sh script was not resolved
+    in the buildgear show --buildfile command.
+
+    A new action "read" has been added to buildgear.sh to present these
+    variables to the buildgear show --buildfile command
+
+  * Set CURLOPT_NOSIGNAL on curl objects
+
+    This is a nasty hack to avoid a bug in libcurl. It might result
+    in undesired behavior, if a DNS lookup hangs.
+
+    http://stackoverflow.com/questions/9191668/error-longjmp-causes-uninitialized-stack-frame
+
+  * Added config for SSL certificate location
+
+    The buildgear config file (.buildgear/config) now supports a paramerter
+    'certificate_dir'. This parameter can be used to set a custom location
+    of SSL certificates. Default for the parameter is a empty string. This
+    makes libcurl choose a location. On Ubuntu that resolves to /ets/ssl/certs.
+
+  * Support for libcurl-gnutls and libcurl-openssl
+
+    The configure script now accepts both libraries
+
+  * Added init --buildfile option to help
+
+  * Do not make error if /bin/sh links to /bin/bash
+
+  * Added a load chart feature
+
+    If a --load-chart option is given to the build command, the CPU load
+    and memory usage will be recorded throughout the build. When the build
+    is finished the loads are rendered in a svg file that shows the results.
+
+    The svg with the data is located in build/output/load-chart.<build name>.svg
+
+  * Added unzip as a run-time dependency
+
+  * Fix extract of .tgz and .txz files
+
+  * Include optional error message in check functions
+
+  * Make tar itself determine the compression type
+
+  * Add a "Cleaning work dir" step in the output
+
+    Cleaning a large work dir can take some time. Include a step in the output
+    to reflect the progress of doing this.
+
+  * Fix support for alternative source dir
+
+  * Rename check_lib to check_exist in template
+
+  * Added --buildfile option to init
+
+    A template for Buildfiles is installed. Running init --buildfile will
+    use the template to create a new Buildfile in the current directory.
+    If a build name is given, this will be inserted in the name variable of
+    the buildfile.
+
+  * Introduce lock file for the build root
+
+    A lock file is used to ensure that multiple instances of buildgear
+    are not allowed to run, if they have the possibility of changing data.
+
+    I.e. you cannot run two build commands in the same root dir, but you are
+    allowed to run a build command and a show --log commmand.
+
+  * Various updates and cleanups
