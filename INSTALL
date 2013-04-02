@@ -13,7 +13,7 @@
    Note: termcap is usually bundled with ncurses/curses.
 
 
-2. Install steps (general)
+2. Installation from source
 
    $ ./configure
    $ make
@@ -22,7 +22,7 @@
    See ./configure --help for more options.
 
 
-3. Install steps (Ubuntu)
+3. Installation via Ubuntu PPA
 
    Build Gear can be installed via Ubuntu PPA. Simply do:
 
