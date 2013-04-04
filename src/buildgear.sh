@@ -356,7 +356,7 @@ do_add()
    log_action "Add      "
 
    if [ -d $BG_BUILD_SYSROOT_DIR ]; then
-      tar -C $BG_BUILD_SYSROOT_DIR -xf $BG_BUILD_PACKAGE
+      tar --dereference -C $BG_BUILD_SYSROOT_DIR -xf $BG_BUILD_PACKAGE
    fi
 
    if [ "$?" != "0" ]; then
