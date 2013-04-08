@@ -31,6 +31,7 @@
 #include <string.h>
 #include <linux/limits.h>
 #include <ncurses.h>
+#include <curl/curl.h>
 #include "buildgear/config.h"
 #include "buildgear/options.h"
 #include "buildgear/filesystem.h"
@@ -95,14 +96,13 @@ string seconds2str(double seconds)
 int CSource::Remote(string item)
 {
    int i;
-   string protocol[4] = { "http://",
-                           "ftp://",
-                         "https://",
-                          "ftps://"  };
+   curl_version_info_data *curl_info;
 
-   for (i=0; i<4; i++)
+   curl_info = curl_version_info(CURLVERSION_NOW);
+
+   for (i=0; curl_info->protocols[i] != NULL; i++)
    {
-      if (item.find(protocol[i]) != item.npos)
+      if (item.find(string(curl_info->protocols[i]) + "://") != item.npos)
          return true;
    }
 
