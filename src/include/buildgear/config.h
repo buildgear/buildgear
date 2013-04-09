@@ -136,6 +136,8 @@ class CConfig : public CUtility
 #define CONFIG_KEY_DOWNLOAD_CONNECTIONS      "download_connections"
 #define CONFIG_KEY_PARALLEL_BUILDS           "parallel_builds"
 #define CONFIG_KEY_CERTIFICATE_DIR           "certificate_dir"
+#define CONFIG_KEY_SSH_PUBLIC_KEYFILE        "ssh_public_key"
+#define CONFIG_KEY_SSH_PRIVATE_KEYFILE       "ssh_private_key"
 
 // Buildfiles config
 #define CONFIG_KEY_DEFAULT_NAME_PREFIX       "default_name_prefix"

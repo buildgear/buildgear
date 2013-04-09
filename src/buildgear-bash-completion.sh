@@ -56,7 +56,8 @@ _buildgear()
                  --log --log-tail --log-mismatch --footprint --checksum --buildfile"
    config_options="--global --unset --list"
    config_keys="source_dir download_mirror_first download_timeout certificate_dir
-                download_retry download_connections parallel_builds"
+                download_retry download_connections parallel_builds ssh_public_key
+                ssh_private_key"
    help_options=$commands
 
    if [ $COMP_CWORD -eq 1 ]; then
@@ -126,6 +127,14 @@ _buildgear()
          fi
          if [ "$config_key_in_args" == 0 ]; then
             COMPREPLY+=( $(compgen -W "$config_keys" -- $cur) )
+         fi
+         if [[ "$prev" == "source_dir" || "$prev" == "certificate_dir" ]]; then
+            COMPREPLY+=( $(compgen -d -S / -- $cur) )
+            compopt -o nospace
+         fi
+         if [[ "$prev" == "ssh_public_key" || "$prev" == "ssh_private_key" ]]; then
+            COMPREPLY+=( $(compgen -f -- $cur) )
+            compopt -o filenames
          fi
          ;;
        "show")

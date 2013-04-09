@@ -179,6 +179,7 @@ void CDownloadItem::File()
    string dest;
    curl_version_info_data *version_info;
    string user_agent;
+   string key_location;
 
    dest = source_dir + "/" + filename + ".part";
 
@@ -223,6 +224,12 @@ void CDownloadItem::File()
       if (Config.bg_config[CONFIG_KEY_CERTIFICATE_DIR] != "") {
          curl_easy_setopt(curl, CURLOPT_CAPATH, Config.bg_config[CONFIG_KEY_CERTIFICATE_DIR].c_str());
       }
+
+      // Set custom public key location
+      curl_easy_setopt(curl, CURLOPT_SSH_PUBLIC_KEYFILE, Config.bg_config[CONFIG_KEY_SSH_PUBLIC_KEYFILE].c_str());
+
+      // Set custom private key location
+      curl_easy_setopt(curl, CURLOPT_SSH_PRIVATE_KEYFILE, Config.bg_config[CONFIG_KEY_SSH_PRIVATE_KEYFILE].c_str());
 
       // Define progress indication callback
       curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, CDownload::progress);

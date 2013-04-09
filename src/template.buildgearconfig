@@ -24,3 +24,9 @@
 
 # Directory containing SSL certificates
 #certificate_dir=
+
+# Location of public ssh keyfile
+#ssh_public_key=$HOME/.ssh/id_rsa.pub
+
+# Location of private ssh keyfile
+#ssh_private_key=$HOME/.ssh/id_rsa

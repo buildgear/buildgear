@@ -75,6 +75,8 @@ CConfigFile::CConfigFile(void)
    options.push_back(new CConfigOption(CONFIG_KEY_DOWNLOAD_CONNECTIONS,    ValidInt));
    options.push_back(new CConfigOption(CONFIG_KEY_PARALLEL_BUILDS,         ValidInt));
    options.push_back(new CConfigOption(CONFIG_KEY_CERTIFICATE_DIR,         NULL));
+   options.push_back(new CConfigOption(CONFIG_KEY_SSH_PUBLIC_KEYFILE,      NULL));
+   options.push_back(new CConfigOption(CONFIG_KEY_SSH_PRIVATE_KEYFILE,     NULL));
 }
 
 void CConfigFile::Parse(string filename)
@@ -93,6 +95,8 @@ void CConfigFile::Parse(string filename)
                      ; echo default_name_prefix=$default_name_prefix \
                      ; echo parallel_builds=$parallel_builds \
                      ; echo certificate_dir=$certificate_dir \
+                     ; echo ssh_public_key=$ssh_public_key \
+                     ; echo ssh_private_key=$ssh_private_key \
                      '";
       else
          command += "; echo cross_depends=${CROSS_DEPENDS[@]} \

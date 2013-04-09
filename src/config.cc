@@ -47,6 +47,8 @@ CConfig::CConfig()
    init = false;
    config = false;
 
+   home_dir = getenv("HOME");
+
    // Default buildgear options
    bg_config_default[CONFIG_KEY_DOWNLOAD_TIMEOUT] = "20";
    bg_config_default[CONFIG_KEY_DOWNLOAD_RETRY] = "3";
@@ -56,6 +58,8 @@ CConfig::CConfig()
    bg_config_default[CONFIG_KEY_SOURCE_DIR] = SOURCE_DIR;
    bg_config_default[CONFIG_KEY_PARALLEL_BUILDS] = "1";
    bg_config_default[CONFIG_KEY_CERTIFICATE_DIR] = "";
+   bg_config_default[CONFIG_KEY_SSH_PUBLIC_KEYFILE] = home_dir + "/.ssh/id_rsa.pub";
+   bg_config_default[CONFIG_KEY_SSH_PRIVATE_KEYFILE] = home_dir + "/.ssh/id_rsa";
 
    // Default buildfiles options
    bf_config[CONFIG_KEY_DOWNLOAD_MIRROR] = "";
@@ -89,7 +93,6 @@ CConfig::CConfig()
    // Misc defaults
    all = false;
 
-   home_dir = getenv("HOME");
    pid = getpid();
    tmp_dir = "/tmp/buildgear." + to_string(pid) + "/";
 
