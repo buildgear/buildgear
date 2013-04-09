@@ -64,6 +64,24 @@ The number of simultaneous download connections allowed. Default is 4.
 The setting can be overrided by the tool at runtime, if the terminal does not have enough lines to print the progress of all the connections. Each connection requires 3 lines for printing.
 .RE
 
+.TP
+.B certificate_dir
+.RS
+A directory containing CA certificates for verfication of SSL hosts. This only has effect if openSSL is used as backend. The default is to let openSSL use the system default.
+.RE
+
+.TP
+.B ssh_public_key
+.RS
+Location of the SSH public key to use for SFTP/SCP download. The default is ~/.ssh/id_rsa.pub
+.RE
+
+.TP
+.B ssh_private_key
+.RS
+Location of the SSH private key to use for SFTP/SCP download. The default is ~/.ssh/is_rsa
+.RE
+
 .SH AUTHOR
 <===AUTHOR===>
 

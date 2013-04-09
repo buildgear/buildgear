@@ -5,9 +5,9 @@
 buildgear-build \- Start buildgear build process.
 
 .SH SYNOPSIS
-\fBbuildgear build\fR [\fB\-\-keep-work\fR] [\fB\-\-update-checksum\fR]
-                [\fB\-\-update-footprint\fR] [\fB\-\-no-strip\fR]
-                [\fB\-\-no-fakeroot\fR] [\fB\-\-all\fR] <\fIbuild name\fR>
+\fBbuildgear build\fR [\fB\-\-all\fR] [\fB\-\-keep-work\fR] [\fB\-\-load-chart\fR]
+                [\fB\-\-update-checksum\fR] [\fB\-\-update-footprint\fR]
+                [\fB\-\-no-fakeroot\fR] [\fB\-\-no-strip\fR] <\fIbuild name\fR>
 
 .SH DESCRIPTION
 This command starts building a build of name <\fIbuild name>. Dependencies are automatically resolved, downloaded and built.
@@ -33,15 +33,17 @@ Whenever a build fails the work files are automatically kept for later debug ins
 .RE
 
 .TP
-.B "--update-checksum"
+.B "--load-chart"
 .RS
-Update source checksum.
+Make a load chart of the entire build process. The chart shows CPU usage and memory consumption of the system during the build process.
+
+The chart is saved in build/output/load-chart.<\fIbuild name\fR>.svg
 .RE
 
 .TP
-.B "--update-footprint"
+.B "--no-fakeroot"
 .RS
-Update the package footprint.
+Do not build in a fakeroot session.
 .RE
 
 .TP
@@ -51,9 +53,15 @@ Do not strip libraries and executables.
 .RE
 
 .TP
-.B "--no-fakeroot"
+.B "--update-checksum"
 .RS
-Do not build in a fakeroot session.
+Update source checksum.
+.RE
+
+.TP
+.B "--update-footprint"
+.RS
+Update the package footprint.
 .RE
 
 .SH CONFIG

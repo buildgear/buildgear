@@ -66,6 +66,13 @@ Create an empty build space. See
 \fBbuildgear-init\fR(1)
 .RE
 
+.TP
+.B config
+.RS
+Manage the Build Gear configuration. See
+\fBbuildgear-config\fR(1)
+.RE
+
 .SH CAVEATS
 buildgear does not make coffee.
 

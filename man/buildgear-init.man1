@@ -4,11 +4,23 @@
 buildgear-init \- Initialize an empty buildgear build space
 
 .SH SYNOPSIS
-.B buildgear init
+\fBbuildgear init \fR[\fB\-\-buildfile\fR [<\fIbuild name\fR>]]
 
 .SH DESCRIPTION
-This command initializes an empty buildgear build space in the path where it is run.
+If no argument is given, this command initializes an empty buildgear build space in the path where it is run.
 The build space is populated with templates for the buildgear config, and the buildfile config.
+
+If the argument \fB\-\-buildfile\fR is given, the command will initialize a Buildfile from a template.
+If a build name is given, the name property of the Buildfile will be automatically set.
+
+.SH OPTIONS
+
+.TP
+\fB\-\-buildfile \fR[<\fIbuild name\fR>]
+.RS
+Initialize a Buildfile from template (See \fBbuildgear-buildfile\fR(5)). This will create a file called Buildfile
+in the current working directory. If an optional build name is given, the Buildfile will have the name property
+automatically set to the build name.
 
 .SH FILES
 
@@ -41,4 +53,4 @@ Directory for the native build files.
 <===AUTHOR===>
 
 .SH SEE ALSO
-\fBbuildgear\fR(1), \fBbuildgear-config\fR(5), \fBbuildgear-buildfileconfig\fR(5).
+\fBbuildgear\fR(1), \fBbuildgear-config\fR(5), \fBbuildgear-buildfile\fR(5), \fBbuildgear-buildfileconfig\fR(5).

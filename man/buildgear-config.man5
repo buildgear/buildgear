@@ -47,6 +47,24 @@ This option can be overruled by the tool at runtime, if the terminal does not ha
 The number of build sessions to run in parallel. If your project contains many small builds, the build time can be reduced drastically on a multi core system, by allowing parallel build sessions. The default is 1.
 .RE
 
+.TP
+\fBcertificate_dir=\fR<\fIpath\fR>
+.RS
+Set <\fIpath\fR> to a directory containing the certificates that should be used to verify SSL connections, when using openSSL as backend. The default is an empty path, which will make openSSL use the system default.
+.RE
+
+.TP
+\fBssh_public_key=\fR<\fIpath\fR>
+.RS
+Set <\fIpath\fR> to the public SSH key to use for SFTP/SCP downloads. The default is ~/.ssh/id_rsa.pub
+.RE
+
+.TP
+\fBssh_private_key=\fR<\fIpath\fR>
+.RS
+Set <\fIpath\fR> to the private SSH key to use for SFTP/SCP downlaods. The default is ~/.ssh/id_rsa
+.RE
+
 .SH TEMPLATE
 .nf
 <===BUILDGEAR_CONFIG_TEMPLATE===>

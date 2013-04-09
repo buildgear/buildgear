@@ -39,7 +39,7 @@ The release identifier of the Buildgear distribution. This identifier will be us
 .TP
 .B source
 .RS
-List of sources needed in the build procedure. Sources can be remote (ftp://, http://, ftps://, https://), or it can be locale, relative to the location of the Builfile. If the source is an archive, it is automatically extracted.
+List of sources needed in the build procedure. Sources can be remote (protocols supported by your curl installation, i.e. http://, ftp://, https://, ftps://), or it can be locale, relative to the location of the Builfile. If the source is an archive, it is automatically extracted.
 .RE
 
 .TP
