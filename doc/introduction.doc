@@ -91,7 +91,7 @@ License for more details.
             <term><filename>Build system</filename></term>
             <listitem>
                <para>
-                  The machince you are building on (typically x86).
+                  The machine you are building on (typically x86).
                </para>
             </listitem>
          </varlistentry>
