@@ -56,41 +56,41 @@ CCursor::CCursor()
    }
 
    // Get number of lines in terminal
-   no_lines = tgetnum("li");
+   no_lines = tgetnum((char *)"li");
 
    // Get number of cols in terminal
-   no_cols = tgetnum("co");
+   no_cols = tgetnum((char *)"co");
 
    // Request padding character
-   temp = tgetstr("pc", NULL);
+   temp = tgetstr((char *)"pc", NULL);
    PC = temp ? *temp : 0;
 
    // Get string for moving cursor #1 lines up
-   UP =  tgetstr("UP", NULL);
+   UP =  tgetstr((char *)"UP", NULL);
 
    // Get string for moving cursor #1 lines down
-   DO =  tgetstr("DO", NULL);
+   DO =  tgetstr((char *)"DO", NULL);
 
    // Get string to clear from cursor to end of line
-   ce =  tgetstr("ce", NULL);
+   ce =  tgetstr((char *)"ce", NULL);
 
    // Get string to make cursor invisible
-   vi =  tgetstr("vi", NULL);
+   vi =  tgetstr((char *)"vi", NULL);
 
    // Get string to make cursor visible
-   ve =  tgetstr("ve", NULL);
+   ve =  tgetstr((char *)"ve", NULL);
 
    // Get string to move cursor to lower left corner
-   ll =  tgetstr("ll", NULL);
+   ll =  tgetstr((char *)"ll", NULL);
 
    // Get string to clear lines below cursor
-   cd =  tgetstr("cd", NULL);
+   cd =  tgetstr((char *)"cd", NULL);
 
    // Get string to disable auto margin
-   RA = tgetstr("RA", NULL);
+   RA = tgetstr((char *)"RA", NULL);
 
    // Get string to enable auto margin
-   SA = tgetstr("SA", NULL);
+   SA = tgetstr((char *)"SA", NULL);
 
    // Relative cursor placement
    ypos = 0;

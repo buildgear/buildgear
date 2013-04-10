@@ -39,7 +39,7 @@ extern CFileSystem FileSystem;
 void CBuildSystem::Check(void)
 {
    FILE *fp;
-   char cmd_result[10];
+   char cmd_result[20];
    int status, i=0;
    string tool[] = {      "bash",
                      "sha256sum",
@@ -92,7 +92,7 @@ void CBuildSystem::Check(void)
       exit(EXIT_FAILURE);
    }
 
-   if (fgets(cmd_result, 10, fp) == NULL)
+   if (fgets(cmd_result, 20, fp) == NULL)
    {
       cout << "fgets error" << endl;
       exit(EXIT_FAILURE);

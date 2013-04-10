@@ -133,7 +133,7 @@ then
 fi
 
 termcap=1
-AC_SEARCH_LIBS([tgetent], termcap, , [termcap=0])
+AC_SEARCH_LIBS([tgetent], [termcap curses ncurses], , [termcap=0])
 AC_CHECK_FUNC([tgetnum], , [termcap=0])
 AC_CHECK_FUNC([tgetstr], , [termcap=0])
 AC_CHECK_FUNC([putp], , [termcap=0])
