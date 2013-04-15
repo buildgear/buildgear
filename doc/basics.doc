@@ -661,7 +661,7 @@ check_exist()
       </para>
       <para>
          The <code>JOBS</code> is typically used by the build files to define
-         how many concurreny jobs that make should support (eg. <code>make -j
+         how many concurrent jobs that make should support (eg. <code>make -j
          $JOBS</code>).
       </para>
       <para>
@@ -675,7 +675,7 @@ check_exist()
          inability to support cross building.
       </para>
       <para>
-         The <code>check_tool()</code> and <code>check_exist</code> are helper
+         The <code>check_tool()</code> and <code>check_exist()</code> are helper
          functions which are used in the <code>check()</code> function of build
          files which rely on certain tools or libraries to be preinstalled on
          the build system.
@@ -801,6 +801,19 @@ check_exist()
             Defines the download super mirror. If a source file fails
             downloading from the source URL then Build Gear will attempt to
             download the same file from the super mirror.
+         </entry>
+         <entry>
+            Optional
+         </entry>
+      </row>
+
+      <row>
+         <entry>
+            <userinput>LAYERS</userinput>
+         </entry>
+         <entry>
+            Defines build layer names and priority. Layer names listed first
+            are highest priority.
          </entry>
          <entry>
             Optional

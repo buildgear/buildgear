@@ -1,5 +1,5 @@
 <chapter>
-   <title>Build Gear Usage</title>
+   <title>Using Build Gear</title>
 
    <para>
       The following chapter describes the mostly used Build Gear features by
@@ -322,6 +322,55 @@ $ buildgear config --list
        override global settings. If settings are not set they simply retain
        their default value.
     </note>
+
+   </section>
+
+   <section>
+      <title> Layer Configuration </title>
+
+      <para>
+         Using build layers it is possible to override existing build files
+         with build files of a higher priority. This feature is quite useful in
+         case some existing build files do not suit your specific needs and you
+         want to override with your own variants. Layers are defined in the
+         global configuration file (<code>config/config</code>) like so:
+      </para>
+
+<screen>
+# Set layers
+LAYERS=(my-layer0 my-layer1 my-layer2 default)
+</screen>
+
+      <para>
+         Layers with higher priority overrides layers with lower prority.  The
+         layer priority is defined according to the order in which they are
+         listed. Meaning, the first layer in the list (<code>my-layer0</code>) is the
+         highest priority and the layer listed last (<code>default</code>) is the lowest
+         priority.
+      </para>
+
+      <note>
+         Please notice that the layer name <code>default</code> is a reserved
+         keyword for the layer name that builds belong to by default if no
+         <code>.layer</code> file is defined.
+      </note>
+
+      <para>
+         To include a build in a specific layer simply create a
+         <code>.layer</code> file next to the <code>Buildfile</code> which
+         contains the layer name that the build file belongs. Eg.
+         <code>buildfiles/cross/cross-panda/gstreamer/.layer</code> containing:
+      </para>
+
+<screen>
+my-layer0
+</screen>
+
+      <para>
+         During build, this will make <code>cross-panda/gstreamer</code>
+         override the default one defined in eg.
+         <code>cross-opt/gstreamer</code>.
+      </para>
 
    </section>
 
