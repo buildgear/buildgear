@@ -177,7 +177,7 @@ void CDependency::ShowDependencyCircleSVG(string filename)
    }
 
    Svg.open(filename);
-   Svg.addHeader(radius+40);
+   Svg.addHeader(radius+60);
 
    // Add arrows
    for (it=build_order.begin(); it!=build_order.end(); it++)
