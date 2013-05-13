@@ -114,7 +114,7 @@ then
 fi
 
 # Check for libraries and their interfaces
-AC_CHECK_LIB([rt], [clock_gettime], , AC_MSG_ERROR([rt not found]))
+AC_CHECK_LIB([rt], [clock_gettime], , AC_MSG_ERROR([required library rt not found]))
 AC_CHECK_FUNCS([clock_gettime getcwd strerror])
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
 
@@ -129,7 +129,7 @@ AC_CHECK_FUNC([curl_easy_strerror], , [curl=0])
 AC_CHECK_HEADERS([curl/curl.h], , [curl=0])
 if test $curl == 0
 then
-       AC_MSG_ERROR([libcurl not found])
+       AC_MSG_ERROR([required library curl not found])
 fi
 
 termcap=1
@@ -142,7 +142,7 @@ AC_CHECK_HEADERS([term.h], , [termcap=0])
 AC_CHECK_HEADERS([curses.h], , [termcap=0])
 if test $termcap == 0
 then
-   AC_MSG_ERROR([termcap not found])
+   AC_MSG_ERROR([required library termcap not found])
 fi
 
 AC_CHECK_LIB([pthread], [pthread_create], , AC_MSG_ERROR([required library pthread not found]))
