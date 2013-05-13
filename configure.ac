@@ -145,6 +145,7 @@ then
    AC_MSG_ERROR([termcap not found])
 fi
 
+AC_CHECK_LIB([pthread], [pthread_create], , AC_MSG_ERROR([required library pthread not found]))
 
 # Check for typedefs, structures, and compiler characteristics
 AC_HEADER_STDBOOL
