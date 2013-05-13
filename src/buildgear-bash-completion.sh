@@ -57,7 +57,7 @@ _buildgear()
    config_options="--global --unset --list"
    config_keys="source_dir download_mirror_first download_timeout certificate_dir
                 download_retry download_connections parallel_builds ssh_public_key
-                ssh_private_key"
+                ssh_private_key log_rotation"
    help_options=$commands
 
    if [ $COMP_CWORD -eq 1 ]; then

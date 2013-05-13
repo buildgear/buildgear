@@ -282,11 +282,12 @@ int main (int argc, char *argv[])
    /* Print number of buildfiles found */
    cout << "Done (" << BuildFiles.buildfiles.size() << " files)\n";
 
-   /* Delete old build log */
-   BuildManager.CleanLog();
-
    /* Create build directory */
    FileSystem.CreateDirectory(BUILD_DIR);
+
+   /* Rotate log */
+   if (Config.bg_config[CONFIG_KEY_LOG_ROTATION] != "0")
+      Log.rotate();
 
    /* Open build log file */
    Log.open(BUILD_LOG);

@@ -77,6 +77,7 @@ CConfigFile::CConfigFile(void)
    options.push_back(new CConfigOption(CONFIG_KEY_CERTIFICATE_DIR,         NULL));
    options.push_back(new CConfigOption(CONFIG_KEY_SSH_PUBLIC_KEYFILE,      NULL));
    options.push_back(new CConfigOption(CONFIG_KEY_SSH_PRIVATE_KEYFILE,     NULL));
+   options.push_back(new CConfigOption(CONFIG_KEY_LOG_ROTATION,            ValidInt));
 }
 
 void CConfigFile::Parse(string filename)
@@ -97,6 +98,7 @@ void CConfigFile::Parse(string filename)
                      ; echo certificate_dir=$certificate_dir \
                      ; echo ssh_public_key=$ssh_public_key \
                      ; echo ssh_private_key=$ssh_private_key \
+                     ; echo log_rotation=$log_rotation \
                      '";
       else
          command += "; echo cross_depends=${CROSS_DEPENDS[@]} \

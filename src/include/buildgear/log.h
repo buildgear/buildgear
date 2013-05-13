@@ -43,6 +43,8 @@ class CLog
       void open(string filename);
       void write(char *buffer, int length);
       void close();
+      void clean(void);
+      void rotate(void);
       CStreamDescriptor* add_stream(FILE*, CBuildFile*);
       list<CStreamDescriptor*> log_streams;
       mutex log_streams_mutex;

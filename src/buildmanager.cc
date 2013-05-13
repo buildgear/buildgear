@@ -527,7 +527,6 @@ void CBuildManager::CleanAll(void)
 {
    CleanPackages();
    CleanWork();
-   CleanLog();
 }
 
 void CBuildManager::CleanDependencies(CBuildFile *buildfile)
@@ -641,12 +640,6 @@ void CBuildManager::CleanWork(void)
 {
    if (system("rm -rf " WORK_DIR) < 0)
 	   perror("error\n");
-}
-
-void CBuildManager::CleanLog(void)
-{
-   if (system("rm -f " BUILD_LOG) < 0)
-      perror("error\n");
 }
 
 void CBuildManager::BuildOutputTick(CBuildFile *buildfile)

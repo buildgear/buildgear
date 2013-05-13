@@ -22,6 +22,7 @@
 #include "config.h"
 #include <unistd.h>
 #include <string>
+#include <sstream>
 #include <cstring>
 #include <stdexcept>
 #include <thread>
@@ -107,6 +108,34 @@ void CLog::write(char *buffer, int length)
 void CLog::close()
 {
    log_file.close();
+}
+
+void CLog::clean(void)
+{
+   if (system("rm -f " BUILD_LOG "*") < 0)
+      perror("error\n");
+}
+
+void CLog::rotate(void)
+{
+   string command;
+   stringstream command_stream;
+   int i, log_rotate;
+
+   log_rotate = stoi(Config.bg_config[CONFIG_KEY_LOG_ROTATION]);
+
+   for (i=log_rotate;i>0;i--)
+   {
+      if (i==1)
+         command_stream << "mv " BUILD_LOG " " BUILD_LOG "." << i << " 2>/dev/null; ";
+      else
+         command_stream << "mv " BUILD_LOG "." << i-1 << " " BUILD_LOG "." << i << " 2>/dev/null; ";
+
+      command = command_stream.str();
+   }
+
+   if (system(command.c_str()) < 0)
+      perror("error\n");
 }
 
 CStreamDescriptor* CLog::add_stream(FILE *fp, CBuildFile *buildfile)

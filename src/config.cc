@@ -60,6 +60,7 @@ CConfig::CConfig()
    bg_config_default[CONFIG_KEY_CERTIFICATE_DIR] = "";
    bg_config_default[CONFIG_KEY_SSH_PUBLIC_KEYFILE] = home_dir + "/.ssh/id_rsa.pub";
    bg_config_default[CONFIG_KEY_SSH_PRIVATE_KEYFILE] = home_dir + "/.ssh/id_rsa";
+   bg_config_default[CONFIG_KEY_LOG_ROTATION] = "5";
 
    // Default buildfiles options
    bf_config[CONFIG_KEY_DOWNLOAD_MIRROR] = "";

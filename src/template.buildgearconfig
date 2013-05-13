@@ -30,3 +30,6 @@
 
 # Location of private ssh keyfile
 #ssh_private_key=$HOME/.ssh/id_rsa
+
+# Number of rotated logs
+#log_rotation=5
