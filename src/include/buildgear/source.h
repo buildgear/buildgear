@@ -36,4 +36,5 @@ class CSource : public CFileSystem, COptions
       int Remote(string item);
 };
 
+string bytes2str(double bytes);
 #endif

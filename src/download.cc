@@ -37,6 +37,7 @@
 #include "buildgear/download.h"
 #include "buildgear/cursor.h"
 #include "buildgear/buildmanager.h"
+#include "buildgear/source.h"
 
 static unsigned int filesize;
 
@@ -73,7 +74,7 @@ int CDownload::progress(void *obj,
       return 0;
    }
 
-   if (dltotal != 0)
+   if (dlnow != 0)
    {
       item->downloaded = dlnow;
       item->total = dltotal;
@@ -317,31 +318,35 @@ void CDownloadItem::print_progress()
    } else
    {
 
-      percent = downloaded * 100.0 / total;
+      if (total == 0) {
+         line << "   Unknown size of remote file. ";
+         line << setw(9) << bytes2str(downloaded) << " downloaded";
+      } else {
 
-      spaces = 20;
+         percent = downloaded * 100.0 / total;
 
-      // Progress bar:
-      // [====================]100%   (= ~ 5%)
+         spaces = 20;
 
-      // Calculate how many bar elements to draw
-      elements = ((int) percent) * spaces / 100;
+         // Progress bar:
+         // [====================]100%   (= ~ 5%)
 
-      line << "   Progress [";
+         // Calculate how many bar elements to draw
+         elements = ((int) percent) * spaces / 100;
 
-      for (i=0; i<elements; i++)
-         line << "=" ;
-      for (i=(spaces-elements);i != 0; i--)
-         line << " " ;
+         line << "   Progress [";
 
-      line << right << "]"
-         << setw(4) << (int) percent << setw(2) << left << "%";
-      if (downloaded == -1)
-         line << setw(9) << 0;
-      else
+         for (i=0; i<elements; i++)
+            line << "=" ;
+         for (i=(spaces-elements);i != 0; i--)
+            line << " " ;
+
+         line << right << "]"
+              << setw(4) << (int) percent << setw(2) << left << "%";
          line << setw(9) << (unsigned long) downloaded;
-      line << " / ";
-      line << setw(9) << (unsigned long) total << setw(6) << " bytes   ";
+         line << " / ";
+         line << setw(9) << (unsigned long) total << setw(6) << " bytes   ";
+
+      }
 
       cout << line.str();
 

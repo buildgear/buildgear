@@ -47,9 +47,9 @@ string bytes2str(double bytes)
    ostringstream result;
    string unit[] = {"B", "kB", "MB", "GB", "TB"};
 
-   for (i=0;bytes > 1024;i++)
+   for (i=0;bytes > 1000;i++)
    {
-      bytes /= 1024;
+      bytes /= 1000;
    }
 
    result << setprecision(2) << fixed << bytes << unit[i];
