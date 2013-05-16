@@ -1,7 +1,7 @@
 /*
  * This file is part of Build Gear.
  *
- * Copyright (c) 2011-2013  Martin Lund
+ * Copyright (c) 2012-2013  Jesper Larsen
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
