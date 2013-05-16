@@ -53,7 +53,8 @@ _buildgear()
                   --no-fakeroot --all --load-chart"
    clean_options="--all --footprint --checksum"
    show_options="--build-order --download-order --dependency --readme --version
-                 --log --log-tail --log-mismatch --footprint --checksum --buildfile"
+                 --log --log-tail --log-mismatch --footprint --checksum --buildfile
+                 --manifest-xml"
    config_options="--global --unset --list"
    config_keys="source_dir download_mirror_first download_timeout certificate_dir
                 download_retry download_connections parallel_builds ssh_public_key
@@ -109,10 +110,12 @@ _buildgear()
          ;;
        "config")
          config_key_in_args=0
+         config_opts_in_args=0
+         config_list_in_args=0
          config_key_in_prev=0
          for i in "${COMP_WORDS[@]}"
          do
-            for j in "${config_keys[@]}"
+            for j in ${config_keys}
             do
                if [ "$j" == "$i" ]; then
                   config_key_in_args=1
@@ -121,11 +124,20 @@ _buildgear()
                   config_key_in_prev=1
                fi
             done
+            for j in ${config_options}
+            do
+               if [ "$j" == "$i" ]; then
+                  config_opts_in_args=1
+               fi
+            done
+            if [ "$i" == "--list" ]; then
+               config_list_in_args=1
+            fi
          done
-         if [ "$config_key_in_prev" == 0 ]; then
+         if [[ "$config_key_in_prev" == 0 && "$config_opts_in_args" == 0 ]]; then
             COMPREPLY=( $(compgen -W "$config_options" -- $cur) )
          fi
-         if [ "$config_key_in_args" == 0 ]; then
+         if [[ "$config_key_in_args" == 0 && "$config_list_in_args" == 0 ]]; then
             COMPREPLY+=( $(compgen -W "$config_keys" -- $cur) )
          fi
          if [[ "$prev" == "source_dir" || "$prev" == "certificate_dir" ]]; then
@@ -138,10 +150,24 @@ _buildgear()
          fi
          ;;
        "show")
-         COMPREPLY=( $(compgen -W "$show_options" -- $cur) )
+         show_opts_in_args=0
          for i in "${COMP_WORDS[@]}"
          do
-           if [[ "$i" == "--build-order" || "$i" == "--download-order" || "$i" == "--dependency" || "$i" == "--version" || "$i" == "--footprint" || "$i" == "--checksum" || "$i" == "--buildfile" ]]; then
+           for j in ${show_options}
+           do
+             if [ "$j" == "$i" ]; then
+               show_opts_in_args=1
+             fi
+           done
+         done
+         if [ "$show_opts_in_args" == 0 ]; then
+           COMPREPLY=( $(compgen -W "$show_options" -- $cur) )
+         fi
+         for i in "${COMP_WORDS[@]}"
+         do
+           if [[ "$i" == "--build-order" || "$i" == "--download-order" || "$i" == "--dependency" || \
+                 "$i" == "--version" || "$i" == "--footprint" || "$i" == "--checksum" || \
+                 "$i" == "--buildfile" || "$i" == "--manifest-xml" ]]; then
              if [ "$build_name_in_args" == 0 ]; then
                COMPREPLY+=( ${builds[@]} )
              fi
