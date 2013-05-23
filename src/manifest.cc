@@ -27,6 +27,11 @@
 
 extern CBuildFiles BuildFiles;
 
+int prj_field_lenght = 34;
+int ver_field_lenght = 20;
+int lic_field_lenght = 10;
+int dsc_field_lenght = 50;
+
 CManifest::CManifest() {
 	mManifestData.documentFormat = FORMAT_NOT_SUPPORTED;
 	mManifestData.footer = "";
@@ -37,7 +42,7 @@ CManifest::CManifest() {
 void CManifest::generateManifest(CBuildFile *buildfile) {
 	switch (mManifestData.documentFormat) {
 	case FORMAT_PLAIN_TEXT:
-		generatePlainText();
+		generatePlainTextFull();
 		break;
 	case FORMAT_XML:
 		if (!buildfile) {
@@ -55,7 +60,6 @@ void CManifest::generateManifest(CBuildFile *buildfile) {
 }
 
 void CManifest::generateXMLFull() {
-	int ret = 0;
 	list<CBuildFile*>::iterator it;
 	string temp;
 	string native = "native";
@@ -84,7 +88,8 @@ void CManifest::generateXMLFull() {
 	mManifestData.file << "<manifest>" << endl;
 
 	if (mManifestData.header != "") {
-		mManifestData.file << "  <!-- " << mManifestData.header << " -->" << endl;
+		mManifestData.file << "  <!-- " << mManifestData.header << " -->"
+				<< endl;
 	}
 
 	//cout << "  <project name=\"\" />" << endl; TODO: At some point add this field
@@ -111,12 +116,14 @@ void CManifest::generateXMLFull() {
 	mManifestData.file << "  </cross>" << endl;
 
 	if (mManifestData.footer != "") {
-		mManifestData.file << "  <!-- " << mManifestData.footer << " -->" << endl;
+		mManifestData.file << "  <!-- " << mManifestData.footer << " -->"
+				<< endl;
 	}
 
 	mManifestData.file << "</manifest>" << endl;
 
 	mManifestData.file.close();
+
 
 	cout << "Done" << endl << endl;
 	cout << "Saved manifest to " << MANIFEST_FILE + mManifestData.fileExtension << endl << endl;
@@ -127,7 +134,7 @@ void CManifest::generateXMLProject(CBuildFile* file) {
 }
 
 void CManifest::generateXMLProjectProperties(CBuildFile* file) {
-	mManifestData.file  << "    <project name=\"" << file->short_name << "\"";
+	mManifestData.file << "    <project name=\"" << file->short_name << "\"";
 
 	if (file->version.length() != 0) {
 		mManifestData.file << " version=\"" << file->version << "\"";
@@ -153,7 +160,94 @@ void CManifest::generateXMLProjectProperties(CBuildFile* file) {
 	mManifestData.file << " />" << endl;
 }
 
-void CManifest::generatePlainText() {
+void CManifest::generatePlainTextFull() {
+	list<CBuildFile*>::iterator it;
+	ostringstream headLine, seperator;
+	string prj_name = "Project name";
+	string ver_name = "Version";
+	string lic_name = "License";
+	string dsc_name = "Description";
+
+	/*
+	 * Plain text defined format
+	 *
+	 * Project name        Version    License    Description
+	 * ===================-==========-==========-=======================================================
+	 *
+	 */
+
+	open(MANIFEST_FILE + mManifestData.fileExtension);
+
+	cout << "Generating manifest..           " << flush;
+
+	cout << endl; //REMOVE THIS LINE WHEN FINISHED WITH PLAIN TEXT FEATURE
+	if (mManifestData.header != "") {
+		mManifestData.file << mManifestData.header << endl << endl;
+	}
+
+	headLine << prj_name;
+	for(int i=0;i<(prj_field_lenght - prj_name.length())+2;i++)
+		headLine << " ";
+
+	headLine << ver_name;
+	for(int i=0;i<ver_field_lenght-ver_name.length();i++)
+		headLine << " ";
+
+	headLine << lic_name;
+	for(int i=0;i<lic_field_lenght-lic_name.length();i++)
+		headLine << " ";
+
+	headLine << dsc_name;
+	for(int i=0;i<dsc_field_lenght-dsc_name.length();i++)
+		headLine << " ";
+
+	mManifestData.file  << headLine.str() << endl;
+
+	for(int i=0; i<prj_field_lenght+1;i++)
+		seperator << "=";
+	seperator << "-";
+	for(int i=0; i<ver_field_lenght-1;i++)
+		seperator << "=";
+	seperator << "-";
+	for(int i=0; i<lic_field_lenght-1;i++)
+		seperator << "=";
+	seperator << "-";
+	for(int i=0; i<dsc_field_lenght;i++)
+		seperator << "=";
+
+	mManifestData.file << seperator.str() <<endl;
+
+	for (it = BuildFiles.buildfiles.begin(); it != BuildFiles.buildfiles.end();	it++) {
+		generatePlainTextProjectProperties((CBuildFile*) (*it));
+	}
+
+	mManifestData.file.close();
+
+	cout << "Done" << endl << endl;
+	cout << "Saved manifest to " << MANIFEST_FILE + mManifestData.fileExtension << endl << endl;
+}
+
+void CManifest::generatePlainTextProjectProperties(CBuildFile* file) {
+	ostringstream line;
+
+	if("cross" == file->type) {
+		line << "c ";
+	}
+
+	if("native" == file->type) {
+		line << "n ";
+	}
+
+	line << file->short_name;
+	for(int i=0; i<prj_field_lenght - file->short_name.length() ;i++) {
+		line << " ";
+	}
+
+	line << file->version;
+	for(int i=0; i<ver_field_lenght - file->version.length(); i++) {
+		line << " ";
+	}
+	mManifestData.file << line.str() << endl;
 }
 
 void CManifest::generateHTML() {
@@ -169,7 +263,7 @@ void CManifest::setHeader(string header) {
 
 void CManifest::setFormat(DocumentFormat df) {
 	mManifestData.documentFormat = df;
-	switch(df) {
+	switch (df) {
 	case FORMAT_XML:
 		mManifestData.fileExtension = ".xml";
 		break;
@@ -185,15 +279,16 @@ void CManifest::setFormat(DocumentFormat df) {
 void CManifest::open(string filename) {
 	mManifestData.file.open(filename, ios::out | ios::trunc);
 
-	if(!mManifestData.file.is_open()) {
-		cout << "Error: Could not open '" << filename << "' for writing"<< endl;
-		exit(EXIT_SUCCESS);
+	if (!mManifestData.file.is_open()) {
+		cout << "Error: Could not open '" << filename << "' for writing"
+				<< endl;
+		exit (EXIT_SUCCESS);
 	}
 }
 
 void CManifest::close() {
 
-	if(mManifestData.file.is_open()) {
+	if (mManifestData.file.is_open()) {
 		mManifestData.file.close();
 	}
 }

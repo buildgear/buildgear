@@ -56,7 +56,8 @@ private:
 	void generateXMLFull();
 	void generateXMLProject(CBuildFile* file);
 	void generateXMLProjectProperties(CBuildFile* file);
-	void generatePlainText();
+	void generatePlainTextFull();
+	void generatePlainTextProjectProperties(CBuildFile* file);
 	void generateHTML();
 	void open(string filename);
 	void close();
