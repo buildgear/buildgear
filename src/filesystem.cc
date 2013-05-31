@@ -324,6 +324,7 @@ void CFileSystem::InitRoot(void)
       // Play nice, create git ignore files
       command  = "echo 'build/*' > .gitignore ; ";
       command += "echo 'config' > " ROOT_DIR "/.gitignore";
+      command += "echo '.lock' >> " ROOT_DIR "/.gitignore";
 
       status = system(command.c_str());
       if (status != 0)
