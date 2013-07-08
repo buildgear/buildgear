@@ -101,11 +101,25 @@ void CFileSystem::FindFile(string dirname, string filename, list<CBuildFile*> *b
    if (chdir(dirname.c_str()) != 0)
       throw std::runtime_error(strerror(errno));
 
-   while((dir = readdir(d)))
+   while ((dir = readdir(d)))
    {
-      if(strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0)
+      if (strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0)
          continue;
-      if(dir->d_type == DT_DIR)
+
+      /* Use more expensive stat operation if readdir gives a unknown type */
+      if (dir->d_type == DT_UNKNOWN)
+      {
+         struct stat sb;
+
+         cwd = GetWorkingDir();
+         if (stat((cwd + "/" + dir->d_name).c_str(), &sb) == -1)
+            throw std::runtime_error(strerror(errno));
+
+         if (S_ISDIR(sb.st_mode))
+            dir->d_type = DT_DIR;
+      }
+
+      if (dir->d_type == DT_DIR)
       {
          if (chdir(dir->d_name) != 0)
             throw std::runtime_error(strerror(errno));
@@ -114,7 +128,7 @@ void CFileSystem::FindFile(string dirname, string filename, list<CBuildFile*> *b
             throw std::runtime_error(strerror(errno));
       } else
       {
-         if(strcmp(dir->d_name, filename.c_str()) == 0 )
+         if (strcmp(dir->d_name, filename.c_str()) == 0 )
          {
             cwd = GetWorkingDir();
             // IMPROVE: maybe not do full path? (make it all relative)
