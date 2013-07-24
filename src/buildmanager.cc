@@ -596,7 +596,7 @@ void CBuildManager::CleanChecksum(CBuildFile *buildfile)
       command += CHECKSUM_NATIVE_DIR "/";
    else
       command += CHECKSUM_CROSS_DIR "/";
-   command += buildfile->short_name + ".sha256";
+   command += buildfile->short_name + ".sha256sum";
 
    if (system(command.c_str()) < 0)
       perror("error\n");
