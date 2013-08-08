@@ -47,6 +47,13 @@ CBuildFile::CBuildFile(string filename)
    CBuildFile::depth = 0;
 }
 
+string CBuildFile::GetLocation()
+{
+   size_t pos;
+   pos = filename.find_last_of('/');
+   return filename.substr(0,pos + 1);
+}
+
 void CBuildFile::Show(void)
 {
    string qoute = "\"";
