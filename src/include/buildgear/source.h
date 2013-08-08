@@ -32,9 +32,10 @@ class CSource : public CFileSystem, COptions
 {
    public:
       void Download(list<CBuildFile*> *, string);
-   private:
       int Remote(string item);
 };
+
+extern CSource Source;
 
 string bytes2str(double bytes);
 #endif

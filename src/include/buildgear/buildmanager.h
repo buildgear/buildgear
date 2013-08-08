@@ -44,7 +44,9 @@ class CBuildManager : public CFileSystem, COptions
       void CleanAllChecksum(void);
       void CleanPackages(void);
       void CleanWork(void);
+      string PackagePath(CBuildFile *);
       bool PackageUpToDate(CBuildFile *);
+      bool SourceUpToDate(CBuildFile *);
       bool DepBuildNeeded(CBuildFile *buildfile);
       void BuildOutputTick(CBuildFile *buildfile);
       void BuildOutputPrint(void);

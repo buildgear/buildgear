@@ -364,7 +364,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    }
 }
 
-bool CBuildManager::PackageUpToDate(CBuildFile *buildfile)
+string CBuildManager::PackagePath(CBuildFile *buildfile)
 {
    string package;
 
@@ -373,6 +373,15 @@ bool CBuildManager::PackageUpToDate(CBuildFile *buildfile)
              buildfile->version + "-" +
              buildfile->release + PACKAGE_EXTENSION;
 
+   return package;
+}
+
+bool CBuildManager::PackageUpToDate(CBuildFile *buildfile)
+{
+   string package;
+
+   package = PackagePath(buildfile);
+
    if (!FileExist(package))
       return false;
 
@@ -380,6 +389,38 @@ bool CBuildManager::PackageUpToDate(CBuildFile *buildfile)
       return true;
 
    return false;
+}
+
+bool CBuildManager::SourceUpToDate(CBuildFile *buildfile)
+{
+   istringstream iss(buildfile->source);
+   string item;
+   string source;
+   string package;
+   size_t pos;
+
+   package = PackagePath(buildfile);
+
+   if (!FileExist(package))
+      return false;
+
+   while ( getline(iss, item, ' ') )
+   {
+      if (Source.Remote(item))
+      {
+         // If source is remote, look in the source directory
+         pos = item.find_last_of('/');
+         source = Config.bg_config[CONFIG_KEY_SOURCE_DIR] + "/" +
+                  item.substr(pos + 1);
+      } else {
+         source = buildfile->GetLocation() + item;
+      }
+
+      if (Age(package) < Age(source))
+         return false;
+   }
+
+   return true;
 }
 
 bool CBuildManager::DepBuildNeeded(CBuildFile *buildfile)
@@ -419,11 +460,12 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
    // Check if buildfiles/config is newer than package or buildfiles
    // If so warn and delete work/packages (force total rebuild)
 
-   // Set build action of all builds (based on package vs. Buildfile age)
+   // Set build action of all builds
+   // Based on package vs. Buildfile age and package vs source age
    // Find the maximum build name
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
-      if (!PackageUpToDate((*it)))
+      if (!PackageUpToDate((*it)) || !SourceUpToDate((*it)))
          (*it)->build = true;
    }
 
