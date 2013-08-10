@@ -65,11 +65,9 @@ class CConfig : public CUtility
       bool checksum;
       bool buildfile;
 
-      // manifest command and options ->
       bool manifest_plain_text;
       bool manifest_xml;
       bool manifest_html;
-      // <- manifest command and options
 
       bool init;
 
