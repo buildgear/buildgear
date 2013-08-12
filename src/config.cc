@@ -83,6 +83,10 @@ CConfig::CConfig()
    mismatch = false;
    footprint = false;
    checksum = false;
+   manifest_plain_text = false;
+   manifest_xml = false;
+   manifest_html = false;
+
 
    // Default config options
    global = false;

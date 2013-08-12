@@ -82,7 +82,7 @@ void COptions::Parse(int argc, char *argv[])
    }
 
    // Download command
-   if (command == "download")
+   else if (command == "download")
    {
       Config.download = true;
 
@@ -213,6 +213,9 @@ void COptions::Parse(int argc, char *argv[])
          {"footprint",           no_argument, 0, 'f'},
          {"checksum",            no_argument, 0, 's'},
          {"buildfile",           no_argument, 0, 'b'},
+         {"manifest-plain-text", no_argument, 0, 'p'},
+         {"manifest-xml",        no_argument, 0, 'x'},
+         //{"manifest-html",       no_argument, 0, 'h'},
          {0,                     0,           0,  0 }
       };
 
@@ -256,6 +259,15 @@ void COptions::Parse(int argc, char *argv[])
             case 'b':
                Config.buildfile = true;
                break;
+            case 'p':
+               Config.manifest_plain_text = true;
+               break;
+            case 'x':
+               Config.manifest_xml = true;
+               break;
+            //case 'h': TODO
+            //   Config.manifest_html = true;
+            //   break;
             default:
                exit(EXIT_FAILURE);
                break;
@@ -455,7 +467,9 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --log-mismatch          Show build log mismatches\n";
    cout << "  --footprint             Show build footprint\n";
    cout << "  --checksum              Show build checksum\n";
-   cout << "\n";
+   cout << "  --manifest-xml          Generate XML manifest\n";
+   cout << "  --manifest-plain-text   Generate plain text manifest\n";
+      cout << "\n";
    cout << "Init options:\n";
    cout << "  --buildfile             Create a Buildfile from template\n";
    cout << "\n";
