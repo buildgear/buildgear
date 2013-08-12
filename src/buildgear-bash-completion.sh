@@ -167,7 +167,7 @@ _buildgear()
          do
            if [[ "$i" == "--build-order" || "$i" == "--download-order" || "$i" == "--dependency" || \
                  "$i" == "--version" || "$i" == "--footprint" || "$i" == "--checksum" || \
-                 "$i" == "--buildfile" || "$i" == "--manifest-xml" || "$i" == "--manifest-plain-text" ]]; then
+                 "$i" == "--buildfile" ]]; then
              if [ "$build_name_in_args" == 0 ]; then
                COMPREPLY+=( ${builds[@]} )
              fi
