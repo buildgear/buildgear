@@ -232,6 +232,9 @@ void CDownloadItem::File()
       // Set custom private key location
       curl_easy_setopt(curl, CURLOPT_SSH_PRIVATE_KEYFILE, Config.bg_config[CONFIG_KEY_SSH_PRIVATE_KEYFILE].c_str());
 
+      // Use agent to handle authentication
+      curl_easy_setopt(curl, CURLOPT_SSH_AUTH_TYPES, CURLSSH_AUTH_AGENT);
+
       // Define progress indication callback
       curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, CDownload::progress);
       curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, this);
