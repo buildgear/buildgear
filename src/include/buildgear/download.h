@@ -82,6 +82,9 @@ class CDownloadItem : public CFileSystem
       CDownload *parent;
       double downloaded;
       double total;
+      string debug;
+      static int CurlDebug(CURL*, curl_infotype,
+            char*, size_t, void*);
 };
 
 #endif
