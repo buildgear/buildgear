@@ -133,7 +133,7 @@ check_create_directory()
 
 make_footprint()
 {
-   tar tvf $BG_BUILD_PACKAGE | \
+   LC_ALL=C tar tvf $BG_BUILD_PACKAGE | \
        awk '{printf $1 "\t" $2 "\t"; s = ""; for (i = 6; i <= NF-1; i++) s = s $i " "; printf s; print $NF}' | \
        sort -k 3
 }
