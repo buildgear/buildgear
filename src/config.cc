@@ -87,7 +87,6 @@ CConfig::CConfig()
    manifest_xml = false;
    manifest_html = false;
 
-
    // Default config options
    global = false;
    unset = false;

@@ -213,7 +213,7 @@ void COptions::Parse(int argc, char *argv[])
          {"footprint",           no_argument, 0, 'f'},
          {"checksum",            no_argument, 0, 's'},
          {"buildfile",           no_argument, 0, 'b'},
-         {"manifest-plain-text", no_argument, 0, 'p'},
+         {"manifest",            no_argument, 0, 'p'},
          {"manifest-xml",        no_argument, 0, 'x'},
          //{"manifest-html",       no_argument, 0, 'h'},
          {0,                     0,           0,  0 }
@@ -459,7 +459,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "Show options:\n";
    cout << "  --build-order           Show build order\n";
    cout << "  --download-order        Show download order\n";
-   cout << "  --dependency            Show dependency graph\n";
+   cout << "  --dependency            Create dependency graph\n";
    cout << "  --readme                Show buildfiles readme\n";
    cout << "  --version               Show build version\n";
    cout << "  --log                   Show build log\n";
@@ -467,9 +467,9 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --log-mismatch          Show build log mismatches\n";
    cout << "  --footprint             Show build footprint\n";
    cout << "  --checksum              Show build checksum\n";
-   cout << "  --manifest-xml          Generate XML manifest\n";
-   cout << "  --manifest-plain-text   Generate plain text manifest\n";
-      cout << "\n";
+   cout << "  --manifest              Create plain text manifest\n";
+   cout << "  --manifest-xml          Create XML manifest\n";
+   cout << "\n";
    cout << "Init options:\n";
    cout << "  --buildfile             Create a Buildfile from template\n";
    cout << "\n";

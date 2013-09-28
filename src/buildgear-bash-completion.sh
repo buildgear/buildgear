@@ -54,7 +54,7 @@ _buildgear()
    clean_options="--all --footprint --checksum"
    show_options="--build-order --download-order --dependency --readme --version
                  --log --log-tail --log-mismatch --footprint --checksum --buildfile
-                 --manifest-xml --manifest-plain-text"
+                 --manifest --manifest-xml"
    config_options="--global --unset --list"
    config_keys="source_dir download_mirror_first download_timeout certificate_dir
                 download_retry download_connections parallel_builds ssh_public_key
@@ -167,7 +167,7 @@ _buildgear()
          do
            if [[ "$i" == "--build-order" || "$i" == "--download-order" || "$i" == "--dependency" || \
                  "$i" == "--version" || "$i" == "--footprint" || "$i" == "--checksum" || \
-                 "$i" == "--buildfile" ]]; then
+                 "$i" == "--buildfile" || "$i" == "--manifest" || "$i" == "--manifest-xml" ]]; then
              if [ "$build_name_in_args" == 0 ]; then
                COMPREPLY+=( ${builds[@]} )
              fi

@@ -47,18 +47,18 @@ class CManifest {
 
 public:
 	CManifest();
-	void generateManifest(CBuildFile *buildfile);
+	void generateManifest(list<CBuildFile*> *buildfiles);
 	void setFormat(DocumentFormat df);
 	void setHeader(string header);
 	void setFooter(string footer);
 
 private:
-	void generateXMLFull();
+	void generateXML(list<CBuildFile*> *buildfiles);
 	void generateXMLProject(CBuildFile* file);
 	void generateXMLProjectProperties(CBuildFile* file);
-	void generatePlainTextFull();
+	void generatePlainText(list<CBuildFile*> *buildfiles);
 	void generatePlainTextProjectProperties(CBuildFile* file);
-	void generateHTML();
+	void generateHTML(list<CBuildFile*> *buildfiles);
 	void open(string filename);
 	void close();
 	void debug(string msg);

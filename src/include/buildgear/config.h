@@ -104,7 +104,7 @@ class CConfig : public CUtility
 #define PACKAGE_DIR              BUILD_DIR "/package"
 #define SYSROOT_DIR              WORK_DIR  "/sysroot"
 #define BUILD_LOG                BUILD_DIR "/build.log"
-#define MANIFEST_FILE            BUILD_DIR "/manifest"
+#define MANIFEST_FILE            OUTPUT_DIR "/manifest"
 #define FOOTPRINT_NATIVE_DIR     ".footprint/native"
 #define FOOTPRINT_CROSS_DIR      ".footprint/cross"
 #define CHECKSUM_NATIVE_DIR      ".checksum/native"
