@@ -469,6 +469,7 @@ void COptions::ShowHelp(char *argv[])
    cout << "  --checksum              Show build checksum\n";
    cout << "  --manifest              Create plain text manifest\n";
    cout << "  --manifest-xml          Create XML manifest\n";
+   cout << "  --buildfile             Show expanded buildfile\n";
    cout << "\n";
    cout << "Init options:\n";
    cout << "  --buildfile             Create a Buildfile from template\n";
