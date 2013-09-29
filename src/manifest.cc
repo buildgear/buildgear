@@ -30,9 +30,9 @@
 extern CBuildFiles BuildFiles;
 
 int cmp_field_length = 34;
-int ver_field_length = 20;
-int lic_field_length = 20;
-int dsc_field_length = 60;
+int ver_field_length = 30;
+int lic_field_length = 30;
+int dsc_field_length = 80;
 
 CManifest::CManifest() {
    mManifestData.documentFormat = FORMAT_NOT_SUPPORTED;
