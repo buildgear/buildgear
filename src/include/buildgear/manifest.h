@@ -29,39 +29,39 @@
 using namespace std;
 
 typedef enum {
-	FORMAT_PLAIN_TEXT,
-	FORMAT_XML,
-	FORMAT_HTML,
-	FORMAT_NOT_SUPPORTED
+   FORMAT_PLAIN_TEXT,
+   FORMAT_XML,
+   FORMAT_HTML,
+   FORMAT_NOT_SUPPORTED
 } DocumentFormat;
 
 typedef struct {
-	string header;
-	string footer;
-	DocumentFormat documentFormat;
-	string fileExtension;
-	ofstream file;
+   string header;
+   string footer;
+   DocumentFormat documentFormat;
+   string fileExtension;
+   ofstream file;
 } ManifestData;
 
 class CManifest {
 
 public:
-	CManifest();
-	void generateManifest(list<CBuildFile*> *buildfiles);
-	void setFormat(DocumentFormat df);
-	void setHeader(string header);
-	void setFooter(string footer);
+   CManifest();
+   void generateManifest(list<CBuildFile*> *buildfiles);
+   void setFormat(DocumentFormat df);
+   void setHeader(string header);
+   void setFooter(string footer);
 
 private:
-	void generateXML(list<CBuildFile*> *buildfiles);
-	void generateXMLComponentProperties(CBuildFile* file);
-	void generatePlainText(list<CBuildFile*> *buildfiles);
-	void generatePlainTextComponentProperties(CBuildFile* file);
-	void generateHTML(list<CBuildFile*> *buildfiles);
-	void open(string filename);
-	void close();
-	void debug(string msg);
-	ManifestData mManifestData;
+   void generateXML(list<CBuildFile*> *buildfiles);
+   void generateXMLComponentProperties(CBuildFile* file);
+   void generatePlainText(list<CBuildFile*> *buildfiles);
+   void generatePlainTextComponentProperties(CBuildFile* file);
+   void generateHTML(list<CBuildFile*> *buildfiles);
+   void open(string filename);
+   void close();
+   void debug(string msg);
+   ManifestData mManifestData;
 };
 
 extern CManifest Manifest;
