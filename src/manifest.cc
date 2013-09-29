@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <fstream>
 #include "buildgear/config.h"
@@ -28,10 +29,10 @@
 
 extern CBuildFiles BuildFiles;
 
-int cmp_field_lenght = 34;
-int ver_field_lenght = 20;
-int lic_field_lenght = 20;
-int dsc_field_lenght = 60;
+int cmp_field_length = 34;
+int ver_field_length = 20;
+int lic_field_length = 20;
+int dsc_field_length = 60;
 
 CManifest::CManifest() {
 	mManifestData.documentFormat = FORMAT_NOT_SUPPORTED;
@@ -98,7 +99,7 @@ void CManifest::generateXML(list<CBuildFile*> *buildfiles) {
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
       if ("native" == (*it)->type)
-         generateXMLProjectProperties((CBuildFile*) (*it));
+         generateXMLComponentProperties((CBuildFile*) (*it));
    }
 
 	mManifestData.file << "  </native>" << endl;
@@ -107,7 +108,7 @@ void CManifest::generateXML(list<CBuildFile*> *buildfiles) {
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
 		if ("cross" == (*it)->type)
-			generateXMLProjectProperties((CBuildFile*) (*it));
+			generateXMLComponentProperties((CBuildFile*) (*it));
 	}
 
 	mManifestData.file << "  </cross>" << endl;
@@ -123,11 +124,7 @@ void CManifest::generateXML(list<CBuildFile*> *buildfiles) {
 	cout << "Saved manifest to " << filename << endl;
 }
 
-void CManifest::generateXMLProject(CBuildFile* file) {
-	cout << file->name << endl;
-}
-
-void CManifest::generateXMLProjectProperties(CBuildFile* file) {
+void CManifest::generateXMLComponentProperties(CBuildFile* file) {
 	mManifestData.file << "    <component name=\"" << file->short_name << "\"";
 
 	if (file->version.length() != 0) {
@@ -180,39 +177,39 @@ void CManifest::generatePlainText(list<CBuildFile*> *buildfiles) {
 	}
 
 	headLine << cmp_name;
-	for(int i=0;i<(cmp_field_lenght - cmp_name.length())+2;i++)
+	for(int i=0;i<(cmp_field_length - cmp_name.length())+2;i++)
 		headLine << " ";
 
 	headLine << ver_name;
-	for(int i=0;i<ver_field_lenght-ver_name.length();i++)
+	for(int i=0;i<ver_field_length-ver_name.length();i++)
 		headLine << " ";
 
 	headLine << lic_name;
-	for(int i=0;i<lic_field_lenght-lic_name.length();i++)
+	for(int i=0;i<lic_field_length-lic_name.length();i++)
 		headLine << " ";
 
 	headLine << dsc_name;
-	for(int i=0;i<dsc_field_lenght-dsc_name.length();i++)
+	for(int i=0;i<dsc_field_length-dsc_name.length();i++)
 		headLine << " ";
 
 	mManifestData.file  << headLine.str() << endl;
 
-	for(int i=0; i<cmp_field_lenght+1;i++)
+	for(int i=0; i<cmp_field_length+1;i++)
 		seperator << "=";
 	seperator << "-";
-	for(int i=0; i<ver_field_lenght-1;i++)
+	for(int i=0; i<ver_field_length-1;i++)
 		seperator << "=";
 	seperator << "-";
-	for(int i=0; i<lic_field_lenght-1;i++)
+	for(int i=0; i<lic_field_length-1;i++)
 		seperator << "=";
 	seperator << "-";
-	for(int i=0; i<dsc_field_lenght;i++)
+	for(int i=0; i<dsc_field_length;i++)
 		seperator << "=";
 
 	mManifestData.file << seperator.str() <<endl;
 
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
-		generatePlainTextProjectProperties((CBuildFile*) (*it));
+		generatePlainTextComponentProperties((CBuildFile*) (*it));
 
 	mManifestData.file.close();
 
@@ -220,7 +217,7 @@ void CManifest::generatePlainText(list<CBuildFile*> *buildfiles) {
 	cout << "Saved manifest to " << filename << endl;
 }
 
-void CManifest::generatePlainTextProjectProperties(CBuildFile* file) {
+void CManifest::generatePlainTextComponentProperties(CBuildFile* file) {
 	ostringstream line;
 
 	if("cross" == file->type) {
@@ -231,15 +228,19 @@ void CManifest::generatePlainTextProjectProperties(CBuildFile* file) {
 		line << "n ";
 	}
 
+   line << left;
+   line << setw(cmp_field_length);
 	line << file->short_name;
-	for(int i=0; i<cmp_field_lenght - file->short_name.length() ;i++) {
-		line << " ";
-	}
 
+   line << setw(ver_field_length);
 	line << file->version;
-	for(int i=0; i<ver_field_lenght - file->version.length(); i++) {
-		line << " ";
-	}
+
+   line << setw(lic_field_length);
+	line << file->license;
+
+   line << setw(0);
+	line << file->description;
+
 	mManifestData.file << line.str() << endl;
 }
 

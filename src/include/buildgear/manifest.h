@@ -54,10 +54,9 @@ public:
 
 private:
 	void generateXML(list<CBuildFile*> *buildfiles);
-	void generateXMLProject(CBuildFile* file);
-	void generateXMLProjectProperties(CBuildFile* file);
+	void generateXMLComponentProperties(CBuildFile* file);
 	void generatePlainText(list<CBuildFile*> *buildfiles);
-	void generatePlainTextProjectProperties(CBuildFile* file);
+	void generatePlainTextComponentProperties(CBuildFile* file);
 	void generateHTML(list<CBuildFile*> *buildfiles);
 	void open(string filename);
 	void close();

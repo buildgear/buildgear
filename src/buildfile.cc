@@ -45,6 +45,9 @@ CBuildFile::CBuildFile(string filename)
    CBuildFile::build = false;
    CBuildFile::visited = false;
    CBuildFile::depth = 0;
+   CBuildFile::description = "";
+   CBuildFile::url = "";
+   CBuildFile::license = "";
 }
 
 string CBuildFile::GetLocation()
@@ -251,5 +254,63 @@ void CBuildFile::Parse(void)
    } else
    {
       layer = DEFAULT_LAYER_NAME;
+   }
+
+   // In manifest mode, also parse description, URL, and license
+   if (Config.manifest_plain_text || Config.manifest_xml)
+   {
+      ifstream input_file(filename);
+
+      if ( input_file.is_open() )
+      {
+         string line;
+         string value;
+
+         while ( getline ( input_file, line ) )
+         {
+            string::size_type i;
+
+            i = line.find_first_not_of ( " \t\n\v" );
+
+            if ( i != string::npos && line[i] == '#' )
+            {
+               // Parse Description from line
+               i = line.find("Description:");
+
+               if (i != string::npos)
+               {
+                  value = line.substr(i+12);
+                  i = value.find_first_not_of(" ");
+                  if (i != string::npos)
+                     description = value.substr(i);
+               }
+
+               // Parse URL from line
+               i = line.find("URL:");
+
+               if (i != string::npos)
+               {
+                  value = line.substr(i+4);
+                  i = value.find_first_not_of(" ");
+                  if (i != string::npos)
+                     url = value.substr(i);
+               }
+
+               // Parse License from line
+               i = line.find("License:");
+
+               if (i != string::npos)
+               {
+                  value = line.substr(i+8);
+                  i = value.find_first_not_of(" ");
+                  if (i != string::npos)
+                     license = value.substr(i);
+               }
+            }
+            else
+               continue;
+         }
+      }
+      input_file.close();
    }
 }

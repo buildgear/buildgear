@@ -35,6 +35,9 @@ class CBuildFile : public CUtility
       void Show(void);
       void Parse(void);
       string filename;
+      string description;
+      string url;
+      string license;
       string name;
       string short_name;
       string version;
