@@ -56,11 +56,11 @@ Torsten Lund:
    buildgear show --manifest-xml fs
 
    The first command generates a plain-text manifest file located in
-	build/output/manifest.fs.txt and the second command generates a XML
-	formatted manifest file located in build/output/manifest.fs.xml .
+   build/output/manifest.fs.txt and the second command generates a XML
+   formatted manifest file located in build/output/manifest.fs.xml .
 
-	The manifest contains various information about the components included in
-	the specified build, eg. name, version, license, and description.
+   The manifest contains various information about the components included in
+   the specified build, eg. name, version, license, and description.
 
 Kalle Lampila:
 
@@ -75,4 +75,6 @@ Martin Lund:
  * Manifest feature cleanup
 
  * Added 'show --buildfile' to options list
+
+ * Updated config.guess file
 
