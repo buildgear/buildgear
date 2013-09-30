@@ -41,6 +41,16 @@
 
 static unsigned int filesize;
 
+int CDownloadItem::CurlDebug(CURL *curl, curl_infotype info, char *data, size_t data_len, void *param)
+{
+   CDownloadItem *item = (CDownloadItem *)param;
+
+   if (info == CURLINFO_TEXT)
+      item->debug.append(data, data_len);
+
+   return 0;
+}
+
 size_t CDownloadItem::CurlFileWrite(void *buffer, size_t size, size_t nmemb, void *data)
 {
    CDownloadItem *item = (CDownloadItem *)data;
@@ -113,6 +123,7 @@ CDownloadItem::CDownloadItem(string url, string source_dir, CDownload *Download)
    parent = Download;
 
    status = "Requesting file..";
+   debug.clear();
 
    // Parse filename from URL
    size_t pos = url.find_last_of('/');
@@ -232,8 +243,12 @@ void CDownloadItem::File()
       // Set custom private key location
       curl_easy_setopt(curl, CURLOPT_SSH_PRIVATE_KEYFILE, Config.bg_config[CONFIG_KEY_SSH_PRIVATE_KEYFILE].c_str());
 
-      // Use agent to handle authentication
+      // Use agent to handle authentication if availible
+#ifdef CURLSSH_AUTH_AGENT
       curl_easy_setopt(curl, CURLOPT_SSH_AUTH_TYPES, CURLSSH_AUTH_AGENT);
+#else
+      curl_easy_setopt(curl, CURLOPT_SSH_AUTH_TYPES, CURLSSH_AUTH_PUBLICKEY);
+#endif
 
       // Define progress indication callback
       curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, CDownload::progress);
@@ -256,8 +271,10 @@ void CDownloadItem::File()
          status = "Partial download detected. Resuming..";
       }
 
-      // Enable curl debug output
-      //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+      // Catch curl debug for output on non HTTP errors
+      curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+      curl_easy_setopt(curl, CURLOPT_DEBUGFUNCTION, CurlDebug);
+      curl_easy_setopt(curl, CURLOPT_DEBUGDATA, this);
 
       parent->pending_downloads.push_back(this);
    }

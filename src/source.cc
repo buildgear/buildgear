@@ -268,6 +268,9 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                   // Make sure loop does not end
                   active_downloads++;
+
+                  // Clear debug log
+                  item->debug.clear();
                   continue;
                }
 
@@ -289,6 +292,13 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                      Cursor.line_up(Cursor.get_ypos());
                      item->print_progress();
+
+                     // Print debug if not a HTTP error
+                     if (response_code == 0)
+                     {
+                        Cursor.clear_below();
+                        cout << endl << item->debug;
+                     }
 
                      Cursor.ypos_add(-DOWNLOAD_LINE_SIZE);
 
@@ -316,6 +326,13 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                   Cursor.line_up(Cursor.get_ypos());
                   item->print_progress();
+
+                  // Print debug if not HTTP error
+                  if (response_code == 0)
+                  {
+                     Cursor.clear_below();
+                     cout << endl << item->debug;
+                  }
 
                   Cursor.ypos_add(-DOWNLOAD_LINE_SIZE);
 
@@ -345,6 +362,13 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
                   Cursor.line_up(Cursor.get_ypos());
                   item->print_progress();
+
+                  // Print debug if not a HTTP error
+                  if (response_code == 0)
+                  {
+                     Cursor.clear_below();
+                     cout << endl << item->debug;
+                  }
 
                   Cursor.ypos_add(-DOWNLOAD_LINE_SIZE);
 
