@@ -315,7 +315,15 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                      continue;
                   }
 
+                  CURL *tmp_handle;
+
                   curl_multi_remove_handle(Download.curlm, msg->easy_handle);
+
+                  // Duplicate handle to keep configuration, but reset state info
+                  tmp_handle = curl_easy_duphandle (msg->easy_handle);
+                  curl_easy_cleanup (msg->easy_handle);
+                  item->curl = tmp_handle;
+
                   temp.str("");
                   temp << "Error " << response_code << " (";
                   temp << curl_easy_strerror(msg->data.result) << ") trying alternative URL..";
