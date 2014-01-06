@@ -1,4 +1,4 @@
-.TH "buildgear clean" 1 "<===DATE===>" "<===VERSION===>" "Buildgear"
+.TH "buildgear config" 1 "<===DATE===>" "<===VERSION===>" "Buildgear"
 
 .SH NAME
 buildgear-config \- Change buildgear configuration
