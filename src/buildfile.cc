@@ -116,8 +116,8 @@ void CBuildFile::Parse(void)
        ; echo release=$release \
        ; echo source=${source[@]} \
        ; echo depends=${depends[@]} \
-       ; type build &> /dev/null && echo build_function=yes || echo build_function=no \
-       ; type check &> /dev/null && echo check_function=yes || echo check_function=no'";
+       ; typeset -F build &> /dev/null && echo build_function=yes || echo build_function=no \
+       ; typeset -F check &> /dev/null && echo check_function=yes || echo check_function=no'";
 
    // Open buildfile for reading
    fp = popen(command.c_str(), "r");
