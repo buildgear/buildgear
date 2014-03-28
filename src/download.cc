@@ -243,8 +243,12 @@ void CDownloadItem::File()
       // Set custom private key location
       curl_easy_setopt(curl, CURLOPT_SSH_PRIVATE_KEYFILE, Config.bg_config[CONFIG_KEY_SSH_PRIVATE_KEYFILE].c_str());
 
-      // Use agent to handle authentication if availible
-#ifdef CURLSSH_AUTH_AGENT
+
+      // Use any available authentication method if curl supports
+      // the option, otherwise fallback to agent or public key auth
+#if defined(CURLSSH_AUTH_ANY)
+      curl_easy_setopt(curl, CURLOPT_SSH_AUTH_TYPES, CURLSSH_AUTH_ANY);
+#elif defined(CURLSSH_AUTH_AGENT)
       curl_easy_setopt(curl, CURLOPT_SSH_AUTH_TYPES, CURLSSH_AUTH_AGENT);
 #else
       curl_easy_setopt(curl, CURLOPT_SSH_AUTH_TYPES, CURLSSH_AUTH_PUBLICKEY);
