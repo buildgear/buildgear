@@ -260,6 +260,38 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                   continue;
                }
 
+               long response_code;
+               curl_easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &response_code);
+
+               // Handle non authorized access
+               if (response_code == 401)
+               {
+                  string user, pass;
+
+                  Cursor.clear_below ();
+                  cout << endl << "Authorization is required" << endl;
+                  cout << "Username: " << flush;
+
+                  // Enable echo to let the user see the username
+                  Cursor.enable_echo();
+                  Cursor.show();
+                  getline (cin, user);
+
+                  // Disable echo for the password
+                  Cursor.disable_echo();
+                  cout << "Password: " << flush;
+                  getline (cin, pass);
+                  Cursor.hide();
+                  cout << endl;
+
+                  // Do not overwrite the output
+                  Cursor.ypos_add(-4);
+
+                  // Set user and pass on the handle
+                  curl_easy_setopt (msg->easy_handle, CURLOPT_USERNAME, user.c_str());
+                  curl_easy_setopt (msg->easy_handle, CURLOPT_PASSWORD, pass.c_str());
+               }
+
                if (item->tries-- > 0)
                {
                   // Restart download by readding the easy handle
@@ -273,9 +305,6 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                   item->debug.clear();
                   continue;
                }
-
-               long response_code;
-               curl_easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &response_code);
 
                if (!item->alternative_url)
                {
