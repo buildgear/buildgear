@@ -264,13 +264,20 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                curl_easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &response_code);
 
                // Handle non authorized access
-               if (response_code == 401)
+               if (response_code == 401 && item->tries > 1)
                {
                   string user, pass;
 
-                  Cursor.clear_below ();
-                  cout << endl << "Authorization is required" << endl;
-                  cout << "Username: " << flush;
+                  item->status = "Authorization is required";
+
+                  Download.lock();
+
+                  // Print the download that requires crendentials
+                  Cursor.line_up(Cursor.get_ypos());
+                  Cursor.clear_below();
+                  item->print_progress();
+
+                  cout << endl << "Username: " << flush;
 
                   // Enable echo to let the user see the username
                   Cursor.enable_echo();
@@ -284,8 +291,10 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                   Cursor.hide();
                   cout << endl;
 
-                  // Do not overwrite the output
-                  Cursor.ypos_add(-4);
+                  // Ensure that the login lines will be overwritten
+                  Cursor.ypos_add(3);
+
+                  Download.unlock();
 
                   // Set user and pass on the handle
                   curl_easy_setopt (msg->easy_handle, CURLOPT_USERNAME, user.c_str());
