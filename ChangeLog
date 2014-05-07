@@ -1,80 +1,48 @@
 
-=== Build Gear v0.9.19beta ===
+=== Build Gear v0.9.20 ===
 
-Changes since Build Gear v0.9.18beta:
+
+Changes since Build Gear v0.9.19beta:
 
 Jesper Larsen:
 
- * Trigger build if source is newer than package
+ * download: Update the output for auth prompt
 
-   A (re)build of a Buildfile is triggered if any of the files defined
-   in the source variable is of newer date than the package file.
+ * download: Prompt for user/pass on auth fail
 
-   This includes both remote sources, that have been downloaded to the
-   source directory, and the local sources residing along with the Buildfile.
+ * man: Fix typo in buildgear-config(1) page
 
- * Add curl debug function
+ * download: Duplicate easy handle for mirror
 
-   Record curl debug information. The information is printed in case a download
-   results in a non HTTP related error. Usefull to debug protocols with authentication.
+   Fixes an issue with having a file:// mirror.
 
- * Test for CURLSSH_AUTH_AGENT
+Tero Koskinen:
 
-   CURLSSH_AUTH_AGENT is introduced in curl 7.28. Ubuntu 12.10 comes with
-   curl 7.27. If not defined we use CURLSSH_AUTH_PUBLICKEY instead.
+ * Use any possible auth mechanism by default.
 
- * Use ssh-agent for SSH authentication
+   If libcurl supports CURLSSH_AUTH_ANY option,
+   use it, otherwise fallback to AUTH_AGENT
+   or AUTH_PUBLICKEY.
 
-   stdin is not availble during the download process, so key passwords must be
-   handled by the ssh-agent.
+Ilkka Aulomaa:
 
- * bash-completion: Add --manifest
+ * Bugfix for parsing the buildfiles
 
- * bash-completion: Support --manifest-xml and improvements
-
- * Buildfile: Add method to get Buildfile directory
-
- * buildmanager: clean --buildfile had wrong suffix
-
-   Checksum files are suffixed with sha256sum, and not sha256
-
- * Use stat call as fallback when searching directory
-
-   If readdir returns a type DT_UNKNOWN a stat call is made
-   in order to determine if the node is a directory.
-
- * Add ".lock" to gitignore template
-
- * Updated Copyright information
-
-Torsten Lund:
-
- * Added manifest feature
-
-   Two new show commands are introduced, eg.:
-   buildgear show --manifest fs
-   buildgear show --manifest-xml fs
-
-   The first command generates a plain-text manifest file located in
-   build/output/manifest.fs.txt and the second command generates a XML
-   formatted manifest file located in build/output/manifest.fs.xml .
-
-   The manifest contains various information about the components included in
-   the specified build, eg. name, version, license, and description.
-
-Kalle Lampila:
-
- * Make footprint generation locale-independent
+   Fixes a bug in parsing the buildfiles. Identifying functions in buildfiles can
+   fail if there are similarly named executables found from users path.
 
 Martin Lund:
 
- * Updated AUTHORS file
+ * Updated config.guess
 
- * manifest: Added description and license support
+ * Updated README and TODO
 
- * Manifest feature cleanup
+ * Updated AUTHORS
 
- * Added 'show --buildfile' to options list
+   Added Tero and Ilkka.
 
- * Updated config.guess file
+ * Added more build environment sanitization
+
+   Unset any pre-existing build() or check() functions to be on the safe
+   side.
 
