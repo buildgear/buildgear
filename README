@@ -1,5 +1,5 @@
 
-=== Build Gear [BETA] ===
+=== Build Gear ===
 
 
 1. Introduction
@@ -14,11 +14,6 @@
    Build Gear is easy to use and well suited for rapid prototyping or product
    development of GNU/Linux firmware to be deployed in small to medium sized
    embedded systems.
-
-   NOTE: Build Gear is currently considered beta so things are subject to
-         change.  However, the basics are in place and now there are mostly
-         fine tuning and bug fixing going on before the planned stable 1.x 
-         release series.
 
 2. Installation
 
