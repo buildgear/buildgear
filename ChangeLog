@@ -46,3 +46,4 @@ Martin Lund:
    Unset any pre-existing build() or check() functions to be on the safe
    side.
 
+ * Updated version year
