@@ -416,6 +416,8 @@ main()
    # Sanitize environment
    unset GREP_OPTIONS
    unset TAR_OPTIONS
+   unset build
+   unset check
    unalias -a
 
    BG_ROOT_DIR="$PWD"
