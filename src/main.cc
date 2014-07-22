@@ -203,25 +203,28 @@ int main (int argc, char *argv[])
    /* Handle 'clean --all' command */
    if ((Config.clean) && (Config.all) && (Config.name == ""))
    {
-      if (Config.footprint)
+      if (!Config.footprint && !Config.checksum)
       {
-         cout << "\nCleaning all footprints.. " << flush;
-         BuildManager.CleanAllFootprint();
-         cout << "Done\n\n";
-         exit(EXIT_SUCCESS);
-      }
-
-      if (Config.checksum)
+         cout << "\nCleaning all builds.. " << flush;
+         BuildManager.CleanAll();
+         cout << "Done";
+      } else
       {
-         cout << "\nCleaning all checksums.. " << flush;
-         BuildManager.CleanAllChecksum();
-         cout << "Done\n\n";
-         exit(EXIT_SUCCESS);
-      }
+         if (Config.footprint)
+         {
+            cout << "\nCleaning all footprints.. " << flush;
+            BuildManager.CleanAllFootprint();
+            cout << "Done";
+         }
 
-      cout << "\nCleaning all builds.. " << flush;
-      BuildManager.CleanAll();
-      cout << "Done\n\n";
+         if (Config.checksum)
+         {
+            cout << "\nCleaning all checksums.. " << flush;
+            BuildManager.CleanAllChecksum();
+            cout << "Done";
+         }
+      }
+      cout << "\n\n";
       exit(EXIT_SUCCESS);
    }
 
@@ -313,38 +316,39 @@ int main (int argc, char *argv[])
       cout << "Done\n";
       if (Config.all)
       {
-         if (Config.footprint)
+         if (!Config.footprint && !Config.checksum)
          {
-            BuildManager.CleanDependenciesFootprint(BuildFiles.BuildFile(Config.name));
-            cout << "\n\nDone\n\n";
-            exit(EXIT_SUCCESS);
+            BuildManager.CleanDependencies(BuildFiles.BuildFile(Config.name));
+         } else
+         {
+            if (Config.footprint)
+            {
+               BuildManager.CleanDependenciesFootprint(BuildFiles.BuildFile(Config.name));
+            }
+
+            if (Config.checksum)
+            {
+               BuildManager.CleanDependenciesChecksum(BuildFiles.BuildFile(Config.name));
+            }
          }
 
-         if (Config.checksum)
-         {
-            BuildManager.CleanDependenciesChecksum(BuildFiles.BuildFile(Config.name));
-            cout << "\n\nDone\n\n";
-            exit(EXIT_SUCCESS);
-         }
-
-         BuildManager.CleanDependencies(BuildFiles.BuildFile(Config.name));
       } else
       {
-         if (Config.footprint)
+         if (!Config.footprint && !Config.checksum)
          {
-            BuildManager.CleanFootprint(BuildFiles.BuildFile(Config.name));
-            cout << "\n\nDone\n\n";
-            exit(EXIT_SUCCESS);
-         }
-
-         if (Config.checksum)
+            BuildManager.Clean(BuildFiles.BuildFile(Config.name));
+         } else
          {
-            BuildManager.CleanChecksum(BuildFiles.BuildFile(Config.name));
-            cout << "\n\nDone\n\n";
-            exit(EXIT_SUCCESS);
-         }
+            if (Config.footprint)
+            {
+               BuildManager.CleanFootprint(BuildFiles.BuildFile(Config.name));
+            }
 
-         BuildManager.Clean(BuildFiles.BuildFile(Config.name));
+            if (Config.checksum)
+            {
+               BuildManager.CleanChecksum(BuildFiles.BuildFile(Config.name));
+            }
+         }
       }
       cout << "\n\nDone\n\n";
       exit(EXIT_SUCCESS);
