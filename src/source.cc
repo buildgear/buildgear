@@ -500,7 +500,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
    if (Download.error)
    {
-      cout << "Error: Could not download all sources. See above." << endl;
+      cout << "Error: Could not download all sources - see download errors above." << endl;
       exit(EXIT_FAILURE);
    }
 }
