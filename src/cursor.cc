@@ -202,12 +202,12 @@ void CCursor::reset_ymaxpos()
 
 void CCursor::enable_echo()
 {
-   if (system("stty echo") != 0)
-      throw std::runtime_error(strerror(errno));
+   if (isatty(fileno(stdin)))
+      if (system("stty echo")) ;
 }
 
 void CCursor::disable_echo()
 {
-   if (system("stty -echo") != 0)
-      throw std::runtime_error(strerror(errno));
+   if (isatty(fileno(stdin)))
+      if (system("stty -echo")) ;
 }
