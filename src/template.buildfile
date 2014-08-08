@@ -1,5 +1,6 @@
 ## Description: Describe the build here
 ## URL: http://www.something.com
+## License: List licenses used in the build here
 
 #name=build-name
 #version=source-version
