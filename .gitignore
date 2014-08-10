@@ -21,3 +21,4 @@ src/include/stamp-h1
 *.swp
 man/*.1
 man/*.5
+buildgear-*
