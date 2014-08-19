@@ -130,6 +130,9 @@ class CConfig : public CUtility
 #define KEY_RELEASE              "release"
 #define KEY_SOURCE               "source"
 #define KEY_DEPENDS              "depends"
+#define KEY_OPTIONS_             "options"
+#define KEY_BUILD_FUNCTION       "build_function"
+#define KEY_CHECK_FUNCTION       "check_function"
 #define KEY_CONFIG_RETURN        "config_return"
 #define KEY_BUILD_RETURN         "build_return"
 

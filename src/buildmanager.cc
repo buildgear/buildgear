@@ -502,7 +502,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       if (sem_init(&build_semaphore, 0,
                    stoi(Config.bg_config[CONFIG_KEY_PARALLEL_BUILDS])) == -1)
       {
-         cerr << "Error: Semaphore init failed" << endl;
+         cerr << "Error: Build semaphore init failed" << endl;
          exit(EXIT_FAILURE);
       }
 
@@ -515,14 +515,27 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
       while (it != buildfiles->end())
       {
          int thread_count=0;
+         list<CBuildFile*> locked_buildfiles;
+         list<CBuildFile*>::iterator itr;
+
+         // Start building threads of same depth in parallel
          while ( ((*it)->depth == current_depth) && (it != buildfiles->end())
                  && !BuildManager.build_error)
          {
-            // Start building threads of same depth in parallel
-            CBuildThread *bt = new CBuildThread(*it);
-            builder.push_back(bt);
-            builder[thread_count]->Start();
-            thread_count++;
+            // Only build buildfiles in parallel which are not marked with the
+            // "build-lock" option
+            if ((*it)->options.build_lock == false)
+            {
+               CBuildThread *bt = new CBuildThread(*it);
+               builder.push_back(bt);
+               builder[thread_count]->Start();
+               thread_count++;
+            }
+            else
+            {
+                // Add for later sequential build deployment
+                locked_buildfiles.push_back(*it);
+            }
             it++;
          }
 
@@ -535,6 +548,18 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
             delete builder[i];
             builder.pop_back();
          }
+
+         // Build "build-lock" marked builds sequentially
+         for (itr = locked_buildfiles.begin(); itr != locked_buildfiles.end(); itr++)
+         {
+            CBuildThread *bt = new CBuildThread(*itr);
+            (bt)->Start();
+            (bt)->Join();
+            if (BuildManager.build_error)
+               break;
+         }
+
+         locked_buildfiles.clear();
 
          if (BuildManager.build_error)
             break;

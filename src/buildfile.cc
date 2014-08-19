@@ -48,6 +48,7 @@ CBuildFile::CBuildFile(string filename)
    CBuildFile::description = "";
    CBuildFile::url = "";
    CBuildFile::license = "";
+   CBuildFile::options.build_lock = false;
 }
 
 string CBuildFile::GetLocation()
@@ -116,6 +117,7 @@ void CBuildFile::Parse(void)
        ; echo release=$release \
        ; echo source=${source[@]} \
        ; echo depends=${depends[@]} \
+       ; echo options=${options[@]} \
        ; typeset -F build &> /dev/null && echo build_function=yes || echo build_function=no \
        ; typeset -F check &> /dev/null && echo check_function=yes || echo check_function=no'";
 
@@ -206,10 +208,18 @@ void CBuildFile::Parse(void)
          source = value;
       if (key == KEY_DEPENDS)
          depends = value;
-      if (key == "build_function")
+      if (key == KEY_BUILD_FUNCTION)
          build_function = value;
-      if (key == "check_function")
+      if (key == KEY_CHECK_FUNCTION)
          check_function = value;
+      if (key == KEY_OPTIONS_)
+      {
+          // Parse options field
+
+          // Check for "build-lock"
+          if (value.find("build-lock") < value.length())
+              options.build_lock = true;
+      }
    }
    pclose(fp);
 

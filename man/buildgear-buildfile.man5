@@ -48,6 +48,18 @@ List of sources needed in the build procedure. Sources can be remote (protocols 
 List of Buildgear builds that is needed by the build. These builds will be added to the sysroot before building of the selected build is started. Both compile-time and run-time dependencies can be specified. If the build dependency is in the native branch, the name of the build must be given as \fInative/<build name>\fR.
 .RE
 
+.TP
+.B options
+.RS
+List of special options. Supported options are:
+.TP
+.B build-lock
+.RS
+Locks the build so that it will be the only one building at any given time (even when parallel_builds > 1).
+.RE
+
+.RE
+
 .SH FUNCTIONS
 
 .TP

@@ -44,6 +44,12 @@ class CBuildFile : public CUtility
       string release;
       string source;
       string depends;
+
+      struct
+         {
+            bool build_lock;
+         } options;
+
       string missing_depends;
       string type;
       string build_function;
