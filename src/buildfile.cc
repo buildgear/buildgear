@@ -125,12 +125,12 @@ void CBuildFile::Parse(void)
       throw std::runtime_error(strerror(errno));
 
    // Assign name and type based on filename
-   pos = filename.rfind("cross/");
+   pos = filename.rfind("buildfiles/cross/");
    if (pos != filename.npos)
       type = "cross";
    else
    {
-      pos = filename.rfind("native/");
+      pos = filename.rfind("buildfiles/native/");
       type = "native";
    }
 
