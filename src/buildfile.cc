@@ -221,7 +221,10 @@ void CBuildFile::Parse(void)
    control_fifo = new char [fifo_name.length() + 1];
    strcpy(control_fifo, fifo_name.c_str());
 
-   // Check for layer file
+   // By default the "default" layer is assigned
+   layer = DEFAULT_LAYER_NAME;
+
+   // Assign layer based on .layer file (if present, 1st priority)
    layerfile = filename.substr(0,filename.find_last_of("/")) + "/" LAYER_FILE_NAME;
    if (FileSystem.FileExist(layerfile))
    {
@@ -237,8 +240,8 @@ void CBuildFile::Parse(void)
          if (Config.bf_config[CONFIG_KEY_LAYERS].find(layer_name) == string::npos
              && layer_name != string(DEFAULT_LAYER_NAME))
          {
+            // No matching layer found
             string line_buffer;
-            layer = DEFAULT_LAYER_NAME;
             line_buffer = string("======> Reverting '") +
                layerfile.substr(layerfile.find(BUILD_FILES_DIR "/")) +
                string("'\n   Layer '") + layer_name +
@@ -248,12 +251,35 @@ void CBuildFile::Parse(void)
          } else
             layer = string(layer_name);
       }
-      else
-         layer = DEFAULT_LAYER_NAME;
-
    } else
    {
-      layer = DEFAULT_LAYER_NAME;
+      // Assign layer based on path location (if match, 2nd priority)
+      string layer_token;
+      istringstream is (Config.bf_config[CONFIG_KEY_LAYERS]);
+      while ( is.good() )
+      {
+         is >> layer_token;
+
+         if (layer_token != DEFAULT_LAYER_NAME)
+         {
+            size_t pos;
+            string layer_path;
+
+            if (type == "cross")
+            {
+               layer_path = "buildfiles/cross/cross-" + layer_token + "/";
+               pos = filename.rfind(layer_path);
+               if (pos != filename.npos)
+                  layer = layer_token;
+            } else
+            {
+               layer_path = "buildfiles/native/native-" + layer_token + "/";
+               pos = filename.rfind(layer_path);
+               if (pos != filename.npos)
+                  layer = layer_token;
+            }
+         }
+      }
    }
 
    // In manifest mode, also parse description, URL, and license
