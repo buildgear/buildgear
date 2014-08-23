@@ -177,7 +177,7 @@ class CConfig : public CUtility
 
 #define LOG_BUFFER_SIZE          10000000
 #define LAYER_NAME_SIZE          32
-#define OUTPUT_PREFIX_SIZE       14
+#define OUTPUT_PREFIX_SIZE       11
 
 extern CConfig Config;
 

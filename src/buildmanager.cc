@@ -135,7 +135,7 @@ void CBuildThread::operator()()
          }
 
          // Output added and advance cursor
-         cout << left << setw(OUTPUT_PREFIX_SIZE) << "   Added";
+         cout << left << setw(OUTPUT_PREFIX_SIZE) << "  Added";
          cout << setw(Dependency.max_name_length + 2) << "'" + buildfile->name + "'";
          if (buildfile->layer != DEFAULT_LAYER_NAME)
             cout << " [" << buildfile->layer << "]";
@@ -707,7 +707,7 @@ void CBuildManager::BuildOutputPrint()
 
    for (it = BuildManager.active_adds.begin(); it != BuildManager.active_adds.end(); it++)
    {
-      cout << left << setw(OUTPUT_PREFIX_SIZE) << "   Adding";
+      cout << left << setw(OUTPUT_PREFIX_SIZE) << "  Adding";
       cout << setw(Dependency.max_name_length + 2) << "'" + (*it)->name + "'";
       if ((*it)->layer != DEFAULT_LAYER_NAME)
          cout << " [" << (*it)->layer << "]";
@@ -741,7 +741,7 @@ void CBuildManager::BuildOutputPrint()
             indicator = "/";
       }
 
-      cout << " " << setw(1) << indicator << left << setw(OUTPUT_PREFIX_SIZE - 2) << " Building";
+      cout << setw(1) << indicator << left << setw(OUTPUT_PREFIX_SIZE - 1) << " Building";
       cout << setw(Dependency.max_name_length + 2) << "'" + (*it)->name + "'";
       if ((*it)->layer != DEFAULT_LAYER_NAME)
          cout << " [" << (*it)->layer << "]";
