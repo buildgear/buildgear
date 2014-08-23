@@ -102,7 +102,7 @@ void CDependency::ShowDownloadOrder(void)
       cout << "   " << setw(3) << i << ". " << (*it)->name;
       if ((*it)->layer != DEFAULT_LAYER_NAME)
       {
-         cout << setw(name_length - (*it)->name.size()) << "";
+         cout << setw(max_name_length - (*it)->name.size()) << "";
          cout << " [" << (*it)->layer << "]";
       }
       cout << endl;
@@ -115,6 +115,7 @@ void CDependency::ShowBuildOrder(void)
    list<CBuildFile*>::iterator it;
 
    cout <<  "\nBuild order:" << endl;
+   cout << "max_name_length = " << max_name_length << endl;
 
    for (it=parallel_build_order.begin(), i=0; it!=parallel_build_order.end(); it++, i++)
    {
@@ -122,7 +123,7 @@ void CDependency::ShowBuildOrder(void)
            << std::setw(3) << i << ". " << (*it)->name;
       if ((*it)->layer != DEFAULT_LAYER_NAME)
       {
-         cout << setw(name_length - (*it)->name.size()) << "";
+         cout << setw(max_name_length - (*it)->name.size()) << "";
          cout << " [" << (*it)->layer << "]";
       }
       cout << endl;
@@ -234,17 +235,28 @@ void CDependency::ResolveDependency(CBuildFile *buildfile,
    unresolved->remove(buildfile);
 }
 
-void CDependency::SetNameLength(void)
+void CDependency::SetMaxNameLength(void)
 {
    list<CBuildFile*>::iterator it;
-   int len;
+   int length;
 
    for (it = parallel_build_order.begin(); it != parallel_build_order.end(); it++)
    {
-      len = (*it)->name.size();
-      if ((*it)->layer != DEFAULT_LAYER_NAME)
-         len += (*it)->layer.size() + 3;
-      if (len > name_length)
-         name_length = len;
+      length = (*it)->name.size();
+      if (length > max_name_length)
+         max_name_length = length;
+   }
+}
+
+void CDependency::SetMaxLayerLength(void)
+{
+   list<CBuildFile*>::iterator it;
+   int length;
+
+   for (it = parallel_build_order.begin(); it != parallel_build_order.end(); it++)
+   {
+      length = (*it)->layer.size();
+      if (length > max_layer_length)
+         max_layer_length = length;
    }
 }

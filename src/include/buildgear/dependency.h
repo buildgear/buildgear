@@ -44,8 +44,10 @@ class CDependency
       void ResolveDependency(CBuildFile *buildfile,
                    list<CBuildFile*> *resolved,
                    list<CBuildFile*> *unresolved);
-      void SetNameLength(void);
-      int name_length;
+      void SetMaxNameLength(void);
+      void SetMaxLayerLength(void);
+      int max_name_length;
+      int max_layer_length;
    private:
       int setDepth(CBuildFile *buildfile, int depth);
 };

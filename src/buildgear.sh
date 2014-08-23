@@ -36,7 +36,18 @@ info()
    echo "$1"
 }
 
-build_name_spaces()
+name_padding()
+{
+   out=""
+
+   for (( i=0; i<($BG_MAX_NAME_LEN - ${#BG_BUILD_TYPE} - ${#name} - 1); i++ ))
+   do
+      out+=" "
+   done
+   echo "${out}"
+}
+
+layer_padding()
 {
    out=""
 
@@ -46,21 +57,22 @@ build_name_spaces()
       layer_size=0
    fi
 
-   for (( i=0; i<($BG_MAX_NAME_LEN - ${#BG_BUILD_TYPE} - 1 - ${#name} - ${layer_size}); i++ ))
+   for (( i=0; i<($BG_MAX_LAYER_LEN - ${layer_size}); i++ ))
    do
       out+=" "
    done
    echo "${out}"
 }
 
+
 warning()
 {
    echo "WARNING: $1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "   Warning    '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" \
+      echo "   Warning    '$BG_BUILD_TYPE/$name'$(name_padding)   $(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    else
-      echo "   Warning    '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" \
+      echo "   Warning    '$BG_BUILD_TYPE/$name'$(name_padding) [$BG_LAYER]$(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    fi
 }
@@ -69,10 +81,10 @@ updating()
 {
    echo "$1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "   Updated    '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" \
+      echo "   Updated    '$BG_BUILD_TYPE/$name'$(name_padding)   $(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    else
-      echo "   Updated    '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" \
+      echo "   Updated    '$BG_BUILD_TYPE/$name'$(name_padding) [$BG_LAYER]$(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    fi
 }
@@ -81,10 +93,10 @@ error()
 {
    echo "ERROR: $1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "   Error      '$BG_BUILD_TYPE/$name'$(build_name_spaces) ($1)" \
+      echo "   Error      '$BG_BUILD_TYPE/$name'$(name_padding)   $(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    else
-      echo "   Error      '$BG_BUILD_TYPE/$name' [$BG_LAYER]$(build_name_spaces) ($1)" \
+      echo "   Error      '$BG_BUILD_TYPE/$name'$(name_padding) [$BG_LAYER]$(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    fi
 }

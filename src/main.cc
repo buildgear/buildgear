@@ -393,8 +393,11 @@ int main (int argc, char *argv[])
       cout << "Done (" << (Dependency.resolved.size()-1) << " dependencies)\n";
    }
 
-   /* Find longest build name */
-   Dependency.SetNameLength();
+   /* Find length of longest build name */
+   Dependency.SetMaxNameLength();
+
+   /* Find length of longest layer name */
+   Dependency.SetMaxLayerLength();
 
    /* Handle show options */
    if (Config.show)

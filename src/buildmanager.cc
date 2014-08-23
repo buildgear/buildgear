@@ -136,7 +136,7 @@ void CBuildThread::operator()()
 
          // Output added and advance cursor
          cout << left << setw(OUTPUT_PREFIX_SIZE) << "   Added";
-         cout << "'" << buildfile->name << "'";
+         cout << setw(Dependency.max_name_length + 2) << "'" + buildfile->name + "'";
          if (buildfile->layer != DEFAULT_LAYER_NAME)
             cout << " [" << buildfile->layer << "]";
          Cursor.clear_rest_of_line();
@@ -254,7 +254,8 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    arguments += " --BG_VERBOSE 'no'";
    arguments += " --BG_BUILD_FOOTPRINT '" + footprint_file + "'";
    arguments += " --BG_BUILD_SHA256SUM '" + checksum_file + "'";
-   arguments += " --BG_MAX_NAME_LEN '" + to_string(Dependency.name_length) + "'";
+   arguments += " --BG_MAX_NAME_LEN '" + to_string(Dependency.max_name_length) + "'";
+   arguments += " --BG_MAX_LAYER_LEN '" + to_string(Dependency.max_layer_length) + "'";
    arguments += " --BG_SCRIPT_OUTPUT_FIFO '" + SCRIPT_OUTPUT_FIFO + "'";
    arguments += " --BG_TEMP_DIR '" + Config.tmp_dir + "'";
 
@@ -706,7 +707,8 @@ void CBuildManager::BuildOutputPrint()
 
    for (it = BuildManager.active_adds.begin(); it != BuildManager.active_adds.end(); it++)
    {
-      cout << left << setw(OUTPUT_PREFIX_SIZE) << "   Adding" << "'" << (*it)->name << "'";
+      cout << left << setw(OUTPUT_PREFIX_SIZE) << "   Adding";
+      cout << setw(Dependency.max_name_length + 2) << "'" + (*it)->name + "'";
       if ((*it)->layer != DEFAULT_LAYER_NAME)
          cout << " [" << (*it)->layer << "]";
       Cursor.clear_rest_of_line();
@@ -740,7 +742,7 @@ void CBuildManager::BuildOutputPrint()
       }
 
       cout << " " << setw(1) << indicator << left << setw(OUTPUT_PREFIX_SIZE - 2) << " Building";
-      cout <<"'" << (*it)->name << "'";
+      cout << setw(Dependency.max_name_length + 2) << "'" + (*it)->name + "'";
       if ((*it)->layer != DEFAULT_LAYER_NAME)
          cout << " [" << (*it)->layer << "]";
       Cursor.clear_rest_of_line();
