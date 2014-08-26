@@ -38,6 +38,8 @@ class CConfig : public CUtility
 
       unordered_map <string, string> bg_config;
       unordered_map <string, string> bg_config_default;
+      unordered_map <string, string> bg_config_local;
+      unordered_map <string, string> bg_config_global;
       unordered_map <string, string> bf_config;
 
       bool download;

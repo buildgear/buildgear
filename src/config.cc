@@ -182,23 +182,17 @@ void CConfig::SetConfig(void)
 
 void CConfig::List(void)
 {
-   CConfig defaults, global, local;
    list<CConfigOption*>::iterator it;
    uint max_len = 0;
    string line;
    ostringstream out;
-   defaults = Config;
-
-   ConfigFile.Parse(LOCAL_CONFIG_FILE);
-
-   local = Config;
 
    ConfigFile.Parse(Config.home_dir + GLOBAL_CONFIG_FILE);
-
-   global = Config;
+   ConfigFile.Parse(LOCAL_CONFIG_FILE);
 
    cout << endl;
 
+   // Find length of longest key=value string
    for (it = ConfigFile.options.begin(); it != ConfigFile.options.end(); it++)
    {
       line = (*it)->key + "=";
@@ -213,14 +207,13 @@ void CConfig::List(void)
       out << (*it)->key << "=";
       out << Config.bg_config[(*it)->key];
       cout << out.str() << setw(max_len - out.tellp()) << "";
-      if (local.bg_config[(*it)->key] == defaults.bg_config[(*it)->key])
-      {
-         if (global.bg_config[(*it)->key] == defaults.bg_config[(*it)->key])
-            cout << " [default]" << endl;
-         else
-            cout << " [global]" << endl;
-      } else
+
+      if (!bg_config_local[(*it)->key].empty())
          cout << " [local]" << endl;
+      else if (!bg_config_global[(*it)->key].empty())
+         cout << " [global]" << endl;
+      else
+         cout << " [default]" << endl;
    }
 
    cout << endl;

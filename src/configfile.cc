@@ -130,6 +130,11 @@ void CConfigFile::Parse(string filename)
             {
                // ~/.buildgearconfig, .buildgear/config :
                Config.bg_config[key] = value;
+
+               if (filename == LOCAL_CONFIG_FILE)
+                   Config.bg_config_local[key] = value;
+               else
+                   Config.bg_config_global[key] = value;
             }
             else
             {
