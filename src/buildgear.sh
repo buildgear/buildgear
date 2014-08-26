@@ -69,10 +69,10 @@ warning()
 {
    echo "WARNING: $1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "  Warning  '$BG_BUILD_TYPE/$name'$(name_padding)   $(layer_padding)  ($1)" \
+      echo "   Warning  '$BG_BUILD_TYPE/$name'$(name_padding)   $(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    else
-      echo "  Warning  '$BG_BUILD_TYPE/$name'$(name_padding) [$BG_LAYER]$(layer_padding)  ($1)" \
+      echo "   Warning  '$BG_BUILD_TYPE/$name'$(name_padding) [$BG_LAYER]$(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    fi
 }
@@ -81,10 +81,10 @@ updating()
 {
    echo "$1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "  Updated  '$BG_BUILD_TYPE/$name'$(name_padding)   $(layer_padding)  ($1)" \
+      echo "   Updated  '$BG_BUILD_TYPE/$name'$(name_padding)   $(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    else
-      echo "  Updated  '$BG_BUILD_TYPE/$name'$(name_padding) [$BG_LAYER]$(layer_padding)  ($1)" \
+      echo "   Updated  '$BG_BUILD_TYPE/$name'$(name_padding) [$BG_LAYER]$(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    fi
 }
@@ -93,10 +93,10 @@ error()
 {
    echo "ERROR: $1"
    if [ "$BG_LAYER" == "" ]; then
-      echo "  Error    '$BG_BUILD_TYPE/$name'$(name_padding)   $(layer_padding)  ($1)" \
+      echo "   Error    '$BG_BUILD_TYPE/$name'$(name_padding)   $(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    else
-      echo "  Error    '$BG_BUILD_TYPE/$name'$(name_padding) [$BG_LAYER]$(layer_padding)  ($1)" \
+      echo "   Error    '$BG_BUILD_TYPE/$name'$(name_padding) [$BG_LAYER]$(layer_padding)  ($1)" \
             > ${BG_SCRIPT_OUTPUT_FIFO}
    fi
 }
