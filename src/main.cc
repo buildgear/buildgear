@@ -480,6 +480,7 @@ int main (int argc, char *argv[])
    /* Show system information */
    cout << "Detecting BUILD system type..   " << Config.bf_config[CONFIG_KEY_BUILD] << endl;
    cout << "Configured HOST system type..   " << Config.bf_config[CONFIG_KEY_HOST] << endl;
+   cout << "Configured parallel builds..    " << Config.bg_config[CONFIG_KEY_PARALLEL_BUILDS] << endl;
 
    /* Delete old work */
    cout << "Cleaning old work directory..   " << flush;
