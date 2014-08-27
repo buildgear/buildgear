@@ -99,11 +99,18 @@ void CLog::open(string filename)
       throw std::runtime_error(strerror(errno));
 }
 
-void CLog::write(char *buffer, int length)
+void CLog::write(const char *buffer, int length)
 {
    log_file.write(buffer, length);
    log_file.flush();
 }
+
+void CLog::print(string buffer)
+{
+   log_file.write(buffer.c_str(), buffer.size());
+   log_file.flush();
+}
+
 
 void CLog::close()
 {

@@ -41,7 +41,8 @@ class CLog
 {
    public:
       void open(string filename);
-      void write(char *buffer, int length);
+      void write(const char *buffer, int length);
+      void print(string buffer);
       void close();
       void clean(void);
       void rotate(void);

@@ -40,6 +40,9 @@
 #include "buildgear/source.h"
 #include "buildgear/download.h"
 #include "buildgear/cursor.h"
+#include "buildgear/log.h"
+
+extern CLog Log;
 
 string bytes2str(double bytes)
 {
@@ -128,7 +131,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    double total_time;
    double speed;
 
-   ostringstream temp;
+   ostringstream status;
 
    /* Make sure that source dir exists */
    CreateDirectory(source_dir);
@@ -161,6 +164,10 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    if (Download.pending_downloads.size() > 0)
    {
       cout << "     (" << Download.pending_downloads.size() << " files)" << flush;
+      status.str("");
+      status << "======> Download\n\n";
+      status << "Downloading " << Download.pending_downloads.size() << " files.\n\n";
+      Log.print(status.str());
    }
 
    // Add download_connections downloads to multi stack
@@ -320,11 +327,12 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                   if (item->mirror_url == "")
                   {
                      curl_multi_remove_handle(Download.curlm, msg->easy_handle);
-                     temp.str("");
-                     temp << "Error " << response_code <<" (";
-                     temp << curl_easy_strerror(msg->data.result) << ")";
-                     item->status = temp.str();
+                     status.str("");
+                     status << "Error " << response_code <<" (";
+                     status << curl_easy_strerror(msg->data.result) << ")";
+                     item->status = status.str();
                      item->downloaded = -1;
+                     Log.print(status.str() + '\n');
 
                      Download.lock();
 
@@ -362,11 +370,12 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                   curl_easy_cleanup (msg->easy_handle);
                   item->curl = tmp_handle;
 
-                  temp.str("");
-                  temp << "Error " << response_code << " (";
-                  temp << curl_easy_strerror(msg->data.result) << ") trying alternative URL..";
-                  item->status = temp.str();
+                  status.str("");
+                  status << "Error " << response_code << " (";
+                  status << curl_easy_strerror(msg->data.result) << ") trying alternative URL..";
+                  item->status = status.str();
                   item->downloaded = -1;
+                  Log.print(status.str() + '\n');
 
                   Download.lock();
 
@@ -398,11 +407,12 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                   continue;
                } else
                {
-                  temp.str("");
-                  temp << "Error " << response_code << " (";
-                  temp << curl_easy_strerror(msg->data.result) << ")";
-                  item->status = temp.str();
+                  status.str("");
+                  status << "Error " << response_code << " (";
+                  status << curl_easy_strerror(msg->data.result) << ")";
+                  item->status = status.str();
                   item->downloaded = -1;
+                  Log.print(status.str() + '\n');
 
                   Download.lock();
 
@@ -445,11 +455,21 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                curl_easy_getinfo(item->curl, CURLINFO_TOTAL_TIME, &total_time);
                curl_easy_getinfo(item->curl, CURLINFO_SPEED_DOWNLOAD, &speed);
 
-               temp.str("");
-               temp << "Download OK (" << bytes2str(item->downloaded) << " in" << seconds2str(total_time)
+               status.str("");
+               status << "Download OK (" << bytes2str(item->downloaded) << " in" << seconds2str(total_time)
                     << " at " << bytes2str(speed) << "/s)";
-               item->status = temp.str();
+               item->status = status.str();
                item->downloaded = -1;
+
+               // Print download status to log
+               status.str("");
+               status << "Download ";
+               if (item->alternative_url)
+                  status << item->mirror_url;
+               else
+                  status << item->url;
+               status << '\n' << item->status << "\n\n";
+               Log.print(status.str());
 
                Download.lock();
 
@@ -469,7 +489,10 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                Download.update_progress();
 
             } else {
-               cout << "Error: " << item->source_dir + "/" + item->filename + ".part" << " not found" << endl << flush;
+               status.str("");
+               status << "Error: " << item->source_dir + "/" + item->filename + ".part" << " not found" << endl << flush;
+               cout << status;
+               Log.print(status.str());
                exit(EXIT_FAILURE);
             }
 
@@ -483,7 +506,10 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                active_downloads++;
             }
          } else {
-            cout << "Error: CURLMsg (" << msg->msg << ")" << endl << flush;
+            status.str("");
+            status << "Error: CURLMsg (" << msg->msg << ")" << endl << flush;
+            cout << status;
+            Log.print(status.str());
             exit(EXIT_FAILURE);
          }
       }
@@ -500,7 +526,10 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
 
    if (Download.error)
    {
-      cout << "Error: Could not download all sources - see download errors above." << endl;
+      status.str("");
+      status << "Error: Could not download all sources - see download errors above." << endl;
+      cout << status;
+      Log.print(status.str());
       exit(EXIT_FAILURE);
    }
 }
