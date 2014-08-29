@@ -34,6 +34,9 @@ class CStats
       void enableCapture(void);
       void disableCapture(void);
       void saveCapture(string filename);
+      string averageCPULoad(void);
+      string maxMemoryUsage(void);
+      string minMemoryUsage(void);
       vector <float> cpu_usage;
       vector <float> mem_usage;
       CSvg svg;

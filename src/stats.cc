@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <sys/sysinfo.h>
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <string.h>
 #include "config.h"
 #include "buildgear/stats.h"
@@ -121,6 +123,54 @@ void CStats::disableCapture()
    this->capture = false;
 }
 
+string CStats::averageCPULoad(void)
+{
+   float average = 0;
+   ostringstream result;
+   vector<float>::iterator it;
+
+   for (it = cpu_usage.begin(); it != cpu_usage.end(); it++)
+        average += *it;
+
+   average = average / cpu_usage.size();
+
+   result << fixed << setprecision(1) << average;
+
+   return result.str();
+}
+
+string CStats::maxMemoryUsage(void)
+{
+   float max_usage = 0;
+   ostringstream result;
+   vector<float>::iterator it;
+
+   for (it = mem_usage.begin(); it != mem_usage.end(); it++)
+      if (*it > max_usage)
+        max_usage = *it;
+
+   result << fixed << setprecision(1) << max_usage;
+
+   return result.str();
+}
+
+string CStats::minMemoryUsage(void)
+{
+   float min_usage;
+   ostringstream result;
+   vector<float>::iterator it;
+
+   min_usage = mem_usage[0];
+
+   for (it = mem_usage.begin(); it != mem_usage.end(); it++)
+      if (*it < min_usage)
+        min_usage = *it;
+
+   result << fixed << setprecision(1) << min_usage;
+
+   return result.str();
+}
+
 void CStats::saveCapture(string filename)
 {
    int i;
@@ -143,18 +193,25 @@ void CStats::saveCapture(string filename)
    this->svg.addText("Build Gear - Load Chart",
          (LOAD_CHART_WIDTH + 2 * LOAD_CHART_MARGIN) / 2, LOAD_CHART_LINE_HEIGHT, "black",
          "font-size='8' text-anchor='middle'");
-   this->svg.addText("Build: " + Config.name + ", built with "
-         + Config.bg_config["parallel_builds"] +
-         " parallel builds", (LOAD_CHART_WIDTH + 2 * LOAD_CHART_MARGIN) / 2,
+   this->svg.addText("Build: " + Config.name + " (parallel_builds="
+         + Config.bg_config["parallel_builds"] + ")",
+         (LOAD_CHART_WIDTH + 2 * LOAD_CHART_MARGIN) / 2,
          2 * LOAD_CHART_LINE_HEIGHT, "black", "font-size='7' text-anchor='middle'");
+
+   // Add average system CPU usage and max/min system memory usage
+   this->svg.addText("Average System CPU Usage: " + averageCPULoad() + "%            " +
+                     "Maximum System Memory Usage: " + maxMemoryUsage() + "%            " +
+                     "Minimum System Memory Usage: " + minMemoryUsage() + "%",
+                     (LOAD_CHART_WIDTH + 2 * LOAD_CHART_MARGIN) / 2,
+                     34 * LOAD_CHART_LINE_HEIGHT, "black", "font-size='6' text-anchor='middle' xml:space='preserve'");
 
    // Graph for system CPU usage
    this->svg.addNaked("<g transform='translate(" +
          to_string(LOAD_CHART_MARGIN + LOAD_CHART_LINE_HEIGHT) + "," +
          to_string(((LOAD_CHART_HEIGHT + 2) / 2) + LOAD_CHART_MARGIN +
                    2 * LOAD_CHART_LINE_HEIGHT) + ")'>");
-   this->svg.addText("CPU usage [%]", 0, 0, "black",
-         "text-anchor='middle' font-size='7' transform='rotate(-90)'");
+   this->svg.addText("System CPU Usage [%]", 0, -2, "black",
+         "text-anchor='middle' font-size='5' transform='rotate(-90)'");
    this->svg.addNaked("</g>");
    this->svg.addRectangle(LOAD_CHART_MARGIN + 1.5 * LOAD_CHART_LINE_HEIGHT - 1,
          LOAD_CHART_MARGIN + 2 * LOAD_CHART_LINE_HEIGHT,
@@ -165,8 +222,8 @@ void CStats::saveCapture(string filename)
          to_string(LOAD_CHART_MARGIN + LOAD_CHART_LINE_HEIGHT) + "," +
          to_string(((LOAD_CHART_HEIGHT + 2) / 2) + 3 * LOAD_CHART_MARGIN +
             2 * LOAD_CHART_LINE_HEIGHT + LOAD_CHART_HEIGHT) + ")'>");
-   this->svg.addText("Memory usage [%]", 0, 0, "black",
-         "text-anchor='middle' font-size='7' transform='rotate(-90)'");
+   this->svg.addText("System Memory Usage [%]", 0, -2, "black",
+         "text-anchor='middle' font-size='5' transform='rotate(-90)'");
    this->svg.addNaked("</g>");
    this->svg.addRectangle(LOAD_CHART_MARGIN + 1.5 * LOAD_CHART_LINE_HEIGHT - 1,
          3 * LOAD_CHART_MARGIN + 2 * LOAD_CHART_LINE_HEIGHT + LOAD_CHART_HEIGHT,
