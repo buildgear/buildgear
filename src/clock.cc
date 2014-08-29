@@ -24,6 +24,9 @@
 #include <iomanip>
 #include <time.h>
 #include "buildgear/clock.h"
+#include "buildgear/config.h"
+
+extern CConfig Config;
 
 void CClock::Start(void)
 {
@@ -61,4 +64,17 @@ void CClock::ShowElapsedTime(void)
         << setprecision(0)
         << seconds << "s "
         << endl << endl;
+}
+
+void CClock::SaveSysDateTime(void)
+{
+   time_t now = time(0);
+   struct tm *timeinfo;
+   char buf[80];
+
+   timeinfo = localtime(&now);
+   strftime(buf, sizeof(buf), "%Y-%m-%d %X", timeinfo);
+   string datetime(buf);
+
+   Config.sys_datetime = datetime;
 }

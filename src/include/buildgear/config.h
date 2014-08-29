@@ -83,6 +83,8 @@ class CConfig : public CUtility
       bool all;
 
       string home_dir;
+      string cmdline;
+      string sys_datetime;
 
       CConfig();
       void CorrectName(void);

@@ -31,7 +31,7 @@
 
 void COptions::Parse(int argc, char *argv[])
 {
-   int option;
+   int option,i;
    string command;
 
    /* Print usage help if no arguments are provided */
@@ -39,6 +39,13 @@ void COptions::Parse(int argc, char *argv[])
    {
       COptions::ShowHelp(argv);
       exit(EXIT_SUCCESS);
+   }
+
+   // Save cmdline
+   for (i = 0; i < argc; i++)
+   {
+      Config.cmdline += argv[i];
+      Config.cmdline += " ";
    }
 
    // Save second argument (assumed to be COMMAND)

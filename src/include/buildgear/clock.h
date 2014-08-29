@@ -30,6 +30,7 @@ class CClock
       void Start(void);
       void Stop(void);
       void ShowElapsedTime(void);
+      void SaveSysDateTime(void);
    private:
       double time_start;
       double time_stop;

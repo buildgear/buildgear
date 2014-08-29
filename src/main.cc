@@ -23,6 +23,7 @@
 #include <string>
 #include <cstdlib>
 #include <thread>
+#include <sstream>
 #include <ncurses.h>
 #include "buildgear/config.h"
 #include "buildgear/signals.h"
@@ -68,6 +69,9 @@ int main (int argc, char *argv[])
 
    /* Start counting elapsed time */
    Clock.Start();
+
+   /* Save system time */
+   Clock.SaveSysDateTime();
 
    /* Install custom signal handlers */
    Signals.Install();
@@ -459,6 +463,13 @@ int main (int argc, char *argv[])
          Dependency.download_order.push_back(Dependency.build_order.back());
       }
    }
+
+   /* Add header to log */
+   ostringstream header;
+   header << "======> Buildgear Log (" << Config.sys_datetime << ")\n\n";
+   header << "Command line: " << Config.cmdline << "\n\n";
+   header << "Build Gear " << VERSION << "\n\n";
+   Log.print(header.str());
 
    /* Download */
    cout << "Downloading sources..           " << flush;
