@@ -105,7 +105,7 @@ void CBuildFile::Parse(void)
    char line_buffer[PATH_MAX];
    size_t pos;
    string fifo_name;
-   string layerfile;
+   string layer_name;
    string command =
       "bash --norc --noprofile -O extglob -c 'source " +
        (string) BUILD_FILES_CONFIG + " 2>/dev/null \
@@ -118,6 +118,7 @@ void CBuildFile::Parse(void)
        ; echo source=${source[@]} \
        ; echo depends=${depends[@]} \
        ; echo options=${options[@]} \
+       ; echo layer=$layer \
        ; typeset -F build &> /dev/null && echo build_function=yes || echo build_function=no \
        ; typeset -F check &> /dev/null && echo check_function=yes || echo check_function=no'";
 
@@ -220,6 +221,8 @@ void CBuildFile::Parse(void)
           if (value.find("build-lock") < value.length())
               options.build_lock = true;
       }
+      if (key == KEY_LAYER)
+         layer_name = value;
    }
    pclose(fp);
 
@@ -234,33 +237,16 @@ void CBuildFile::Parse(void)
    // By default the "default" layer is assigned
    layer = DEFAULT_LAYER_NAME;
 
-   // Assign layer based on .layer file (if present, 1st priority)
-   layerfile = filename.substr(0,filename.find_last_of("/")) + "/" LAYER_FILE_NAME;
-   if (FileSystem.FileExist(layerfile))
+   // Assign layer based on layer variable (if present, 1st priority)
+   if (!layer_name.empty())
    {
-      char layer_name[LAYER_NAME_SIZE];
-      fp = fopen(layerfile.c_str(), "r");
-
-      if (!fp)
-         perror("error\n");
-
-      if (fscanf(fp, "%s", layer_name) > 0)
+      // Check if layer is defined in master config
+      if (Config.bf_config[CONFIG_KEY_LAYERS].find(layer_name) == string::npos
+          && layer_name != string(DEFAULT_LAYER_NAME))
       {
-         // Check if layer is in config file
-         if (Config.bf_config[CONFIG_KEY_LAYERS].find(layer_name) == string::npos
-             && layer_name != string(DEFAULT_LAYER_NAME))
-         {
-            // No matching layer found
-            string line_buffer;
-            line_buffer = string("======> Reverting '") +
-               layerfile.substr(layerfile.find(BUILD_FILES_DIR "/")) +
-               string("'\n   Layer '") + layer_name +
-               string("' not defined in ") + BUILD_FILES_CONFIG +
-               string(". Reverting to '" DEFAULT_LAYER_NAME "'.\n");
-            Log.write((char *)line_buffer.c_str(), line_buffer.size());
-         } else
-            layer = string(layer_name);
-      }
+         // No matching layer found
+      } else
+         layer = layer_name;
    } else
    {
       // Assign layer based on path location (if match, 2nd priority)
