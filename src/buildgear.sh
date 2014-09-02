@@ -248,20 +248,20 @@ do_build()
 
 do_strip()
 {
-   local FILE FILTER
-
-   if [ -f $BG_BUILD_NOSTRIP ] && [ ! -s $BG_BUILD_NOSTRIP ]; then
-      return
-   fi
+   local FILE FILTER EXPR
 
    log_action "Strip    "
 
    cd $PKG
 
-   if [ -f $BG_BUILD_NOSTRIP ]; then
-      FILTER="grep -v -f $BG_BUILD_NOSTRIP"
-   else
+   if [ -z $nostrip ]; then
       FILTER="cat"
+   else
+      for i in "${nostrip[@]}"
+      do
+         EXPR+="-e $i "
+      done
+      FILTER="grep -v $EXPR"
    fi
 
    if [ "$BG_BUILD_TYPE" = "cross" ]; then

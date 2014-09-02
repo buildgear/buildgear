@@ -268,8 +268,11 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
       arguments += " --BG_BUILD_BUILD '" + build + "'";
       arguments += " --BG_UPDATE_CHECKSUM '" + Config.update_checksum + "'";
       arguments += " --BG_UPDATE_FOOTPRINT '" + Config.update_footprint + "'";
-      arguments += " --BG_NO_STRIP '" + Config.no_strip + "'";
       arguments += " --BG_KEEP_WORK '" + Config.keep_work + "'";
+      if (Config.no_strip == "yes")
+         arguments += " --BG_NO_STRIP '" + Config.no_strip + "'";
+      else
+         arguments += " --BG_NO_STRIP '" + buildfile->options.nostrip + "'";
    } else
    {
       // Apply settings to main build
@@ -278,16 +281,19 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
          arguments += " --BG_BUILD_BUILD '" + build + "'";
          arguments += " --BG_UPDATE_CHECKSUM '" + Config.update_checksum + "'";
          arguments += " --BG_UPDATE_FOOTPRINT '" + Config.update_footprint + "'";
-         arguments += " --BG_NO_STRIP '" + Config.no_strip + "'";
          arguments += " --BG_KEEP_WORK '" + Config.keep_work + "'";
+         if (Config.no_strip == "yes")
+            arguments += " --BG_NO_STRIP '" + Config.no_strip + "'";
+         else
+            arguments += " --BG_NO_STRIP '" + buildfile->options.nostrip + "'";
       } else
       {
          // Apply default settings to the build dependencies
          arguments += " --BG_BUILD_BUILD '" + build + "'";
          arguments += " --BG_UPDATE_CHECKSUM 'no'";
          arguments += " --BG_UPDATE_FOOTPRINT 'no'";
-         arguments += " --BG_NO_STRIP 'no'";
          arguments += " --BG_KEEP_WORK 'no'";
+         arguments += " --BG_NO_STRIP '" + buildfile->options.nostrip + "'";
       }
    }
 

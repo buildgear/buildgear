@@ -46,9 +46,10 @@ class CBuildFile : public CUtility
       string depends;
 
       struct
-         {
-            bool build_lock;
-         } options;
+      {
+         bool build_lock;
+         string nostrip;
+      } options;
 
       string missing_depends;
       string type;

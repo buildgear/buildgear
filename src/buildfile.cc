@@ -49,6 +49,7 @@ CBuildFile::CBuildFile(string filename)
    CBuildFile::url = "";
    CBuildFile::license = "";
    CBuildFile::options.build_lock = false;
+   CBuildFile::options.nostrip = "no";
 }
 
 string CBuildFile::GetLocation()
@@ -215,11 +216,16 @@ void CBuildFile::Parse(void)
          check_function = value;
       if (key == KEY_OPTIONS_)
       {
-          // Parse options field
+          // Parse options array
 
           // Check for "build-lock"
           if (value.find("build-lock") < value.length())
               options.build_lock = true;
+
+          // Check for "nostrip"
+          if (value.find("nostrip") < value.length())
+              options.nostrip = "yes";
+
       }
       if (key == KEY_LAYER)
          layer_name = value;
