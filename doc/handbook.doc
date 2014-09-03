@@ -28,7 +28,7 @@
          </para>
       </legalnotice>
 
-      <copyright><year>2013</year><holder>Martin Lund</holder></copyright>
+      <copyright><year>2014</year><holder>Martin Lund</holder></copyright>
       <subtitle>Version PACKAGE_VERSION</subtitle>
       <pubdate><?dbtimestamp format="Y-m-d"?></pubdate>
    </bookinfo>
