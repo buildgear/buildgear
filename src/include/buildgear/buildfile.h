@@ -47,7 +47,7 @@ class CBuildFile : public CUtility
 
       struct
       {
-         bool build_lock;
+         bool buildlock;
          string nostrip;
       } options;
 

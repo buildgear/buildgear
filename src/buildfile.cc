@@ -48,7 +48,7 @@ CBuildFile::CBuildFile(string filename)
    CBuildFile::description = "";
    CBuildFile::url = "";
    CBuildFile::license = "";
-   CBuildFile::options.build_lock = false;
+   CBuildFile::options.buildlock = false;
    CBuildFile::options.nostrip = "no";
 }
 
@@ -218,9 +218,9 @@ void CBuildFile::Parse(void)
       {
           // Parse options array
 
-          // Check for "build-lock"
-          if (value.find("build-lock") < value.length())
-              options.build_lock = true;
+          // Check for "buildlock"
+          if (value.find("buildlock") < value.length())
+              options.buildlock = true;
 
           // Check for "nostrip"
           if (value.find("nostrip") < value.length())

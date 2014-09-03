@@ -59,9 +59,9 @@ List of files to not be automatically stripped. List items are treated as regula
 .RS
 List of special options. Supported options are:
 .TP
-.B build-lock
+.B buildlock
 .RS
-Locks the build so that it will be the only one building at any given time (even when parallel_builds > 1).
+Locks the build so that it will be the only one building at any given time (when parallel_builds > 1).
 .RE
 .TP
 .B nostrip

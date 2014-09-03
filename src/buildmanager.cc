@@ -529,8 +529,8 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
                  && !BuildManager.build_error)
          {
             // Only build buildfiles in parallel which are not marked with the
-            // "build-lock" option
-            if ((*it)->options.build_lock == false)
+            // "buildlock" option
+            if ((*it)->options.buildlock == false)
             {
                CBuildThread *bt = new CBuildThread(*it);
                builder.push_back(bt);
@@ -555,7 +555,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
             builder.pop_back();
          }
 
-         // Build "build-lock" marked builds sequentially
+         // Build "buildlock" marked builds sequentially
          for (itr = locked_buildfiles.begin(); itr != locked_buildfiles.end(); itr++)
          {
             CBuildThread *bt = new CBuildThread(*itr);
