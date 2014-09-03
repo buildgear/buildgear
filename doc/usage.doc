@@ -325,6 +325,7 @@ $ buildgear config --list
 
    </section>
 
+
    <section>
       <title> Layer Configuration </title>
 
@@ -387,5 +388,47 @@ layer=layer0
 
    </section>
 
+
+   <section>
+      <title> Strip Configuration </title>
+
+      <para>
+         By default a builds output object files are automatically stripped
+         (symbols discarded). The stripped files include executables, shared
+         libraries (.so), and static archives (.a).
+      </para>
+
+      <para>
+         It is possible to disable this strip step entirely by simply adding
+         the <code>nostrip</code> option to the special options array in the
+         buildfile like so:
+      </para>
+
+<screen>
+options=(nostrip)
+</screen>
+
+      <para>
+         Alternatively, it is also possible to select which files will not be
+         automatically stripped by adding a <code>nostrip</code> array to the
+         buildfile matching the files you don't want to be stripped. For
+         example:
+      </para>
+
+<screen>
+nostrip=(/usr/lib/libtest.so /usr/lib/libtest.a)
+</screen>
+
+      <para>
+         Entries in the nostrip array are treated as regular expressions (as
+         used by grep) making it possible to do file pattern matching.
+      </para>
+
+      <note>
+         Please notice that the nostrip array will have no effect if the nostrip
+         options is defined in the special options array.
+      </note>
+
+   </section>
 
 </chapter>
