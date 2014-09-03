@@ -70,6 +70,12 @@ Disables automatic strip of executables, shared libraries (.so), and static arch
 .RE
 .RE
 
+.TP
+.B layer
+.RS
+The name of the layer which the build belongs.
+.RE
+
 
 .SH FUNCTIONS
 
