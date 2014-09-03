@@ -812,8 +812,10 @@ check_exist()
             <userinput>LAYERS</userinput>
          </entry>
          <entry>
-            Defines build layer names and priority. Layer names listed first
-            are highest priority.
+            Defines build layer names and priority. Layers are prioritized in
+            the order they are listed. The layer name listed first is highest
+            priority, the last listed is lowest priority. If the 'default'
+            layer is not listed it will automatically assume lowest priority.
          </entry>
          <entry>
             Optional
