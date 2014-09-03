@@ -49,6 +49,12 @@ List of Buildgear builds that is needed by the build. These builds will be added
 .RE
 
 .TP
+.B nostrip
+.RS
+List of files to not be automatically stripped. List items are treated as regular expressions (as used by grep).
+.RE
+
+.TP
 .B options
 .RS
 List of special options. Supported options are:
@@ -57,8 +63,13 @@ List of special options. Supported options are:
 .RS
 Locks the build so that it will be the only one building at any given time (even when parallel_builds > 1).
 .RE
-
+.TP
+.B nostrip
+.RS
+Disables automatic strip of executables, shared libraries (.so), and static archives (.a).
 .RE
+.RE
+
 
 .SH FUNCTIONS
 
