@@ -115,7 +115,6 @@ void CDependency::ShowBuildOrder(void)
    list<CBuildFile*>::iterator it;
 
    cout <<  "\nBuild order:" << endl;
-   cout << "max_name_length = " << max_name_length << endl;
 
    for (it=parallel_build_order.begin(), i=0; it!=parallel_build_order.end(); it++, i++)
    {
