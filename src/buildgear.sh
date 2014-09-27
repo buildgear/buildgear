@@ -432,7 +432,7 @@ main()
    unset check
    unalias -a
 
-   BG_ROOT_DIR="$PWD"
+   BG_ROOT_DIR="`pwd -P`"
    BG_OUTPUT_DIR="$BG_ROOT_DIR/$BG_OUTPUT_DIR"
    BG_BUILD_FILE_DIR="`dirname $BG_BUILD_FILE`"
    BG_BUILD_PACKAGE_DIR="$BG_ROOT_DIR/$BG_PACKAGE_DIR/$BG_BUILD_TYPE"
