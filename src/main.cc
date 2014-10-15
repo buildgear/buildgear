@@ -539,4 +539,7 @@ int main (int argc, char *argv[])
 
    /* Enable cursor again */
    Cursor.restore();
+
+   if (BuildManager.build_error)
+      return EXIT_FAILURE;
 }
