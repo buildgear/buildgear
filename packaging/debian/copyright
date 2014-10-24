@@ -1,6 +1,6 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: buildgear
-Source: http://www.buildgear.org
+Source: http://buildgear.io
 
 Files: *
 Copyright: 2011-2013 Martin Lund <martin.lund@keep-it-simple.com>

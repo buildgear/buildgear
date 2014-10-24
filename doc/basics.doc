@@ -572,7 +572,7 @@ CROSS_DEPENDS=native/crosstool-ng
 CROSS_SYSROOT="$NATIVE_SYSROOT/$HOST/sysroot"
 
 # Set download mirror
-DOWNLOAD_MIRROR="http://www.buildgear.org/mirror"
+DOWNLOAD_MIRROR="http://buildgear.io/mirror"
 
 # Add cross toolchain to build environment
 PATH="$NATIVE_SYSROOT/bin:$PATH"

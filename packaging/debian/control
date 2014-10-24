@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Jesper Larsen <knorr.jesper@gmail.com>
 Build-Depends: debhelper (>= 8.0.0), autotools-dev, cpp (>= 4.7), libcurl4-gnutls-dev, libncurses5-dev, unzip
 Standards-Version: 3.9.3
-Homepage: http://www.buildgear.org
+Homepage: http://buildgear.io
 
 Package: buildgear
 Architecture: any

@@ -31,7 +31,7 @@
          Build and install Build Gear:
       </para>
 
-<screen>$ wget http://www.buildgear.org/release/buildgear-PACKAGE_VERSION.tar.xz
+<screen>$ wget http://buildgear.io/release/buildgear-PACKAGE_VERSION.tar.xz
 $ tar xf buildgear-PACKAGE_VERSION.tar.xz
 $ cd buildgear-PACKAGE_VERSION
 $ ./configure --prefix=$HOME/opt/buildgear
@@ -79,7 +79,7 @@ $ sudo apt-get install buildgear
    </para>
    <para>
       The VirtualBox build image and install instructions are available <ulink
-      url="http://buildgear.org/release/virtual-build-image">here</ulink>.
+      url="http://buildgear.io/release/virtual-build-image">here</ulink>.
     </para>
 
 
