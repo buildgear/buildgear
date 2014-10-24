@@ -40,7 +40,7 @@ name_padding()
 {
    out=""
 
-   for (( i=0; i<($BG_MAX_NAME_LEN - ${#BG_BUILD_TYPE} - ${#name} - 1); i++ ))
+   for (( i=0; i < ($BG_MAX_NAME_LEN - ${#BG_BUILD_TYPE} - ${#name} - 1); i++ ))
    do
       out+=" "
    done
@@ -57,7 +57,7 @@ layer_padding()
       layer_size=0
    fi
 
-   for (( i=0; i<($BG_MAX_LAYER_LEN - ${layer_size}); i++ ))
+   for (( i=0; i < ($BG_MAX_LAYER_LEN - ${layer_size}); i++ ))
    do
       out+=" "
    done
