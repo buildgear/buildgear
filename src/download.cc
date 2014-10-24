@@ -201,6 +201,7 @@ void CDownloadItem::File()
 
    // Reset progress bar
    downloaded = -1;
+   start_offset = 0;
 
    // Initialize Curl
    curl = curl_easy_init();
@@ -273,6 +274,7 @@ void CDownloadItem::File()
          // Resume
          curl_easy_setopt(curl, CURLOPT_RESUME_FROM, filesize);
          status = "Partial download detected. Resuming..";
+         start_offset = filesize;
       }
 
       // Catch curl debug for output on non HTTP errors
@@ -347,7 +349,7 @@ void CDownloadItem::print_progress()
          line << setw(9) << bytes2str(downloaded) << " downloaded";
       } else {
 
-         percent = downloaded * 100.0 / total;
+         percent = (downloaded + start_offset) * 100.0 / (total + start_offset);
 
          spaces = 20;
 
@@ -366,9 +368,9 @@ void CDownloadItem::print_progress()
 
          line << right << "]"
               << setw(4) << (int) percent << setw(2) << left << "%";
-         line << setw(9) << (unsigned long) downloaded;
+         line << setw(9) << (unsigned long) (downloaded + start_offset);
          line << " / ";
-         line << setw(9) << (unsigned long) total << setw(6) << " bytes   ";
+         line << setw(9) << (unsigned long) (total + start_offset) << setw(6) << " bytes   ";
 
       }
 

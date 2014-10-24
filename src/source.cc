@@ -258,6 +258,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
                   }
 
                   curl_easy_setopt(item->curl, CURLOPT_RESUME_FROM, 0);
+                  item->start_offset = 0;
 
                   // Start transfer again from beginning of file
                   curl_multi_add_handle(Download.curlm, item->curl);
