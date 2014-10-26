@@ -41,16 +41,28 @@ CManifest::CManifest() {
    mManifestData.fileExtension = "";
 }
 
+bool nameCompare(CBuildFile *first, CBuildFile *second)
+{
+   if (first->name > second->name)
+      return false;
+   else
+      return true;
+}
+
 void CManifest::generateManifest(list<CBuildFile*> *buildfiles) {
+
+   list<CBuildFile*> sortedBuildfiles = *buildfiles;
+   sortedBuildfiles.sort(nameCompare);
+
    switch (mManifestData.documentFormat) {
    case FORMAT_PLAIN_TEXT:
-      generatePlainText(buildfiles);
+      generatePlainText(&sortedBuildfiles);
       break;
    case FORMAT_XML:
-      generateXML(buildfiles);
+      generateXML(&sortedBuildfiles);
       break;
    case FORMAT_HTML:
-      generateHTML(buildfiles);
+      generateHTML(&sortedBuildfiles);
       break;
    case FORMAT_NOT_SUPPORTED:
    default:
