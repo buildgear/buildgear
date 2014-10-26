@@ -80,6 +80,7 @@ class CDownloadItem : public CFileSystem
       string mirror_url;
       CURL *curl;
       CDownload *parent;
+      double start_offset;
       double downloaded;
       double total;
       string debug;
