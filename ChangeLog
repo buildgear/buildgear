@@ -1,176 +1,42 @@
 
-=== Build Gear v0.9.21 ===
+=== Build Gear v0.9.22 ===
 
 
-Changes since Build Gear v0.9.20:
+Changes since Build Gear v0.9.21:
 
 Jeser Larsen:
 
- * template: Add License field to buildfile template
+ * Add existing file size for resumed downloads
 
- * Support cleaning both footprint and checksum
+   We want to show the user the progress of the entire file download,
+   not just the part downloading in this session.
+
+Kalle Lampila:
+
+ * return error code on exit status, if build failed
 
 Martin Lund:
 
- * handbook: Added strip configuration text
+ * Sort manifest lists alphabetically
 
- * handbook: Updated layer text
+  To give a better overview the manifests lists are now sorted by build
+  name in alphabetical order.
 
- * Updated handbook year
+ * Update buildgear.org to buildgear.io
 
- * Renamed special option 'build-lock' -> 'buildlock'
+   Since http://buildgear.io is the new home of Build Gear all references
+   have been updated accordingly.
 
-   Renamed it to make it in the same style as the special 'nostrip' option.
+ * Fixed build step stalling on Ubuntu 14.10
 
- * Added layer man text
+   Ubuntu 14.10 includes an updated bash version which apparently includes
+   stricter parsing which resulted in buildgear stalling in the build step.
 
- * Added nostrip man text
+ * Fixed root path resolution in buildgear.sh
 
- * Removed '.nostrip' file support
+   Made resolution of working directory independent of symbolic links. The
+   buildfiles environment paths used to vary depending of root path having
+   symbolic path elements or not. This is now fixed so all paths are
+   resolved to absolute paths (basically ignoring symlinks).
 
-   Defining whether or not a Buildfile is stripped or not using the
-   .nostrip file is now deprecated.
-
-   Instead the nostrip feature can now be defined in the Buildfile itself
-   in either of two ways:
-
-   1. Disable strip entirely
-
-      Adding a 'nostrip' option to the 'options' list like so:
-
-      options=(nostrip)
-
-      Will disable any strip of the build entirely.
-
-   2. Selective nostrip
-
-      It is possible to select which files will not be stripped by adding a
-      nostrip array. For example:
-
-      nostrip=(/usr/lib/libtest.so /usr/lib/libtest.a)
-
-      Entries in the nostrip array are treated as regular expressions (as
-      used by grep).
-
-   Note: (2) will have no effect if (1) is used.
-
-   Note: By default all executables and .so and .a files are stripped.
-
-   This change is part of a plan to consolidate all settings inside the
-   Buildfile to make the Buildfile more precise to avoid that the user
-   overlooks any settings.
-
- * Removed '.layer' file support
-
-   Defining which layer a Buildfile belongs to using the .layer file is now
-   deprecated.
-
-   Instead the layer can now be defined in the Buildfile itself by adding
-   the "layer" variable. For example, to assign a Buildfile to "mylayer"
-   simply add:
-
-   layer=mylayer
-
-   If the layer is not defined in the master config LAYERS list, then the
-   Buildfile will default to the "default" layer.
-
-   Please note that the preferred method for assigning layers is by
-   Buildfile path location (eg. cross-<layer>) and not by using the "layer"
-   variable.
-
-   This is part of a plan to consolidate all settings inside the Buildfile
-   to make the Buildfile more precise to avoid that the user misses any
-   settings.
-
- * Added some metrics to load chart
-
-   Added the following metrics to the loaad chart:
-
-    * Average System CPU Usage
-    * Maximum System Memory Usage
-    * Minimum System Memory Usage
-
- * Added info header to log
-
-   Added info header to log when building or downloading.
-
- * Added download status to log
-
- * Print 'Configured parallel builds..' when building
-
-   Added print of 'Configured parallel builds..' when the build command is
-   fired.
-
- * Fixed 'buildgear config --list' command
-
-   Buildgear now correctly distinguishes between local, global, and default
-   settings when showing the configuration listing.
-
- * Revert some compacting of the output
-
-   Previous commit went a little to far with compacting the build output -
-   added one space of indentation so the spinner is not cramped to the
-   terminal wall.
-
- * Added support for "build-lock" option
-
-   This feature adds support for locking a build so that it will be the
-   only one building at any given time (even when parallel_builds > 1).
-   This is done by introducing a new "options" list and a special toggle
-   option named "build-lock".
-
-   To force a buildfile to be built in non-parallel, simply add to the
-   buildfile:
-
-   options=build-lock
-
-   This is reported to be useful for eg. kernel module builds which must
-   avoid to be built in parallel at the same time because they need to
-   operate in the same kernel build workspace in order to produce coherent
-   kernel and modules.
-
-   In the future, more options can be added to the options list.
-
- * Compacted build output
-
-   Compacted build output a little bit to save horizontal space.
-
- * Prettyfied build output
-
-   Added padding so that layer and status fields align nicely into columns.
-
- * Improve buildfile type identification
-
- * Automatic assigment of layer by buildfile location
-
-   Buildfiles are now automatically assigned to <layer> when placed in:
-
-   buildfiles/cross/cross-<layer>
-   buildfiles/native/native-<layer>
-
-   Provided that <layer> is defined in the master config LAYERS list.
-
-   If <layer> is not defined in the LAYERS list buildfiles in these
-   locations will continue to default to the "default" layer.
-
-   However, the .layer file will still take priority if used.
-
-   This feature makes it much more easy to assign multiple buildfiles to a
-   single layer by not having to create a .layer file for each buildfile
-   but instead by simply putting them in the right layer directory
-   location.
-
- * Bumped version
-
- * Updated .gitignore
-
-   Ignore buildgear-* directory created by 'make dist'.
-
- * Improved download error message
-
- * Fixed tty terminal handling
-
-   Added tty terminal detection so that no tty reconfiguration will be
-   performed when no tty terminal is attached to the buildgear process.
-
-   This was reported to be an issue when deploying builds under Jenkins.
+ * Removed debug line
