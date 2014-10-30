@@ -122,6 +122,10 @@ void CConfig::CorrectSourceDir(void)
          CConfig::bg_config[CONFIG_KEY_SOURCE_DIR] = home_dir + CConfig::bg_config[CONFIG_KEY_SOURCE_DIR];
       }
    }
+
+   // Prepend build root directory if a relative path is configured
+   if (CConfig::bg_config[CONFIG_KEY_SOURCE_DIR][0] != '/')
+         CConfig::bg_config[CONFIG_KEY_SOURCE_DIR] = root + "/" +  CConfig::bg_config[CONFIG_KEY_SOURCE_DIR];
 }
 
 void CConfig::GuessBuildSystem(void)
