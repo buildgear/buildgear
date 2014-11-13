@@ -61,7 +61,6 @@ string CBuildFile::GetLocation()
 
 void CBuildFile::Show(void)
 {
-   string qoute = "\"";
    string arguments;
    string command;
 
@@ -77,20 +76,10 @@ void CBuildFile::Show(void)
    arguments += " --BG_HOST '" + Config.bf_config[CONFIG_KEY_HOST] + "'";
    arguments += " --BG_SOURCE_DIR '" + Config.bg_config[CONFIG_KEY_SOURCE_DIR] + "'";
 
-   command =
-      "bash --norc --noprofile -O extglob -c '"
-      "source " BUILD_FILES_CONFIG
-      "; eval `" SCRIPT " " + arguments + "`"
-      "; source " + filename +
-      "; BG_TEMP=$(cat " + filename + ") \
-       ; BG_TEMP=$(echo \"$BG_TEMP\" | sed -e \"s|\\\\\\|\\\\\\\\\\\\\\|g\") \
-       ; BG_TEMP=${BG_TEMP//\\" + qoute + "/\\\\\\" + qoute + "} \
-       ; echo \"echo -E \\" + qoute + "\" > " + SHOW_BUILD_FILE +
-      "; echo \"$BG_TEMP\" >> " + SHOW_BUILD_FILE +
-      "; echo \"\\" + qoute + "\" >> " + SHOW_BUILD_FILE +
-      "; BG_TEMP=$(source " + SHOW_BUILD_FILE + ") \
-       ; echo \"$BG_TEMP\" \
-       ; rm -f " + SHOW_BUILD_FILE + "'";
+   command = SCRIPT " " + arguments;
+   command = "bash --norc --noprofile -O extglob -c 'setsid " + command + " 2>&1' 2>&1";
+
+   cout << endl;
 
    if (system(command.c_str()) != 0)
    {
@@ -98,6 +87,8 @@ void CBuildFile::Show(void)
       cout << strerror(errno) << endl;
       exit(EXIT_FAILURE);
    }
+
+   cout << endl;
 }
 
 void CBuildFile::Parse(void)

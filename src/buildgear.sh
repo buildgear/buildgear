@@ -398,6 +398,14 @@ do_buildfile()
    . $BG_BUILD_FILE
 }
 
+show_buildfile()
+{
+   local BUFFER=$(<$BG_BUILD_FILE)
+   BUFFER=${BUFFER//\\/\\\\}
+   BUFFER="echo -E \"$BUFFER\""
+   eval "$BUFFER"
+}
+
 parse_options()
 {
    optspec=":-:"
@@ -464,17 +472,9 @@ main()
    export SYSROOT="$BG_BUILD_SYSROOT_DIR"
    export SOURCE=$BG_SOURCE_DIR
 
-   # Present variables to show command
+   # Read and show expanded buildfile
    if [ "$BG_ACTION" = "read" ]; then
-      echo "PKG=$PKG"
-      echo "SRC=$SRC"
-      echo "OUTPUT=$OUTPUT"
-      echo "BUILD=$BUILD"
-      echo "HOST=$HOST"
-      echo "SYSROOT=$SYSROOT"
-      echo "SOURCE=$SOURCE"
-      echo "NATIVE_SYSROOT=$NATIVE_SYSROOT"
-      echo "BUILD_TYPE=$BUILD_TYPE"
+      show_buildfile
       exit 0
    fi
 

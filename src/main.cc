@@ -381,7 +381,7 @@ int main (int argc, char *argv[])
 
    if (Config.show && Config.buildfile)
    {
-      cout << "\nShowing expanded buildfile for '" << Config.name << "'..\n";
+      cout << "\nShowing expanded buildfile for '" << Config.name << "':\n";
       BuildFiles.BuildFile(Config.name)->Show();
       exit(EXIT_SUCCESS);
    }
