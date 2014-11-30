@@ -123,7 +123,7 @@ class CConfig : public CUtility
 #define BUILD_FILES_README       "README"
 #define LAYER_FILE_NAME          ".layer"
 #define DEFAULT_LAYER_NAME       "default"
-#define LOCK_FILE                ROOT_DIR "/.lock"
+#define LOCK_FILE                ROOT_DIR "/lock"
 
 #define TEMP(a)                  (Config.tmp_dir + string(a))
 #define SCRIPT_OUTPUT_FIFO       TEMP("script_output.fifo")
