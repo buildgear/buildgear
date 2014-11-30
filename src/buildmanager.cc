@@ -224,6 +224,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    string arguments;
    string footprint_file;
    string checksum_file;
+   string buildfile_checksum_file;
    string command;
    stringstream pid;
    char pid_string[PID_MAX_LENGTH];
@@ -232,11 +233,13 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    if (buildfile->type == "native")
    {
       footprint_file = FOOTPRINT_NATIVE_DIR  "/" +  buildfile->short_name + ".footprint";
-      checksum_file  = CHECKSUM_NATIVE_DIR  "/" + buildfile->short_name + ".sha256sum";
+      checksum_file = CHECKSUM_NATIVE_DIR  "/" + buildfile->short_name + ".sha256sum";
+      buildfile_checksum_file = BUILDFILE_CHECKSUM_NATIVE_DIR "/" + buildfile->short_name + ".sha256sum";
    } else
    {
       footprint_file = FOOTPRINT_CROSS_DIR  "/" + buildfile->short_name + ".footprint";
-      checksum_file  = CHECKSUM_CROSS_DIR  "/" + buildfile->short_name + ".sha256sum";
+      checksum_file = CHECKSUM_CROSS_DIR  "/" + buildfile->short_name + ".sha256sum";
+      buildfile_checksum_file = BUILDFILE_CHECKSUM_CROSS_DIR "/" + buildfile->short_name + ".sha256sum";
    }
 
    // Set required script arguments
@@ -254,6 +257,7 @@ void CBuildManager::Do(string action, CBuildFile* buildfile)
    arguments += " --BG_VERBOSE 'no'";
    arguments += " --BG_BUILD_FOOTPRINT '" + footprint_file + "'";
    arguments += " --BG_BUILD_SHA256SUM '" + checksum_file + "'";
+   arguments += " --BG_BUILDFILE_SHA256SUM '" + buildfile_checksum_file + "'";
    arguments += " --BG_MAX_NAME_LEN '" + to_string(Dependency.max_name_length) + "'";
    arguments += " --BG_MAX_LAYER_LEN '" + to_string(Dependency.max_layer_length) + "'";
    arguments += " --BG_SCRIPT_OUTPUT_FIFO '" + SCRIPT_OUTPUT_FIFO + "'";
@@ -430,6 +434,16 @@ bool CBuildManager::SourceUpToDate(CBuildFile *buildfile)
    return true;
 }
 
+bool CBuildManager::BuildfileChecksumMismatch(CBuildFile *buildfile)
+{
+   // Verify buildfile checksum for buildfiles with build() function only else
+   // assume no checksum mismatch
+   if (buildfile->build_function == "yes")
+      return buildfile->BuildfileChecksumMismatch();
+   else
+      return false;
+}
+
 bool CBuildManager::DepBuildNeeded(CBuildFile *buildfile)
 {
    list<CBuildFile*>::iterator it;
@@ -463,16 +477,11 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
    thread script_output_thread(script_output);
    script_output_thread.detach();
 
-   // FIXME:
-   // Check if buildfiles/config is newer than package or buildfiles
-   // If so warn and delete work/packages (force total rebuild)
-
-   // Set build action of all builds
-   // Based on package vs. Buildfile age and package vs source age
-   // Find the maximum build name
+   // Set build action of all builds based on package vs. buildfile age,
+   // package vs source age, and mismatching buildfile checksum
    for (it=buildfiles->begin(); it!=buildfiles->end(); it++)
    {
-      if (!PackageUpToDate((*it)) || !SourceUpToDate((*it)))
+      if (!PackageUpToDate((*it)) || !SourceUpToDate((*it)) || BuildfileChecksumMismatch((*it)))
          (*it)->build = true;
    }
 

@@ -339,6 +339,7 @@ void CFileSystem::InitRoot(void)
       command  = "echo 'build/*' > .gitignore ; ";
       command += "echo 'config' > " ROOT_DIR "/.gitignore";
       command += "echo 'lock' >> " ROOT_DIR "/.gitignore";
+      command += "echo 'buildfile-checksum' >> " ROOT_DIR "/.gitignore";
 
       status = system(command.c_str());
       if (status != 0)

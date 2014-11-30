@@ -398,12 +398,40 @@ do_buildfile()
    . $BG_BUILD_FILE
 }
 
+do_buildfile_checksum()
+{
+   local BUFFER=$(<$BG_BUILD_FILE)
+   BUFFER="echo -E \"$BUFFER\""
+   eval "$BUFFER" 2>/dev/null | sha256sum | awk '{print $1}' > $BG_BUILDFILE_SHA256SUM
+}
+
 show_buildfile()
 {
    local BUFFER=$(<$BG_BUILD_FILE)
    BUFFER=${BUFFER//\\/\\\\}
    BUFFER="echo -E \"$BUFFER\""
    eval "$BUFFER"
+}
+
+verify_buildfile_checksum()
+{
+   local SHA256SUM SHA256SUM_FILE
+   local BUFFER=$(<$BG_BUILD_FILE)
+   BUFFER="echo -E \"$BUFFER\""
+   SHA256SUM=`eval "$BUFFER" 2>/dev/null | sha256sum | awk '{print $1}'`
+
+   if [ -e $BG_BUILDFILE_SHA256SUM ]; then
+      SHA256SUM_FILE=$(<$BG_BUILDFILE_SHA256SUM)
+   else
+      exit 1
+   fi
+
+   if [ "$SHA256SUM" == "$SHA256SUM_FILE" ]; then
+      exit 0
+   fi
+
+   # Checksum mismatch
+   exit 1
 }
 
 parse_options()
@@ -472,6 +500,12 @@ main()
    export SYSROOT="$BG_BUILD_SYSROOT_DIR"
    export SOURCE=$BG_SOURCE_DIR
 
+   # Verify buildfile checksum
+   if [ "$BG_ACTION" = "verify_buildfile_checksum" ]; then
+      verify_buildfile_checksum
+      exit 0
+   fi
+
    # Read and show expanded buildfile
    if [ "$BG_ACTION" = "read" ]; then
       show_buildfile
@@ -516,6 +550,7 @@ main()
          fi
          do_package
          do_footprint
+         do_buildfile_checksum
          if [ "$BG_KEEP_WORK" = "no" ]; then
             do_clean
          fi

@@ -91,6 +91,50 @@ void CBuildFile::Show(void)
    cout << endl;
 }
 
+bool CBuildFile::BuildfileChecksumMismatch(void)
+{
+   string arguments;
+   string command;
+   string buildfile_checksum_file;
+   int status;
+
+   if (this->type == "native")
+      buildfile_checksum_file = BUILDFILE_CHECKSUM_NATIVE_DIR "/" + this->short_name + ".sha256sum";
+   else
+      buildfile_checksum_file = BUILDFILE_CHECKSUM_CROSS_DIR "/" + this->short_name + ".sha256sum";
+
+   arguments =  " --BG_BUILD_FILE '" + filename + "'";
+   arguments += " --BG_ACTION 'verify_buildfile_checksum'";
+   arguments += " --BG_BUILD_FILES_CONFIG '" BUILD_FILES_CONFIG "'";
+   arguments += " --BG_OUTPUT_DIR '" OUTPUT_DIR "'";
+   arguments += " --BG_PACKAGE_DIR '" PACKAGE_DIR "'";
+   arguments += " --BG_BUILD_TYPE '" + type + "'";
+   arguments += " --BG_SYSROOT_DIR '" SYSROOT_DIR "'";
+   arguments += " --BG_WORK_DIR '" WORK_DIR "'";
+   arguments += " --BG_BUILD '" + Config.bf_config[CONFIG_KEY_BUILD] + "'";
+   arguments += " --BG_HOST '" + Config.bf_config[CONFIG_KEY_HOST] + "'";
+   arguments += " --BG_SOURCE_DIR '" + Config.bg_config[CONFIG_KEY_SOURCE_DIR] + "'";
+   arguments += " --BG_BUILDFILE_SHA256SUM '" + buildfile_checksum_file + "'";
+
+   command = SCRIPT " " + arguments;
+   command = "bash --norc --noprofile -O extglob -c 'setsid " + command + " 2>&1' 2>&1";
+
+   status = system(command.c_str());
+   if (status == -1)
+   {
+      cout << "\nError: Could not verify buildfile checksum for '" << name << "'\n";
+      cout << strerror(errno) << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   status = WEXITSTATUS(status);
+   if (status == 1)
+      return true;
+
+   // No checksum mismatch
+   return false;
+}
+
 void CBuildFile::Parse(void)
 {
    FILE *fp;

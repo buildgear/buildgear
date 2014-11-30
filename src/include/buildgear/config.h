@@ -113,6 +113,8 @@ class CConfig : public CUtility
 #define FOOTPRINT_CROSS_DIR      ".footprint/cross"
 #define CHECKSUM_NATIVE_DIR      ".checksum/native"
 #define CHECKSUM_CROSS_DIR       ".checksum/cross"
+#define BUILDFILE_CHECKSUM_NATIVE_DIR  ROOT_DIR "/buildfile-checksum/native"
+#define BUILDFILE_CHECKSUM_CROSS_DIR   ROOT_DIR "/buildfile-checksum/cross"
 #define BUILD_FILE               "Buildfile"
 #define PACKAGE_EXTENSION        ".pkg.tar.gz"
 
