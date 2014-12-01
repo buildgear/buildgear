@@ -43,6 +43,7 @@ CBuildFile::CBuildFile(string filename)
 {
    CBuildFile::filename = filename;
    CBuildFile::build = false;
+   CBuildFile::have_pkg = false;
    CBuildFile::visited = false;
    CBuildFile::depth = 0;
    CBuildFile::description = "";

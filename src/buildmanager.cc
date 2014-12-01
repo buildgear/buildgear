@@ -93,6 +93,10 @@ void CBuildThread::operator()()
 
       Do("build", buildfile);
 
+      // Test for produced package output
+      if (FileExist(PackagePath(buildfile)))
+         buildfile->have_pkg = true;
+
       // Remove buildfile from active builds
       pthread_mutex_lock(&active_builds_mutex);
       BuildManager.active_builds.remove(buildfile);
@@ -109,8 +113,8 @@ void CBuildThread::operator()()
       BuildOutputPrint();
       pthread_mutex_unlock(&cout_mutex);
 
-      // Don't add last build
-      if (buildfile != last_build)
+      // Don't add last build or builds which have no package output
+      if ((buildfile != last_build) && buildfile->have_pkg)
       {
          pthread_mutex_lock(&add_mutex);
 
@@ -144,7 +148,9 @@ void CBuildThread::operator()()
          Cursor.reset_ymaxpos();
          BuildOutputPrint();
          pthread_mutex_unlock(&cout_mutex);
-      } else
+      }
+
+      if (buildfile == last_build)
       {
          // Clear line if it is the last build
          pthread_mutex_lock(&cout_mutex);

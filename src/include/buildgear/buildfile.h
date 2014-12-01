@@ -59,6 +59,7 @@ class CBuildFile : public CUtility
       string layer;
       char *control_fifo;
       bool build;
+      bool have_pkg;
       bool visited;
       int depth;
       float x;
