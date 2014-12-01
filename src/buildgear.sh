@@ -52,7 +52,7 @@ layer_padding()
    out=""
 
    if [[ ${#BG_LAYER} > 0 ]]; then
-      layer_size=$((${#BG_LAYER}+3))
+      layer_size=${#BG_LAYER}
    else
       layer_size=0
    fi
@@ -63,7 +63,6 @@ layer_padding()
    done
    echo "${out}"
 }
-
 
 warning()
 {
