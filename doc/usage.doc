@@ -1,4 +1,4 @@
-<chapter>
+<chapter id="usage">
    <title>Using Build Gear</title>
 
    <para>
@@ -10,7 +10,7 @@
       <title> Help </title>
 
       <para>
-         To list all available Build Gear commands and options simply do:
+         To list all available Build Gear commands and options simply type:
       </para>
 
 <screen>
@@ -18,7 +18,7 @@ $ buildgear --help
 </screen>
 
       <para>
-         To ask for help on a specific command do:
+         To ask for help on a specific command type eg.:
       </para>
 
 <screen>
@@ -32,7 +32,7 @@ $ buildgear help build
       <title> Building </title>
 
       <para>
-         To build for example the "fs" build simply do eg.:
+         To build for example the "fs" build simply type:
       </para>
 
 <screen>
@@ -41,7 +41,7 @@ $ buildgear build fs
 
       <para>
          This will automatically download all sources, resolve all dependencies
-         and build the "fs" build.
+         and start building the "fs" build.
       </para>
 
    </section>
@@ -50,9 +50,7 @@ $ buildgear build fs
       <title> Building With Load Chart Enabled</title>
 
       <para>
-         During building Build Gear can monitor and log the system CPU and
-         memory usage and summarize these metrics in a load chart. To build a
-         build and have Build Gear produce a load chart containing CPU and
+         To build and have Build Gear produce a load chart containing CPU and
          memory usage during the build process simply do eg.:
       </para>
 
@@ -73,7 +71,7 @@ $ buildgear build fs --load-chart
       <title> Show Log </title>
 
       <para>
-         To have Build Gear show the log after a build has finished simply do:
+         To have Build Gear show the full log after a build has finished simply type:
       </para>
 
 <screen>
@@ -82,7 +80,7 @@ $ buildgear show --log
 
       <para>
          Alternatively, when Build Gear is building you can follow (tail) the
-         build log live by simply doing:
+         build log live by simply typing:
       </para>
 
 <screen>
@@ -91,8 +89,9 @@ $ buildgear show --log-tail
 
       <para>
          This features is quite useful - it enables you to have eg. one
-         terminal window open where you launch the actual build commands while in
-         another window you follow the log as it progresses during the build.
+         terminal window open where you launch the actual build commands while
+         in another window you follow the log as it progresses during the
+         build. It will keep tailing the log across builds.
       </para>
 
    </section>
@@ -104,7 +103,7 @@ $ buildgear show --log-tail
 
       <para>
          To have Build Gear show the build order of a particular build, simply
-         do eg.:
+         type eg.:
       </para>
 
 <screen>
@@ -112,7 +111,8 @@ $ buildgear show --build-order fs
 </screen>
 
       <para>
-         This will produce a build order list.
+         This will produce a build order list. In case of parallel building,
+         builds marked with the same group number is built concurrently.
       </para>
 
    </section>
@@ -123,8 +123,8 @@ $ buildgear show --build-order fs
       <title> Show Build Dependency </title>
 
       <para>
-         Build Gear can produce a graphical overview of the dependencies in a
-         build. Simply do eg.:
+         Build Gear can produce a graphical overview of the dependencies for a
+         specific build. For example:
       </para>
 
 <screen>
@@ -145,7 +145,7 @@ $ buildgear show --dependency fs
       <title> Update Footprint </title>
 
       <para>
-         To update the footprint for a particular build simply do eg.:
+         To update the footprint for a build simply do eg.:
       </para>
 
 <screen>
@@ -169,7 +169,7 @@ $ buildgear build fs --update-footprint --all
       <title> Update Checksum </title>
 
       <para>
-         To update the checksum for a particular build simply do eg.:
+         To update the checksum for a build simply do eg.:
       </para>
 
 <screen>
@@ -193,7 +193,7 @@ $ buildgear build fs --update-checksum --all
       <title> Show Footprint </title>
 
       <para>
-         To show the footprint for a particular build simply do eg.:
+         To show the footprint for a build simply do eg.:
       </para>
 
 <screen>
@@ -208,7 +208,7 @@ $ buildgear show --footprint zlib
       <title> Show Checksum </title>
 
       <para>
-         To show the checksum for a particular build simply do eg.:
+         To show the checksum for a build simply do eg.:
       </para>
 
 <screen>
@@ -223,7 +223,7 @@ $ buildgear show --checksum zlib
       <title> Download Source </title>
 
       <para>
-         To download the source of a particular build simply do eg.:
+         To download the source of a build simply do eg.:
       </para>
 
 <screen>
@@ -231,8 +231,8 @@ $ buildgear download zlib
 </screen>
 
       <para>
-         Likewise, to download the source of a particular build including the
-         source of all its dependencies simply do eg.:
+         Likewise, to download the source of a build including the source of
+         all its dependencies simply do eg.:
       </para>
 
 <screen>
@@ -253,11 +253,11 @@ $ buildgear download --all
       <title> Cleaning </title>
 
       <para>
-         To clean the internal build package of a particular build simply do:
+         To clean (delete) the internal build package of a build simply do eg.:
       </para>
 
 <screen>
-$ buildgear clean zlib
+$ buildgear clean connman
 </screen>
 
       <para>
@@ -265,11 +265,11 @@ $ buildgear clean zlib
       </para>
 
       <para>
-         To also clean the build and its dependencies simply do:
+         Likewise, to clean a build and all of its dependencies simply do eg.:
       </para>
 
 <screen>
-$ buildgear clean --all fs
+$ buildgear clean --all connman
 </screen>
 
       <para>
@@ -282,8 +282,8 @@ $ buildgear clean --all
 
       <para>
          Please be careful, the above command will remove everything in
-         <code>build/package</code>. Meaning you will have to rebuild
-         everything.
+         <code>build/package</code>. Meaning everything will rebuild from
+         scratch in your next build command.
       </para>
 
    </section>
@@ -338,7 +338,7 @@ $ buildgear config --list
       </para>
 
 <screen>
-# Define layers
+# Layer configuration
 LAYERS=(layer0 layer1 layer2 default)
 </screen>
 
@@ -365,7 +365,7 @@ buildfiles/cross/cross-&lt;layer&gt;
 buildfiles/native/native-&lt;layer&gt;
 </screen>
       <para>
-         If &lt;layer&gt; is not defined in the LAYERS list then buildfiles in
+         If &lt;layer&gt; is not defined in the LAYERS list then build files in
          these locations will automatically be assigned to the
          <code>default</code> layer.
       </para>
@@ -393,9 +393,9 @@ layer=layer0
       <title> Strip Configuration </title>
 
       <para>
-         By default a builds output object files are automatically stripped
-         (symbols discarded). The stripped files include executables, shared
-         libraries (.so), and static archives (.a).
+         By default the output object files of a build are automatically
+         stripped (symbols discarded). The stripped files include executables,
+         shared libraries (.so), and static archives (.a).
       </para>
 
       <para>
@@ -430,5 +430,24 @@ nostrip=(/usr/lib/libtest.so /usr/lib/libtest.a)
       </note>
 
    </section>
+
+
+   <section>
+      <title> Force Non-Parallel Building </title>
+
+      <para>
+         When building in parallel mode (parallel_builds > 1) it is possible to
+         force a specific build to be built in non-parallel by adding a build
+         lock. To do so simple add the following option to the special options
+         field in the relevant buildfile like so:
+      </para>
+
+<screen>
+options=(buildlock)
+</screen>
+
+   </section>
+
+
 
 </chapter>

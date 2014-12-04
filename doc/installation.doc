@@ -7,11 +7,11 @@
       <title> Supported GNU/Linux Distributions </title>
 
       <para>
-         Build Gear is tested with Ubuntu 12.10 64-bit (Minimal). Installation
-         on other GNU/Linux distributions is not officially supported. That
-         being said, installation and building on other modern GNU/Linux
-         distributions might work, especially if they are based on the Debian
-         package system.
+         Build Gear is tested with the latest Ubuntu release which is currently
+         Ubuntu 14.10 (64-bit). Installation on other GNU/Linux distributions
+         is not officially supported. However, installing and building on other
+         distributions might work, especially if they are based on Debian - but
+         do so on your own risk.
       </para>
 
    </section>
@@ -22,13 +22,15 @@
       <title> Installing From Source </title>
 
       <para>
-         Prepare Ubuntu for compilation and installation of Build Gear:
+      To build the Build Gear tool successfully you need to install the
+      following build dependecies:
       </para>
 
 <screen>$ sudo apt-get install build-essential libcurl4-gnutls-dev libncurses5-dev unzip</screen>
 
       <para>
-         Build and install Build Gear:
+         Then build and install Build Gear using standard configure and make
+         options. For example:
       </para>
 
 <screen>$ wget http://buildgear.io/release/buildgear-PACKAGE_VERSION.tar.xz
@@ -37,6 +39,10 @@ $ cd buildgear-PACKAGE_VERSION
 $ ./configure --prefix=$HOME/opt/buildgear
 $ make
 $ make install</screen>
+
+      <para>
+         The following two steps are not be necessary if you install Build Gear system wide (ie. --prefix=/usr).
+      </para>
 
       <para>
          To add Build Gear to your path, do eg.:
@@ -56,7 +62,7 @@ $ make install</screen>
    <section><title>Installing From Ubuntu PPA</title>
 
       <para>
-         Build Gear can be installed via Ubuntu PPA. Simply do:
+         Build Gear can be installed via Ubuntu PPA:
       </para>
 
 <screen>
@@ -65,23 +71,14 @@ $ sudo apt-get update
 $ sudo apt-get install buildgear
 </screen>
 
+      <para>
+         In case you do not have Ubuntu installed or do not wish to install
+         Ubuntu as your system OS, then it is recommended to instead use Build
+         Gear with Ubuntu installed in a virtual machine such as VirtualBox,
+         Qemu, etc..
+      </para>
+
    </section>
-
-
-
-   <section>
-      <title>VirtualBox Build Image</title></section>
-   <para>
-      In case you do not have Ubuntu installed or do not wish to install Ubuntu
-      on your main system, then you can use the available VirtualBox build
-      image instead. Currently, this image comes with Ubuntu 12.10
-      preinstalled.
-   </para>
-   <para>
-      The VirtualBox build image and install instructions are available <ulink
-      url="http://buildgear.io/release/virtual-build-image">here</ulink>.
-    </para>
-
 
 
 

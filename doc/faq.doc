@@ -1,25 +1,7 @@
-<chapter>
+<chapter id="faq">
    <title>FAQ</title>
 
 
-
-   <section>
-      <title> Common Build Issues </title>
-
-      <para>
-         Here is a list of common build issues and related solutions.
-      </para>
-
-      <para>
-         To be done..
-      </para>
-
-   </section>
-
-
-
-   <section>
-      <title> General Questions </title>
 
       <qandaset defaultlabel='qanda'>
       <qandaentry>
@@ -35,8 +17,8 @@
             Most of the core functionality of the tool is written in C/C++ to
             achieve best build performance. Some of the tool functionality is
             written in a bash helper script. Also, all build files are written
-            in bash. This makes perfect sense since most install descriptions
-            are bash centric.
+            in bash which makes perfect sense since most install actions and
+            descriptions are bash centric.
          </para>
       </answer>
 
@@ -63,8 +45,6 @@
 
       </qandaentry>
       </qandaset>
-
-   </section>
 
 
 

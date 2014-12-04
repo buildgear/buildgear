@@ -1,24 +1,21 @@
-<chapter>
+<chapter id="introduction">
    <title> Introduction </title>
 
-   <para role="notice">
-      Please notice that the handbook documentation is currently considered
-      incomplete and work in progress.
-   </para>
+
 
    <section>
       <title> What is Build Gear? </title>
 
       <para>
          Build Gear is a lightweight build tool for building embedded firmware.
-         It is intended for experienced GNU/Linux users and developers.
+         Its target audience is experienced GNU/Linux users and developers.
       </para>
 
       <para>
          The primary focus of this build tool is to keep building simple which
          is reflected in a straightforward command line interface and support
-         for easy to maintain build files. The secondary focus is build
-         performance and build integrity. Build Gear is easy to use and well
+         for easy readable and maintainable build files. The secondary focus is
+         build performance and build integrity. Build Gear is easy to use and well
          suited for rapid prototyping and product development of GNU/Linux
          firmware to be deployed in small to medium sized embedded systems.
       </para>
@@ -35,8 +32,15 @@
          full control of how you build your firmware. By design, it operates in
          simple ways and offers a high level of transparency in regards to how
          things are built. This way it becomes easy to create and customize
-         build descriptions which in turn helps ensure a high level of software
-         quality.
+         build files which in turn helps ensure a high level of software
+         quality. Also, other popular build tools often delivers firmware build
+         files (meta data) which is permeated with all sorts of noisy and often
+         unwanted configuration code. In contrast, Build Gear is designed to
+         allow for quickly and concisely putting together build files from
+         scratch which include configuration code and options only relevant for
+         the end customer. This way the end customer will get a clean cut
+         firmware meta data delivery which is much easier to navigate and work
+         with.
       </para>
 
    </section>
@@ -55,19 +59,20 @@
          The more complexity introduced in the build meta data the more prone
          the firmware build becomes to build errors and increased maintenance.
          Also, with high complexity it becomes hard to maintain a high level of
-         software quality. This simple fact is overlooked by many existing
-         build tools.
+         software quality. This cost is overlooked by many existing build
+         tools.
       </para>
 
       <para>
-         In response to this fact, Build Gear is an attempt to create a build
-         tool which does things as simple as possible and with the lowest level
-         of information possible in order to perform the specific job of
+         In response to these issues, Build Gear is an attempt to create a
+         build tool which does things as simple as possible and with as little
+         infrastructure as possible in order to perform the specific job of
          building fully tailored embedded firmware images for prototypes or
          products.
       </para>
 
    </section>
+
 
 
    <section>
@@ -112,6 +117,17 @@ License for more details.
                </para>
             </listitem>
          </varlistentry>
+
+         <varlistentry>
+            <term><filename>Build space</filename></term>
+            <listitem>
+               <para>
+                  The repository within which the build tool operates.
+               </para>
+            </listitem>
+         </varlistentry>
+
+
 
       </variablelist>
 

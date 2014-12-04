@@ -1,4 +1,4 @@
-<chapter>
+<chapter id="basics">
    <title> Build Gear Basics </title>
 
 
@@ -7,12 +7,18 @@
       <title> Getting Started </title>
 
       <para>
-         To get started, one will typically start by downloading an existing build
-         repository. For example, to get started with the Mini Distribution for
-         the Pandaboard simply do:
+         The easiest way to get started learning Build Gear is by cloning an
+         existing build files repository and start building stuff. For example,
+         to get started with the Mini Distribution for the Hummingboard simply
+         do:
       </para>
 
-<screen>$ git clone --recursive git://github.com/mini-distribution/pandaboard.git</screen>
+<screen>$ git clone --recursive git://github.com/mini-distribution/hummingboard.git</screen>
+
+      <para>
+         The Mini Distribution serves as a reference distribution and example
+         on how to create firmware using Build Gear.
+      </para>
 
       <note>
           The <code>--recursive</code> option makes git recursively checkout
@@ -23,47 +29,55 @@
       </note>
 
       <para>
-         Next, enter the repository build space:
+         Next, enter the repository, also known as the build space:
       </para>
 
-<screen>$ cd pandaboard</screen>
+<screen>$ cd hummingboard</screen>
 
       <para>
-         Please take a careful look at the included README information. It
-         describes what build system dependencies are needed to be installed in
-         order to build successfully:
+         Please take a careful look at the README included in the board
+         repository. It usually includes various useful informantion such as
+         known issues and what build system dependencies are needed to be
+         installed in order to build successfully:
       </para>
 
 <screen>$ buildgear show --readme</screen>
 
       <para>
-         In case of the Pandaboard, you will find the following important section
+         In case of the Hummingboard, you will find the following useful section
          in the README:
       </para>
 
 <screen>
 Build system requirements:
 
-   Tested on Ubuntu 12.10 Minimal (64-bit x86) with the following additional
-   packages installed:
+   Tested on Ubuntu 14.10 (64-bit x86) with the following additional packages
+   installed:
 
    $ sudo apt-get install unzip groff bison flex gperf texinfo xsltproc \
                           libtool libncurses5-dev gawk libexpat1-dev \
                           gettext u-boot-tools libglib2.0-dev intltool \
-                          libxml2-utils docbook-xml cmake g++
+                          libxml2-utils docbook-xml cmake g++ pixz lzop \
+                          u-boot-tools
 
 
    Also requires reconfiguring "/bin/sh" to use bash:
 
    $ sudo dpkg-reconfigure dash
 
-   Fact: many software distributions fail to build using the dash shell.
+   Fact: Many software distributions fail to build using the dash shell.
 </screen>
 
+      <note>
+        Please take care to reconfigure your default shell to use bash instead
+        of dash. If you don't you will experience build errors.
+      </note>
+
       <para>
-         After installing the described dependencies and reconfiguring your
-         default shell to use bash, then you are ready to start building stuff.
-         Also found in the README is a short description of the main builds:
+         After installing the required dependencies and reconfiguring your
+         default shell to use bash, then you are ready to start building.  Also
+         found in the README is usually a short description of the main builds
+         of interest:
       </para>
 
 <screen>
@@ -75,7 +89,7 @@ Main builds:
 </screen>
 
       <para>
-         Now, you can build the filesystem by simply doing:
+         Now, you can go ahead and build the filesystem:
       </para>
 
 <screen>
@@ -83,7 +97,7 @@ Main builds:
 </screen>
 
       <note>
-         In case of the Pandaboard, the <code>fs</code> build automatically
+         In case of the Hummingboard, the <code>fs</code> build automatically
          builds the linux kernel because the kernel depends on the Linux kernel
          modules to be installed in the filesystem.
       </note>
@@ -102,14 +116,14 @@ Main builds:
       </para>
 
 <screen>
-   fs.tar.gz  MLO  u-boot.img  uImage
+   fs.tar.xz  SPL  u-boot.img
 </screen>
 
       <para>
          Finish by installing the output files on a SD card and you are ready
-         to boot the Mini Distribution on the Pandaboard. See Appendix (TODO)
-         for details on how to create and format the partitions on the SD Card
-         and how to install the files.
+         to boot the Mini Distribution on the Hummingboard. Usually the README
+         contains details on how to create and format the partitions on the SD
+         Card and how to install the files.
       </para>
 
    </section>
@@ -123,11 +137,11 @@ Main builds:
          When you enter a build repository directory you also enter the
          repository build space. All Build Gear commands relate to the build
          space you are currently in. A typical build space layout looks like
-         this (Pandaboard example):
+         this (Hummingboard example):
       </para>
 
 <screen>
-pandaboard
+hummingboard
 ├── build
 │   ├── build.log
 │   ├── output
@@ -137,10 +151,11 @@ pandaboard
 │   ├── cross
 │   │   ├── cross-core
 │   │   ├── cross-extra
+│   │   ├── cross-freescale
 │   │   ├── cross-opt
-│   │   └── cross-pandaboard
+│   │   └── cross-hummingboard
 │   └── native
-│       └── native-pandaboard
+│       └── native-hummingboard
 ├── config
 │   └── config
 └── README
@@ -151,21 +166,22 @@ pandaboard
          is split into cross and native type build file directories. Each of
          these directories contains various build files submodules.
          <code>cross-core</code>, <code>cross-opt</code>, and
-         <code>cross-opt</code> are all submodules containing generic
-         buildfiles from the Mini Distribution.  In this case, the directories
-         <code>native-pandaboard</code> and <code>cross-pandaboard</code> are
-         actually not submodules but are simply directories belonging to the
-         top level repository - they contain board specific build files.
+         <code>cross-extra</code> are all submodules containing generic
+         build files from the Mini Distribution. In this case, the directories
+         <code>native-hummingboard</code> and <code>cross-hummingboard</code>
+         are actually not submodules but are simply directories belonging to
+         the top level repository - they contain board specific build files.
       </para>
 
       <note>
          The Mini Distribution is a reference distribution. You can decide to
          use its build files as they are or fork and modify the repositories as
-         you like.
+         you like. If needed, individual build files can be overridden by your
+         own custom build files using layers.
       </note>
 
       <para>
-         The build files are located in eg. <code>cross-core</code> like so:
+         The build files are arranged in eg. <code>cross-core</code> like so:
       </para>
 
 <screen>
@@ -192,26 +208,33 @@ cross-core
 </screen>
 
       <para>
-         In case of the Mini Distribution, the <code>cross-core</code> build file
-         directory contains the the builds which represent the "core"
+         In case of the Mini Distribution, the <code>cross-core</code>
+         directory contains the the build files which represent the "core"
          functionality.  Likewise, the <code>cross-opt</code> and
-         <code>cross-extra</code> directories contains the builds with "optional"
-         and "extra" functionality respectively.
+         <code>cross-extra</code> directories contains the build files with
+         "optional" and "extra" functionality respectively.
       </para>
 
       <para>
-         The <code>config</code> directory contains the global build configuration
-         file <code>config</code>.
+         The <code>config</code> directory contains the global build files
+         configuration file <code>config</code>.
       </para>
 
       <para>
-         The <code>build</code> directory is a temporary directory which is
-         created when building - it contains build log, build output, internal
-         packages, and downloaded build source. The build log file is
-         <code>build/build.log</code>. The build output files are located in
-         <code>build/output</code>. The internal build package files are
-         located in <code>build/package</code>. The downloaded build source is
-         located in <code>build/source</code>.
+         The <code>build</code> directory is the temporary build directory
+         which is automatically created when building - it contains build log,
+         build output, internal build packages, and downloaded build source.
+         The build log file is <code>build/build.log</code>. The build output
+         files are located in <code>build/output</code>. The internal build
+         package files are located in <code>build/package</code>. The
+         downloaded build source is located in <code>build/source</code>.
+      </para>
+      <para>
+         During build the <code>build</code> directory also contains a
+         <code>work</code> directory in which things are built. This directory
+         is automatically removed after after a successful build. However, if a
+         build error occurs this directory is kept so that one can inspect the
+         failing build data.
       </para>
 
    </section>
@@ -221,17 +244,19 @@ cross-core
    <title> Buildfile </title>
 
       <para>
-         Each build directory contains a <code>Buildfile</code>. A typical
-         <code>Buildfile</code> is structured like so
-         (<code>buildfiles/cross/cross-core/attr/Buildfile</code> example):
+         Each buildable unit is represented by a build file named
+         <code>Buildfile</code>. A typical build file is structured like so
+         (<code>buildfiles/cross/cross-core/attr/Buildfile</code>
+         example):
       </para>
 
 <screen>
 # Description: Commands for Manipulating Filesystem Extended Attributes
 # URL: http://savannah.nongnu.org/projects/attr
+# License: GPLv2
 
 name=attr
-version=2.4.46
+version=2.4.47
 release=1
 source=(http://mirrors.zerg.biz/nongnu/attr/$name-$version.src.tar.gz)
 
@@ -240,10 +265,14 @@ build() {
 
    ./configure --build=$BUILD \
                --host=$HOST \
-               --prefix=/usr
+               --prefix=/usr \
+               --disable-static \
+               --disable-nls
 
    make -j $JOBS
    make DIST_ROOT=$PKG install install-lib install-dev
+
+   rm -rf $PKG/usr/share/{doc,locale}
 
    # Fix libtool files
    fix_la_files $PKG
@@ -251,7 +280,7 @@ build() {
 
 check() {
    # Test for preinstalled msgfmt tool
-   check_tool msgfmt
+   check_tool msgfmt "Please install msgfmt"
 }
 </screen>
 
@@ -340,6 +369,42 @@ check() {
 
          <row>
             <entry>
+               <userinput>options</userinput>
+            </entry>
+            <entry>
+               A list of special options. Supported options are:
+         <variablelist>
+
+         <varlistentry>
+            <term><filename>buildlock</filename></term>
+            <listitem>
+               <para>
+                  Locks the build so that it will be the only one building at
+                  any given time (when parallel_builds > 1).
+               </para>
+            </listitem>
+         </varlistentry>
+
+         <varlistentry>
+            <term><filename>nostrip</filename></term>
+            <listitem>
+               <para>
+                  Disables automatic strip of executables, shared libraries
+                  (.so), and  static archives (.a).
+               </para>
+            </listitem>
+         </varlistentry>
+
+      </variablelist>
+
+            </entry>
+            <entry>
+               Optional
+            </entry>
+         </row>
+
+         <row>
+            <entry>
                <userinput>build()</userinput>
             </entry>
             <entry>
@@ -409,12 +474,13 @@ check() {
       </informaltable>
 
       <para>
-         Some variables are "mandatory" and must be defined while others are
-         "provided" by Build Gear and some are simply "optional".
+         Some variables are mandatory and must be defined while others are
+         automatically provided by Build Gear and some can simply be optionally
+         defined.
       </para>
 
       <note>
-         By convention, the directory containing the Buildfile must have the
+         By convention, the directory containing the Buildfile should have the
          exact same name as the build name defined in the same Buildfile.
       </note>
 
@@ -436,14 +502,14 @@ check() {
             Searches for available build files in the current build space
          </step>
          <step>
-            Loads the build files
+            Loads the found build files
          </step>
          <step>
-            Resolves all dependencies (resolves build order)
+            Resolves build order from dependency information
          </step>
          <step>
-            Runs the build system checks (calls <code>check()</code> function
-            in build file(s))
+            Runs build system checks (calls <code>check()</code> function in
+            build files)
          </step>
          <step>
             Downloads any missing source files
@@ -459,7 +525,7 @@ check() {
          </step>
          <step>
             Starts building in resolved build order (calls <code>build()</code>
-            function in build file(s))
+            function in all resolved build files)
          </step>
       </procedure>
 
@@ -472,13 +538,14 @@ check() {
 <screen>
 $ buildgear build fs
 
-Searching for build files..     Done (183 files)
+Searching for build files..     Done (246 files)
 Loading build files..           Done
-Resolving dependencies..        Done (61 dependencies)
+Resolving dependencies..        Done (87 dependencies)
 Running build system checks..   Done
 Downloading sources..           Done
 Detecting BUILD system type..   x86_64-unknown-linux-gnu
-Configured HOST system type..   arm-cortex_a8-linux-gnueabi
+Configured HOST system type..   arm-cortex_a9-linux-gnueabi
+Configured parallel builds..    4
 Cleaning old work directory..   Done
 
 Building 'cross/fs'..
@@ -491,32 +558,33 @@ Building 'cross/fs'..
 
 
    <section>
-      <title> Build Environment / Configuration </title>
+      <title> Build Environment &amp; Configuration </title>
 
       <para>
-         The bash environment that the <code>build()</code> function is
-         executed in is constituted by the following environments added in the
-         following way:
+         The bash environment in which the <code>build()</code> function of
+         each build file is executed is constituted by the following
+         environments added in the following order:
       </para>
 
       <para role="environment">
-         Existing user environment + Global build configuration + Buildfile
+         User shell environment + Global build files config + Buildfile
       </para>
 
       <para>
          This means that variables and functions defined in the Buildfile
          override the ones defined in the global configuration file which in
-         turn overrides the existing user environment.
+         turn overrides the users shell environment.
       </para>
 
       <note>
          All build actions are performed in a fakeroot session. Using fakeroot
-         allow builds to create special device files and also makes it possible
-         to create files with custom ownership which in turn makes it possible
-         to maintain generic footprints. It is possible to disable the use of
-         fakeroot by using the <code>--no-fakeroot</code> option but its use is
-         ill advised.
+         allow builds to create special device files and files with custom
+         ownership. This makes it possible to maintain consistent footprints
+         across build machines. It is possible to disable the use of fakeroot
+         by using the <code>--no-fakeroot</code> option but it is normally ill
+         advised to do so.
       </note>
+
 <!--
          <procedure>
 
@@ -536,27 +604,27 @@ Building 'cross/fs'..
 -->
 
    <section>
-      <title> Global Build Configuration </title>
+      <title> Global Buildfiles Configuration </title>
 
       <para>
-         The global build configuration file is located in the
+         The global build files configuration is located in the
          <code>config/config</code> file. It defines the global configuration
          for the particular set of build files located in the build space. It
          is global because it can be used to define bash variables and
-         functions which are available for all builds. It also contains a
-         few configuration variables required by the build tool.
+         functions which are available for all build files. It also contains
+         some configuration variables which are required by the build tool.
       </para>
       <para>
          With the global configuration file you can create a fully configurable
          software distribution if needed.  Meaning, you can introduce all sorts
-         of configuration variables that the build files will react on. Though,
-         it is recommended to carefully keep the amount of this type of
-         configuration variables to a minimum to keep the sample configuration
-         space low and thus minimize maintenance.
+         of configuration variables here that build files can use and react on
+         accordingly. Though, it is recommended to carefully keep the amount of
+         this type of configuration variables to a minimum to keep the
+         configuration sample space low and minimize maintenance.
       </para>
       <para>
-         A minimal global build configuration file would typically look
-         something like this (Pandaboard example):
+         A minimal global build files configuration file would typically look
+         something like this (Hummingboard example):
       </para>
 
 <screen>
@@ -629,50 +697,55 @@ check_exist()
 </screen>
 
       <para>
-         To understand the global configuration, lets go through the individual
-         parts.
+         At a first glance it migh look a bit strange but in reality it is
+         actually quite simple. To understand the global build files
+         configuration, lets go through the individual parts.
       </para>
       <para>
          The configuration above starts by defining the <code>HOST</code>
-         variable which expresses the host system type. This variable is used
-         in the configure line (eg. <code>configure --host=$HOST</code> of
+         variable which expresses the host system type (eg.
+         <code>arm-cortex_a9-linux-gnueabi</code>). This variable is used in
+         the configure line (eg. <code>configure --host=$HOST</code> of
          virtually all cross build files.
       </para>
       <para>
          Secondly, the <code>CROSS_DEPENDS</code> variable is defined - this
          variable tells the build tool that all cross builds should depend on
          this build. This will typically be the Crosstool-NG toolchain build
-         which is native type.
+         which is of course of the native type because it builds and runs on
+         the build machine.
       </para>
       <para>
          Next, the build tool needs the <code>CROSS_SYSROOT</code> which
-         defines where the cross sysroot is located. This will typically be
-         inside the toolchain space added to the native sysroot. Both the
-         native sysroot and cross sysroot act as staging areas - builds are
-         added here accordingly during the build process.
+         defines where the cross sysroot is located. Using standard
+         Crosstool-NG configuration, this will typically be inside the
+         toolchain package added to the native sysroot. Both the native sysroot
+         and cross sysroot act as staging areas - build packages are added here
+         accordingly during the build process.
       </para>
       <para>
          The download super mirror for your specific set of build files is
          defined by the <code>DOWNLOAD_MIRROR</code> variable.
       </para>
       <para>
-         The toolchain is added to the environment by the well known
-         <code>PATH</code> variable.
+         The toolchain is added to the environment using the <code>PATH</code>
+         variable.
       </para>
       <para>
-         The <code>JOBS</code> is typically used by the build files to define
-         how many concurrent jobs that make should support (eg. <code>make -j
+         The <code>JOBS</code> variable is used by the build files to define
+         how many concurrent jobs that make should support (eg.  <code>make -j
          $JOBS</code>).
       </para>
       <para>
          Next, the pkgconfig tool needs two configurations, one for native
          building, and a second for cross building. The two are distinguised
-         using the <code>BUILD_TYPE</code> variable.
+         using the <code>BUILD_TYPE</code> variable which is automatically
+         provided.
       </para>
       <para>
-         This simple <code>fix_la_files()</code> bash function is a necessary
-         evil to bypass a long standing problem with libtool - namely it's
-         inability to support cross building.
+         This simple <code>fix_la_files()</code> function is a necessary evil
+         to bypass a long standing problem with libtool - namely it's inability
+         to support cross building.
       </para>
       <para>
          The <code>check_tool()</code> and <code>check_exist()</code> are helper
