@@ -400,6 +400,7 @@ do_buildfile()
 do_buildfile_checksum()
 {
    local BUFFER=$(<$BG_BUILD_FILE)
+   BUFFER=${BUFFER//\`/\\\`}
    BUFFER="echo -E \"$BUFFER\""
    eval "$BUFFER" 2>/dev/null | sha256sum | awk '{print $1}' > $BG_BUILDFILE_SHA256SUM
 }
@@ -408,6 +409,7 @@ show_buildfile()
 {
    local BUFFER=$(<$BG_BUILD_FILE)
    BUFFER=${BUFFER//\\/\\\\}
+   BUFFER=${BUFFER//\`/\\\`}
    BUFFER="echo -E \"$BUFFER\""
    eval "$BUFFER"
 }
@@ -416,6 +418,7 @@ verify_buildfile_checksum()
 {
    local SHA256SUM SHA256SUM_FILE
    local BUFFER=$(<$BG_BUILD_FILE)
+   BUFFER=${BUFFER//\`/\\\`}
    BUFFER="echo -E \"$BUFFER\""
    SHA256SUM=`eval "$BUFFER" 2>/dev/null | sha256sum | awk '{print $1}'`
 
