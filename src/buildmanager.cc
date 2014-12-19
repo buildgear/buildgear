@@ -157,6 +157,12 @@ void CBuildThread::operator()()
          Cursor.clear_rest_of_line();
          pthread_mutex_unlock(&cout_mutex);
       }
+   } else
+   {
+      // in case build function was removed
+      // we need remove old build package
+      if (FileExist(PackagePath(buildfile)))
+	 remove(PackagePath(buildfile).c_str());
    }
    sem_post(&build_semaphore);
 
