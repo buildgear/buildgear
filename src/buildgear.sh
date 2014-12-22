@@ -300,6 +300,11 @@ do_package()
    if [ "`ls -A`" != "" ]; then
       tar czvvf $BG_BUILD_PACKAGE.tmp * && \
       mv $BG_BUILD_PACKAGE.tmp $BG_BUILD_PACKAGE
+   else
+      if [ -f $BG_BUILD_PACKAGE ] ; then
+	  rm -f -- $BG_BUILD_PACKAGE
+      fi
+      warning "no ouput files"
    fi
 
    if [ "$?" != "0" ]; then
