@@ -96,8 +96,11 @@ int main (int argc, char *argv[])
       exit(EXIT_SUCCESS);
    }
 
-   /* Search for build root directory */
-   FileSystem.FindRoot(ROOT_DIR);
+   if (!(Config.config && Config.global))
+   {
+      /* Search for build root directory */
+      FileSystem.FindRoot(ROOT_DIR);
+   }
 
    /* Handle config command */
    if (Config.config)
