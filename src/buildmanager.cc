@@ -57,6 +57,7 @@ pthread_mutex_t active_builds_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t active_adds_mutex = PTHREAD_MUTEX_INITIALIZER;
 CBuildFile *last_build;
 
+
 class CBuildThread : CBuildManager
 {
    public:
@@ -456,16 +457,25 @@ bool CBuildManager::BuildfileChecksumMismatch(CBuildFile *buildfile)
       return false;
 }
 
-bool CBuildManager::DepBuildNeeded(CBuildFile *buildfile)
+bool CBuildManager::DepBuildNeeded(CBuildFile *buildfile, time_t age)
 {
    list<CBuildFile*>::iterator it;
 
-   for (it=buildfile->dependency.begin(); it!=buildfile->dependency.end(); it++)
+   string package(PackagePath(buildfile));
+
+   if (FileExist(package))
+      age = Age(package);
+
+   for (it=buildfile->dependency.begin(); it!=buildfile->dependency.end(); ++it)
    {
       if ((*it)->build)
          return true;
 
-      if (DepBuildNeeded(*it))
+      package = PackagePath(*it);
+      if (FileExist(package) && (difftime(Age(package), age) < 0))
+         return true;
+
+      if (DepBuildNeeded(*it, age))
          return true;
    }
 
@@ -505,7 +515,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
          continue;
 
       // If one or more dependencies needs to be build
-      if (DepBuildNeeded((*it)))
+      if (DepBuildNeeded(*it, numeric_limits<time_t>::max()))
       {
          // Then build is needed
          (*it)->build = true;
