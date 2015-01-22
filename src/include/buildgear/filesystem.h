@@ -23,6 +23,7 @@
 #define FILESYSTEM_H
 
 #include <string>
+#include <ctime>
 #include "buildgear/buildfiles.h"
 
 using namespace std;
@@ -36,7 +37,7 @@ class CFileSystem
       bool DirExists(string dirname);
       bool FileExist(string filename);
       bool FileExistSize(string filename, unsigned int &filesize);
-      long Age(string filename);
+      time_t Age(string filename);
       void Move(string source, string destination);
       bool Cat(string filename);
       void Tail(string filename);

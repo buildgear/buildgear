@@ -408,7 +408,7 @@ bool CBuildManager::PackageUpToDate(CBuildFile *buildfile)
    if (!FileExist(package))
       return (buildfile->build_function == "no");
 
-   if (Age(package) > Age(buildfile->filename))
+   if (difftime(Age(package), Age(buildfile->filename)) > 0)
       return true;
 
    return false;
@@ -439,7 +439,7 @@ bool CBuildManager::SourceUpToDate(CBuildFile *buildfile)
          source = buildfile->GetLocation() + item;
       }
 
-      if (Age(package) < Age(source))
+      if (difftime(Age(package), Age(source)) < 0)
          return false;
    }
 
