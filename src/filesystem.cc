@@ -189,7 +189,7 @@ bool CFileSystem::FileExistSize(string filename, unsigned int &filesize )
    return true;
 }
 
-long CFileSystem::Age(string filename)
+time_t CFileSystem::Age(string filename)
 {
    struct stat st;
 
