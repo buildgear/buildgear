@@ -472,7 +472,7 @@ bool CBuildManager::DepBuildNeeded(CBuildFile *buildfile, time_t age)
          return true;
 
       package = PackagePath(*it);
-      if (FileExist(package) && (difftime(Age(package), age) < 0))
+      if (FileExist(package) && (difftime(Age(package), age) > 0))
          return true;
 
       if (DepBuildNeeded(*it, age))
