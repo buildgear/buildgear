@@ -1,65 +1,35 @@
 
-=== Build Gear v0.9.23 ===
+=== Build Gear v0.9.24 ===
 
 
-Changes since Build Gear v0.9.22:
+Changes since Build Gear v0.9.23:
 
- * Updated handbook
+Kalle Lampila:
 
- * Added sensible handbook chapter ids
+ * Fix package dependency age compare
 
- * Support builds with no package output
+ * Fix bug that package is not rebuild even if dependency package is changed
 
-   This feature adds support for buildfiles which include a build()
-   function but produces no package output (no files installed in $PKG).
+ * Rebuild package, if dependency package is newer
 
- * Fixed layer name output padding
+ * Return time_t from Age()-function
 
- * Add rebuild detection based on buildfile checksum
+   Avoid unnecessary casting to long.
 
-   This means that a build will automatically rebuild if the sha256sum
-   checksum of its bash expanded Buildfile changes.
+ * Allow run config --global outside buildgear dir
 
-   This is particular useful if you use configurations variables to
-   reconfigure the way your firmware is built.
+ * Delete outdated package output, if there is not package output anymore. rebuild buildfiles without build() only when needed.
 
-   For example, if you have a configuration variable in the global
-   buildfiles configuration file (config/config), eg.:
+ * Ensure outdated package output deletion
 
-   CONFIG_AUDIO="alsa"
+   Delete outdated package output, if there is not package output anymore.
 
-   And in one or more Buildfiles you use this variable to reconfigure the
-   build or change dependencies. For example:
+ * Rebuild buildfiles without build() only when needed
 
-   if [ "$CONFIG_AUDIO" == "alsa" ]
-   then
-      CONF_OPTIONS+="--audio=alsa"
-      depends+=(alsa-lib)
-   else
-      CONF_OPTIONS+="--audio=oss"
-   fi
+   If buildfile has no build rules, it not make output package. So it
+   need only mark with build flag only when it has dependence change or
+   old output file exist.
 
-   Now, if you change the value of CONFIG_AUDIO between builds, then build
-   gear will automatically rebuild any build files that uses CONFIG_AUDIO
-   because it will detect that the the checksum of the bash expanded
-   build file(s) changes by this modification.
+Jesper Larsen:
 
- * Renamed .buildgear/.lock to .buildgear/lock
-
-   No need to make the lock file hidden since it is already in a hidden
-   directory.
-
- * Optimized 'show --buildfile' command
-
-   Optimized the 'show --buildfile' command to avoid the use of temporary
-   files in /tmp and reduce the number of calls to external programs.
-
- * Resolve source_dir (SOURCE) path
-
-   The 'source_dir' path was not being resolved which resulted in $SOURCE
-   being non-resolved.
-
-   This had the unfortunate effect that builds like crosstool-ng would not
-   find the $SOURCE path nor any previously downloaded source. Subsequently
-   it would download sources from scratch at every rebuild slowing down the
-   build.
+ * Do not expand ` calls for buildfile checksums
