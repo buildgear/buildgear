@@ -304,7 +304,6 @@ do_package()
       if [ -f $BG_BUILD_PACKAGE ] ; then
 	  rm -f -- $BG_BUILD_PACKAGE
       fi
-      warning "no ouput files"
    fi
 
    if [ "$?" != "0" ]; then
