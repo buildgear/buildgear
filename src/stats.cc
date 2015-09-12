@@ -275,11 +275,13 @@ void CStats::saveCapture(string filename)
    for (i = 0; i < this->cpu_usage.size(); i++)
    {
       int temp;
-      this->svg.addRectangle(i * bar_width, 0, bar_width, cpu_usage[i] * ((LOAD_CHART_HEIGHT - 2) / -100.0),
-            "fill:blue;stroke-width:1;stroke:blue");
+      this->svg.addRectangle(i * bar_width, -cpu_usage[i] * ((LOAD_CHART_HEIGHT - 2) / 100.0),
+                             bar_width, cpu_usage[i] * ((LOAD_CHART_HEIGHT - 2) / 100.0),
+                             "fill:blue;stroke-width:1;stroke:blue");
       this->svg.addRectangle(i * bar_width, LOAD_CHART_HEIGHT + LOAD_CHART_MARGIN +
-            LOAD_CHART_LINE_HEIGHT + 2, bar_width, mem_usage[i] * ((LOAD_CHART_HEIGHT - 2) / -100.0),
-            "fill:red;stroke-width:1;stroke:red");
+                             LOAD_CHART_LINE_HEIGHT + 2 - mem_usage[i] * ((LOAD_CHART_HEIGHT - 2) / 100.0),
+                             bar_width, mem_usage[i] * ((LOAD_CHART_HEIGHT - 2) / 100.0),
+                             "fill:red;stroke-width:1;stroke:red");
    }
 
    this->svg.addNaked("</g>");
