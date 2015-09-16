@@ -492,7 +492,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
             } else {
                status.str("");
                status << "Error: " << item->source_dir + "/" + item->filename + ".part" << " not found" << endl << flush;
-               cout << status;
+               cout << status.str();
                Log.print(status.str());
                exit(EXIT_FAILURE);
             }
@@ -509,7 +509,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
          } else {
             status.str("");
             status << "Error: CURLMsg (" << msg->msg << ")" << endl << flush;
-            cout << status;
+            cout << status.str();
             Log.print(status.str());
             exit(EXIT_FAILURE);
          }
@@ -529,7 +529,7 @@ void CSource::Download(list<CBuildFile*> *buildfiles, string source_dir)
    {
       status.str("");
       status << "Error: Could not download all sources - see download errors above." << endl;
-      cout << status;
+      cout << status.str();
       Log.print(status.str());
       exit(EXIT_FAILURE);
    }
