@@ -556,7 +556,7 @@ void CBuildManager::Build(list<CBuildFile*> *buildfiles)
          list<CBuildFile*>::iterator itr;
 
          // Start building threads of same depth in parallel
-         while ( ((*it)->depth == current_depth) && (it != buildfiles->end())
+         while ( (it != buildfiles->end()) && ((*it)->depth == current_depth)
                  && !BuildManager.build_error)
          {
             // Only build buildfiles in parallel which are not marked with the
