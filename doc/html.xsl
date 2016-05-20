@@ -4,6 +4,10 @@
 
 <xsl:import href="/usr/share/xml/docbook/stylesheet/docbook-xsl/html/docbook.xsl"/>
 
+<xsl:output method="html"
+            encoding="UTF-8"
+            indent="no"/>
+
 <xsl:param name="generate.toc">book toc,title</xsl:param>
 <xsl:param name="chapter.autolabel" select="1"/>
 <xsl:param name="section.autolabel" select="1"/>
