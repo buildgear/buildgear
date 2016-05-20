@@ -1,5 +1,21 @@
 
-=== Build Gear v0.9.25 ===
+=== Build Gear v0.9.26 ===
+
+
+Changes since Build Gear v0.9.25:
+
+ * Fixed html doc output encoding type
+
+   Forced html output encoding to UTF-8 to fix html whitespace rendering
+   issues.
+
+ * Cleaned up tabs in doc/Makefile.am
+
+Jesper Larsen:
+
+ * Test for past-the-end list element before dereference
+
+
 
 
 Changes since Build Gear v0.9.24:
