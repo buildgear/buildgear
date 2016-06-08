@@ -99,7 +99,7 @@ void CDependency::ShowDownloadOrder(void)
 
    for (it=download_order.begin(), i=1; it!=download_order.end(); it++, i++)
    {
-      cout << "   " << setw(3) << i << ". " << (*it)->name;
+      cout << "   " << setw(3) << i << "  " << (*it)->name;
       if ((*it)->layer != DEFAULT_LAYER_NAME)
       {
          cout << setw(max_name_length - (*it)->name.size()) << "";
@@ -111,15 +111,13 @@ void CDependency::ShowDownloadOrder(void)
 
 void CDependency::ShowBuildOrder(void)
 {
-   int i;
    list<CBuildFile*>::iterator it;
 
    cout <<  "\nBuild order:" << endl;
 
-   for (it=parallel_build_order.begin(), i=0; it!=parallel_build_order.end(); it++, i++)
+   for (it=parallel_build_order.begin(); it!=parallel_build_order.end(); it++)
    {
-      cout << "   [" << (*it)->depth << "] " \
-           << std::setw(3) << i << ". " << (*it)->name;
+      cout << "   " << setw(3) << (*it)->depth+1 << "  " << (*it)->name;
       if ((*it)->layer != DEFAULT_LAYER_NAME)
       {
          cout << setw(max_name_length - (*it)->name.size()) << "";
